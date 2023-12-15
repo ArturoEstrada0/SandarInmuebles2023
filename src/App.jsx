@@ -39,8 +39,8 @@ function ClientRoute({ children }) {
 function App() {
   return (
     <Router>
-      {/* <AdminPanel /> */}
-      <Routes>
+      <AdminPanel />
+      {/* <Routes>
         <Route path="/" element={<Home />} />
         <Route
           path="/admin"
@@ -60,7 +60,7 @@ function App() {
         />
         <Route exact path="/" element={<PropertyList />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
-      </Routes>
+      </Routes> */}
     </Router>
   );
 }
