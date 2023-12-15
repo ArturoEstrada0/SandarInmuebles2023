@@ -1,0 +1,120 @@
+/* AboutUs.css */
+
+.about-us-container {
+    background-color: #fff;
+    color: #333;
+    padding: 60px;
+
+  }
+  
+  .about-us-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .about-us-paragraph {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  
+  .about-us-subtitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+  
+  .experience-statistic {
+    display: flex;
+    align-items: center;
+  }
+  
+  .experience-icon {
+    background-color: #1890ff;
+    color: #fff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+  .experience-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .experience-info span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .experience-info p {
+    font-size: 18px;
+    color: #777;
+  }
+  
+  .about-us-image-collage {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 16px;
+  }
+  
+  .about-us-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 16px; /* Ajusta el espacio entre las imágenes verticalmente */
+  }
+ 
+  .small-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px; /* Ajusta el valor de acuerdo a tus necesidades */
+  }
+  
+  .square-image {
+    width: 200px; /* Establece el ancho deseado */
+    height: 200px; /* Establece la misma altura que el ancho para hacerla cuadrada */
+  }
+  .square-icon {
+    width: 100px; /* Establece el ancho deseado */
+    height: 100px; /* Establece la misma altura que el ancho para hacerlo cuadrado */
+  }
+
+  
+
+
+  .small-hr {
+    height: 3px;
+    width: 20px;
+    background-color: #1890ff;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  .experience-statistic {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .experience-statistic .experience-info {
+    margin-left: 16px;
+  }
+  
+  .experience-statistic p {
+    margin: 0;
+  }
+  
+  .small-hr-title {
+    height: 3px;
+    width: 50px;
+    background-color: #1890ff;
+  }
+  

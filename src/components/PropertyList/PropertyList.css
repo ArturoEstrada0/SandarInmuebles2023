@@ -1,0 +1,32 @@
+/* PropertyList.css */
+.property-list {
+  margin-top: -140px;
+  padding: 20px;
+}
+
+.centered-card {
+  margin: 0 10%;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-button {
+  margin-top: 16px;
+}
+
+.property-info-row {
+  margin-top: 20px; /* Ajusta el valor según tu preferencia */
+}
+
+.large-button {
+  font-size: 1.5rem; /* Ajusta el tamaño del texto del botón */
+  padding: 10px 20px; /* Ajusta el relleno (padding) para aumentar el tamaño del botón */
+}
+
+.centered-button {
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,4 @@
+/* Ejemplo de selector más específico */
+#miChatBubble .ant-float-button {
+  background-color: #171717;
+}
