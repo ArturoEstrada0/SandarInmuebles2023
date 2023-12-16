@@ -1,5 +1,4 @@
 import { Card, Col, Row, Statistic } from 'antd';
-import { Line } from '@ant-design/charts';
 
 function Inicio() {
   const data = [
@@ -40,7 +39,7 @@ function Inicio() {
           </Card>
         </Col>
       </Row>
-      <Line {...config} />
+      {/* <Line {...config} /> */}
     </div>
   );
 }
