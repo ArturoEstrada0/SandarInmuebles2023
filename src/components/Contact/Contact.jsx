@@ -1,4 +1,4 @@
-import { Input, Button, Form, Space, Row, Col, Select, Card } from "antd";
+import { Input, Button, Form, /*Space,*/ Row, Col, Select, Card } from "antd";
 import {
   UserOutlined,
   MailOutlined,
@@ -9,10 +9,24 @@ import {
   MailFilled, // Icono de correo electrónico
 } from "@ant-design/icons"; // Importa los iconos que necesitas
 import "antd/dist/reset.css";
+import { collection, addDoc } from 'firebase/firestore';
+import { firestore } from "../firebase/firebase";  
+
+
 
 const Contact = () => {
-  const onFinish = (values) => {
-    console.log("Valores enviados:", values);
+  const onFinish = async (values) => {
+
+    try{
+      const contactCollection = collection(firestore, 'contacts');
+      await addDoc(contactCollection, values);
+
+      console.log("Datos enviados correctamente a Firestore: ",values)
+    }catch (error) {
+      console.log("Error al enviar datos a Firestore: ", error)
+    }
+    // Aquí puedes agregar lógica para enviar el correo, por ejemplo, utilizando un servicio de envío de correos.
+
   };
 
   return (
@@ -41,6 +55,7 @@ const Contact = () => {
               <Form.Item
                 label="Teléfono"
                 name="phone"
+              
                 rules={[
                   {
                     required: true,
@@ -54,20 +69,20 @@ const Contact = () => {
               <Form.Item
                 label="Mensaje"
                 name="message"
+                
                 rules={[
                   { required: true, message: "Por favor, ingrese un mensaje." },
                 ]}
               >
                 <Input.TextArea rows={2} prefix={<MessageOutlined />} />
               </Form.Item>
-            </Form>
-          </Col>
 
-          <Col span={8}>
-            <Form name="contact-form" onFinish={onFinish} layout="vertical">
+              <Form.Item>
+              </Form.Item>
               <Form.Item
                 label="Correo Electrónico"
                 name="email"
+                
                 rules={[
                   {
                     required: true,
@@ -82,6 +97,7 @@ const Contact = () => {
               <Form.Item
                 label="Asunto"
                 name="subject"
+               
                 rules={[
                   {
                     required: true,
@@ -96,8 +112,12 @@ const Contact = () => {
                   <Select.Option value="otros">Otros</Select.Option>
                 </Select>
               </Form.Item>
+              <Button type="primary" htmlType="submit">
+                  Enviar Correo
+                </Button>
             </Form>
           </Col>
+
 
           <Col span={8}>
             <div

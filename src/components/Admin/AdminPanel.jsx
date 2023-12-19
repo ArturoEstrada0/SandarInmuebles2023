@@ -10,6 +10,7 @@ import Inicio from './Inicio';
 import Clientes from './Clientes';
 import Propiedades from './Propiedades';
 import Contratos from './Contratos';
+import Buzon from './Buzon';
 
 
 const { Sider, Content } = Layout;
@@ -27,6 +28,8 @@ function AdminPanel() {
         return <Propiedades />;
       case 'contratos':
         return <Contratos />;
+        case 'buzon':
+          return <Buzon />;
       default:
         return <Inicio />;
     }
@@ -48,6 +51,9 @@ function AdminPanel() {
           </Menu.Item>
           <Menu.Item key="contratos" icon={<KeyOutlined />}>
             Contratos
+          </Menu.Item>
+          <Menu.Item key="buzon" icon={<KeyOutlined />}>
+            Buzon
           </Menu.Item>
         </Menu>
       </Sider>
