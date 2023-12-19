@@ -9,6 +9,7 @@ import {
   Input,
   message,
   Card,
+  Spin,
 } from "antd";
 import {
   UserOutlined,
@@ -18,66 +19,53 @@ import {
   HomeOutlined,
   CalendarOutlined,
   NumberOutlined,
+  EnvironmentOutlined,
 } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
-const PropertyDetail = () => {
+const PropertyDetail = ({ propertyData }) => {
   const { id } = useParams();
-  const [imageHeight, setImageHeight] = useState("60vh"); // Altura de la imagen ajustada a 60% de la altura de la página
+  const [imageHeight, setImageHeight] = useState("60vh");
+  const [propertyDetails, setPropertyDetails] = useState(null);
 
-  const propertyData = [
-    {
-      id: 1,
-      type: "Casa",
-      price: 250000,
-      state: "Disponible",
-      description: "Esta es una hermosa casa en una ubicación increíble...",
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 180,
-      yearBuilt: 2000,
-      images: [
-        "https://julioros.com/wp-content/uploads/2013/06/IMG_3610.jpg",
-        "https://julioros.com/wp-content/uploads/2013/06/IMG_3610.jpg",
-      ],
-    },
-    {
-      id: 2,
-      type: "Apartamento",
-      price: 150000,
-      state: "En proceso",
-      description: "Amplio apartamento con vista al mar...",
-      bedrooms: 2,
-      bathrooms: 1,
-      area: 120,
-      yearBuilt: 2010,
-      images: [
-        "https://julioros.com/wp-content/uploads/2013/06/IMG_3610.jpg",
-        "https://julioros.com/wp-content/uploads/2013/06/IMG_3610.jpg",
-      ],
-    },
-    // Agrega más propiedades
-  ];
+  useEffect(() => {
+    const selectedProperty = propertyData.find(
+      (property) => property.id.toString() === id
+    );
 
-  const propertyDetails = propertyData.find(
-    (property) => property.id.toString() === id
-  );
+    if (selectedProperty) {
+      setPropertyDetails(selectedProperty);
+
+      const imgSrc =
+        selectedProperty &&
+        selectedProperty.images &&
+        selectedProperty.images.length > 0
+          ? selectedProperty.images[0].image
+          : "";
+
+      const img = new Image();
+      img.src = imgSrc;
+
+      console.log("selectedProperty:", selectedProperty);
+      console.log("selectedProperty.images:", selectedProperty.images);
+      console.log("Image source:", img.src);
+
+      img.onload = () => {
+        setImageHeight("60vh");
+      };
+    }
+  }, [id, propertyData]);
 
   const handleContactFormSubmit = (values) => {
     message.success("¡Tu mensaje ha sido enviado con éxito!");
   };
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = propertyDetails.images[0];
-    img.onload = () => {
-      setImageHeight("60vh"); // Ajusta la altura de la imagen a 60% después de cargar la imagen
-    };
-  }, [propertyDetails.images]);
+  if (!propertyDetails) {
+    return <Spin tip="Cargando..." />;
+  }
 
   return (
     <Content>
@@ -100,21 +88,23 @@ const PropertyDetail = () => {
       <Row gutter={16}>
         <Col span={24}>
           <div style={{ display: "flex", alignItems: "flex-start" }}>
-            <div
-              style={{
-                flex: "1",
-                width: "70vh",
-                height: "60vh",
-                paddingLeft: "30px",
-                paddingRight: "30px",
-              }}
-            >
-              <img
-                src={propertyDetails.images[0]}
-                alt="Property Image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </div>
+          <div
+  style={{
+    flex: "1",
+    width: "70vh",
+    height: "60vh",
+    paddingLeft: "30px",
+    paddingRight: "30px",
+  }}
+>
+  {propertyDetails && propertyDetails.image && (
+    <img
+      src={propertyDetails.image}  // Corregir aquí
+      alt="Property Image"
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+    />
+  )}
+</div>
             <div style={{ flex: "1", maxWidth: "30%", maxHeight: "60vh" }}>
               <Card
                 style={{
@@ -213,11 +203,11 @@ const PropertyDetail = () => {
           <div>
             <Title level={4}>
               <HomeOutlined style={{ marginRight: "8px" }} />
-              Dormitorios: {propertyDetails.bedrooms}
+              Dormitorios: {propertyDetails.activeFeatures?.Habitaciones || 0}
             </Title>
             <Title level={4}>
               <NumberOutlined style={{ marginRight: "8px" }} />
-              Baños: {propertyDetails.bathrooms}
+              Baños: {propertyDetails.activeFeatures?.Baño || 0}
             </Title>
             <Title level={4}>
               <CalendarOutlined style={{ marginRight: "8px" }} />
