@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Steps,
   Divider,
@@ -14,23 +14,63 @@ import {
   Row,
   Col,
   notification,
-  Select,
 } from "antd";
 import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import { app, firestore, analytics } from "../firebase/firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import YouTube from 'react-youtube';
+
+
+// Antes de tu función Propiedades()
+const storage = getStorage(app);
 
 const { Step } = Steps;
-const { Option } = Select;
 
-
+// Antes de la función Propiedades()
+let formData = {
+  youtubeUrl: "", // Agrega el campo para la URL de YouTube
+};
 
 function Propiedades() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
+  const [dataSource, setDataSource] = useState([]);
+  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [youtubePreview, setYoutubePreview] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const propiedadesCollection = collection(firestore, "propiedades");
+        const propiedadesSnapshot = await getDocs(propiedadesCollection);
+
+        const nuevasPropiedades = [];
+        propiedadesSnapshot.forEach((doc) => {
+          const propiedadData = doc.data();
+          const propiedad = {
+            key: doc.id,
+            ...propiedadData,
+          };
+          nuevasPropiedades.push(propiedad);
+        });
+
+        setDataSource(nuevasPropiedades);
+      } catch (error) {
+        console.error("Error al obtener propiedades:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Este efecto se ejecutará solo una vez al montar el componente
 
   const [features] = useState([
     "Baño",
+    "Medios Baños",
     "Habitaciones",
     "Cocina",
     "Patio",
@@ -47,6 +87,7 @@ function Propiedades() {
 
   const [featuresChecked, setFeaturesChecked] = useState({
     Baño: false,
+    "Medios Baños": false,
     Habitaciones: false,
     Cocina: false,
     Patio: false,
@@ -62,6 +103,7 @@ function Propiedades() {
   });
   const [featuresCount, setFeaturesCount] = useState({
     Baño: 0,
+    "Medios Baños": 0,
     Habitaciones: 0,
     Cocina: 0,
     Patio: 0,
@@ -83,11 +125,6 @@ function Propiedades() {
     }));
   };
 
-  // Manejador para el cambio de checkboxes
-  const onFeaturesChange = (checkedValues) => {
-    console.log("Características seleccionadas: ", checkedValues);
-  };
-
   // Manejador para agregar propiedades
   const handleAdd = () => {
     form.resetFields();
@@ -102,12 +139,99 @@ function Propiedades() {
   };
 
   // Manejador para el envío del formulario
-  const onFormSubmit = (values) => {
-    notification.success({
-      message: "Propiedad guardada",
-      description: "La propiedad ha sido guardada con éxito.",
-    });
-    setIsModalVisible(false);
+  const onFormSubmit = async (values, step) => {
+    // Validar que todos los campos obligatorios estén llenos
+    if (step === 0 && (!values.nombre || !values.ubicacion || !values.precio)) {
+      notification.error({
+        message: "Error al guardar en Firebase",
+        description: "Por favor, completa todos los campos obligatorios.",
+      });
+      return;
+    }
+
+    // Añadir datos al objeto global formData
+    formData = { ...formData, ...values, youtubeUrl }; // Incluye la URL de YouTube en el objeto formData
+
+    // Si es el último paso, enviar a Firebase
+    if (step === 3) {
+      try {
+        // Verificar si app está definido
+        if (typeof app !== "undefined") {
+          // Verificar que hay fotos antes de intentar acceder a values.fotos
+          if (
+            values.fotos &&
+            values.fotos.fileList &&
+            values.fotos.fileList.length > 0
+          ) {
+            // Crear un identificador único para la imagen
+            const imageId = Date.now().toString();
+
+            // Subir cada imagen a Firebase Storage
+            const uploadTasks = values.fotos.fileList.map(
+              async (photo, index) => {
+                const storageRef = ref(
+                  getStorage(app),
+                  `propiedades${imageId}_${index}`
+                );
+                await uploadBytes(storageRef, photo.originFileObj);
+
+                // Obtener la URL de descarga
+                const imageURL = await getDownloadURL(storageRef);
+
+                return imageURL;
+              }
+            );
+
+            // Esperar a que todas las imágenes se suban
+            const imageUrls = await Promise.all(uploadTasks);
+
+            // Añadir las referencias de las imágenes a los datos
+            formData = { ...formData, fotos: imageUrls, youtubeUrl };
+
+            // Añadir características activas al formulario
+            const activeFeatures = features.reduce((acc, feature) => {
+              if (featuresChecked[feature]) {
+                acc[feature] = featuresCount[feature];
+              }
+              return acc;
+            }, {});
+
+            formData = { ...formData, activeFeatures };
+
+            // Guardar en Firestore
+            const propiedadesCollection = collection(firestore, "propiedades");
+            await addDoc(propiedadesCollection, formData);
+
+            notification.success({
+              message: "Propiedad guardada",
+              description: "La propiedad ha sido guardada con éxito.",
+            });
+
+            setIsModalVisible(false);
+          } else {
+            console.error(
+              "No se proporcionaron fotos en el formulario. Por favor, selecciona al menos una foto."
+            );
+            throw new Error(
+              "No se proporcionaron fotos en el formulario. Por favor, selecciona al menos una foto."
+            );
+          }
+        } else {
+          throw new Error("Firebase no está definido");
+        }
+      } catch (error) {
+        console.error("Error al guardar en Firebase:", error);
+        notification.error({
+          message: "Error al guardar en Firebase",
+          description:
+            error.message ||
+            "Ocurrió un error al intentar guardar la propiedad.",
+        });
+      }
+    } else {
+      // Si no es el último paso, avanzar al siguiente
+      nextStep();
+    }
   };
 
   // Manejador para el cambio en la carga de archivos
@@ -147,14 +271,14 @@ function Propiedades() {
 
   const handleFeatureIncrement = (feature) => {
     setFeaturesCount((prevState) => {
-      let incrementValue = feature === "Baño" ? 0.5 : 1;
+      let incrementValue = 1;
       return { ...prevState, [feature]: prevState[feature] + incrementValue };
     });
   };
 
   const handleFeatureDecrement = (feature) => {
     setFeaturesCount((prevState) => {
-      let decrementValue = feature === "Baño" ? 0.5 : 1;
+      let decrementValue = 1;
       if (prevState[feature] - decrementValue >= 0) {
         return { ...prevState, [feature]: prevState[feature] - decrementValue };
       } else {
@@ -163,55 +287,61 @@ function Propiedades() {
     });
   };
 
-  // Datos simulados
-const dataSource = [
-  {
-    key: "1",
-    nombre: "Propiedad 1",
-    ubicacion: "Ubicación 1",
-    precio: 1000,
-    descripcion: "Descripción 1",
-    caracteristicas: "Característica 1",
-    // Asumiendo que tienes un campo para imágenes
-    imagenes: [
-      // URLs de imágenes, si las tienes
-    ],
-  },
-  // Más propiedades aquí...
-];
+  const columns = [
+    {
+      title: "Imagen",
+      dataIndex: "fotos",
+      key: "imagen",
+      render: (fotos) => (
+        <img
+          src={fotos && fotos.length > 0 ? fotos[0] : ""}
+          alt="Propiedad"
+          style={{ width: "100px", height: "100Itzpx", objectFit: "cover" }}
+        />
+      ),
+    },
 
-const columns = [
-  {
-    title: "Nombre",
-    dataIndex: "nombre",
-    key: "nombre",
-  },
-  {
-    title: "Ubicación",
-    dataIndex: "ubicacion",
-    key: "ubicacion",
-  },
-  {
-    title: "Precio",
-    dataIndex: "precio",
-    key: "precio",
-  },
-  // Puedes añadir más columnas como descripción y características si lo necesitas
-  {
-    title: "Acciones",
-    key: "acciones",
-    render: (text, record) => (
-      <Space>
-        <Button type="primary" onClick={() => handleEdit(record)}>
-          Editar
-        </Button>
-        <Button danger onClick={() => handleDelete(record.key)}>
-          Eliminar
-        </Button>
-      </Space>
-    ),
-  },
-];
+    {
+      title: "Nombre",
+      dataIndex: "nombre",
+      key: "nombre",
+    },
+    {
+      title: "Ubicación",
+      dataIndex: "ubicacion",
+      key: "ubicacion",
+    },
+    {
+      title: "Precio",
+      dataIndex: "precio",
+      key: "precio",
+    },
+    // Puedes añadir más columnas como descripción y características si lo necesitas
+    {
+      title: "Acciones",
+      key: "acciones",
+      render: (text, record) => (
+        <Space>
+          <Button type="primary" onClick={() => handleEdit(record)}>
+            Editar
+          </Button>
+          <Button danger onClick={() => handleDelete(record.key)}>
+            Eliminar
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
+  function getYouTubeVideoId(url) {
+    // Expresión regular para extraer el ID del video de una URL de YouTube
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+  
+    // Si se encontró un ID, devuelve el primer grupo capturado (ID del video)
+    return match ? match[1] : null;
+  }
+  
 
   return (
     <div>
@@ -241,7 +371,11 @@ const columns = [
           <Step title="Características" />
           <Step title="Fotos" />
         </Steps>
-        <Form form={form} layout="vertical" onFinish={onFormSubmit}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={(values) => onFormSubmit(values, currentStep)}
+        >
           {currentStep === 0 && (
             <>
               <Form.Item
@@ -333,22 +467,41 @@ const columns = [
           )}
 
           {currentStep === 3 && (
-            <Form.Item label="Fotos" name="fotos">
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                onChange={handleUploadChange}
-                onPreview={onPreview}
-                beforeUpload={() => false}
-              >
-                {fileList.length < 5 && (
-                  <div>
-                    <UploadOutlined />
-                    <div style={{ marginTop: 8 }}>Subir</div>
-                  </div>
-                )}
-              </Upload>
-            </Form.Item>
+            <>
+              <Form.Item label="Fotos" name="fotos">
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={handleUploadChange}
+                  onPreview={onPreview}
+                  beforeUpload={() => false}
+                >
+                  {fileList.length < 5 && (
+                    <div>
+                      <UploadOutlined />
+                      <div style={{ marginTop: 8 }}>Subir</div>
+                    </div>
+                  )}
+                </Upload>
+              </Form.Item>
+              <Form.Item label="URL de YouTube" name="youtubeUrl">
+                <Input
+                  placeholder="Inserta la URL de YouTube"
+                  value={youtubeUrl}
+                  onChange={(e) => {
+                    setYoutubeUrl(e.target.value);
+                    // Actualiza el estado con la nueva URL de YouTube
+                  }}
+                />
+              </Form.Item>
+
+              {youtubeUrl && (
+                <YouTube
+                  videoId={getYouTubeVideoId(youtubeUrl)}
+                  opts={{ width: "100%", height: 315 }}
+                />
+              )}
+            </>
           )}
 
           <Divider />
