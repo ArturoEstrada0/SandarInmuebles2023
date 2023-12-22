@@ -1,0 +1,13 @@
+.fondo-cards {
+  /* fallback for old browsers */
+  background: #ffffff;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgba(255, 215, 0, 1), rgb(255, 255, 255));
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgba(255, 215, 0, 1), rgb(255, 255, 255));
+     /* Ajustes para que el fondo blanco abarque solo la mitad de la pantalla */
+     background-size: 50% 150%; /* Ancho 50%, altura 100% */
+     background-repeat: no-repeat; /* No repetir el fondo */
+}

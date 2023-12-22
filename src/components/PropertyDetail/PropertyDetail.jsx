@@ -19,7 +19,7 @@ import {
   CalendarOutlined,
   NumberOutlined,
 } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 
 const { Content } = Layout;

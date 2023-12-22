@@ -12,6 +12,10 @@ import ClientDashboard from "./components/Client/ClientDashboard";
 import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 import PropertyList from "./components/PropertyList/PropertyList";
 import AdminPanel from "./components/Admin/AdminPanel";
+import Login from "./components/Auth/Login";
+import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
+import Registro from "./components/Auth/Registro";
+
 
 // Crea una función que verifica el rol del usuario
 const checkUserRole = () => {
@@ -39,9 +43,12 @@ function ClientRoute({ children }) {
 function App() {
   return (
     <Router>
+
       {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} /> {/* Agrega la ruta de inicio de sesión */}
+
         <Route
           path="/admin"
           element={
@@ -60,6 +67,12 @@ function App() {
         />
         <Route exact path="/" element={<PropertyList />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
+
+        <Route exact path="/login" element={<Login />} />
+        <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
+        <Route path="/registro" element={<Registro />} />
+
+
       </Routes>
     </Router>
   );

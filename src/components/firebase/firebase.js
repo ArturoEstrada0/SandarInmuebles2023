@@ -1,5 +1,6 @@
+import { GoogleAuthProvider } from 'firebase/auth';
 import { initializeApp } from "firebase/app";
-import { getAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';  // Solo importa getAuth una vez
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from "firebase/analytics";
 
@@ -17,8 +18,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); // Utiliza getAuth para obtener la instancia de autenticación
-const firestore = getFirestore(app); // Utiliza getFirestore para obtener la instancia de Firestore
+const auth = getAuth(app);
+const googleAuthProvider = new GoogleAuthProvider();
+const firestore = getFirestore(app);
 const analytics = getAnalytics(app);
 
-export { auth, firestore, analytics };
+export { auth, firestore, analytics, googleAuthProvider };
