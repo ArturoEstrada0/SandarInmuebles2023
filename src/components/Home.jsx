@@ -1,4 +1,5 @@
 import { Layout, Menu } from 'antd';
+import { Link } from 'react-router-dom'; // Asegúrate de tener react-router-dom instalado
 import LandingPage from './LandingPage/LandingPage';
 import AboutUs from './AboutUs/AboutUs';
 import Contact from './Contact/Contact';
@@ -8,9 +9,9 @@ import { Slider } from 'antd';
 import Footer  from './Footer/Footer';
 import ChatBubble from './Chat/ChatBubble';
 import logo from '../assets/img/logo.png';
+import Login from './Auth/Login';
 
 const { Header, Content } = Layout;
-
 
 const theme = {
   '@primary-color': '#1890ff', // Color primario
@@ -37,11 +38,21 @@ function Home() {
           />
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">Nosotros</Menu.Item>
-          <Menu.Item key="2">Contacto</Menu.Item>
-          <Menu.Item key="4">Inmuebles</Menu.Item>
-          <Menu.Item key="5">Testimonios</Menu.Item>
-          <Menu.Item key="3">Iniciar Sesión</Menu.Item>
+          <Menu.Item key="1">
+            <Link to="/nosotros">Nosotros</Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/contacto">Contacto</Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/inmuebles">Inmuebles</Link>
+          </Menu.Item>
+          <Menu.Item key="5">
+            <Link to="/testimonios">Testimonios</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/login">Iniciar Sesión</Link>
+          </Menu.Item>
         </Menu>
       </Header>
       <Content>

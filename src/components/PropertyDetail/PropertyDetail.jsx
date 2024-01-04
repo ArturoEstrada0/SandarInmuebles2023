@@ -51,7 +51,7 @@ import {
   ScheduleOutlined,
   PicCenterOutlined,
 } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 const { Content } = Layout;
 const { Title, Text, Paragraph } = Typography;

@@ -18,6 +18,10 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "./components/firebase/firebase";
 
 const { Content } = Layout;
+import Login from "./components/Auth/Login";
+import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
+import Registro from "./components/Auth/Registro";
+
 
 // Crea una función que verifica el rol del usuario
 const checkUserRole = () => {
@@ -80,9 +84,11 @@ function App() {
 
   return (
     <Router>
-      {/*<AdminPanel />*/}
+      {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} /> {/* Agrega la ruta de inicio de sesión */}
+
         <Route
           path="/admin"
           element={
@@ -108,6 +114,12 @@ function App() {
           path="/property/:id"
           element={<PropertyDetail propertyData={propertyData} />}
         />
+
+        <Route exact path="/login" element={<Login />} />
+        <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
+        <Route path="/registro" element={<Registro />} />
+
+
       </Routes>
     </Router>
   );
