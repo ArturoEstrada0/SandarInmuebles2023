@@ -17,12 +17,16 @@ import {
 } from "antd";
 import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import axios from "axios"; // Importa Axios
 
-import { app, firestore, analytics } from "../firebase/firebase";
+import { app, firestore } from "../firebase/firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import YouTube from 'react-youtube';
-
+import YouTube from "react-youtube";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import markerIconUrl from "../../assets/img/logo.png"; // Reemplaza con la ruta correcta de tu marcador
 
 // Antes de tu función Propiedades()
 const storage = getStorage(app);
@@ -42,6 +46,50 @@ function Propiedades() {
   const [dataSource, setDataSource] = useState([]);
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [youtubePreview, setYoutubePreview] = useState("");
+  const [mapHeight, setMapHeight] = useState("300px"); // Tamaño inicial
+  const [mapCenter, setMapCenter] = useState([0, 0]); // Centro inicial
+
+  // Agrega un estado para las sugerencias de ubicación y la ubicación seleccionada
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  // Manejador para el cambio en la entrada de ubicación
+  const handleLocationChange = async (newLocation) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          newLocation
+        )}`
+      );
+      // Establecer la ubicación seleccionada a null al cambiar la entrada
+      setSelectedLocation(null);
+
+      // Actualizar las sugerencias solo si hay cambios en la entrada
+      if (newLocation.trim() !== "") {
+        setLocationSuggestions(response.data || []);
+      } else {
+        setLocationSuggestions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching location suggestions:", error);
+    }
+  };
+
+  // Manejador para seleccionar una ubicación de las sugerencias
+  const handleLocationSelect = (suggestion) => {
+    setSelectedLocation(suggestion);
+    setLocationSuggestions([]); // Oculta las sugerencias después de la selección
+
+    // Actualizar el centro del mapa y el tamaño
+    setMapCenter([suggestion.lat, suggestion.lon]);
+    setMapHeight("500px"); // Ajusta el tamaño según tus necesidades
+  };
+
+  useEffect(() => {
+    if (selectedLocation) {
+      setMapCenter([selectedLocation.lat, selectedLocation.lon]);
+    }
+  }, [selectedLocation]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -150,7 +198,12 @@ function Propiedades() {
     }
 
     // Añadir datos al objeto global formData
-    formData = { ...formData, ...values, youtubeUrl }; // Incluye la URL de YouTube en el objeto formData
+    formData = {
+      ...formData,
+      ...values,
+      youtubeUrl,
+      ubicacion: selectedLocation?.display_name,
+    };
 
     // Si es el último paso, enviar a Firebase
     if (step === 3) {
@@ -335,13 +388,15 @@ function Propiedades() {
 
   function getYouTubeVideoId(url) {
     // Expresión regular para extraer el ID del video de una URL de YouTube
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const regex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
-  
+
     // Si se encontró un ID, devuelve el primer grupo capturado (ID del video)
     return match ? match[1] : null;
   }
-  
+
+  const defaultPosition = [0, 0]; // Posición por defecto del marcador antes de seleccionar una ubicación
 
   return (
     <div>
@@ -364,6 +419,7 @@ function Propiedades() {
         onOk={form.submit}
         onCancel={() => setIsModalVisible(false)}
         width={800}
+        style={{ minWidth: "800px" }} // Ajuste para asegurar un ancho mínimo
       >
         <Steps current={currentStep} style={{ marginBottom: "20px" }}>
           <Step title="Información Básica" />
@@ -394,8 +450,24 @@ function Propiedades() {
                   { required: true, message: "Por favor ingresa la ubicación" },
                 ]}
               >
-                <Input />
+                <Input
+                  onChange={(e) => handleLocationChange(e.target.value)}
+                  value={selectedLocation ? selectedLocation.display_name : ""}
+                />
               </Form.Item>
+
+              {locationSuggestions.length > 0 && (
+                <ul>
+                  {locationSuggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.display_name}
+                      onClick={() => handleLocationSelect(suggestion)}
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <Form.Item
                 label="Precio"
                 name="precio"
@@ -505,6 +577,50 @@ function Propiedades() {
           )}
 
           <Divider />
+
+          {/* Coloca el mapa debajo del campo "Precio" */}
+          <Form.Item label="Ubicación en Mapa" style={{ height: mapHeight }}>
+            <div
+              style={{
+                position: "relative",
+                height: mapHeight,
+                marginBottom: "20px",
+              }}
+            >
+              <MapContainer
+                center={
+                  selectedLocation
+                    ? [selectedLocation.lat, selectedLocation.lon]
+                    : defaultPosition
+                }
+                zoom={13}
+                style={{ height: "100%", width: "100%" }}
+                containerElement={<div style={{ height: "100%" }} />}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                {selectedLocation && (
+                  <Marker
+                    position={[selectedLocation.lat, selectedLocation.lon]}
+                    eventHandlers={{
+                      click: () => console.log("Marker clicked!"),
+                    }}
+                    icon={L.icon({
+                      iconUrl: markerIconUrl, // Utiliza la ruta importada
+                      iconSize: [25, 41],
+                      iconAnchor: [12, 41],
+                      popupAnchor: [1, -34],
+                    })}
+                  >
+                    <Popup>{selectedLocation.display_name}</Popup>
+                  </Marker>
+                )}
+              </MapContainer>
+            </div>
+          </Form.Item>
+
           {currentStep > 0 && (
             <Button style={{ margin: "0 8px" }} onClick={prevStep}>
               Anterior
