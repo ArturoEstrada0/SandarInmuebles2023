@@ -11,6 +11,7 @@ import {
   Typography,
   Image,
   Spin,
+  Input,
 } from "antd";
 import {
   HomeOutlined,
@@ -33,6 +34,17 @@ const PropertyList = ({ onPropertyClick }) => {
   const [filterType, setFilterType] = useState("all");
   const [filterPrice, setFilterPrice] = useState([0, 1000000]);
   const [filterState, setFilterState] = useState("all");
+
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+
+  const handleMinPriceChange = (e) => {
+    setMinPrice(e.target.value);
+  };
+
+  const handleMaxPriceChange = (e) => {
+    setMaxPrice(e.target.value);
+  };
   const [mexicanStates, setMexicanStates] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
@@ -84,11 +96,10 @@ const PropertyList = ({ onPropertyClick }) => {
 
   const applyFilters = () => {
     const filtered = propertyData.filter((property) => {
-      const isTypeMatch = filterType === "all" || property.type === filterType;
+      const isTypeMatch = filterType === 'all' || property.type === filterType;
       const isPriceMatch =
-        property.price >= filterPrice[0] && property.price <= filterPrice[1];
-      const isStateMatch =
-        filterState === "all" || property.state === filterState;
+        property.price >= parseInt(minPrice) && property.price <= parseInt(maxPrice);
+      const isStateMatch = filterState === 'all' || property.state === filterState;
 
       return isTypeMatch && isPriceMatch && isStateMatch;
     });
@@ -122,18 +133,24 @@ const PropertyList = ({ onPropertyClick }) => {
               </Select>
             </Col>
             <Col xs={24} sm={12} md={6} lg={6}>
-              <Text strong>
-                <DollarOutlined /> Rango de Precio
-              </Text>
-              <Slider
-                range
-                min={0}
-                max={1000000}
-                step={10000}
-                value={filterPrice}
-                onChange={(value) => setFilterPrice(value)}
+            <Text strong>
+              <DollarOutlined /> Rango de Precio
+            </Text>
+            <div style={{ display: 'flex' }}>
+              <Input
+                placeholder="Mínimo"
+                value={minPrice}
+                onChange={handleMinPriceChange}
+                style={{ width: 'calc(50% - 8px)', marginRight: '8px' }}
               />
-            </Col>
+              <Input
+                placeholder="Máximo"
+                value={maxPrice}
+                onChange={handleMaxPriceChange}
+                style={{ width: 'calc(50% - 8px)' }}
+              />
+            </div>
+          </Col>
             <Col xs={24} sm={12} md={6} lg={6}>
               <Text strong>
                 <EnvironmentOutlined /> Estado
