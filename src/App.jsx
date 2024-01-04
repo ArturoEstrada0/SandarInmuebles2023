@@ -5,19 +5,13 @@ import {
   Navigate,
   Link,
 } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Layout, Spin } from "antd";
-import "./App.css";
+// Importa tus componentes
 import Home from "./components/Home";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ClientDashboard from "./components/Client/ClientDashboard";
 import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 import PropertyList from "./components/PropertyList/PropertyList";
 import AdminPanel from "./components/Admin/AdminPanel";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "./components/firebase/firebase";
-
-const { Content } = Layout;
 import Login from "./components/Auth/Login";
 import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
 import Registro from "./components/Auth/Registro";
@@ -47,43 +41,9 @@ function ClientRoute({ children }) {
 }
 
 function App() {
-  const [propertyData, setPropertyData] = useState([]);
-
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const propertiesSnapshot = await getDocs(
-          collection(firestore, "propiedades")
-        );
-        const properties = propertiesSnapshot.docs.map((doc) => {
-          const data = doc.data();
-          const features = data.activeFeatures || {};
-
-          return {
-            id: doc.id,
-            type: data.nombre,
-            price: data.precio,
-            state: data.ubicacion,
-            city: data.ubicacion,
-            rooms: features.Habitaciones || 0,
-            bathrooms: features.Baño || 0,
-            area: features.Tamaño || 0,
-            image: data.fotos[0],
-            // Agrega cualquier propiedad adicional según tu estructura
-            // activeFeatures: data.activeFeatures,
-          };
-        });
-        setPropertyData(properties);
-      } catch (error) {
-        console.error("Error al obtener propiedades:", error);
-      }
-    };
-
-    fetchProperties();
-  }, []);
-
   return (
     <Router>
+
       {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -105,15 +65,8 @@ function App() {
             </ClientRoute>
           }
         />
-        <Route
-          exact
-          path="/"
-          element={<PropertyList propertyData={propertyData} />}
-        />
-        <Route
-          path="/property/:id"
-          element={<PropertyDetail propertyData={propertyData} />}
-        />
+        <Route exact path="/" element={<PropertyList />} />
+        <Route path="/property/:id" element={<PropertyDetail />} />
 
         <Route exact path="/login" element={<Login />} />
         <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
