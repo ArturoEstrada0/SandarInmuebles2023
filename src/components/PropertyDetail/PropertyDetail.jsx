@@ -60,6 +60,7 @@ const PropertyDetail = ({ propertyData }) => {
   const { id } = useParams();
   const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState('Recámaras');
 
   useEffect(() => {
     const selectedProperty = propertyData.find(
@@ -221,7 +222,6 @@ const PropertyDetail = ({ propertyData }) => {
             <Title level={4} style={{ color: '#1890ff' }}>
               {propertyDetails.activeFeatures?.[detail.key] || 0}
             </Title>
-            <Paragraph style={{ fontSize: '14px', color: '#888' }}>{detail.label}</Paragraph>
           </Card>
         </Col>
       ))}
@@ -232,6 +232,48 @@ const PropertyDetail = ({ propertyData }) => {
 {/* Insertar componentes de Detalles, Descripción y Características debajo de Detalles de la Propiedad */}
 <Col span={24}>
   <Row gutter={[16, 16]}>
+
+{/* Características */}
+<Col span={24}>
+  <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', marginTop: '16px' }}>
+    <Title level={2}>Información del inmueble</Title>
+    <Row gutter={[16, 16]}>
+    <Col span={12}>
+  <ul style={{ listStyle: 'none', padding: 0 }}>
+    <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Estacionamiento:</strong> Sí</li>
+    <li><strong><HomeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo:</strong> Casa</li>
+    <li><strong><EnvironmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Uso de la propiedad:</strong> Residencial</li>
+    <li><strong><BankOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />¿Está en condominio?:</strong> No</li>
+    <li><strong><BuildOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Edificios:</strong> 1</li>
+    <li><strong><ShopOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Propiedades:</strong> 2</li>
+    <li><strong><ApartmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo de departamento:</strong> N/A</li>
+    <li><strong><AlertOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Estado de conservación del inmueble:</strong> Bueno</li>
+    <li><strong><ClockCircleOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Antigüedad:</strong> 5 años</li>
+    <li><strong><HeatMapOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Orientación del inmueble:</strong> Norte</li>
+    <li><strong><ScheduleOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Superficie de construcción:</strong> 150 m²</li>
+  </ul>
+  </Col>
+  <Col span={12}>
+  <ul style={{ listStyle: 'none', padding: 0 }}>
+    <li><strong><CrownOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Recámaras:</strong> 3</li>
+    <li><strong><FieldNumberOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Superficie terreno:</strong> 250 m²</li>
+    <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Baños:</strong> 2</li>
+    <li><strong><CarryOutOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Medios baños:</strong> 1</li>
+    <li><strong><ToolOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Cocina:</strong> Equipada</li>
+    <li><strong><HeatMapOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Clima:</strong> Aire acondicionado</li>
+    <li><strong><ApartmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Amueblado:</strong> Sí</li>
+    <li><strong><RiseOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />¿Está equipado?:</strong> Sí</li>
+    <li><strong><BulbOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Acabados:</strong> De lujo</li>
+    <li><strong><EyeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Número de niveles:</strong> 2</li>
+    <li><strong><GlobalOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Vista del inmueble:</strong> Panorámica</li>
+  </ul>
+  </Col>
+    </Row>
+  </div>
+  </Col>
+
+
+
     {/* Detalles */}
     <Col xs={24} sm={24} md={12}>
       <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -260,44 +302,7 @@ const PropertyDetail = ({ propertyData }) => {
   </Row>
 </Col>
 
-{/* Características */}
-<Col span={24}>
-  <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', marginTop: '16px' }}>
-    <Title level={2}>Información del inmueble</Title>
-    <Row gutter={[16, 16]}>
-    <Col span={12}>
-  <ul style={{ listStyle: 'none', padding: 0 }}>
-    <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Estacionamiento:</strong> Sí</li>
-    <li><strong><HomeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo:</strong> Casa</li>
-    <li><strong><EnvironmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Uso de la propiedad:</strong> Residencial</li>
-    <li><strong><BankOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />¿Está en condominio?:</strong> No</li>
-    <li><strong><BuildOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Edificios:</strong> 1</li>
-    <li><strong><ShopOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Propiedades:</strong> 2</li>
-    <li><strong><ApartmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo de departamento:</strong> N/A</li>
-    <li><strong><AlertOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Estado de conservación del inmueble:</strong> Bueno</li>
-    <li><strong><ClockCircleOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Antigüedad:</strong> 5 años</li>
-    <li><strong><HeatMapOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Orientación del inmueble:</strong> Norte</li>
-    <li><strong><ScheduleOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Superficie de construcción:</strong> 150 m²</li>
-  </ul>
-</Col>
-<Col span={12}>
-  <ul style={{ listStyle: 'none', padding: 0 }}>
-    <li><strong><CrownOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Recámaras:</strong> 3</li>
-    <li><strong><FieldNumberOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Superficie terreno:</strong> 250 m²</li>
-    <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Baños:</strong> 2</li>
-    <li><strong><CarryOutOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Medios baños:</strong> 1</li>
-    <li><strong><ToolOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Cocina:</strong> Equipada</li>
-    <li><strong><HeatMapOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Clima:</strong> Aire acondicionado</li>
-    <li><strong><ApartmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Amueblado:</strong> Sí</li>
-    <li><strong><RiseOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />¿Está equipado?:</strong> Sí</li>
-    <li><strong><BulbOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Acabados:</strong> De lujo</li>
-    <li><strong><EyeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Número de niveles:</strong> 2</li>
-    <li><strong><GlobalOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Vista del inmueble:</strong> Panorámica</li>
-  </ul>
-</Col>
-    </Row>
-  </div>
-</Col>
+
     </Row>
   </Content>
 );
