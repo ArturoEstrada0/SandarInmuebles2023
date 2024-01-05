@@ -10,6 +10,7 @@ import Inicio from './Inicio';
 import Clientes from './Clientes';
 import Propiedades from './Propiedades';
 import Contratos from './Contratos';
+import Buzon from './Buzon';
 
 
 const { Sider, Content } = Layout;
@@ -27,6 +28,8 @@ function AdminPanel() {
         return <Propiedades />;
       case 'contratos':
         return <Contratos />;
+      case 'buzon':
+        return <Buzon />;
       default:
         return <Inicio />;
     }
