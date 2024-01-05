@@ -1,0 +1,40 @@
+.asesores-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px; /* Ajusta la altura máxima según tus preferencias */
+  }
+  
+  .text-container {
+    margin: 20px 0; /* Agrega márgenes superior e inferior */
+    max-width: 50%; /* Establece el ancho máximo al 50% de la pantalla */
+    color: #333; /* Color de texto para el párrafo */
+    font-size: 20px;
+  }
+  
+  .text-container h1 {
+    color: black; /* Color negro para el h1 */
+  }
+  
+  .text-container h4 {
+    color: blue; /* Color azul para el h4 */
+  }
+  
+  .text-container hr {
+    width: 50%; /* Ancho de la línea horizontal al 50% de la pantalla */
+    margin: 10px auto; /* Ajusta el margen superior e inferior y centra la línea horizontal */
+    border: 2px solid blue; /* Color y grosor de la línea horizontal */
+  }
+  
+  .button-asesor {
+    margin-top: 10px; /* Ajusta el margen superior del botón según tus preferencias */
+  }
+  

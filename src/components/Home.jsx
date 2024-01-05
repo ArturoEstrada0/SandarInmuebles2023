@@ -8,6 +8,7 @@ import { Slider } from 'antd';
 import Footer  from './Footer/Footer';
 import ChatBubble from './Chat/ChatBubble';
 import Header from './Header';
+import Asesores from './Asesores/Asesores';
 
 
 const { Content } = Layout;
@@ -26,6 +27,7 @@ function Home() {
           <LandingPage />
           <PropertyList />
           <AboutUs />
+          <Asesores />
           <Contact />
         </div>
 
