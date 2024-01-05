@@ -83,7 +83,7 @@ function App() {
 
   return (
     <Router>
-      <AdminPanel />
+      {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
