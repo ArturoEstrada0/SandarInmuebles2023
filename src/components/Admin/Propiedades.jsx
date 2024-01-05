@@ -53,27 +53,38 @@ function Propiedades() {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-  // Manejador para el cambio en la entrada de ubicación
-  const handleLocationChange = async (newLocation) => {
-    try {
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          newLocation
-        )}`
-      );
-      // Establecer la ubicación seleccionada a null al cambiar la entrada
-      setSelectedLocation(null);
+// Antes de la función Propiedades()
+let locationCache = {};
 
-      // Actualizar las sugerencias solo si hay cambios en la entrada
-      if (newLocation.trim() !== "") {
-        setLocationSuggestions(response.data || []);
-      } else {
-        setLocationSuggestions([]);
-      }
-    } catch (error) {
-      console.error("Error fetching location suggestions:", error);
+// Dentro de handleLocationChange
+const handleLocationChange = async (newLocation) => {
+  try {
+    // Verificar si la ubicación está en la caché
+    if (locationCache[newLocation]) {
+      setLocationSuggestions(locationCache[newLocation]);
+      return;
     }
-  };
+
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(newLocation)}`,
+      { timeout: 50000 } // Tiempo de espera en milisegundos (ajusta según sea necesario)
+    );
+    
+
+    // Actualizar las sugerencias solo si hay cambios en la entrada
+    if (newLocation.trim() !== "") {
+      setLocationSuggestions(response.data || []);
+
+      // Almacenar en la caché
+      locationCache[newLocation] = response.data || [];
+    } else {
+      setLocationSuggestions([]);
+    }
+  } catch (error) {
+    console.error("Error al obtener sugerencias de ubicación:", error.message);
+  }
+};
+
 
   // Manejador para seleccionar una ubicación de las sugerencias
   const handleLocationSelect = (suggestion) => {
