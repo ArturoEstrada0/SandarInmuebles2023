@@ -4,6 +4,8 @@ import { getAuth } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { LeftOutlined } from "@ant-design/icons";
+
 import {
   MDBBtn,
   MDBContainer,
@@ -105,6 +107,15 @@ const Registro = () => {
             style={{ borderRadius: "1rem", maxWidth: "400px" }}
           >
             <MDBCardBody className="p-5 d-flex flex-column align-items-center">
+              <Link to="/">
+                <LeftOutlined
+                  style={{
+                    fontSize: "1.5rem",
+                    marginRight: "350px",
+                    color: "white",
+                  }}
+                />
+              </Link>
               <MDBNavbar
                 expand="lg"
                 light

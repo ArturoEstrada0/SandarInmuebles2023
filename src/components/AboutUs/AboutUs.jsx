@@ -3,11 +3,12 @@ import { Layout, Typography, Row, Col, Statistic, Divider } from 'antd';
 import { ApartmentOutlined, HomeOutlined } from '@ant-design/icons';
 import './AboutUs.css';
 
-import image1 from '../../assets/img/houses/house5.png';
+/*import image1 from '../../assets/img/houses/house5.png';
 import image2 from '../../assets/img/houses/house6.png';
 import image3 from '../../assets/img/houses/house7.png';
-import image4 from '../../assets/img/houses/house8.png';
+import image4 from '../../assets/img/houses/house8.png';*/
 
+import aboutusF from '../../assets/img/aboutusF.jpg'
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
 
@@ -18,14 +19,13 @@ const AboutUs = () => {
 
   return (
     <Content>
-      <div className="about-us-container">
+      <div className="about-us-container" style={{ backgroundImage: `url(${aboutusF})`}}>
         <Row gutter={32}>
           <Col span={12}>
             <AboutUsIntro />
             <AboutUsStats />
           </Col>
           <Col span={12}>
-            <AboutUsImageCollage />
           </Col>
         </Row>
       </div>
@@ -84,7 +84,7 @@ const StatisticCard = ({ icon, title, value, color, id }) => (
   </div>
 );
 
-const AboutUsImageCollage = () => (
+/*const AboutUsImageCollage = () => (
   <div className="about-us-image-collage">
     <div className="image-collage-row">
       <img src={image1} alt="Imagen 1" className="about-us-image square-image" />
@@ -95,6 +95,6 @@ const AboutUsImageCollage = () => (
       <img src={image4} alt="Imagen 4" className="about-us-image square-image" />
     </div>
   </div>
-);
+);*/
 
 export default AboutUs;

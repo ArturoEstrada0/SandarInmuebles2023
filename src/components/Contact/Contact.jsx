@@ -10,6 +10,9 @@ import {
 } from "@ant-design/icons"; // Importa los iconos que necesitas
 import "antd/dist/reset.css";
 
+import contactF from '../../assets/img/contactF.jpg'
+
+
 const Contact = () => {
   const onFinish = (values) => {
     console.log("Valores enviados:", values);
@@ -22,6 +25,7 @@ const Contact = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "65vh",
+        backgroundImage: `url(${contactF})`
       }}
     >
       <Card title="Formulario de Contacto" style={{ width: 1000 }}>
