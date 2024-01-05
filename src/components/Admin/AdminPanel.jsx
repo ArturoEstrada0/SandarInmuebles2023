@@ -49,6 +49,9 @@ function AdminPanel() {
           <Menu.Item key="contratos" icon={<KeyOutlined />}>
             Contratos
           </Menu.Item>
+          <Menu.Item key="buzon" icon={<KeyOutlined />}>
+            Buzon
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout>
