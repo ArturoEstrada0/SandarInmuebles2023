@@ -14,6 +14,8 @@ import {
   Row,
   Col,
   notification,
+  Select,
+  Radio
 } from "antd";
 import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -53,38 +55,41 @@ function Propiedades() {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-// Antes de la función Propiedades()
-let locationCache = {};
+  // Antes de la función Propiedades()
+  let locationCache = {};
 
-// Dentro de handleLocationChange
-const handleLocationChange = async (newLocation) => {
-  try {
-    // Verificar si la ubicación está en la caché
-    if (locationCache[newLocation]) {
-      setLocationSuggestions(locationCache[newLocation]);
-      return;
+  // Dentro de handleLocationChange
+  const handleLocationChange = async (newLocation) => {
+    try {
+      // Verificar si la ubicación está en la caché
+      if (locationCache[newLocation]) {
+        setLocationSuggestions(locationCache[newLocation]);
+        return;
+      }
+
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          newLocation
+        )}`,
+        { timeout: 50000 } // Tiempo de espera en milisegundos (ajusta según sea necesario)
+      );
+
+      // Actualizar las sugerencias solo si hay cambios en la entrada
+      if (newLocation.trim() !== "") {
+        setLocationSuggestions(response.data || []);
+
+        // Almacenar en la caché
+        locationCache[newLocation] = response.data || [];
+      } else {
+        setLocationSuggestions([]);
+      }
+    } catch (error) {
+      console.error(
+        "Error al obtener sugerencias de ubicación:",
+        error.message
+      );
     }
-
-    const response = await axios.get(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(newLocation)}`,
-      { timeout: 50000 } // Tiempo de espera en milisegundos (ajusta según sea necesario)
-    );
-    
-
-    // Actualizar las sugerencias solo si hay cambios en la entrada
-    if (newLocation.trim() !== "") {
-      setLocationSuggestions(response.data || []);
-
-      // Almacenar en la caché
-      locationCache[newLocation] = response.data || [];
-    } else {
-      setLocationSuggestions([]);
-    }
-  } catch (error) {
-    console.error("Error al obtener sugerencias de ubicación:", error.message);
-  }
-};
-
+  };
 
   // Manejador para seleccionar una ubicación de las sugerencias
   const handleLocationSelect = (suggestion) => {
@@ -197,7 +202,6 @@ const handleLocationChange = async (newLocation) => {
     setIsModalVisible(true);
   };
 
-  // Manejador para el envío del formulario
   const onFormSubmit = async (values, step) => {
     // Validar que todos los campos obligatorios estén llenos
     if (step === 0 && (!values.nombre || !values.ubicacion || !values.precio)) {
@@ -207,7 +211,7 @@ const handleLocationChange = async (newLocation) => {
       });
       return;
     }
-
+  
     // Añadir datos al objeto global formData
     formData = {
       ...formData,
@@ -215,7 +219,13 @@ const handleLocationChange = async (newLocation) => {
       youtubeUrl,
       ubicacion: selectedLocation?.display_name,
     };
-
+  
+    // Manejar específicamente la asignación de valores para tipoPropiedad y condicion
+    if (step === 0) {
+      formData.tipoPropiedad = values.tipoPropiedad || "";
+      formData.condicion = values.condicion || "";
+    }
+  
     // Si es el último paso, enviar a Firebase
     if (step === 3) {
       try {
@@ -229,29 +239,27 @@ const handleLocationChange = async (newLocation) => {
           ) {
             // Crear un identificador único para la imagen
             const imageId = Date.now().toString();
-
+  
             // Subir cada imagen a Firebase Storage
-            const uploadTasks = values.fotos.fileList.map(
-              async (photo, index) => {
-                const storageRef = ref(
-                  getStorage(app),
-                  `propiedades${imageId}_${index}`
-                );
-                await uploadBytes(storageRef, photo.originFileObj);
-
-                // Obtener la URL de descarga
-                const imageURL = await getDownloadURL(storageRef);
-
-                return imageURL;
-              }
-            );
-
+            const uploadTasks = values.fotos.fileList.map(async (photo, index) => {
+              const storageRef = ref(
+                getStorage(app),
+                `propiedades${imageId}_${index}`
+              );
+              await uploadBytes(storageRef, photo.originFileObj);
+  
+              // Obtener la URL de descarga
+              const imageURL = await getDownloadURL(storageRef);
+  
+              return imageURL;
+            });
+  
             // Esperar a que todas las imágenes se suban
             const imageUrls = await Promise.all(uploadTasks);
-
+  
             // Añadir las referencias de las imágenes a los datos
             formData = { ...formData, fotos: imageUrls, youtubeUrl };
-
+  
             // Añadir características activas al formulario
             const activeFeatures = features.reduce((acc, feature) => {
               if (featuresChecked[feature]) {
@@ -259,18 +267,18 @@ const handleLocationChange = async (newLocation) => {
               }
               return acc;
             }, {});
-
+  
             formData = { ...formData, activeFeatures };
-
+  
             // Guardar en Firestore
             const propiedadesCollection = collection(firestore, "propiedades");
             await addDoc(propiedadesCollection, formData);
-
+  
             notification.success({
               message: "Propiedad guardada",
               description: "La propiedad ha sido guardada con éxito.",
             });
-
+  
             setIsModalVisible(false);
           } else {
             console.error(
@@ -297,6 +305,7 @@ const handleLocationChange = async (newLocation) => {
       nextStep();
     }
   };
+  
 
   // Manejador para el cambio en la carga de archivos
   const handleUploadChange = ({ fileList: newFileList }) => {
@@ -369,6 +378,16 @@ const handleLocationChange = async (newLocation) => {
       title: "Nombre",
       dataIndex: "nombre",
       key: "nombre",
+    },
+    {
+      title: "Tipo de Propiedad",
+      dataIndex: "tipoPropiedad",
+      key: "tipoPropiedad",
+    },
+    {
+      title: "Condición",
+      dataIndex: "condicion",
+      key: "condicion",
     },
     {
       title: "Ubicación",
@@ -454,6 +473,41 @@ const handleLocationChange = async (newLocation) => {
               >
                 <Input />
               </Form.Item>
+
+              <Form.Item
+                label="Tipo de Propiedad"
+                name="tipoPropiedad"
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor selecciona el tipo de propiedad",
+                  },
+                ]}
+              >
+                <Select>
+                  <Select.Option value="Casa">Casa</Select.Option>
+                  <Select.Option value="Departamento">
+                    Departamento
+                  </Select.Option>
+                  {/* Agrega más opciones según sea necesario */}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Condición"
+                name="condicion"
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor selecciona la condición",
+                  },
+                ]}
+              >
+                <Radio.Group>
+                  <Radio value="venta">Venta</Radio>
+                  <Radio value="renta">Renta</Radio>
+                </Radio.Group>
+              </Form.Item>
+
               <Form.Item
                 label="Ubicación"
                 name="ubicacion"
@@ -635,11 +689,6 @@ const handleLocationChange = async (newLocation) => {
           {currentStep > 0 && (
             <Button style={{ margin: "0 8px" }} onClick={prevStep}>
               Anterior
-            </Button>
-          )}
-          {currentStep < 3 && (
-            <Button type="primary" onClick={nextStep}>
-              Siguiente
             </Button>
           )}
         </Form>

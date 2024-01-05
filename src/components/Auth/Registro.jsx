@@ -25,6 +25,8 @@ const Registro = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
+  const [phone, setPhone] = useState("");
+
   const [successMessage, setSuccessMessage] = useState(""); // Nuevo estado
 
   const isValidEmail = (email) => {
@@ -42,7 +44,7 @@ const Registro = () => {
   const register = async () => {
     setError("");
     setSuccessMessage(""); // Limpiar el mensaje de éxito al intentar registrar nuevamente
-    if (!name || !email || !password || !confirmPassword || !role) {
+    if (!name || !email || !password || !confirmPassword ) {
       setError("Por favor, complete todos los campos.");
       return;
     }
@@ -56,6 +58,10 @@ const Registro = () => {
     }
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
+      return;
+    }
+    if (!phone) {
+      setError("Por favor, ingrese un número de teléfono.");
       return;
     }
 
@@ -80,7 +86,8 @@ const Registro = () => {
         uid: user.uid,
         name: name,
         email: email,
-        role: role,
+        //role: role,
+        phone: phone, // Agregar el número de teléfono
       });
 
       console.log("Usuario registrado exitosamente", user);
@@ -167,13 +174,24 @@ const Registro = () => {
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
                 labelClass="text-white"
+                label="Teléfono"
+                size="lg"
+                id="form6"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+
+              {/* <MDBInput
+                wrapperClass="mb-4 mx-5 w-100"
+                labelClass="text-white"
                 label="Rol"
                 size="lg"
                 id="form5"
                 type="text"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-              />
+              /> */}
 
               <div className="d-flex flex-row justify-content-center mb-4">
                 <MDBCheckbox

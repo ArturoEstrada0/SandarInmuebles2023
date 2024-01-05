@@ -1,51 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input } from 'antd';
-
-
+import { getDocs, collection } from 'firebase/firestore';
+import { firestore } from '../firebase/firebase';  // Asegúrate de importar la instancia correcta de firestore
 
 function Clientes() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [usuarios, setUsuarios] = useState([]);
 
+  // Datos simulados
+  const dataSource = usuarios.map((usuario) => ({ key: usuario.id, ...usuario }));
 
-// Datos simulados
-const dataSource = [
-  {
-    key: '1',
-    nombre: 'Juan',
-    correo: 'juan@example.com',
-    telefono: '1234567890',
-  },
-  // Más clientes aquí...
-];
+  const columns = [
+    {
+      title: 'Nombre',
+      dataIndex: 'name',
+      key: 'nombre',
+    },
+    {
+      title: 'Correo',
+      dataIndex: 'email',
+      key: 'correo',
+    },
+    {
+      title: 'Teléfono',
+      dataIndex: 'phone',
+      key: 'telefono',
+    },
+    {
+      title: 'Acciones',
+      key: 'acciones',
+      render: (text, record) => (
+        <div>
+          <Button type="primary" onClick={() => handleEdit(record)}>Editar</Button>
+          <Button danger onClick={() => handleDelete(record.key)}>Eliminar</Button>
+        </div>
+      ),
+    },
+  ];
 
-const columns = [
-  {
-    title: 'Nombre',
-    dataIndex: 'nombre',
-    key: 'nombre',
-  },
-  {
-    title: 'Correo',
-    dataIndex: 'correo',
-    key: 'correo',
-  },
-  {
-    title: 'Teléfono',
-    dataIndex: 'telefono',
-    key: 'telefono',
-  },
-  {
-    title: 'Acciones',
-    key: 'acciones',
-    render: (text, record) => (
-      <div>
-        <Button type="primary" onClick={() => handleEdit(record)}>Editar</Button>
-        <Button danger onClick={() => handleDelete(record.key)}>Eliminar</Button>
-      </div>
-    ),
-  },
-];
+  useEffect(() => {
+    const obtenerUsuariosFirestore = async () => {
+      const usuariosCollection = collection(firestore, 'usuarios');
+      try {
+        const querySnapshot = await getDocs(usuariosCollection);
+        const usuariosData = [];
+        querySnapshot.forEach((doc) => {
+          usuariosData.push({ id: doc.id, ...doc.data() });
+        });
+        setUsuarios(usuariosData);
+      } catch (error) {
+        console.error('Error al obtener la lista de usuarios desde Firestore:', error);
+        // Puedes manejar el error según tus necesidades
+      }
+    };
+
+    obtenerUsuariosFirestore();
+  }, []);
 
   const handleAdd = () => {
     setIsModalVisible(true);
@@ -57,7 +68,7 @@ const columns = [
   };
 
   const handleDelete = (key) => {
-    // Aquí podrías eliminar el cliente con la clave proporcionada
+    // Aquí podrías implementar la lógica para eliminar el cliente con la clave proporcionada
   };
 
   const handleOk = () => {
@@ -91,4 +102,3 @@ const columns = [
 }
 
 export default Clientes;
-    
