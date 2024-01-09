@@ -13,6 +13,7 @@ import Contratos from './Contratos';
 import Buzon from './Buzon';
 
 
+
 const { Sider, Content } = Layout;
 
 function AdminPanel() {

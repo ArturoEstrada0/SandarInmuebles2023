@@ -1,4 +1,4 @@
-import { Input, Button, Form, /*Space,*/ Row, Col, Select, Card } from "antd";
+import { Input, Button, Form, /*Space,*/ Row, Col, Select, Card, message } from "antd";
 import {
   UserOutlined,
   MailOutlined,
@@ -11,43 +11,39 @@ import {
 import "antd/dist/reset.css";
 import { collection, addDoc } from 'firebase/firestore';
 import { firestore } from "../firebase/firebase";  
+import "./Contact.css";
 
 
 
 const Contact = () => {
   const onFinish = async (values) => {
-
-    try{
+    try {
       const contactCollection = collection(firestore, 'contacts');
       await addDoc(contactCollection, values);
 
-      console.log("Datos enviados correctamente a Firestore: ",values)
-    }catch (error) {
-      console.log("Error al enviar datos a Firestore: ", error)
-    }
-    // Aquí puedes agregar lógica para enviar el correo, por ejemplo, utilizando un servicio de envío de correos.
+      console.log("Datos enviados correctamente a Firestore: ", values);
 
+      // Muestra una alerta indicando que el mensaje se envió correctamente
+      message.success("Mensaje enviado correctamente");
+
+    } catch (error) {
+      console.log("Error al enviar datos a Firestore: ", error);
+
+      // Muestra una alerta indicando que hubo un error al enviar el mensaje
+      message.error("Error al enviar el mensaje. Por favor, inténtalo de nuevo.");
+    }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "65vh",
-      }}
-    >
-      <Card title="Formulario de Contacto" style={{ width: 1000 }}>
+    <div className="contact-container">
+      <Card Card title={<span className="card-title">Formulario de Contacto</span>} className="card-container">
         <Row gutter={16}>
           <Col span={8}>
             <Form name="contact-form" onFinish={onFinish} layout="vertical">
               <Form.Item
                 label="Nombre"
                 name="name"
-                rules={[
-                  { required: true, message: "Por favor, ingrese su nombre." },
-                ]}
+                rules={[{ required: true, message: 'Por favor, ingrese su nombre.' }]}
               >
                 <Input prefix={<UserOutlined />} />
               </Form.Item>
@@ -55,55 +51,34 @@ const Contact = () => {
               <Form.Item
                 label="Teléfono"
                 name="phone"
-              
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingrese su número de teléfono.",
-                  },
-                ]}
+                rules={[{ required: true, message: 'Por favor, ingrese su número de teléfono.' }]}
               >
                 <Input prefix={<PhoneOutlined />} />
               </Form.Item>
 
               <Form.Item
-                label="Mensaje"
-                name="message"
-                
-                rules={[
-                  { required: true, message: "Por favor, ingrese un mensaje." },
-                ]}
-              >
-                <Input.TextArea rows={2} prefix={<MessageOutlined />} />
-              </Form.Item>
-
-              <Form.Item>
-              </Form.Item>
-              <Form.Item
                 label="Correo Electrónico"
                 name="email"
-                
                 rules={[
-                  {
-                    required: true,
-                    type: "email",
-                    message: "Por favor, ingrese un correo electrónico válido.",
-                  },
+                  { required: true, type: 'email', message: 'Por favor, ingrese un correo electrónico válido.' },
                 ]}
               >
                 <Input prefix={<MailOutlined />} />
               </Form.Item>
 
               <Form.Item
+                label="Mensaje"
+                name="message"
+                rules={[{ required: true, message: 'Por favor, ingrese un mensaje.' }]}
+              >
+                <Input.TextArea rows={2} prefix={<MessageOutlined />} />
+              </Form.Item>
+
+
+              <Form.Item
                 label="Asunto"
                 name="subject"
-               
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, seleccione un asunto.",
-                  },
-                ]}
+                rules={[{ required: true, message: 'Por favor, seleccione un asunto.' }]}
               >
                 <Select placeholder="Seleccione un asunto">
                   <Select.Option value="consulta">Consulta</Select.Option>
@@ -112,47 +87,35 @@ const Contact = () => {
                   <Select.Option value="otros">Otros</Select.Option>
                 </Select>
               </Form.Item>
+
               <Button type="primary" htmlType="submit">
-                  Enviar Correo
-                </Button>
+                Enviar Correo
+              </Button>
             </Form>
           </Col>
 
-
           <Col span={8}>
-            <div
-              style={{
-                background: "#001529",
-                padding: "10px",
-                color: "#e5e5e5",
-                borderRadius: "10px",
-                display: "flex",
-                flexDirection: "column",
-                height: "40vh",
-                alignItems: "flex-start", // Alinea la información de contacto a la izquierda
-                justifyContent: "flex-start", // Alinea el contenido hacia arriba
-              }}
-            >
-              <h3 style={{ marginLeft: "10px", marginTop: "20px" }}>
-                <UserOutlined /> Información de Contacto
-              </h3>
-              <div style={{ textAlign: "left", marginLeft: "10px", marginTop: "50px"}}>
+          <div className="contact-info-container">
+    <h3 className="contact-title">
+      <UserOutlined /> Información de Contacto
+    </h3>
+    <div className="contact-info">
                 <p>
                   <strong>
                     <EnvironmentOutlined />
-                  </strong>{" "}
+                  </strong>{' '}
                   Dirección de tu empresa
                 </p>
                 <p>
                   <strong>
                     <PhoneFilled />
-                  </strong>{" "}
+                  </strong>{' '}
                   +123-456-7890
                 </p>
                 <p>
                   <strong>
                     <MailFilled />
-                  </strong>{" "}
+                  </strong>{' '}
                   info@tudominio.com
                 </p>
               </div>
@@ -163,5 +126,6 @@ const Contact = () => {
     </div>
   );
 };
+
 
 export default Contact;
