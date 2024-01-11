@@ -13,6 +13,7 @@ import {
   Space,
   List,
   Divider,
+  Collapse,
 } from "antd";
 import {
   UserOutlined,
@@ -53,16 +54,27 @@ import {
 } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { collection, addDoc } from 'firebase/firestore';
+import mapaImage from '../../assets/img/mapa.png'; // Importa la imagen del mapa
+import './PropertyDetail.css';
+
 import { firestore } from "../firebase/firebase"; 
 
 const { Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
+const { Panel } = Collapse;
+
 
 const PropertyDetail = ({ propertyData }) => {
   const { id } = useParams();
   const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState('Recámaras');
+  const [activeKey, setActiveKey] = useState('');
+
+  const onCollapseChange = (key) => {
+    setActiveKey(activeKey === key ? '' : key);
+  };
+  
 
   useEffect(() => {
     const selectedProperty = propertyData.find(
@@ -152,7 +164,8 @@ const PropertyDetail = ({ propertyData }) => {
       >
         <div style={{ marginBottom: '20px', padding: '20px', borderRadius: '8px', boxShadow: 'none', border: 'none' }}>
   <Title level={2} style={{ fontFamily: 'Arial, sans-serif', color: '#333', fontWeight: 'bold', marginBottom: '10px' }}>
-    {propertyDetails.type}
+    {/*{propertyDetails.type}*/}
+    Casa en venta, Acueducto de Morelia
   </Title>
   <div style={{ display: 'flex', alignItems: 'center' }}>
     <DollarCircleOutlined style={{ fontSize: '2.5em', marginRight: '15px', color: '#1890ff' }} />
@@ -261,13 +274,16 @@ const PropertyDetail = ({ propertyData }) => {
 <Col span={24}>
   <Row gutter={[16, 16]}>
 
+    
+
 {/* Características */}
 <Col span={24}>
-  <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', marginTop: '16px' }}>
+  <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
+  <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} /> {/* Línea horizontal superior */}
     <Title level={2}>Información del inmueble</Title>
     <Row gutter={[16, 16]}>
-    <Col span={12}>
-  <ul style={{ listStyle: 'none', padding: 0 }}>
+      <Col span={12}>
+        <ul style={{ listStyle: 'none', padding: 0, fontSize: '17px', lineHeight: '2' }}>
     <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Estacionamiento:</strong> Sí</li>
     <li><strong><HomeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo:</strong> Casa</li>
     <li><strong><EnvironmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Uso de la propiedad:</strong> Residencial</li>
@@ -282,7 +298,7 @@ const PropertyDetail = ({ propertyData }) => {
   </ul>
   </Col>
   <Col span={12}>
-  <ul style={{ listStyle: 'none', padding: 0 }}>
+  <ul style={{ listStyle: 'none', padding: 0, fontSize: '17px', lineHeight: '2' }}>
     <li><strong><CrownOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Recámaras:</strong> 3</li>
     <li><strong><FieldNumberOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Superficie terreno:</strong> 250 m²</li>
     <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Baños:</strong> 2</li>
@@ -297,36 +313,64 @@ const PropertyDetail = ({ propertyData }) => {
   </ul>
   </Col>
     </Row>
+    <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} /> {/* Línea horizontal inferior */}
   </div>
   </Col>
 
-
-
-    {/* Detalles */}
-    <Col xs={24} sm={24} md={12}>
-      <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <Title level={2}>Detalles</Title>
-        <List
-          size="large"
-          dataSource={[
-            'Tipo: Casa',
-            'ID: 1234',
-            // Otros detalles ficticios
-          ]}
-          renderItem={item => <List.Item><InfoCircleOutlined style={{ marginRight: '8px', fontSize: '16px', color: '#1890ff' }} />{item}</List.Item>}
-        />
-      </div>
-    </Col>
-
     {/* Descripción */}
-    <Col xs={24} sm={24} md={12}>
-      <div style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', marginTop: '16px' }}>
-        <Title level={2}>Descripción</Title>
-        <Paragraph style={{ fontSize: '16px', color: '#333' }}>
+    <Col>
+    <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
+  <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
+       <Title level={2}>Descripción</Title>
+        <Paragraph style={{ fontSize: '17px', color: '#333' }}>
           Encantadora casa de dos habitaciones con una vista impresionante. Cuenta con una amplia sala de estar, cocina totalmente equipada, dos baños y un jardín exuberante. Ubicada en una zona tranquila y conveniente, cerca de parques y servicios.
         </Paragraph>
+        <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
       </div>
     </Col>
+
+{/* Mapa demostrativo */}
+<Col span={24}>
+<div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
+  <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
+          <img src={mapaImage} alt="Mapa demostrativo" style={{ maxWidth: '50%', float: 'left', marginRight: '20px', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }} />
+          {/* O puedes utilizar un componente de mapa no interactivo si tienes uno disponible */}
+          {/* <MapComponent style={{ maxWidth: '50%', float: 'left', marginRight: '20px', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }} /> */}
+        </div>
+      </Col>
+    
+    {/* Nuevo apartado "Precio y Contrato" */}
+    <Col span={24}>
+    <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
+    <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
+        <div className="header">
+        <Title level={2}>Informacion del inmueble</Title>
+        </div>
+        <div className="button-group">
+          <Button className={`custom-button ${activeKey === 'Recámaras' ? 'active' : ''}`} onClick={() => onCollapseChange('Recámaras')}>
+            Récamaras
+          </Button>
+          <Button className={`custom-button ${activeKey === 'Interiores/Exteriores' ? 'active' : ''}`} onClick={() => onCollapseChange('Interiores/Exteriores')}>
+          Interiores/Exteriores
+          </Button>
+          <Button className={`custom-button ${activeKey === 'Estacionamiento' ? 'active' : ''}`} onClick={() => onCollapseChange('Estacionamiento')}>
+          Estacionamiento
+          </Button>
+          <Button className={`custom-button ${activeKey === 'Seguridad/Tecnologiá' ? 'active' : ''}`} onClick={() => onCollapseChange('Seguridad/Tecnologiá')}>
+          Seguridad/Tecnologiá
+          </Button>
+          
+        </div>
+        <div className="content-container">
+          {activeKey === 'Recámaras' && <p>Contenido relacionado a las recamaras.</p>}
+          {activeKey === 'Interiores/Exteriores' && <p>Contenido relacionado a los interiores y exteriores.</p>}
+          {activeKey === 'Estacionamiento' && <p>Contenido relacionado al estacionamiento.</p>}
+          {activeKey === 'Seguridad/Tecnologiá' && <p>Contenido relacionado a la seguridad y tecnologia.</p>}
+        </div>
+        <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
+      </div>
+    </Col>
+    
   </Row>
 </Col>
 
