@@ -9,6 +9,8 @@ import {
   MailFilled, // Icono de correo electrónico
 } from "@ant-design/icons"; // Importa los iconos que necesitas
 import "antd/dist/reset.css";
+import contactF from '../../assets/img/contactF.jpg'
+
 import { collection, addDoc } from 'firebase/firestore';
 import { firestore } from "../firebase/firebase";  
 import "./Contact.css";
