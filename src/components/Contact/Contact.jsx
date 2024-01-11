@@ -31,8 +31,16 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact-container">
-      <Card Card title={<span className="card-title">Formulario de Contacto</span>} className="card-container">
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "65vh",
+        backgroundImage: `url(${contactF})`
+      }}
+    >
+      <Card title="Formulario de Contacto" style={{ width: 1000 }}>
         <Row gutter={16}>
           <Col span={8}>
             <Form name="contact-form" onFinish={onFinish} layout="vertical">
