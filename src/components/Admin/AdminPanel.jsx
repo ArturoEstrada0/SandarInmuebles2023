@@ -28,8 +28,6 @@ function AdminPanel() {
         return <Propiedades />;
       case 'contratos':
         return <Contratos />;
-      case 'buzon':
-        return <Buzon />;
       default:
         return <Inicio />;
     }

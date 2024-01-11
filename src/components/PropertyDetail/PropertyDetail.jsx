@@ -51,6 +51,9 @@ import {
   ScheduleOutlined,
   PicCenterOutlined,
 } from "@ant-design/icons";
+import { useParams } from "react-router-dom";
+import { collection, addDoc } from 'firebase/firestore';
+import { firestore } from "../firebase/firebase"; 
 import { useParams } from 'react-router-dom';
 
 const { Content } = Layout;
@@ -90,14 +93,34 @@ const PropertyDetail = ({ propertyData }) => {
     }
   }, [id, propertyData]);
 
-  const renderDetailItem = (label, value) => (
-    <div style={{ marginBottom: "10px" }}>
-      <strong>{label}:</strong> {value}
-    </div>
-  );
+  const handleContactFormSubmit = async (values) => {
+    try {
+      const contactCollection = collection(firestore, 'msgpro');
+      // Obtén la información específica de la propiedad
+      const selectedProperty = propertyData.find(property => property.id.toString() === id);
 
-  const handleContactFormSubmit = (values) => {
-    message.success("¡Tu mensaje ha sido enviado con éxito!");
+      console.log("selectedProperty:", selectedProperty);
+
+      if (!selectedProperty) {
+        console.error("No se encontró la propiedad con el ID proporcionado.");
+        return;
+      }
+
+      // Agrega información adicional al objeto values
+      const contactDataWithPropertyInfo = {
+        ...values,
+        propertyId: id,
+        propertyName: selectedProperty.type, // O usa selectedProperty.type, dependiendo de lo que necesites
+      };
+
+      console.log("Datos del mensaje:", contactDataWithPropertyInfo);
+
+      await addDoc(contactCollection, contactDataWithPropertyInfo);
+      message.success("¡Tu mensaje ha sido enviado con éxito!");
+    } catch (error) {
+      console.error("Error al enviar datos a Firestore:", error);
+      message.error("Hubo un error al enviar el mensaje. Por favor, inténtalo nuevamente.");
+    }
   };
 
   if (!propertyDetails) {
