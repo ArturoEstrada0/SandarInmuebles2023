@@ -20,6 +20,7 @@ import Login from "./components/Auth/Login";
 import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
 import Registro from "./components/Auth/Registro";
 import { AuthProvider, useAuth } from "./context/AuthContext"; // Importa el AuthProvider y useAuth
+import Header from "./components/Header";
 
 const { Content } = Layout;
 
@@ -90,7 +91,8 @@ function App() {
 
   return (
     <Router>
-      <AdminPanel />
+      <Header />
+      {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />

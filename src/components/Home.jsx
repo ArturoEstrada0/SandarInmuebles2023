@@ -7,7 +7,6 @@ import PropertyDetail from './PropertyDetail/PropertyDetail';
 import { Slider } from 'antd';
 import Footer  from './Footer/Footer';
 import ChatBubble from './Chat/ChatBubble';
-import Header from './Header';
 import Asesores from './Asesores/Asesores';
 
 
@@ -19,7 +18,6 @@ function Home() {
   return (
 
     <Layout>
-      <Header />
 
       <Content style={{ marginTop: '65px' }}>
         {/* Contenido principal de la página */}

@@ -10,10 +10,6 @@ import {
   message,
   Card,
   Spin,
-  Space,
-  List,
-  Divider,
-  Collapse,
 } from "antd";
 import {
   UserOutlined,
@@ -21,36 +17,26 @@ import {
   FormOutlined,
   DollarCircleOutlined,
   HomeOutlined,
-  CalendarOutlined,
-  NumberOutlined,
+
   EnvironmentOutlined,
-  InfoCircleOutlined,
-  ProfileOutlined,
-  UnorderedListOutlined,
   GlobalOutlined,
   ToolOutlined,
   CarOutlined,
   ShopOutlined,
   BankOutlined,
   ApartmentOutlined,
-  FieldTimeOutlined,
-  HomeFilled,
+  
   FieldNumberOutlined,
   BulbOutlined,
-  UsergroupAddOutlined,
-  ExperimentOutlined,
   CrownOutlined,
   HeatMapOutlined,
   CarryOutOutlined,
-  SolutionOutlined,
   AlertOutlined,
-  ToolFilled,
   RiseOutlined,
   EyeOutlined,
   ClockCircleOutlined,
   BuildOutlined,
   ScheduleOutlined,
-  PicCenterOutlined,
 } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { collection, addDoc } from 'firebase/firestore';
@@ -60,15 +46,13 @@ import './PropertyDetail.css';
 import { firestore } from "../firebase/firebase"; 
 
 const { Content } = Layout;
-const { Title, Text, Paragraph } = Typography;
-const { Panel } = Collapse;
+const { Title, Paragraph } = Typography;
 
 
 const PropertyDetail = ({ propertyData }) => {
   const { id } = useParams();
   const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
-  const [selectedGroup, setSelectedGroup] = useState('Recámaras');
   const [activeKey, setActiveKey] = useState('');
 
   const onCollapseChange = (key) => {
@@ -104,11 +88,7 @@ const PropertyDetail = ({ propertyData }) => {
     }
   }, [id, propertyData]);
 
-  const renderDetailItem = (label, value) => (
-    <div style={{ marginBottom: "10px" }}>
-      <strong>{label}:</strong> {value}
-    </div>
-  );
+
 
   const handleContactFormSubmit = async (values) => {
     try {
