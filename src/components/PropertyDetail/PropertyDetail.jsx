@@ -51,7 +51,9 @@ import {
   ScheduleOutlined,
   PicCenterOutlined,
 } from "@ant-design/icons";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import { collection, addDoc } from 'firebase/firestore';
+import { firestore } from "../firebase/firebase"; 
 
 const { Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
