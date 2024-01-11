@@ -1,0 +1,22 @@
+.button-group {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.custom-button {
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none; /* Agregada para eliminar el subrayado predeterminado del enlace */
+  transition: border-bottom 0.3s ease; /* Agregada para la transición del subrayado */
+}
+
+.custom-button.active {
+  border-bottom: 2px solid #1890ff; /* Agregada para el subrayado activo */
+}
+
+.content-container {
+  text-align: center;
+}
+
