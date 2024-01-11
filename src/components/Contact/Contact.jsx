@@ -81,16 +81,7 @@ const Contact = () => {
               >
                 <Input prefix={<MailOutlined />} />
               </Form.Item>
-
-              <Form.Item
-                label="Mensaje"
-                name="message"
-                rules={[{ required: true, message: 'Por favor, ingrese un mensaje.' }]}
-              >
-                <Input.TextArea rows={2} prefix={<MessageOutlined />} />
-              </Form.Item>
-
-
+              
               <Form.Item
                 label="Asunto"
                 name="subject"
