@@ -11,6 +11,7 @@ import {
 import { collection, addDoc } from 'firebase/firestore';
 import { firestore } from "../firebase/firebase";  
 import "./Contact.css";
+import contactF from "../../assets/img/contactF.jpg"
 
 const Contact = () => {
   const [form] = Form.useForm();
