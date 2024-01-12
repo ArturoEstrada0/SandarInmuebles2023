@@ -99,7 +99,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <AdminPanel />
+      {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/aboutUs" element={<AboutUs />} />
