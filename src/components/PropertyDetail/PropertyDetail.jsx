@@ -78,7 +78,9 @@ const PropertyDetail = () => {
     } catch (error) {
       console.error("Error al obtener datos de Firestore:", error);
     }
-  };
+  }, [id, propertyData]);
+
+  const [form] = Form.useForm();
 
   const handleContactFormSubmit = async (values) => {
     try {
@@ -104,6 +106,7 @@ const PropertyDetail = () => {
 
       await addDoc(contactCollection, contactDataWithPropertyInfo);
       message.success("¡Tu mensaje ha sido enviado con éxito!");
+      form.resetFields();
     } catch (error) {
       console.error("Error al enviar datos a Firestore:", error);
       message.error("Hubo un error al enviar el mensaje. Por favor, inténtalo nuevamente.");
@@ -169,12 +172,13 @@ const PropertyDetail = () => {
           </Title>
         </div>
         <Form
-          name="contact-form"
-          onFinish={handleContactFormSubmit}
-          labelCol={{ span: 0 }}
-          wrapperCol={{ span: 24 }}
-          style={{ flex: 1, overflowY: 'auto' }}
-        >
+              form={form} // Asigna la instancia del formulario al componente Form
+              name="contact-form"
+              onFinish={handleContactFormSubmit}
+              labelCol={{ span: 0 }}
+              wrapperCol={{ span: 24 }}
+              style={{ flex: 1, overflowY: 'auto' }}
+            >
           <Form.Item
             name="name"
             rules={[{ required: true, message: 'Por favor, ingresa tu nombre' }]}

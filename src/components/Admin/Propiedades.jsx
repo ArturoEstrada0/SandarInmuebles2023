@@ -545,7 +545,7 @@ function Propiedades() {
                     height: mapHeight,
                     marginBottom: '20px',
                   }}>
-<Map height="500px" width="100%" markerCoords={markerCoords} setMarkerCoords={setMarkerCoords} />
+      <Map height="500px" width="100%" markerCoords={markerCoords} setMarkerCoords={setMarkerCoords} />
                 </div>
               </Form.Item>
             </>
