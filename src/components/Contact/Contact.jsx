@@ -39,7 +39,8 @@ const Contact = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "65vh",
-        backgroundImage: `url(${contactF})`
+        backgroundImage: `url(${contactF})`,
+        marginTop: '80px' 
       }}
     >
       <Card title="Formulario de Contacto" style={{ width: 1000 }}>
