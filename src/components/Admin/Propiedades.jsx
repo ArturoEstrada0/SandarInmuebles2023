@@ -14,6 +14,12 @@ import {
   Row,
   Col,
   notification,
+  Select,
+  Radio
+} from "antd";
+import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import axios from "axios"; // Importa Axios
 } from 'antd'
 import { SearchOutlined, UploadOutlined } from '@ant-design/icons'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
@@ -204,7 +210,7 @@ function Propiedades() {
       })
       return
     }
-
+  
     // Añadir datos al objeto global formData
     formData = {
       ...formData,
@@ -213,6 +219,14 @@ function Propiedades() {
       ubicacion: selectedLocation?.display_name,
     }
 
+    };
+  
+    // Manejar específicamente la asignación de valores para tipoPropiedad y condicion
+    if (step === 0) {
+      formData.tipoPropiedad = values.tipoPropiedad || "";
+      formData.condicion = values.condicion || "";
+    }
+  
     // Si es el último paso, enviar a Firebase
     if (step === 3) {
       try {
@@ -243,6 +257,19 @@ function Propiedades() {
               },
             )
 
+            const uploadTasks = values.fotos.fileList.map(async (photo, index) => {
+              const storageRef = ref(
+                getStorage(app),
+                `propiedades${imageId}_${index}`
+              );
+              await uploadBytes(storageRef, photo.originFileObj);
+  
+              // Obtener la URL de descarga
+              const imageURL = await getDownloadURL(storageRef);
+  
+              return imageURL;
+            });
+  
             // Esperar a que todas las imágenes se suban
             const imageUrls = await Promise.all(uploadTasks)
 

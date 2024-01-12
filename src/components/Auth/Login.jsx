@@ -3,6 +3,7 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { Link } from "react-router-dom";
+import { LeftOutlined } from "@ant-design/icons";
 
 import {
   MDBBtn,
@@ -83,6 +84,15 @@ const Login = () => {
               style={{ borderRadius: "1rem", maxWidth: "400px" }}
             >
               <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
+                  <Link to="/">
+                    <LeftOutlined
+                      style={{
+                        fontSize: "1.5rem",
+                        marginRight: "350px",
+                        color: "white",
+                      }}
+                    />
+                  </Link>
                 <MDBNavbar
                   expand="lg"
                   light

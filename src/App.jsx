@@ -19,6 +19,8 @@ import { firestore } from "./components/firebase/firebase";
 import Login from "./components/Auth/Login";
 import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
 import Registro from "./components/Auth/Registro";
+import { AuthProvider, useAuth } from "./context/AuthContext"; // Importa el AuthProvider y useAuth
+import Header from "./components/Header";
 
 const { Content } = Layout;
 
@@ -30,22 +32,28 @@ const checkUserRole = () => {
 
 // Rutas protegidas
 function AdminRoute({ children }) {
-  if (checkUserRole() === "admin") {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated && checkUserRole() === "admin") {
     return children;
   } else {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 }
 
 function ClientRoute({ children }) {
-  if (checkUserRole() === "client") {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated && checkUserRole() === "client") {
     return children;
   } else {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 }
 
 function App() {
+  const { isAuthenticated } = useAuth(); // Utiliza el hook useAuth para obtener el estado de autenticación
+
   const [propertyData, setPropertyData] = useState([]);
 
   useEffect(() => {
@@ -83,7 +91,8 @@ function App() {
 
   return (
     <Router>
-      <AdminPanel />
+      <Header />
+      {/* <AdminPanel /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
@@ -119,4 +128,10 @@ function App() {
   );
 }
 
-export default App;
+const AppWithAuthProvider = () => (
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+);
+
+export default AppWithAuthProvider;
