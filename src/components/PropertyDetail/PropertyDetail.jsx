@@ -39,7 +39,7 @@ import {
   ScheduleOutlined,
 } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import mapaImage from '../../assets/img/mapa.png'; // Importa la imagen del mapa
 import './PropertyDetail.css';
 
@@ -49,7 +49,7 @@ const { Content } = Layout;
 const { Title, Paragraph } = Typography;
 
 
-const PropertyDetail = ({ propertyData }) => {
+const PropertyDetail = () => {
   const { id } = useParams();
   const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
@@ -60,35 +60,26 @@ const PropertyDetail = ({ propertyData }) => {
   };
   
 
+
   useEffect(() => {
-    const selectedProperty = propertyData.find(
-      (property) => property.id.toString() === id
-    );
+    getPropertyDataFromFirebase();
+  }, [id]);
 
-    if (selectedProperty) {
-      setPropertyDetails(selectedProperty);
-
-      const imgSrc =
-        selectedProperty &&
-        selectedProperty.images &&
-        selectedProperty.images.length > 0
-          ? selectedProperty.images[0].image
-          : "";
-
-      const img = new Image();
-      img.src = imgSrc;
-
-      console.log("selectedProperty:", selectedProperty);
-      console.log("selectedProperty.images:", selectedProperty.images);
-      console.log("Image source:", img.src);
-
-      img.onload = () => {
-        setImageHeight("60vh");
-      };
+  const getPropertyDataFromFirebase = async () => {
+    try {
+      const propertyDocRef = doc(firestore, 'propiedades', id);
+      const propertyDocSnapshot = await getDoc(propertyDocRef);
+      
+      if (propertyDocSnapshot.exists()) {
+        const propertyData = propertyDocSnapshot.data();
+        setPropertyDetails(propertyData);
+      } else {
+        console.error("No se encontró la propiedad con el ID proporcionado en Firebase.");
+      }
+    } catch (error) {
+      console.error("Error al obtener datos de Firestore:", error);
     }
-  }, [id, propertyData]);
-
-
+  };
 
   const handleContactFormSubmit = async (values) => {
     try {
@@ -145,12 +136,12 @@ const PropertyDetail = ({ propertyData }) => {
         <div style={{ marginBottom: '20px', padding: '20px', borderRadius: '8px', boxShadow: 'none', border: 'none' }}>
   <Title level={2} style={{ fontFamily: 'Arial, sans-serif', color: '#333', fontWeight: 'bold', marginBottom: '10px' }}>
     {/*{propertyDetails.type}*/}
-    Casa en venta, Acueducto de Morelia
+    {propertyDetails.nombre}
   </Title>
   <div style={{ display: 'flex', alignItems: 'center' }}>
     <DollarCircleOutlined style={{ fontSize: '2.5em', marginRight: '15px', color: '#1890ff' }} />
     <Title level={4} style={{ fontFamily: 'Arial, sans-serif', color: '#666', marginBottom: 0 }}>
-      Precio: ${propertyDetails.price}
+      Precio: ${propertyDetails.precio}
     </Title>
   </div>
 </div>
@@ -265,7 +256,7 @@ const PropertyDetail = ({ propertyData }) => {
       <Col span={12}>
         <ul style={{ listStyle: 'none', padding: 0, fontSize: '17px', lineHeight: '2' }}>
     <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Estacionamiento:</strong> Sí</li>
-    <li><strong><HomeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo:</strong> Casa</li>
+    <li><strong><HomeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Tipo:</strong> {propertyDetails.tipoPropiedad}</li>
     <li><strong><EnvironmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Uso de la propiedad:</strong> Residencial</li>
     <li><strong><BankOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />¿Está en condominio?:</strong> No</li>
     <li><strong><BuildOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Edificios:</strong> 1</li>
@@ -279,16 +270,16 @@ const PropertyDetail = ({ propertyData }) => {
   </Col>
   <Col span={12}>
   <ul style={{ listStyle: 'none', padding: 0, fontSize: '17px', lineHeight: '2' }}>
-    <li><strong><CrownOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Recámaras:</strong> 3</li>
+    <li><strong><CrownOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Recámaras:</strong> {propertyDetails.activeFeatures.Habitaciones}</li>
     <li><strong><FieldNumberOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Superficie terreno:</strong> 250 m²</li>
-    <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Baños:</strong> 2</li>
-    <li><strong><CarryOutOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Medios baños:</strong> 1</li>
-    <li><strong><ToolOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Cocina:</strong> Equipada</li>
+    <li><strong><CarOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Baños:</strong> {propertyDetails.activeFeatures.Baño} </li>
+    <li><strong><CarryOutOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Medios baños:</strong> {propertyDetails.activeFeatures.MediosBaños}</li>
+    <li><strong><ToolOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Cocina:</strong> {propertyDetails.activeFeatures.Cocina} </li>
     <li><strong><HeatMapOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Clima:</strong> Aire acondicionado</li>
     <li><strong><ApartmentOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Amueblado:</strong> Sí</li>
     <li><strong><RiseOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />¿Está equipado?:</strong> Sí</li>
     <li><strong><BulbOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Acabados:</strong> De lujo</li>
-    <li><strong><EyeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Número de niveles:</strong> 2</li>
+    <li><strong><EyeOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Número de niveles:</strong> {propertyDetails.activeFeatures.NumeroDePisos} </li>
     <li><strong><GlobalOutlined style={{ marginRight: '5px', fontSize: '16px', color: '#1890ff' }} />Vista del inmueble:</strong> Panorámica</li>
   </ul>
   </Col>
@@ -303,7 +294,7 @@ const PropertyDetail = ({ propertyData }) => {
   <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
        <Title level={2}>Descripción</Title>
         <Paragraph style={{ fontSize: '17px', color: '#333' }}>
-          Encantadora casa de dos habitaciones con una vista impresionante. Cuenta con una amplia sala de estar, cocina totalmente equipada, dos baños y un jardín exuberante. Ubicada en una zona tranquila y conveniente, cerca de parques y servicios.
+            {propertyDetails.descripcion}
         </Paragraph>
         <hr style={{ borderTop: '2px solid #1890ff', margin: '0', marginBottom: '16px' }} />
       </div>
