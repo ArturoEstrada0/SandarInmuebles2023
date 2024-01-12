@@ -95,7 +95,6 @@ const PropertyList = ({ onPropertyClick }) => {
             type: data.nombre,
             price: data.precio,
             state: data.ubicacion,
-            city: data.ubicacion,
             rooms: features.Habitaciones || 0,
             bathrooms: features.Baño || 0,
             area: features.Tamaño || 0,
@@ -272,12 +271,14 @@ const PropertyList = ({ onPropertyClick }) => {
             <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
               <Card
                 className="property-card"
+                style={{ width: 480, height: 420 }}
                 onClick={() => handlePropertyClick(property.id)}
               >
                 <Image
                   src={property.image}
                   alt={property.type}
                   preview={false}
+                  style={{ width: '120%', height: '200px' }} // Ajusta el tamaño y la altura según tus necesidades
                 />
                 <div
                   className="property-location"
@@ -371,7 +372,7 @@ const PropertyList = ({ onPropertyClick }) => {
                   )}
 
                   <Text strong style={{ fontSize: "1.5rem" }}>
-                    $ {property.price}
+                    $ {property.price.toLocaleString()}
                   </Text>
                 </div>
               </Card>
