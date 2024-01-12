@@ -5,6 +5,7 @@ import {
   HomeOutlined,
   DollarOutlined,
   KeyOutlined,
+  MailOutlined,
 } from '@ant-design/icons';
 import Inicio from './Inicio';
 import Clientes from './Clientes';
@@ -53,7 +54,7 @@ function AdminPanel() {
           <Menu.Item key="contratos" icon={<KeyOutlined />}>
             Contratos
           </Menu.Item>
-          <Menu.Item key="buzon" icon={<KeyOutlined />}>
+          <Menu.Item key="buzon" icon={<MailOutlined />}>
             Buzon
           </Menu.Item>
         </Menu>
