@@ -15,11 +15,7 @@ import {
   Col,
   notification,
   Select,
-  Radio
-} from "antd";
-import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import axios from "axios"; // Importa Axios
+  Radio,
 } from 'antd'
 import { SearchOutlined, UploadOutlined } from '@ant-design/icons'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
@@ -200,7 +196,6 @@ function Propiedades() {
     setIsModalVisible(true)
   }
 
-  // Manejador para el envío del formulario
   const onFormSubmit = async (values, step) => {
     // Validar que todos los campos obligatorios estén llenos
     if (step === 0 && (!values.nombre || !values.ubicacion || !values.precio)) {
@@ -210,7 +205,7 @@ function Propiedades() {
       })
       return
     }
-  
+
     // Añadir datos al objeto global formData
     formData = {
       ...formData,
@@ -219,14 +214,12 @@ function Propiedades() {
       ubicacion: selectedLocation?.display_name,
     }
 
-    };
-  
     // Manejar específicamente la asignación de valores para tipoPropiedad y condicion
     if (step === 0) {
-      formData.tipoPropiedad = values.tipoPropiedad || "";
-      formData.condicion = values.condicion || "";
+      formData.tipoPropiedad = values.tipoPropiedad || ''
+      formData.condicion = values.condicion || ''
     }
-  
+
     // Si es el último paso, enviar a Firebase
     if (step === 3) {
       try {
@@ -257,19 +250,6 @@ function Propiedades() {
               },
             )
 
-            const uploadTasks = values.fotos.fileList.map(async (photo, index) => {
-              const storageRef = ref(
-                getStorage(app),
-                `propiedades${imageId}_${index}`
-              );
-              await uploadBytes(storageRef, photo.originFileObj);
-  
-              // Obtener la URL de descarga
-              const imageURL = await getDownloadURL(storageRef);
-  
-              return imageURL;
-            });
-  
             // Esperar a que todas las imágenes se suban
             const imageUrls = await Promise.all(uploadTasks)
 
@@ -395,6 +375,16 @@ function Propiedades() {
       key: 'nombre',
     },
     {
+      title: 'Tipo de Propiedad',
+      dataIndex: 'tipoPropiedad',
+      key: 'tipoPropiedad',
+    },
+    {
+      title: 'Condición',
+      dataIndex: 'condicion',
+      key: 'condicion',
+    },
+    {
       title: 'Ubicación',
       dataIndex: 'ubicacion',
       key: 'ubicacion',
@@ -476,6 +466,39 @@ function Propiedades() {
                 ]}>
                 <Input />
               </Form.Item>
+
+              <Form.Item
+                label='Tipo de Propiedad'
+                name='tipoPropiedad'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor selecciona el tipo de propiedad',
+                  },
+                ]}>
+                <Select>
+                  <Select.Option value='Casa'>Casa</Select.Option>
+                  <Select.Option value='Departamento'>
+                    Departamento
+                  </Select.Option>
+                  {/* Agrega más opciones según sea necesario */}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label='Condición'
+                name='condicion'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor selecciona la condición',
+                  },
+                ]}>
+                <Radio.Group>
+                  <Radio value='venta'>Venta</Radio>
+                  <Radio value='renta'>Renta</Radio>
+                </Radio.Group>
+              </Form.Item>
+
               <Form.Item
                 label='Ubicación'
                 name='ubicacion'
@@ -618,11 +641,6 @@ function Propiedades() {
           {currentStep > 0 && (
             <Button style={{ margin: '0 8px' }} onClick={prevStep}>
               Anterior
-            </Button>
-          )}
-          {currentStep < 3 && (
-            <Button type='primary' onClick={nextStep}>
-              Siguiente
             </Button>
           )}
         </Form>
