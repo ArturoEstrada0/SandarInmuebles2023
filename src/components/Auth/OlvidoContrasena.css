@@ -1,0 +1,76 @@
+.olvido-contrasena-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  .olvido-contrasena-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+.label-oc {
+    display: block;
+    margin-bottom: 8px;
+    color: #000000;
+  }
+  
+.input-oc {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border-color: #FFD700;
+  }
+  
+.button-oc {
+    background-color: #FFD700;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button-oc:hover {
+    background-color: #45a049;
+  }
+  
+  .success-message {
+    color: green;
+    margin-top: 10px;
+    text-align: center;
+
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+
+  }
+  
+  .fondo {
+    /* fallback for old browsers */
+    background: #ffffff;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(255, 215, 0, 1), rgb(255, 255, 255));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(255, 215, 0, 1), rgb(255, 255, 255));
+  
+    /* Ajustes para que el fondo blanco abarque toda la pantalla */
+    background-size: 50% 100%; /* Ancho 100%, altura 100% */
+    background-repeat: no-repeat; /* No repetir el fondo */
+    margin: 0; /* Eliminar el margen predeterminado del body */
+    height: 100vh; /* Ajustar la altura al 100% del viewport */
+    display: flex; /* Utiliza flexbox para centrar el contenido vertical y horizontalmente */
+    justify-content: center;
+    align-items: center;  
+}
+  

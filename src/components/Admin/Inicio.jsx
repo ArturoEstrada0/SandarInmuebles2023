@@ -1,36 +1,48 @@
-import { useEffect, useState } from 'react'
-import { collection, onSnapshot, query } from 'firebase/firestore'
-import { Card, Col, Row, Statistic } from 'antd'
-import { Line } from '@ant-design/charts'
-import { firestore } from '../firebase/firebase'
+import { Card, Col, Row, Statistic } from 'antd';
+import { useEffect, useState } from 'react';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 function Inicio() {
-  const [data, setData] = useState([])
+  const [totalPropiedades, setTotalPropiedades] = useState(0);
+  const [totalUsuarios, setTotalUsuarios] = useState(0);
+  const [totalContacts, setTotalContacts] = useState(0);
+
+  const obtenerTotalPropiedades = async () => {
+    const firestore = getFirestore();
+    const propiedadesCollection = collection(firestore, 'propiedades');
+    const propiedadesSnapshot = await getDocs(propiedadesCollection);
+    const totalPropiedades = propiedadesSnapshot.size;
+    setTotalPropiedades(totalPropiedades);
+  };
+
+  const obtenerTotalUsuarios = async () => {
+    const firestore = getFirestore();
+    const usuariosCollection = collection(firestore, 'usuarios');
+    const usuariosSnapshot = await getDocs(usuariosCollection);
+    const totalUsuarios = usuariosSnapshot.size;
+    setTotalUsuarios(totalUsuarios);
+  };
+
+  const obtenerTotalContacts = async () => {
+    const firestore = getFirestore();
+    const contactsCollection = collection(firestore, 'contacts');
+    const contactsSnapshot = await getDocs(contactsCollection);
+    const totalContacts = contactsSnapshot.size;
+    setTotalContacts(totalContacts);
+  };
 
   useEffect(() => {
-    const q = query(collection(firestore, 'hi'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      let newData = []
-      snapshot.forEach((doc) => {
-        newData.push(doc.data())
-      })
-      setData(newData)
-    })
+    obtenerTotalPropiedades();
+    obtenerTotalUsuarios();
+    obtenerTotalContacts();
+  }, []);
 
-    // Limpiar la suscripción al desmontar
-    return () => unsubscribe()
-  }, [])
-
-  const config = {
-    data,
-    height: 400,
-    xField: 'mes',
-    yField: 'valor',
-    point: {
-      size: 5,
-      shape: 'diamond',
-    },
-  }
+  const data = [
+    { name: 'Propiedades', valor: totalPropiedades },
+    { name: 'Usuarios', valor: totalUsuarios },
+    { name: 'Contacts', valor: totalContacts },
+  ];
 
   return (
     <div>
@@ -38,21 +50,29 @@ function Inicio() {
       <Row gutter={16}>
         <Col span={8}>
           <Card>
-            <Statistic title='Total de propiedades' value={1128} />
+            <Statistic title="Total de propiedades" value={totalPropiedades} />
           </Card>
         </Col>
         <Col span={8}>
           <Card>
-            <Statistic title='Total de clientes' value={11289} />
+            <Statistic title="Total de clientes" value={totalUsuarios} />
           </Card>
         </Col>
         <Col span={8}>
           <Card>
-            <Statistic title='Total de contratos' value={112893} />
+            <Statistic title="Total de contactos" value={totalContacts} />
           </Card>
         </Col>
       </Row>
-      <Line {...config} />
+      
+      <BarChart width={600} height={300} data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="valor" fill="#8884d8" />
+      </BarChart>
     </div>
   )
 }

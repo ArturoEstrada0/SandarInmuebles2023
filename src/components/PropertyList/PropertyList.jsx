@@ -1,4 +1,5 @@
-import { useState } from "react";
+// PropertyList.jsx
+import { useState, useEffect } from "react";
 import {
   Layout,
   Row,
@@ -9,6 +10,8 @@ import {
   Button,
   Typography,
   Image,
+  Spin,
+  Input,
 } from "antd";
 import {
   HomeOutlined,
@@ -17,99 +20,156 @@ import {
   AreaChartOutlined,
   SearchOutlined,
   EnvironmentOutlined,
+  HeartFilled,
+  HeartOutlined,
 } from "@ant-design/icons";
 import "./PropertyList.css";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  increment
+} from "firebase/firestore";
+import { firestore } from "../firebase/firebase";
+import { Link } from "react-router-dom";
 
-import BathIcon from "../../assets/img/Icons/bath.png";
+import { useAuth } from "../../context/AuthContext";
 
 const { Content } = Layout;
 const { Option } = Select;
 const { Title, Text } = Typography;
 
-const PropertyList = () => {
+const PropertyList = ({ onPropertyClick }) => {
+  const [propertyClickCount, setPropertyClickCount] = useState(0);
   const [filterType, setFilterType] = useState("all");
   const [filterPrice, setFilterPrice] = useState([0, 1000000]);
   const [filterState, setFilterState] = useState("all");
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
 
-  const mexicanStates = [
-    "Aguascalientes",
-    "Baja California",
-    "Baja California Sur",
-    "Campeche",
-    "Chiapas",
-    "Chihuahua",
-    "Coahuila",
-    "Colima",
-    "Durango",
-    "Guanajuato",
-    "Guerrero",
-    "Hidalgo",
-    "Jalisco",
-    "México City",
-    "Mexico State",
-    "Michoacán",
-    "Morelos",
-    "Nayarit",
-    "Nuevo León",
-    "Oaxaca",
-    "Puebla",
-    "Querétaro",
-    "Quintana Roo",
-    "San Luis Potosí",
-    "Sinaloa",
-    "Sonora",
-    "Tabasco",
-    "Tamaulipas",
-    "Tlaxcala",
-    "Veracruz",
-    "Yucatán",
-    "Zacatecas",
-  ];
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
-  const propertyData = [
-    {
-      id: 1,
-      type: "Casa",
-      price: 750000,
-      state: "Jalisco",
-      city: "Guadalajara",
-      rooms: 3,
-      bathrooms: 2,
-      area: 180,
-      image: "https://julioros.com/wp-content/uploads/2013/06/IMG_3610.jpg",
-    },
-    {
-      id: 2,
-      type: "Apartamento",
-      price: 950000,
-      state: "Nuevo León",
-      city: "Monterrey",
-      rooms: 2,
-      bathrooms: 1,
-      area: 120,
-      image:
-        "https://tuinmobiliarioenveracruz.files.wordpress.com/2014/10/2012-11-20-363.jpg?w=736",
-    },
-    {
-      id: 3,
-      type: "Casa",
-      price: 750000,
-      state: "Jalisco",
-      city: "Guadalajara",
-      rooms: 3,
-      bathrooms: 2,
-      area: 180,
-      image: "https://julioros.com/wp-content/uploads/2013/06/IMG_3610.jpg",
-    },
-  ];
+  const { isAuthenticated, user } = useAuth(); // Agrega esta línea para obtener el estado de autenticación y el usuario actual
 
-  const [filteredProperties, setFilteredProperties] = useState(propertyData);
+  useEffect(() => {
+    // Verifica si el usuario está autenticado
+    setUserAuthenticated(isAuthenticated);
+  }, [isAuthenticated]);
+
+  const handleMinPriceChange = (e) => {
+    setMinPrice(e.target.value);
+  };
+
+  const handleMaxPriceChange = (e) => {
+    setMaxPrice(e.target.value);
+  };
+  const [mexicanStates, setMexicanStates] = useState([]);
+  const [propertyData, setPropertyData] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const statesSnapshot = await getDocs(collection(firestore, "states"));
+        const states = statesSnapshot.docs.map((doc) => doc.data().name);
+        setMexicanStates(states);
+      } catch (error) {
+        console.error("Error al obtener estados:", error);
+      }
+    };
+
+    const fetchProperties = async () => {
+      try {
+        const propertiesSnapshot = await getDocs(
+          collection(firestore, "propiedades")
+        );
+        const properties = propertiesSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          const features = data.activeFeatures || {};
+
+          return {
+            id: doc.id,
+            type: data.nombre,
+            price: data.precio,
+            state: data.ubicacion,
+            city: data.ubicacion,
+            rooms: features.Habitaciones || 0,
+            bathrooms: features.Baño || 0,
+            area: features.Tamaño || 0,
+            image: data.fotos[0],
+          };
+        });
+        setPropertyData(properties);
+        setFilteredProperties(properties);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener propiedades:", error);
+      }
+    };
+
+    fetchStates();
+    fetchProperties();
+  }, []);
+
+  const handlePropertyClick = async (propertyId) => {
+    // Incrementa el contador local
+    setPropertyClickCount(propertyClickCount + 1);
+
+    // Referencia al documento de la propiedad en Firestore
+    const propertyDocRef = doc(
+      collection(firestore, "propiedades"),
+      propertyId
+    );
+
+    // Actualiza el contador en Firestore
+    try {
+      await updateDoc(propertyDocRef, {
+        clickCount: increment(1), // Incrementa el valor actual en 1
+      });
+
+      // Llama a la función original pasada como prop (si es necesario)
+      if (onPropertyClick) {
+        onPropertyClick(propertyId);
+      }
+    } catch (error) {
+      console.error("Error al actualizar el contador en Firestore:", error);
+    }
+  };
+
+  const toggleFavorite = async (propertyId) => {
+    try {
+      if (!isAuthenticated) {
+        // Si el usuario no está autenticado, redirige a la página de inicio de sesión
+        // o muestra un mensaje para iniciar sesión
+        return;
+      }
+
+      // Actualiza el estado local de favoritos
+      setIsFavorite(!isFavorite);
+
+      // Referencia al documento de la propiedad en Firestore
+      const propertyDocRef = doc(collection(firestore, "propiedades"), propertyId);
+
+      // Actualiza el contador de favoritos en Firestore
+      await updateDoc(propertyDocRef, {
+        favoriteCount: isFavorite ? decrement(1) : increment(1),
+      });
+
+      // Resto del código de toggleFavorite
+    } catch (error) {
+      console.error("Error al actualizar favoritos en Firestore:", error);
+    }
+  };
 
   const applyFilters = () => {
     const filtered = propertyData.filter((property) => {
       const isTypeMatch = filterType === "all" || property.type === filterType;
       const isPriceMatch =
-        property.price >= filterPrice[0] && property.price <= filterPrice[1];
+        property.price >= parseInt(minPrice) &&
+        property.price <= parseInt(maxPrice);
       const isStateMatch =
         filterState === "all" || property.state === filterState;
 
@@ -148,14 +208,20 @@ const PropertyList = () => {
               <Text strong>
                 <DollarOutlined /> Rango de Precio
               </Text>
-              <Slider
-                range
-                min={0}
-                max={1000000}
-                step={10000}
-                value={filterPrice}
-                onChange={(value) => setFilterPrice(value)}
-              />
+              <div style={{ display: "flex" }}>
+                <Input
+                  placeholder="Mínimo"
+                  value={minPrice}
+                  onChange={handleMinPriceChange}
+                  style={{ width: "calc(50% - 8px)", marginRight: "8px" }}
+                />
+                <Input
+                  placeholder="Máximo"
+                  value={maxPrice}
+                  onChange={handleMaxPriceChange}
+                  style={{ width: "calc(50% - 8px)" }}
+                />
+              </div>
             </Col>
             <Col xs={24} sm={12} md={6} lg={6}>
               <Text strong>
@@ -199,71 +265,119 @@ const PropertyList = () => {
         </Card>
       </div>
       <Row gutter={[16, 16]}>
-        {filteredProperties.map((property) => (
-          <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
-            <Card className="property-card">
-              <Image src={property.image} alt={property.type} preview={false} />
-              <div className="property-location" style={{ marginTop: "16px" }}>
-                <Text strong style={{ fontSize: "1.2rem" }}>
-                  <EnvironmentOutlined
-                    style={{ fontSize: "1.5rem", fontWeight: "bold" }}
-                  />{" "}
-                  {property.state}, {property.city}
-                </Text>
-              </div>
-              <div className="property-details">
-                <Row
-                  gutter={[16, 16]}
-                  style={{ marginBottom: "16px", marginTop: "20px" }}
-                >
-                  <Col xs={8}>
-                    <Text strong>
-                      <TeamOutlined
-                        style={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      />{" "}
-                      Habitaciones: {property.rooms}
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong>
-                      <img
-                        src={BathIcon}
-                        alt="Baños"
-                        style={{ width: "16px", marginRight: "8px" }}
-                      />{" "}
-                      Baños: {property.bathrooms}
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong>
-                      <AreaChartOutlined
-                        style={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      />{" "}
-                      Tamaño: {property.area} m²
-                    </Text>
-                  </Col>
-                </Row>
-              </div>
-              <div
-                className="property-actions"
-                style={{ display: "flex", justifyContent: "space-between" }}
+        {loading ? (
+          <Spin tip="Cargando..." />
+        ) : (
+          filteredProperties.map((property) => (
+            <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
+              <Card
+                className="property-card"
+                onClick={() => handlePropertyClick(property.id)}
               >
-                <Button
-                  type="primary"
-                  href={`/property/${property.id}`}
-                  className="large-button centered-button"
-                  style={{ backgroundColor: "black", color: "white" }}
+                <Image
+                  src={property.image}
+                  alt={property.type}
+                  preview={false}
+                />
+                <div
+                  className="property-location"
+                  style={{ marginTop: "16px" }}
                 >
-                  Reserva
-                </Button>
+                  <Text strong style={{ fontSize: "1.2rem" }}>
+                    <EnvironmentOutlined
+                      style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+                    />{" "}
+                    {property.state}, {property.city}
+                  </Text>
+                </div>
+                <div className="property-details">
+                  <Row
+                    gutter={[16, 16]}
+                    style={{
+                      marginBottom: "16px",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <Col xs={8}>
+                      <Text strong>
+                        <TeamOutlined
+                          style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                          }}
+                        />{" "}
+                        Habitaciones: {property.rooms}
+                      </Text>
+                    </Col>
+                    <Col xs={8}>
+                      <Text strong>
+                        <TeamOutlined
+                          alt="Baños"
+                          style={{
+                            width: "16px",
+                            marginRight: "8px",
+                          }}
+                        />{" "}
+                        Baños: {property.bathrooms}
+                      </Text>
+                    </Col>
+                    <Col xs={8}>
+                      <Text strong>
+                        <AreaChartOutlined
+                          style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                          }}
+                        />{" "}
+                        Tamaño: {property.area} m²
+                      </Text>
+                    </Col>
+                  </Row>
+                </div>
+                <div
+                  className="property-actions"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    href={`/property/${property.id}`}
+                    className="large-button centered-button"
+                    style={{
+                      backgroundColor: "black",
+                      color: "white",
+                    }}
+                  >
+                    Reserva
+                  </Button>
+                  {userAuthenticated ? (
+                    <Button
+                      type="primary"
+                      icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
+                      onClick={() => toggleFavorite(property.id)}
+                    >
+                      {isFavorite
+                        ? "Quitar de Favoritos"
+                        : "Añadir a Favoritos"}
+                    </Button>
+                  ) : (
+                    <Link to="/login">
+                      <Button type="primary">
+                        Inicia sesión para guardar en favoritos
+                      </Button>
+                    </Link>
+                  )}
 
-                <Text strong style={{ fontSize: "1.5rem" }}>
-                  $ {property.price}
-                </Text>
-              </div>
-            </Card>
-          </Col>
-        ))}
+                  <Text strong style={{ fontSize: "1.5rem" }}>
+                    $ {property.price}
+                  </Text>
+                </div>
+              </Card>
+            </Col>
+          ))
+        )}
       </Row>
     </Content>
   );

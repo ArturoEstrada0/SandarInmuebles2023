@@ -1,7 +1,8 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
-import { getAnalytics, logEvent } from 'firebase/analytics'
+import { GoogleAuthProvider } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth } from 'firebase/auth';  // Solo importa getAuth una vez
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, addDoc, doc, setDoc } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -16,10 +17,10 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const auth = getAuth(app) // Utiliza getAuth para obtener la instancia de autenticación
-const firestore = getFirestore(app) // Utiliza getFirestore para obtener la instancia de Firestore
-const analytics = getAnalytics(app)
-logEvent(analytics, 'notification_received')
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleAuthProvider = new GoogleAuthProvider();
+const firestore = getFirestore(app);
+const analytics = getAnalytics(app);
 
-export { auth, firestore, analytics }
+export {app, auth, firestore, analytics, googleAuthProvider };
