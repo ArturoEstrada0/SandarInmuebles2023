@@ -8,6 +8,7 @@ import { Slider } from 'antd';
 import Footer  from './Footer/Footer';
 import ChatBubble from './Chat/ChatBubble';
 import Asesores from './Asesores/Asesores';
+import Testimonials from './Testimonials/Testimonials';
 
 
 const { Content } = Layout;

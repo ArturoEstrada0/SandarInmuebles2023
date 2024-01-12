@@ -47,6 +47,8 @@ function Propiedades() {
   const [youtubePreview, setYoutubePreview] = useState('')
   const [mapHeight, setMapHeight] = useState('300px') // Tamaño inicial
   const [mapCenter, setMapCenter] = useState([0, 0]) // Centro inicial
+  const [markerCoords, setMarkerCoords] = useState([0, 0]);
+
 
   // Agrega un estado para las sugerencias de ubicación y la ubicación seleccionada
   const [locationSuggestions, setLocationSuggestions] = useState([])
@@ -87,13 +89,16 @@ function Propiedades() {
 
   // Manejador para seleccionar una ubicación de las sugerencias
   const handleLocationSelect = (suggestion) => {
-    setSelectedLocation(suggestion)
-    setLocationSuggestions([]) // Oculta las sugerencias después de la selección
-
+    setSelectedLocation(suggestion);
+    setLocationSuggestions([]); // Oculta las sugerencias después de la selección
+  
     // Actualizar el centro del mapa y el tamaño
-    setMapCenter([suggestion.lat, suggestion.lon])
-    setMapHeight('500px') // Ajusta el tamaño según tus necesidades
-  }
+    setMapCenter([suggestion.lat, suggestion.lon]);
+    setMapHeight('500px'); // Ajusta el tamaño según tus necesidades
+  
+    // Actualizar las coordenadas del marcador
+    setMarkerCoords([suggestion.lat, suggestion.lon]);
+  };
 
   useEffect(() => {
     if (selectedLocation) {
@@ -540,7 +545,7 @@ function Propiedades() {
                     height: mapHeight,
                     marginBottom: '20px',
                   }}>
-                  <Map height={mapHeight} width='100%' />
+<Map height="500px" width="100%" markerCoords={markerCoords} setMarkerCoords={setMarkerCoords} />
                 </div>
               </Form.Item>
             </>

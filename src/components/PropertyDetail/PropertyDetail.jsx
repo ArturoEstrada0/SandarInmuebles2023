@@ -25,7 +25,6 @@ import {
   ShopOutlined,
   BankOutlined,
   ApartmentOutlined,
-  
   FieldNumberOutlined,
   BulbOutlined,
   CrownOutlined,
