@@ -179,6 +179,7 @@ const PropertyList = ({ onPropertyClick }) => {
   };
 
   return (
+
     <Content className="property-list">
       <div
         className="centered-card"
@@ -380,6 +381,7 @@ const PropertyList = ({ onPropertyClick }) => {
           ))
         )}
       </Row>
+
     </Content>
   );
 };

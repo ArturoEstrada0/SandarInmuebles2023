@@ -31,31 +31,52 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact-container">
-      <Card title={<span className="card-title">Contacto</span>} className="card-container">
-        <Row gutter={[16, 16]}>
-          <Col span={12}>
-            <Form form={form} name="contact-form" onFinish={onFinish} layout="vertical">
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    label="Nombre"
-                    name="name"
-                    rules={[{ required: true, message: 'Por favor, ingrese su nombre.' }]}
-                  >
-                    <Input prefix={<UserOutlined />} placeholder="Nombre completo" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Teléfono"
-                    name="phone"
-                    rules={[{ required: true, message: 'Por favor, ingrese su número de teléfono.' }]}
-                  >
-                    <Input prefix={<PhoneOutlined />} placeholder="Número de teléfono" />
-                  </Form.Item>
-                </Col>
-              </Row>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "65vh",
+        backgroundImage: `url(${contactF})`,
+        marginTop: '80px' 
+      }}
+    >
+      <Card title="Formulario de Contacto" style={{ width: 1000 }}>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form name="contact-form" onFinish={onFinish} layout="vertical">
+              <Form.Item
+                label="Nombre"
+                name="name"
+                rules={[{ required: true, message: 'Por favor, ingrese su nombre.' }]}
+              >
+                <Input prefix={<UserOutlined />} />
+              </Form.Item>
+
+              <Form.Item
+                label="Teléfono"
+                name="phone"
+              
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingrese su número de teléfono.",
+                  },
+                ]}
+              >
+                <Input prefix={<PhoneOutlined />} />
+              </Form.Item>
+
+              <Form.Item
+                label="Mensaje"
+                name="message"
+                
+                rules={[
+                  { required: true, message: "Por favor, ingrese un mensaje." },
+                ]}
+              >
+                <Input.TextArea rows={2} prefix={<MessageOutlined />} />
+              </Form.Item>
 
               <Form.Item
                 label="Correo Electrónico"
