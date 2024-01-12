@@ -77,9 +77,7 @@ const PropertyDetail = () => {
     } catch (error) {
       console.error('Error al obtener datos de Firestore:', error)
     }
-  }, [id, propertyData]);
-
-  const [form] = Form.useForm();
+  }
 
   const handleContactFormSubmit = async (values) => {
     try {
@@ -105,9 +103,8 @@ const PropertyDetail = () => {
 
       console.log('Datos del mensaje:', contactDataWithPropertyInfo)
 
-      await addDoc(contactCollection, contactDataWithPropertyInfo);
-      message.success("¡Tu mensaje ha sido enviado con éxito!");
-      form.resetFields();
+      await addDoc(contactCollection, contactDataWithPropertyInfo)
+      message.success('¡Tu mensaje ha sido enviado con éxito!')
     } catch (error) {
       console.error('Error al enviar datos a Firestore:', error)
       message.error(
@@ -178,68 +175,123 @@ const PropertyDetail = () => {
         {/* Agrega aquí cualquier contenido que desees alinear a la derecha */}
       </div>
       <Row gutter={16}>
-      <Col span={24}>
-  <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-    <div style={{ flex: '1', width: '70vh', height: '60vh', paddingLeft: '30px', paddingRight: '30px' }}>
-      {propertyDetails && propertyDetails.image && (
-        <img
-          src={propertyDetails.image} // Reemplazar por la URL correcta de la imagen
-          alt="Property Image"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
-        />
-      )}
-    </div>
-    <div style={{ flex: '1', maxWidth: '30%', maxHeight: '60vh', padding: '0 20px' }}>
-      <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', borderRadius: '12px' }}>
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <Title level={4} className="contact-title" style={{ marginBottom: '5px' }}>
-            SANDAR INMUEBLES
-          </Title>
-          <Title level={4} className="contact-title" style={{ marginBottom: '20px' }}>
-            CONTACTANOS Y PREGUNTA
-          </Title>
-        </div>
-        <Form
-              form={form} // Asigna la instancia del formulario al componente Form
-              name="contact-form"
-              onFinish={handleContactFormSubmit}
-              labelCol={{ span: 0 }}
-              wrapperCol={{ span: 24 }}
-              style={{ flex: 1, overflowY: 'auto' }}
-            >
-          <Form.Item
-            name="name"
-            rules={[{ required: true, message: 'Por favor, ingresa tu nombre' }]}
-          >
-            <Input prefix={<UserOutlined />} placeholder="Nombre" style={{ borderRadius: '8px' }} />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Por favor, ingresa tu correo electrónico' },
-              { type: 'email', message: 'Ingresa un correo electrónico válido' },
-            ]}
-          >
-            <Input prefix={<MailOutlined />} placeholder="Correo Electrónico" style={{ borderRadius: '8px' }} />
-          </Form.Item>
-          <Form.Item
-            name="message"
-            rules={[{ required: true, message: 'Por favor, ingresa tu mensaje' }]}
-          >
-            <Input.TextArea prefix={<FormOutlined />} placeholder="Mensaje" style={{ borderRadius: '8px' }} />
-          </Form.Item>
-          <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
-            <Button type="primary" htmlType="submit" style={{ width: '100%', borderRadius: '8px' }}>
-              Enviar Mensaje
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    </div>
-  </div>
-</Col>
-
-
+        <Col span={24}>
+          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+            <div
+              style={{
+                flex: '1',
+                width: '70vh',
+                height: '60vh',
+                paddingLeft: '30px',
+                paddingRight: '30px',
+              }}>
+              {propertyDetails && propertyDetails.image && (
+                <img
+                  src={propertyDetails.image} // Reemplazar por la URL correcta de la imagen
+                  alt='Property Image'
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '12px',
+                  }}
+                />
+              )}
+            </div>
+            <div
+              style={{
+                flex: '1',
+                maxWidth: '30%',
+                maxHeight: '60vh',
+                padding: '0 20px',
+              }}>
+              <Card
+                style={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                  borderRadius: '12px',
+                }}>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <Title
+                    level={4}
+                    className='contact-title'
+                    style={{ marginBottom: '5px' }}>
+                    SANDAR INMUEBLES
+                  </Title>
+                  <Title
+                    level={4}
+                    className='contact-title'
+                    style={{ marginBottom: '20px' }}>
+                    CONTACTANOS Y PREGUNTA
+                  </Title>
+                </div>
+                <Form
+                  name='contact-form'
+                  onFinish={handleContactFormSubmit}
+                  labelCol={{ span: 0 }}
+                  wrapperCol={{ span: 24 }}
+                  style={{ flex: 1, overflowY: 'auto' }}>
+                  <Form.Item
+                    name='name'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Por favor, ingresa tu nombre',
+                      },
+                    ]}>
+                    <Input
+                      prefix={<UserOutlined />}
+                      placeholder='Nombre'
+                      style={{ borderRadius: '8px' }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name='email'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Por favor, ingresa tu correo electrónico',
+                      },
+                      {
+                        type: 'email',
+                        message: 'Ingresa un correo electrónico válido',
+                      },
+                    ]}>
+                    <Input
+                      prefix={<MailOutlined />}
+                      placeholder='Correo Electrónico'
+                      style={{ borderRadius: '8px' }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name='message'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Por favor, ingresa tu mensaje',
+                      },
+                    ]}>
+                    <Input.TextArea
+                      prefix={<FormOutlined />}
+                      placeholder='Mensaje'
+                      style={{ borderRadius: '8px' }}
+                    />
+                  </Form.Item>
+                  <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
+                    <Button
+                      type='primary'
+                      htmlType='submit'
+                      style={{ width: '100%', borderRadius: '8px' }}>
+                      Enviar Mensaje
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
+          </div>
+        </Col>
 
         <Col span={24}>
           <div style={{ padding: '20px' }}>
