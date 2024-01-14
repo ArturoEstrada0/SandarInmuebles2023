@@ -1,20 +1,39 @@
 /* PropertyList.css */
 .property-list {
-  margin-top: -140px;
-  padding: 20px;
+  margin-top: -290px;
+  padding: 30px;
 }
 
 .centered-card {
-  margin: 0 10%;
+  margin: 20px 10%;
+  background-color: rgba(0, 0, 0, 0.5); /* Hace el fondo semi-transparente blanco */
+  padding: 30px;
+  border-radius: 12px; /* Bordes más redondeados para un toque más suave */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra más suave para un aspecto más elegante */
 }
 
+/* Ajustes para los campos de filtro */
 .filters {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias líneas si no caben en una sola */
+  gap: 16px; /* Espacio entre los elementos */
 }
 
+/* Mejora del botón de búsqueda */
 .search-button {
   margin-top: 16px;
+  background-color: #1890ff; /* Color de fondo azul más vibrante */
+  color: #fff; /* Texto blanco para un contraste adecuado */
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px; /* Ajuste del relleno para un botón más grande */
+  font-size: 1.2rem; /* Tamaño de fuente ligeramente reducido para una apariencia más equilibrada */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Efecto de transición suave */
+}
+
+.search-button:hover {
+  background-color: #40a9ff; /* Cambio de color al pasar el ratón para feedback visual */
 }
 
 .property-info-row {

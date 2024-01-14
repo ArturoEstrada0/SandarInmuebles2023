@@ -1,5 +1,11 @@
+.landing-page-text,
+.landing-page-stat-number,
+.landing-page-stat-title {
+    color: black;
+}
+
 .landing-page-stat-number {
-    font-size: 1.5rem;
+    font-size: 2.3rem;
     font-weight: bold;
     margin-bottom: 5px;
     opacity: 0;
@@ -8,7 +14,7 @@
 }
 
 .landing-page-stat-title {
-    font-size: 1rem;
+    font-size: 1.2rem;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 1s ease, transform 1s ease;
@@ -20,9 +26,11 @@
     transform: translateY(0);
 }
 
+/* Otras reglas de estilo ... */
+
 .landing-page-image {
     height: 100%;
     background-size: cover;
     background-position: center;
-    transition: opacity 0.5s ease; /* Ajustamos la transición para mejorarla */
+    transition: opacity 0.5s ease;
 }

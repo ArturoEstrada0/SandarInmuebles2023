@@ -15,6 +15,7 @@ import "./LandingPage.css";
 import backgroundImage1 from "../../assets/img/houses/banner.jpg";
 import backgroundImage2 from "../../assets/img/houses/banner-2.jpg";
 import backgroundImage3 from "../../assets/img/houses/banner-3.jpg";
+import familia from "../../assets/img/familia.jpg";
 import CountUp from "react-countup";
 import ImageCarousel from "./ImageCarousel";
 
@@ -39,26 +40,28 @@ function LandingPage() {
   }, []);
 
   return (
-    <Content style={{backgroundColor: "#e2f4fe"}}>
+    <Content style={{ backgroundImage: `url(${familia})` }}>
       <div
         className="landing-page-container"
-        style={{ height: "80vh", marginLeft: "30px" }}
+        style={{ height: "90vh", marginLeft: "30px", marginTop: "1px" }}
       >
-        <Row gutter={16} style={{ height: "100%" }}>
-          <Col xs={{ span: 24 }} md={{ span: 9 }} style={{ height: "40vh" }}>
+        <Row gutter={6} style={{ height: "100%" }}>
+          <Col xs={{ span: 24 }} md={{ span: 10 }} style={{ height: "40vh" }}>
             <div
               className="landing-page-text"
               style={{ height: "100%", padding: "0 15px" }}
             >
               <Title
                 level={2}
-                style={{ fontSize: "2.5rem", fontFamily: "Lato, sans-serif" }}
+                className="landing-page-text" // Agregado para cambiar el color del texto a blanco
+                style={{ fontSize: "2.5rem", fontFamily: "montserrat", color: "black" }} // Agregado color: white
               >
                 Encuentra la Casa de Tus Sueños con Nosotros
               </Title>
 
               <Paragraph
-                style={{ fontSize: "1.2rem", fontFamily: "Lato, sans-serif" }}
+                className="landing-page-text" // Agregado para cambiar el color del texto a blanco
+                style={{ fontSize: "1.2rem", fontFamily: "Lato", color: "black" }} // Agregado color: white
               >
                 Encuentra la casa de tus sueños con nosotros. Te ofrecemos una
                 amplia variedad de opciones que se adaptarán a tus necesidades.
@@ -123,18 +126,6 @@ function LandingPage() {
                 </Col>
               </Row>
             </div>
-          </Col>
-          <Col xs={{ span: 0 }} md={{ span: 15 }} style={{ height: "60vh" }}>
-            <div
-              className="landing-page-image"
-              style={{
-                height: "100%",
-                backgroundImage: `url(${images[currentImage - 1]})`,
-              }}
-            ></div>
-            {/* <Col>
-              <ImageCarousel />
-            </Col> */}
           </Col>
         </Row>
       </div>
