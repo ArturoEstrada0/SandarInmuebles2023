@@ -1,25 +1,36 @@
-/* Testimonials.css */
+.testimonials {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 80%;
+  max-width: 1000px;
+  padding: 20px;
+}
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 10px;
+}
 
-/* Cambia el color de los botones del carrusel */
-.slick-dots {
-    text-align: center;
-    margin-top: 20px; /* Ajusta el margen superior según sea necesario */
-  }
-  
-  .slick-dots li {
-    display: inline;
-  }
-  
-  .slick-dots button {
-    background-color: blue !important; /* Cambia el color de fondo a tu elección */
-    border: none;
-    border-radius: 50%; /* Haz que los botones sean círculos */
-    width: 10px; /* Ancho de los botones */
-    height: 10px; /* Altura de los botones */
-    margin: 0 5px; /* Espacio entre los botones */
-  }
-  
-  .slick-dots button:hover {
-    background-color: black !important; /* Cambia el color de fondo al pasar el mouse */
-  }
-  
+.testimonial-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.testimonial-card h2 {
+  margin-bottom: 10px;
+}
+
+.testimonial-card p {
+  text-align: center;
+}
