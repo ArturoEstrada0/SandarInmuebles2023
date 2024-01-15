@@ -126,7 +126,7 @@ const PropertyDetail = () => {
   ]
 
   return (
-    <Content>
+    <Content style={{ marginTop: '65px' }}>
       <div
         style={{
           display: 'flex',

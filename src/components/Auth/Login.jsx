@@ -68,7 +68,8 @@ const Login = () => {
   };
 
   return (
-    <div className="fondo-cards">
+    <div className="fondo-cards"   style={{ marginTop: '67px' }}
+    >
       <MDBContainer fluid>
         <MDBRow className="d-flex justify-content-center align-items-center">
           <MDBCol col="10" md="6">

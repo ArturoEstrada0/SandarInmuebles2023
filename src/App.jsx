@@ -8,19 +8,28 @@ import {
 import { useState, useEffect } from "react";
 import { Layout, Spin } from "antd";
 import "./App.css";
+import Header from "./components/Header";
+
 import Home from "./components/Home";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ClientDashboard from "./components/Client/ClientDashboard";
-import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 import PropertyList from "./components/PropertyList/PropertyList";
+import AboutUs from "./components/AboutUs/AboutUs";
+import Testimonials from './components/Testimonials/Testimonials';
+
+import Contact from "./components/Contact/Contact";
 import AdminPanel from "./components/Admin/AdminPanel";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "./components/firebase/firebase";
+
 import Login from "./components/Auth/Login";
 import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
 import Registro from "./components/Auth/Registro";
+
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "./components/firebase/firebase";
 import { AuthProvider, useAuth } from "./context/AuthContext"; // Importa el AuthProvider y useAuth
-import Header from "./components/Header";
+import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
+import Asesores from "./components/Asesores/Asesores";
+
 
 const { Content } = Layout;
 
@@ -92,9 +101,15 @@ function App() {
   return (
     <Router>
       <Header />
-      {/* <AdminPanel /> */}
+      <AdminPanel />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route exact path="/" element={<Home />} />
+        <Route path="/aboutUs" element={<AboutUs />} />
+        <Route path="/asesores" element={<Asesores />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/propertyList" element={<PropertyList />} />
         <Route exact path="/login" element={<Login />} />
         <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
         <Route path="/registro" element={<Registro />} />

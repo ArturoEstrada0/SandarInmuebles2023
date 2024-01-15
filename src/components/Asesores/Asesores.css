@@ -3,14 +3,14 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 65px;
     margin-bottom: 30px;
   }
   
   .image-container img {
     max-width: 100%;
     height: auto;
-    max-height: 400px; /* Ajusta la altura máxima según tus preferencias */
+    max-height: 270px; /* Ajusta la altura máxima según tus preferencias */
   }
   
   .text-container {
@@ -20,9 +20,6 @@
     font-size: 20px;
   }
   
-  .text-container h1 {
-    color: black; /* Color negro para el h1 */
-  }
   
   .text-container h4 {
     color: blue; /* Color azul para el h4 */
@@ -34,7 +31,37 @@
     border: 2px solid blue; /* Color y grosor de la línea horizontal */
   }
   
-  .button-asesor {
-    margin-top: 10px; /* Ajusta el margen superior del botón según tus preferencias */
-  }
+  .button-asesor button {
+    background: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 10px 20px; /* Ajusta el padding según tus preferencias */
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* Agregado para mostrar que es un elemento interactivo */
+}
+
+.button-asesor {
+    margin-top: 10px; /* Ajusta el margen superior del contenedor del botón según tus preferencias */
+    margin-left: 50%;
+}
   
+  .text-container p{
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-align: left;
+    margin-left:10%;
+  }
+
+  .asesor-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+    margin-left: 10%;
+  }

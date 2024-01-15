@@ -103,7 +103,7 @@ const Registro = () => {
   };
 
   return (
-    <div className="fondo-cards">
+    <div className="fondo-cards" style={{ marginTop: '65px' }}>
       <MDBContainer
         fluid
         className="d-flex justify-content-center align-items-center vh-100"

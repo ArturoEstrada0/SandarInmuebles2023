@@ -87,7 +87,7 @@ const ContactList = () => {
       notification.info({
         message: notificationMessage || `Nuevo mensaje`,
         description,
-        duration: 0, // Mantener abierta la notificación hasta que el usuario la cierre
+        duration: 1.2, // Mantener abierta la notificación hasta que el usuario la cierre
         onClose: () => {
           // Limpiar el contador y la lista de nuevos mensajes después de cerrar la notificación
           setNotificationCountContacts(0);
@@ -100,7 +100,7 @@ const ContactList = () => {
       notification.info({
         message: notificationMessage || `Nuevo mensaje`,
         description,
-        duration: 0, // Mantener abierta la notificación hasta que el usuario la cierre
+        duration: 1.2, // Mantener abierta la notificación hasta que el usuario la cierre
         onClose: () => {
           // Limpiar el contador y la lista de nuevos mensajes después de cerrar la notificación
           setNotificationCountMsgPro(0);
