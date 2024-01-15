@@ -15,6 +15,8 @@ import AdminDashboard from "./components/Admin/AdminDashboard";
 import ClientDashboard from "./components/Client/ClientDashboard";
 import PropertyList from "./components/PropertyList/PropertyList";
 import AboutUs from "./components/AboutUs/AboutUs";
+import Testimonials from './components/Testimonials/Testimonials';
+
 import Contact from "./components/Contact/Contact";
 import AdminPanel from "./components/Admin/AdminPanel";
 
@@ -101,9 +103,11 @@ function App() {
       <Header />
       <AdminPanel />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route exact path="/" element={<Home />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/asesores" element={<Asesores />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+
         <Route path="/contact" element={<Contact />} />
         <Route path="/propertyList" element={<PropertyList />} />
         <Route exact path="/login" element={<Login />} />
