@@ -22,6 +22,7 @@ import {
   EnvironmentOutlined,
   HeartFilled,
   HeartOutlined,
+  ToolOutlined
 } from "@ant-design/icons";
 import "./PropertyList.css";
 import {
@@ -92,7 +93,8 @@ const PropertyList = ({ onPropertyClick }) => {
 
           return {
             id: doc.id,
-            type: data.nombre,
+            name: data.nombre,
+            type: data.tipoPropiedad,
             price: data.precio,
             state: data.ubicacion,
             rooms: features.Habitaciones || 0,
@@ -167,17 +169,17 @@ const PropertyList = ({ onPropertyClick }) => {
     const filtered = propertyData.filter((property) => {
       const isTypeMatch = filterType === "all" || property.type === filterType;
       const isPriceMatch =
-        property.price >= parseInt(minPrice) &&
-        property.price <= parseInt(maxPrice);
-      const isStateMatch =
-        filterState === "all" || property.state === filterState;
-
+        (minPrice === "" || property.price >= parseInt(minPrice, 10)) &&
+        (maxPrice === "" || property.price <= parseInt(maxPrice, 10));
+      const isStateMatch = filterState === "all" || property.state === filterState;
+  
       return isTypeMatch && isPriceMatch && isStateMatch;
     });
-
+  
     setFilteredProperties(filtered);
   };
-
+  
+  
   return (
 
     <Content className="property-list">
@@ -201,7 +203,7 @@ const PropertyList = ({ onPropertyClick }) => {
               >
                 <Option value="all">Todos</Option>
                 <Option value="Casa">Casa</Option>
-                <Option value="Apartamento">Apartamento</Option>
+                <Option value="Departamento">Departamento</Option>
               </Select>
             </Col>
             <Col xs={24} sm={12} md={6} lg={6}>
@@ -332,6 +334,28 @@ const PropertyList = ({ onPropertyClick }) => {
                           }}
                         />{" "}
                         Tamaño: {property.area} m²
+                      </Text>
+                    </Col>
+                    <Col xs={8.1}>
+                      <Text strong>
+                        <HomeOutlined
+                          style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                          }}
+                        />{" "}
+                        Tipo: {property.type}
+                      </Text>
+                    </Col>
+                    <Col xs={8.1}>
+                      <Text strong>
+                        < ToolOutlined
+                          style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                          }}
+                        />{" "}
+                        Metros de contruccion: {property.area} m²
                       </Text>
                     </Col>
                   </Row>
