@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useAuth } from '../context/AuthContext'; // Importa el hook useAuth
 import logo from '../assets/img/logo.png';
-import { UserOutlined } from '@ant-design/icons';
 
 const headerStyle = {
   width: '100%',
@@ -30,7 +31,7 @@ const menuItemStyle = {
 
 const activeMenuItemStyle = {
   ...menuItemStyle,
-  borderBottom: '2px solid #1890ff', // Cambia el color de la línea inferior al color deseado
+  borderBottom: '2px solid #1890ff',
 };
 
 const loginStyle = {
@@ -44,6 +45,7 @@ const loginStyle = {
 
 const Header = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
   const [activeSection, setActiveSection] = useState('');
 
   const handleMenuClick = (path, section) => {
@@ -51,12 +53,17 @@ const Header = () => {
     setActiveSection(section);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <>
       <div style={headerStyle}>
         <Link to="/">
           <div className="logo-container">
-          <img src={logo} alt="Mi logotipo" style={logoStyle} className="logo" />
+            <img src={logo} alt="Mi logotipo" style={logoStyle} className="logo" />
           </div>
         </Link>
 
@@ -100,10 +107,17 @@ const Header = () => {
           Inmuebles
         </Link>
 
-        <Link to="/login" style={loginStyle}>
-          <UserOutlined style={{ marginRight: '5px' }} />
-          Iniciar Sesión
-        </Link>
+        {isAuthenticated ? (
+          <div style={loginStyle} onClick={handleLogout} role="button">
+            <LogoutOutlined style={{ marginRight: '5px' }} />
+            Cerrar Sesión
+          </div>
+        ) : (
+          <Link to="/login" style={loginStyle}>
+            <UserOutlined style={{ marginRight: '5px' }} />
+            Iniciar Sesión
+          </Link>
+        )}
       </div>
     </>
   );

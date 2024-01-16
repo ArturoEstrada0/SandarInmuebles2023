@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, getAuth } from 'firebase/auth';
+import { createContext, useContext, useState, useEffect } from "react";
+import { onAuthStateChanged, getAuth, signOut } from "firebase/auth";
 
 // Crear el contexto de autenticación
 const AuthContext = createContext();
@@ -32,15 +32,24 @@ export const AuthProvider = ({ children }) => {
     // Por ejemplo, cargar más información del usuario desde Firebase
   };
 
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      window.location.reload(); // Recargar la página después de cerrar sesión
+
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error.message);
+    }
+  };
+
   const contextValue = {
     user,
     isAuthenticated,
     updateUserContext,
+    logout,
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

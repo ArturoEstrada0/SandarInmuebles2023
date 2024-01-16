@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -5,17 +6,14 @@ import {
   Navigate,
   Link,
 } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Layout, Spin } from "antd";
 import "./App.css";
 import Header from "./components/Header";
 
 import Home from "./components/Home";
-import AdminDashboard from "./components/Admin/AdminDashboard";
-import ClientDashboard from "./components/Client/ClientDashboard";
 import PropertyList from "./components/PropertyList/PropertyList";
 import AboutUs from "./components/AboutUs/AboutUs";
-import Testimonials from './components/Testimonials/Testimonials';
+import Testimonials from "./components/Testimonials/Testimonials";
 
 import Contact from "./components/Contact/Contact";
 import AdminPanel from "./components/Admin/AdminPanel";
@@ -24,46 +22,41 @@ import Login from "./components/Auth/Login";
 import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
 import Registro from "./components/Auth/Registro";
 
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "./components/firebase/firebase";
-import { AuthProvider, useAuth } from "./context/AuthContext"; // Importa el AuthProvider y useAuth
 import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 import Asesores from "./components/Asesores/Asesores";
 
-
-const { Content } = Layout;
-
-// Crea una función que verifica el rol del usuario
-const checkUserRole = () => {
-  // Implementa la lógica para determinar el rol del usuario
-  // Devuelve 'admin' o 'client' según corresponda.
-};
-
-// Rutas protegidas
-function AdminRoute({ children }) {
-  const { isAuthenticated } = useAuth();
-
-  if (isAuthenticated && checkUserRole() === "admin") {
-    return children;
-  } else {
-    return <Navigate to="/login" />;
-  }
-}
-
-function ClientRoute({ children }) {
-  const { isAuthenticated } = useAuth();
-
-  if (isAuthenticated && checkUserRole() === "client") {
-    return children;
-  } else {
-    return <Navigate to="/login" />;
-  }
-}
+import { collection, getDoc, getDocs, doc } from "firebase/firestore";
+import { firestore } from "./components/firebase/firebase";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function App() {
-  const { isAuthenticated } = useAuth(); // Utiliza el hook useAuth para obtener el estado de autenticación
-
+  const { isAuthenticated, user } = useAuth();
   const [propertyData, setPropertyData] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    if (user && user.uid) {
+      const fetchUserData = async () => {
+        try {
+          const userDocRef = doc(firestore, "usuarios", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            setUserData(userDoc.data());
+            setIsAdmin(userDoc.data().role === "admin");
+          } else {
+            console.error(
+              "No se encontró el documento del usuario en Firestore."
+            );
+          }
+        } catch (error) {
+          console.error("Error al obtener datos del usuario:", error);
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -85,8 +78,6 @@ function App() {
             bathrooms: features.Baño || 0,
             area: features.Tamaño || 0,
             image: data.fotos[0],
-            // Agrega cualquier propiedad adicional según tu estructura
-            // activeFeatures: data.activeFeatures,
           };
         });
         setPropertyData(properties);
@@ -101,43 +92,27 @@ function App() {
   return (
     <Router>
       <Header />
-      <AdminPanel />
       <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/aboutUs" element={<AboutUs />} />
-        <Route path="/asesores" element={<Asesores />} />
-        <Route path="/testimonials" element={<Testimonials />} />
-
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/propertyList" element={<PropertyList />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/client"
-          element={
-            <ClientRoute>
-              <ClientDashboard />
-            </ClientRoute>
-          }
-        />
-        <Route
-          exact
-          path="/"
-          element={<PropertyList propertyData={propertyData} />}
-        />
-        <Route
-          path="/property/:id"
-          element={<PropertyDetail propertyData={propertyData} />}
-        />
+        {isAuthenticated && isAdmin && (
+          <Route path="/" element={<AdminPanel />} />
+        )}
+        {(!isAuthenticated || !isAdmin) && (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/aboutUs" element={<AboutUs />} />
+            <Route path="/asesores" element={<Asesores />} />
+            <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/propertyList" element={<PropertyList />} />
+            <Route
+              path="/property/:id"
+              element={<PropertyDetail propertyData={propertyData} />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
+            <Route path="/registro" element={<Registro />} />
+          </>
+        )}
       </Routes>
     </Router>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { getAuth } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
@@ -46,7 +46,7 @@ const Registro = () => {
   const register = async () => {
     setError("");
     setSuccessMessage(""); // Limpiar el mensaje de éxito al intentar registrar nuevamente
-    if (!name || !email || !password || !confirmPassword ) {
+    if (!name || !email || !password || !confirmPassword) {
       setError("Por favor, complete todos los campos.");
       return;
     }
@@ -84,12 +84,15 @@ const Registro = () => {
 
       // Añadir información adicional del usuario a la colección en Firestore
       const usersCollection = collection(firestore, "usuarios");
-      await addDoc(usersCollection, {
+
+      // Utilizar el UID del usuario como ID del documento
+      const userDocRef = doc(usersCollection, user.uid);
+
+      await setDoc(userDocRef, {
         uid: user.uid,
         name: name,
         email: email,
-        //role: role,
-        phone: phone, // Agregar el número de teléfono
+        phone: phone,
       });
 
       console.log("Usuario registrado exitosamente", user);
@@ -103,7 +106,7 @@ const Registro = () => {
   };
 
   return (
-    <div className="fondo-cards" style={{ marginTop: '65px' }}>
+    <div className="fondo-cards" style={{ marginTop: "65px" }}>
       <MDBContainer
         fluid
         className="d-flex justify-content-center align-items-center vh-100"

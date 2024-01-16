@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import { LeftOutlined } from "@ant-design/icons";
 
 import {
@@ -31,6 +31,7 @@ const isValidPassword = (password) => {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -56,6 +57,8 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Inicio de sesión exitoso"); // Establece el mensaje de éxito
+      navigate('/');
+
     } catch (error) {
       setError("Error al ingresar, intente de nuevo");
     }
