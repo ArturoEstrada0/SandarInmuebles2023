@@ -55,6 +55,7 @@ function Propiedades() {
   const [mapHeight, setMapHeight] = useState("300px"); // Tamaño inicial
   const [mapCenter, setMapCenter] = useState(moreliaCoords);
   const [markerCoords, setMarkerCoords] = useState(moreliaCoords);
+  const [tableFilters, setTableFilters] = useState({});
 
   // Agrega un estado para las sugerencias de ubicación y la ubicación seleccionada
   const [locationSuggestions, setLocationSuggestions] = useState([]);
@@ -140,14 +141,25 @@ function Propiedades() {
           nuevasPropiedades.push(propiedad);
         });
 
-        setDataSource(nuevasPropiedades);
+        // Filtrar propiedades según el término de búsqueda y los filtros de la tabla
+        const filteredPropiedades = nuevasPropiedades.filter(
+          (propiedad) =>
+            Object.entries(tableFilters).every(([key, filter]) =>
+              filter(propiedad[key])
+            ) &&
+            Object.values(propiedad).some((value) =>
+              value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+
+        setDataSource(filteredPropiedades);
       } catch (error) {
         console.error("Error al obtener propiedades:", error);
       }
     };
 
     fetchData();
-  }, []); // Este efecto se ejecutará solo una vez al montar el componente
+  }, [searchTerm, tableFilters]);
 
   const [features] = useState([
     "Baño",
@@ -389,7 +401,7 @@ function Propiedades() {
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -461,7 +473,6 @@ function Propiedades() {
         />
       ),
     },
-
     {
       title: "Nombre",
       dataIndex: "nombre",
@@ -471,11 +482,23 @@ function Propiedades() {
       title: "Tipo de Propiedad",
       dataIndex: "tipoPropiedad",
       key: "tipoPropiedad",
+      filters: [
+        { text: "Casa", value: "Casa" },
+        { text: "Departamento", value: "Departamento" },
+        // Agrega más opciones según sea necesario
+      ],
+      onFilter: (value, record) => record.tipoPropiedad === value,
     },
     {
       title: "Condición",
       dataIndex: "condicion",
       key: "condicion",
+      filters: [
+        { text: "Venta", value: "venta" },
+        { text: "Renta", value: "renta" },
+        // Agrega más opciones según sea necesario
+      ],
+      onFilter: (value, record) => record.condicion === value,
     },
     {
       title: "Ubicación",
@@ -486,7 +509,10 @@ function Propiedades() {
       title: "Precio",
       dataIndex: "precio",
       key: "precio",
+      sorter: (a, b) => a.precio - b.precio, // Agrega esta línea para permitir ordenar por precio
+      sortDirections: ["ascend", "descend"],
     },
+  
     // Puedes añadir más columnas como descripción y características si lo necesitas
     {
       title: "Acciones",
@@ -528,6 +554,11 @@ function Propiedades() {
           allowClear
           enterButton={<SearchOutlined />}
           onSearch={handleSearch}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setSearchTerm("");
+            }
+          }}
         />
       </Space>
       <Table dataSource={dataSource} columns={columns} />
@@ -591,8 +622,8 @@ function Propiedades() {
                 ]}
               >
                 <Radio.Group>
-                  <Radio value="venta">Venta</Radio>
-                  <Radio value="renta">Renta</Radio>
+                  <Radio value="Venta">Venta</Radio>
+                  <Radio value="Renta">Renta</Radio>
                 </Radio.Group>
               </Form.Item>
 
