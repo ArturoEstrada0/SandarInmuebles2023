@@ -643,7 +643,7 @@ const handleLocationSelect = (suggestion) => {
                   onPreview={onPreview}
                   beforeUpload={() => false}
                 >
-                  {fileList.length < 5 && (
+                  {fileList.length < 50 && (
                     <div>
                       <UploadOutlined />
                       <div style={{ marginTop: 8 }}>Subir</div>
