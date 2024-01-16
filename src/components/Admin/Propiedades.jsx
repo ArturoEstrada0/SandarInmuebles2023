@@ -22,7 +22,13 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import axios from "axios"; // Importa Axios
 
 import { app, firestore } from "../firebase/firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  addDoc,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import YouTube from "react-youtube";
 import Map from "../Map/Map";
@@ -97,19 +103,18 @@ function Propiedades() {
     }
   };
 
-// Dentro de handleLocationSelect
-const handleLocationSelect = (suggestion) => {
-  setSelectedLocation(suggestion);
-  setLocationSuggestions([]); // Oculta las sugerencias después de la selección
+  // Dentro de handleLocationSelect
+  const handleLocationSelect = (suggestion) => {
+    setSelectedLocation(suggestion);
+    setLocationSuggestions([]); // Oculta las sugerencias después de la selección
 
-  // Actualizar las coordenadas del marcador
-  setMarkerCoords([suggestion.lat, suggestion.lon]);
+    // Actualizar las coordenadas del marcador
+    setMarkerCoords([suggestion.lat, suggestion.lon]);
 
-  // No es necesario setMapCenter aquí, ya que se manejará automáticamente en el componente Map
+    // No es necesario setMapCenter aquí, ya que se manejará automáticamente en el componente Map
 
-  setMapHeight('500px'); // Ajusta el tamaño según tus necesidades
-};
-
+    setMapHeight("500px"); // Ajusta el tamaño según tus necesidades
+  };
 
   useEffect(() => {
     if (selectedLocation) {
@@ -321,6 +326,45 @@ const handleLocationSelect = (suggestion) => {
   // Manejador para el cambio en la carga de archivos
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  };
+
+  // Funcion para ELIMINAR propiedades
+  const deleteProperty = async (propertyId) => {
+    try {
+      const propiedadesCollection = collection(firestore, "propiedades");
+      await deleteDoc(doc(propiedadesCollection, propertyId));
+
+      // Actualizar el estado local eliminando la propiedad
+      setDataSource((prevDataSource) =>
+        prevDataSource.filter((property) => property.key !== propertyId)
+      );
+
+      notification.success({
+        message: "Propiedad eliminada",
+        description: "La propiedad ha sido eliminada con éxito.",
+      });
+    } catch (error) {
+      console.error("Error al eliminar propiedad:", error);
+      notification.error({
+        message: "Error al eliminar propiedad",
+        description:
+          error.message ||
+          "Ocurrió un error al intentar eliminar la propiedad.",
+      });
+    }
+  };
+
+  const handleDelete = (propertyId) => {
+    Modal.confirm({
+      title: "Confirmar eliminación",
+      content: "¿Estás seguro de que deseas eliminar esta propiedad?",
+      okText: "Sí",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        deleteProperty(propertyId);
+      },
+    });
   };
 
   // Previsualización de imágenes
