@@ -60,6 +60,8 @@ function Propiedades() {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   // Antes de la función Propiedades()
   let locationCache = {};
 
@@ -385,9 +387,40 @@ function Propiedades() {
 
   // Función para manejar la búsqueda
   const handleSearch = (value) => {
-    console.log("Buscar:", value);
-    // Implementa aquí tu lógica de búsqueda
+    setSearchTerm(value);
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const propiedadesCollection = collection(firestore, "propiedades");
+        const propiedadesSnapshot = await getDocs(propiedadesCollection);
+
+        const nuevasPropiedades = [];
+        propiedadesSnapshot.forEach((doc) => {
+          const propiedadData = doc.data();
+          const propiedad = {
+            key: doc.id,
+            ...propiedadData,
+          };
+          nuevasPropiedades.push(propiedad);
+        });
+
+        // Filtrar propiedades según el término de búsqueda
+        const filteredPropiedades = nuevasPropiedades.filter((propiedad) =>
+          Object.values(propiedad).some((value) =>
+            value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
+
+        setDataSource(filteredPropiedades);
+      } catch (error) {
+        console.error("Error al obtener propiedades:", error);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm]);
 
   const nextStep = () => {
     setCurrentStep((prev) => prev + 1);
