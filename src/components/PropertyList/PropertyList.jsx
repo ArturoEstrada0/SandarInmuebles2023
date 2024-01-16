@@ -12,6 +12,7 @@ import {
   Image,
   Spin,
   Input,
+  Carousel,
 } from "antd";
 import {
   HomeOutlined,
@@ -22,7 +23,7 @@ import {
   EnvironmentOutlined,
   HeartFilled,
   HeartOutlined,
-  ToolOutlined
+  ToolOutlined,
 } from "@ant-design/icons";
 import "./PropertyList.css";
 import {
@@ -30,7 +31,7 @@ import {
   getDocs,
   doc,
   updateDoc,
-  increment
+  increment,
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { Link } from "react-router-dom";
@@ -100,7 +101,7 @@ const PropertyList = ({ onPropertyClick }) => {
             rooms: features.Habitaciones || 0,
             bathrooms: features.Baño || 0,
             area: features.Tamaño || 0,
-            image: data.fotos[0],
+            image: data.fotos,
           };
         });
         setPropertyData(properties);
@@ -152,7 +153,10 @@ const PropertyList = ({ onPropertyClick }) => {
       setIsFavorite(!isFavorite);
 
       // Referencia al documento de la propiedad en Firestore
-      const propertyDocRef = doc(collection(firestore, "propiedades"), propertyId);
+      const propertyDocRef = doc(
+        collection(firestore, "propiedades"),
+        propertyId
+      );
 
       // Actualiza el contador de favoritos en Firestore
       await updateDoc(propertyDocRef, {
@@ -171,17 +175,16 @@ const PropertyList = ({ onPropertyClick }) => {
       const isPriceMatch =
         (minPrice === "" || property.price >= parseInt(minPrice, 10)) &&
         (maxPrice === "" || property.price <= parseInt(maxPrice, 10));
-      const isStateMatch = filterState === "all" || property.state === filterState;
-  
+      const isStateMatch =
+        filterState === "all" || property.state === filterState;
+
       return isTypeMatch && isPriceMatch && isStateMatch;
     });
-  
+
     setFilteredProperties(filtered);
   };
-  
-  
-  return (
 
+  return (
     <Content className="property-list">
       <div
         className="centered-card"
@@ -277,12 +280,25 @@ const PropertyList = ({ onPropertyClick }) => {
                 style={{ width: 480, height: 420 }}
                 onClick={() => handlePropertyClick(property.id)}
               >
-                <Image
-                  src={property.image}
-                  alt={property.type}
-                  preview={false}
-                  style={{ width: '120%', height: '200px' }} // Ajusta el tamaño y la altura según tus necesidades
-                />
+                <Carousel
+                  autoplay
+                  style={{ width: "100%", textAlign: "center" }}
+                >
+                  {property.image.map((image, index) => (
+                    <div key={index}>
+                      <Image
+                        src={image}
+                        alt={property.type}
+                        preview={false}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Carousel>
                 <div
                   className="property-location"
                   style={{ marginTop: "16px" }}
@@ -349,7 +365,7 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Col>
                     <Col xs={8.1}>
                       <Text strong>
-                        < ToolOutlined
+                        <ToolOutlined
                           style={{
                             fontSize: "1.2rem",
                             fontWeight: "bold",
@@ -376,7 +392,7 @@ const PropertyList = ({ onPropertyClick }) => {
                       color: "white",
                     }}
                   >
-                    Reserva
+                    Ver más
                   </Button>
                   {userAuthenticated ? (
                     <Button
@@ -390,9 +406,7 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Button>
                   ) : (
                     <Link to="/login">
-                      <Button type="primary">
-                        Inicia sesión para guardar en favoritos
-                      </Button>
+                      <Button type="primary">Añadir a Favoritos</Button>
                     </Link>
                   )}
 
@@ -405,7 +419,6 @@ const PropertyList = ({ onPropertyClick }) => {
           ))
         )}
       </Row>
-
     </Content>
   );
 };
