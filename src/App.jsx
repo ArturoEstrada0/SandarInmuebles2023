@@ -13,7 +13,6 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import PropertyList from "./components/PropertyList/PropertyList";
 import AboutUs from "./components/AboutUs/AboutUs";
-import Testimonials from "./components/Testimonials/Testimonials";
 
 import Contact from "./components/Contact/Contact";
 import AdminPanel from "./components/Admin/AdminPanel";
@@ -101,7 +100,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/asesores" element={<Asesores />} />
-            <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/propertyList" element={<PropertyList />} />
             <Route
