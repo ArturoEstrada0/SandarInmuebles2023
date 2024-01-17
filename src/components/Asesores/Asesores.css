@@ -64,4 +64,6 @@
     margin-bottom: 20px;
     text-align: left;
     margin-left: 10%;
+    border-left: 3px solid #1890ff;
+    padding-left: 16px; /* Ajusta el espacio entre la línea y el texto */
   }
