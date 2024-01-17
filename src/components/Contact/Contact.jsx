@@ -53,7 +53,7 @@ const Contact = () => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="Nombre"
+                    label={<span style={{ fontSize: '16.5px' }}>Nombre</span>}
                     name="name"
                     rules={[
                       {
@@ -67,7 +67,7 @@ const Contact = () => {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="Teléfono"
+                    label={<span style={{ fontSize: '16.5px' }}>Teléfono</span>}
                     name="phone"
                     rules={[
                       {
@@ -82,7 +82,7 @@ const Contact = () => {
               </Row>
 
               <Form.Item
-                label="Correo Electrónico"
+                label={<span style={{ fontSize: '16.5px' }}>Correo electrónico</span>}
                 name="email"
                 rules={[
                   {
@@ -96,7 +96,7 @@ const Contact = () => {
               </Form.Item>
 
               <Form.Item
-                label="Asunto"
+                label={<span style={{ fontSize: '16.5px' }}>Asunto</span>}
                 name="subject"
                 rules={[
                   {
@@ -114,7 +114,7 @@ const Contact = () => {
               </Form.Item>
 
               <Form.Item
-                label="Mensaje"
+                label={<span style={{ fontSize: '16.5px' }}>Mensaje</span>}
                 name="message"
                 rules={[
                   { required: true, message: 'Por favor, ingrese un mensaje.' },

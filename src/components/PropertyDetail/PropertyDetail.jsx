@@ -149,12 +149,14 @@ const PropertyDetail = () => {
         >
           <Title
             level={2}
-            style={{
-              fontFamily: "Arial, sans-serif",
-              color: "#333",
-              fontWeight: "bold",
-              marginBottom: "10px",
-            }}
+      style={{
+        fontFamily: "Arial, sans-serif",
+        color: "#333",
+        fontWeight: "bold",
+        marginBottom: "10px",
+        borderLeft: "3px solid #1890ff", // Agregar línea vertical a la izquierda del título
+        paddingLeft: "16px", // Ajustar el espacio entre la línea y el texto
+      }}
           >
             {/*{propertyDetails.type}*/}
             {propertyDetails.nombre}
@@ -204,7 +206,7 @@ const PropertyDetail = () => {
                         alt={`Property Image ${index + 1}`}
                         style={{
                           width: '100%',
-                          height: '100%',
+                          height: "28rem",
                           objectFit: 'cover',
                           borderRadius: '12px',
                         }}
@@ -317,6 +319,7 @@ const PropertyDetail = () => {
             </div>
           </div>
         </Col>
+        
 
         <Col span={24}>
           <div style={{ padding: "20px" }}>

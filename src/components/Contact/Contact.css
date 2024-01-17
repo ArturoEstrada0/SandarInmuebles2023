@@ -5,13 +5,16 @@
     height: 90vh;
   }
 
-.contact-container .card-container,
-.contact-container .card-container .ant-form-item-label,
-.contact-container .card-container .ant-input,
-.contact-container .card-container .ant-select-selector,
-.contact-container .card-container .ant-btn {
-  font-size: 17px; /* Ajusta el tamaño de la fuente según tus preferencias */
-}
+  .contact-container .card-container,
+  .contact-container .card-container .ant-form-item-label,
+  .contact-container .card-container .ant-input,
+  .contact-container .card-container .ant-select-selector,
+  .contact-container .card-container .ant-btn,
+  .contact-container .card-container .card-title,
+  .contact-container .card-container .contact-info-container h3,
+  .contact-container .card-container .contact-info {
+    font-size: 16.6px; /* Ajusta el tamaño de la fuente según tus preferencias */
+  }
 
   .card-container {
     width: 60%;
