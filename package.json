@@ -28,7 +28,6 @@
     "mdb-react-ui-kit": "^7.0.0",
     "npm": "^10.2.0",
     "react": "^18.2.0",
-    "react-animated-slider": "^2.0.0",
     "react-bootstrap": "^2.9.1",
     "react-chartjs-2": "^5.2.0",
     "react-countup": "^6.4.2",
@@ -41,8 +40,10 @@
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
     "react-scroll": "^1.9.0",
+    "react-slick": "^0.29.0",
     "react-youtube": "^10.1.0",
     "recharts": "^2.10.3",
+    "slick-carousel": "^1.8.1",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },

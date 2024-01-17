@@ -38,6 +38,8 @@ import { Link } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 
+import CustomCarousel from "./Carousel";
+
 const { Content } = Layout;
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -118,6 +120,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
   const handlePropertyClick = async (propertyId) => {
     // Incrementa el contador local
+
     setPropertyClickCount(propertyClickCount + 1);
 
     // Referencia al documento de la propiedad en Firestore
@@ -136,6 +139,7 @@ const PropertyList = ({ onPropertyClick }) => {
       if (onPropertyClick) {
         onPropertyClick(propertyId);
       }
+      window.location.href = `/property/${propertyId}`;
     } catch (error) {
       console.error("Error al actualizar el contador en Firestore:", error);
     }
@@ -277,31 +281,16 @@ const PropertyList = ({ onPropertyClick }) => {
             <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
               <Card
                 className="property-card"
-                style={{ width: 480, height: 420 }}
-                onClick={() => handlePropertyClick(property.id)}
+                style={{ width: 480, height: 420}}
               >
-                <Carousel
-                  autoplay
-                  style={{ width: "100%", textAlign: "center" }}
-                >
-                  {property.image.map((image, index) => (
-                    <div key={index}>
-                      <Image
-                        src={image}
-                        alt={property.type}
-                        preview={false}
-                        style={{
-                          width: "100%",
-                          height: "200px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Carousel>
+            <CustomCarousel images={property.image} />
+
+
                 <div
                   className="property-location"
-                  style={{ marginTop: "16px" }}
+                  style={{ marginTop: "16px", cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
+
                 >
                   <Text strong style={{ fontSize: "1.2rem" }}>
                     <EnvironmentOutlined
@@ -316,7 +305,9 @@ const PropertyList = ({ onPropertyClick }) => {
                     style={{
                       marginBottom: "16px",
                       marginTop: "20px",
+                      cursor: "pointer"
                     }}
+                    onClick={() => handlePropertyClick(property.id)}
                   >
                     <Col xs={8}>
                       <Text strong>
@@ -383,22 +374,14 @@ const PropertyList = ({ onPropertyClick }) => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Button
-                    type="primary"
-                    href={`/property/${property.id}`}
-                    className="large-button centered-button"
-                    style={{
-                      backgroundColor: "black",
-                      color: "white",
-                    }}
-                  >
-                    Ver más
-                  </Button>
                   {userAuthenticated ? (
                     <Button
                       type="primary"
                       icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
-                      onClick={() => toggleFavorite(property.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(property.id);
+                      }}
                     >
                       {isFavorite
                         ? "Quitar de Favoritos"
@@ -410,7 +393,7 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Link>
                   )}
 
-                  <Text strong style={{ fontSize: "1.5rem" }}>
+                  <Text strong style={{ fontSize: "1.5rem", cursor: "pointer" }}  onClick={() => handlePropertyClick(property.id)}>
                     $ {property.price.toLocaleString()}
                   </Text>
                 </div>

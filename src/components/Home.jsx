@@ -6,7 +6,7 @@ import PropertyList from './PropertyList/PropertyList'
 import Footer from './Footer/Footer'
 import ChatBubble from './Chat/ChatBubble'
 import Asesores from './Asesores/Asesores'
-import Testimonials from './Testimonials/Testimonials'
+// import Testimonials from './Testimonials/Testimonials'
 
 const { Content } = Layout
 
@@ -17,7 +17,7 @@ function Home() {
         <div className='site-layout-content'>
           <LandingPage />
           <PropertyList />
-          <Testimonials />
+          {/* <Testimonials /> */}
           <AboutUs />
           <Asesores />
           <Contact />
