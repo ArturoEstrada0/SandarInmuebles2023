@@ -3,7 +3,7 @@ import { Layout, Typography, Row, Col, Statistic, Divider } from 'antd';
 import { ApartmentOutlined, HomeOutlined } from '@ant-design/icons';
 import './AboutUs.css';
 
-import aboutusF from '../../assets/img/aboutusF.jpg'
+import aboutusF from '../../assets/img/mudandose2.jpg'
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
 

@@ -11,6 +11,9 @@
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 20px;
+    /* Agregar línea vertical a la izquierda del título */
+    border-left: 3px solid #1890ff;
+    padding-left: 16px; /* Ajusta el espacio entre la línea y el texto */
   }
   
   .about-us-paragraph {
@@ -117,4 +120,3 @@
     width: 50px;
     background-color: #1890ff;
   }
-  
