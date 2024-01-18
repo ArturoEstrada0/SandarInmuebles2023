@@ -46,6 +46,8 @@ import {
   faCity,
   faRulerCombined,
   faHome,
+  faHouse,
+  faHouseFlag,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useParams } from "react-router-dom";
@@ -130,13 +132,13 @@ const PropertyDetail = () => {
   }
 
   const details = [
-    { key: "Habitaciones", label: "Recámaras" },
+    { key: "Habitaciones", label: "Habitaciones" },
     { key: "Baño", label: "Baños" },
     { key: "Medio_bano", label: "Medios Baños" },
     { key: "Construccion", label: "Construcción" },
     { key: "Estacionamientos", label: "Estacionamientos" },
   ];
-  
+
   const iconStyle = {
     color: "#1890ff", // Color azul, puedes ajustarlo según tu preferencia
   };
@@ -157,15 +159,15 @@ const PropertyDetail = () => {
       'Jardín': <FontAwesomeIcon icon={faTree} style={iconStyle} />,
       'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
       'Piscina': <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
-      'Salón de eventos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
+      'Salón de eventos': <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />,
       'Sistema de sonido': <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />,
-      'Terraza': <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />,
+      'Terraza': <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
       'Vestidor': <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
       'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={iconStyle} />,
       'Vista a la montaña': <FontAwesomeIcon icon={faMountain} style={iconStyle} />,
       'Vista al mar': <FontAwesomeIcon icon={faWater} style={iconStyle} />,
       'Vista panorámica': <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />,
-      'Área de juegos': <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+      'Área de juegos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
       'Ático': <FontAwesomeIcon icon={faHome} style={iconStyle} />,
       'Chimenea': <FontAwesomeIcon icon={faFire} style={iconStyle} />,
       // Puedes agregar más iconos según sea necesario
@@ -522,11 +524,11 @@ const PropertyDetail = () => {
                 <div className="button-group">
                   <Button
                     className={`custom-button ${
-                      activeKey === "Recámaras" ? "active" : ""
+                      activeKey === "Habitaciones" ? "active" : ""
                     }`}
-                    onClick={() => onCollapseChange("Recámaras")}
+                    onClick={() => onCollapseChange("Habitaciones")}
                   >
-                    Récamaras
+                    Habitaciones
                   </Button>
                   <Button
                     className={`custom-button ${
@@ -554,7 +556,7 @@ const PropertyDetail = () => {
                   </Button>
                 </div>
                 <div className="content-container">
-                  {activeKey === "Recámaras" && (
+                  {activeKey === "Habitaciones" && (
                     <p>Contenido relacionado a las recamaras.</p>
                   )}
                   {activeKey === "Interiores/Exteriores" && (
