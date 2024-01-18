@@ -37,12 +37,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBath,
   faBed,
-  faBriefcase,
-  faSink,
   faSwimmingPool,
   faMountain,
   faCar,
-  faLayerGroup,
   faTree,
   faUtensils,
   faBell,
@@ -61,8 +58,6 @@ import {
   faWater,
   faCity,
   faRulerCombined,
-  faClock,
-  faPalette,
   faHome,
 } from "@fortawesome/free-solid-svg-icons";
 // Antes de tu función Propiedades()

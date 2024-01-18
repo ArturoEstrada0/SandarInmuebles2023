@@ -18,27 +18,36 @@ import {
   FormOutlined,
   DollarCircleOutlined,
   HomeOutlined,
-  EnvironmentOutlined,
-  GlobalOutlined,
-  ToolOutlined,
-  CarOutlined,
-  ShopOutlined,
-  BankOutlined,
-  ApartmentOutlined,
-  FieldNumberOutlined,
-  BulbOutlined,
-  CrownOutlined,
-  HeatMapOutlined,
-  CarryOutOutlined,
-  AlertOutlined,
-  RiseOutlined,
-  EyeOutlined,
-  ClockCircleOutlined,
-  BuildOutlined,
-  ScheduleOutlined,
-  LeftOutlined,
-  RightOutlined,
 } from "@ant-design/icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBath,
+  faBed,
+  faSwimmingPool,
+  faMountain,
+  faCar,
+  faTree,
+  faUtensils,
+  faBell,
+  faVideo,
+  faVolumeUp,
+  faTshirt,
+  faBox,
+  faFire,
+  faSnowflake,
+  faCouch,
+  faPaw,
+  faBinoculars,
+  faDumbbell,
+  faGlassCheers,
+  faChess,
+  faWater,
+  faCity,
+  faRulerCombined,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+
 import { useParams } from "react-router-dom";
 import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import mapaImage from "../../assets/img/mapa.png"; // Importa la imagen del mapa
@@ -127,6 +136,50 @@ const PropertyDetail = () => {
     { key: "Construccion", label: "Construcción" },
     { key: "Estacionamientos", label: "Estacionamientos" },
   ];
+  
+  const iconStyle = {
+    color: "#1890ff", // Color azul, puedes ajustarlo según tu preferencia
+  };
+  
+  const getIcon = (key) => {
+    // Mapea las claves a los iconos correspondientes de Font Awesome
+    const iconMapping = {
+      'Aire acondicionado': <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />,
+      'Alarma': <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+      'Amueblado': <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
+      'Baño': <FontAwesomeIcon icon={faBath} style={iconStyle} />,
+      'Bodega': <FontAwesomeIcon icon={faBox} style={iconStyle} />,
+      'Cámaras de seguridad': <FontAwesomeIcon icon={faVideo} style={iconStyle} />,
+      'Cochera': <FontAwesomeIcon icon={faCar} style={iconStyle} />,
+      'Cocina': <FontAwesomeIcon icon={faUtensils} style={iconStyle} />,
+      'Gimnasio': <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
+      'Habitaciones': <FontAwesomeIcon icon={faBed} style={iconStyle} />,
+      'Jardín': <FontAwesomeIcon icon={faTree} style={iconStyle} />,
+      'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
+      'Piscina': <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
+      'Salón de eventos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
+      'Sistema de sonido': <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />,
+      'Terraza': <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />,
+      'Vestidor': <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
+      'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={iconStyle} />,
+      'Vista a la montaña': <FontAwesomeIcon icon={faMountain} style={iconStyle} />,
+      'Vista al mar': <FontAwesomeIcon icon={faWater} style={iconStyle} />,
+      'Vista panorámica': <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />,
+      'Área de juegos': <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+      'Ático': <FontAwesomeIcon icon={faHome} style={iconStyle} />,
+      'Chimenea': <FontAwesomeIcon icon={faFire} style={iconStyle} />,
+      // Puedes agregar más iconos según sea necesario
+    };
+  
+    return iconMapping[key] || null;
+  };
+  
+  
+  const formatLabel = (key) => {
+    // Puedes personalizar el formato de la etiqueta según tus necesidades
+    // Por ejemplo, puedes cambiar el formato de 'Área de juegos' a 'Área de Juegos'
+    return key.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase());
+  };
 
   return (
     <Content style={{ marginTop: "65px" }}>
@@ -368,315 +421,31 @@ const PropertyDetail = () => {
                 {/* Línea horizontal superior */}
                 <Title level={2}>Información del inmueble</Title>
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <ul
-                      style={{
-                        listStyle: "none",
-                        padding: 0,
-                        fontSize: "17px",
-                        lineHeight: "2",
-                      }}
-                    >
-                      <li>
-                        <strong>
-                          <CarOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Estacionamiento:
-                        </strong>{" "}
-                        Sí
-                      </li>
-                      <li>
-                        <strong>
-                          <HomeOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Tipo:
-                        </strong>{" "}
-                        {propertyDetails.tipoPropiedad}
-                      </li>
-                      <li>
-                        <strong>
-                          <EnvironmentOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Uso de la propiedad:
-                        </strong>{" "}
-                        Residencial
-                      </li>
-                      <li>
-                        <strong>
-                          <BankOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          ¿Está en condominio?:
-                        </strong>{" "}
-                        No
-                      </li>
-                      <li>
-                        <strong>
-                          <BuildOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Edificios:
-                        </strong>{" "}
-                        1
-                      </li>
-                      <li>
-                        <strong>
-                          <ShopOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Propiedades:
-                        </strong>{" "}
-                        2
-                      </li>
-                      <li>
-                        <strong>
-                          <ApartmentOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Tipo de departamento:
-                        </strong>{" "}
-                        N/A
-                      </li>
-                      <li>
-                        <strong>
-                          <AlertOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Estado de conservación del inmueble:
-                        </strong>{" "}
-                        Bueno
-                      </li>
-                      <li>
-                        <strong>
-                          <ClockCircleOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Antigüedad:
-                        </strong>{" "}
-                        5 años
-                      </li>
-                      <li>
-                        <strong>
-                          <HeatMapOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Orientación del inmueble:
-                        </strong>{" "}
-                        Norte
-                      </li>
-                      <li>
-                        <strong>
-                          <ScheduleOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Superficie de construcción:
-                        </strong>{" "}
-                        150 m²
-                      </li>
-                    </ul>
-                  </Col>
-                  <Col span={12}>
-                    <ul
-                      style={{
-                        listStyle: "none",
-                        padding: 0,
-                        fontSize: "17px",
-                        lineHeight: "2",
-                      }}
-                    >
-                      <li>
-                        <strong>
-                          <CrownOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Recámaras:
-                        </strong>{" "}
-                        {propertyDetails.habitaciones}
-                      </li>
-                      <li>
-                        <strong>
-                          <FieldNumberOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Superficie terreno:
-                        </strong>{" "}
-                        {propertyDetails.tamanioPropiedad}
-                      </li>
-                      <li>
-                        <strong>
-                          <CarOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Baños:
-                        </strong>{" "}
-                        {propertyDetails.baños}{" "}
-                      </li>
-                      <li>
-                        <strong>
-                          <CarryOutOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Medios baños:
-                        </strong>{" "}
-                        {propertyDetails.baños}
-                      </li>
-                      <li>
-                        <strong>
-                          <ToolOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Cocina:
-                        </strong>{" "}
-                        {propertyDetails.cardsActivadas.Cocina}{" "}
-                      </li>
-                      <li>
-                        <strong>
-                          <HeatMapOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Clima:
-                        </strong>{" "}
-                        Aire acondicionado
-                      </li>
-                      <li>
-                        <strong>
-                          <ApartmentOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Amueblado:
-                        </strong>{" "}
-                        Sí
-                      </li>
-                      <li>
-                        <strong>
-                          <RiseOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          ¿Está equipado?:
-                        </strong>{" "}
-                        Sí
-                      </li>
-                      <li>
-                        <strong>
-                          <BulbOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Acabados:
-                        </strong>{" "}
-                        De lujo
-                      </li>
-                      <li>
-                        <strong>
-                          <EyeOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Número de niveles:
-                        </strong>{" "}
-                        {propertyDetails.cardsActivadas.Alarma}{" "}
-                      </li>
-                      <li>
-                        <strong>
-                          <GlobalOutlined
-                            style={{
-                              marginRight: "5px",
-                              fontSize: "16px",
-                              color: "#1890ff",
-                            }}
-                          />
-                          Vista del inmueble:
-                        </strong>{" "}
-                        Panorámica
-                      </li>
-                    </ul>
-                  </Col>
-                </Row>
+                {Object.entries(propertyDetails.cardsActivadas)
+                  .filter(([key, value]) => value) // Filtra solo las características con valor true
+                  .map(([key, value]) => (
+                    <Col span={12} key={key}>
+                      <ul
+                        style={{
+                          listStyle: "none",
+                          padding: 0,
+                          fontSize: "17px",
+                          lineHeight: "2",
+                        }}
+                      >
+                        <li>
+                          <strong>
+                            {getIcon(key)} {/* Función para obtener el ícono */}
+                            {formatLabel(key)}:
+                          </strong>{" "}
+                          Sí
+                        </li>
+                      </ul>
+                    </Col>
+                  ))}
+              </Row>
+
+
                 <hr
                   style={{
                     borderTop: "2px solid #1890ff",
