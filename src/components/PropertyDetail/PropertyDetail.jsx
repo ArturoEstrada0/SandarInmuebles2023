@@ -542,7 +542,7 @@ const PropertyDetail = () => {
                           />
                           Recámaras:
                         </strong>{" "}
-                        {propertyDetails.activeFeatures.Habitaciones}
+                        {propertyDetails.habitaciones}
                       </li>
                       <li>
                         <strong>
@@ -555,7 +555,7 @@ const PropertyDetail = () => {
                           />
                           Superficie terreno:
                         </strong>{" "}
-                        250 m²
+                        {propertyDetails.tamanioPropiedad}
                       </li>
                       <li>
                         <strong>
@@ -568,7 +568,7 @@ const PropertyDetail = () => {
                           />
                           Baños:
                         </strong>{" "}
-                        {propertyDetails.activeFeatures.Baño}{" "}
+                        {propertyDetails.baños}{" "}
                       </li>
                       <li>
                         <strong>
@@ -581,7 +581,7 @@ const PropertyDetail = () => {
                           />
                           Medios baños:
                         </strong>{" "}
-                        {propertyDetails.activeFeatures.MediosBaños}
+                        {propertyDetails.baños}
                       </li>
                       <li>
                         <strong>
@@ -594,7 +594,7 @@ const PropertyDetail = () => {
                           />
                           Cocina:
                         </strong>{" "}
-                        {propertyDetails.activeFeatures.Cocina}{" "}
+                        {propertyDetails.cardsActivadas.Cocina}{" "}
                       </li>
                       <li>
                         <strong>
@@ -659,7 +659,7 @@ const PropertyDetail = () => {
                           />
                           Número de niveles:
                         </strong>{" "}
-                        {propertyDetails.activeFeatures.NumeroDePisos}{" "}
+                        {propertyDetails.cardsActivadas.Alarma}{" "}
                       </li>
                       <li>
                         <strong>
@@ -698,6 +698,9 @@ const PropertyDetail = () => {
                     marginBottom: "16px",
                   }}
                 />
+
+
+                
                 <Title level={2}>Descripción</Title>
                 <Paragraph style={{ fontSize: "17px", color: "#333" }}>
                   {propertyDetails.descripcion}
