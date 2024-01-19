@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Table, Tabs, notification, Badge, Input, Row, Col } from "antd";
+import { useState, useEffect } from "react";
+import { Table, Tabs, notification, Badge, Input,Button } from "antd";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase/firebase"; // Asegúrate de especificar la ruta correcta
 
@@ -19,32 +19,9 @@ const ContactList = () => {
   const [notificationCountContacts, setNotificationCountContacts] = useState(0);
   const [notificationCountMsgPro, setNotificationCountMsgPro] = useState(0);
 
-  // Estados para los filtros de búsqueda de contactos
-  const [searchName, setSearchName] = useState("");
-  const [searchPhone, setSearchPhone] = useState("");
-  const [searchEmail, setSearchEmail] = useState("");
-  const [searchSubject, setSearchSubject] = useState("");
 
-  // Estados para los filtros de búsqueda de mensajes de propiedades
-  const [searchMsgProName, setSearchMsgProName] = useState("");
-  const [searchMsgProEmail, setSearchMsgProEmail] = useState("");
-  const [searchMsgProProperty, setSearchMsgProProperty] = useState("");
-
-  const filteredContacts = contactDataContacts.filter(
-    (contact) =>
-      contact.name.toLowerCase().includes(searchName.toLowerCase()) &&
-      contact.phone.toLowerCase().includes(searchPhone.toLowerCase()) &&
-      contact.email.toLowerCase().includes(searchEmail.toLowerCase()) &&
-      contact.subject.toLowerCase().includes(searchSubject.toLowerCase())
-  );
 
   // Filtrar mensajes de propiedades según los criterios de búsqueda
-  const filteredMsgPro = contactDataMsgPro.filter(
-    (msgPro) =>
-      msgPro.name.toLowerCase().includes(searchMsgProName.toLowerCase()) &&
-      msgPro.email.toLowerCase().includes(searchMsgProEmail.toLowerCase()) &&
-      msgPro.propertyName.toLowerCase().includes(searchMsgProProperty.toLowerCase())
-  );
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -144,11 +121,62 @@ const ContactList = () => {
       title: "Nombre",
       dataIndex: "name",
       key: "name",
+      // Agregar campo de búsqueda para nombre
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Nombre"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Teléfono",
       dataIndex: "phone",
       key: "phone",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Telefono"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.phone.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Mensaje",
@@ -159,11 +187,61 @@ const ContactList = () => {
       title: "Correo",
       dataIndex: "email",
       key: "email",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Correo"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.email.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Asunto",
       dataIndex: "subject",
       key: "subject",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Asunto"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.subject.toLowerCase().includes(value.toLowerCase()),
     },
   ];
 
@@ -172,11 +250,62 @@ const ContactList = () => {
       title: "Nombre",
       dataIndex: "name",
       key: "name",
+      // Agregar campo de búsqueda para nombre en mensajes de propiedades
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Nombre"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Correo Electrónico",
       dataIndex: "email",
       key: "email",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Correo"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.email.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Mensaje",
@@ -187,6 +316,31 @@ const ContactList = () => {
       title: "Propiedad",
       dataIndex: "propertyName",
       key: "propertyName",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Propiedad"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.propertyName.toLowerCase().includes(value.toLowerCase()),
     },
   ];
 
@@ -196,7 +350,7 @@ const ContactList = () => {
     setLoadingMsgPro(true);
   };
 
-  return (
+ return (
     <div style={{ padding: "20px" }}>
       <h2>Bandeja de Entrada</h2>
       <Tabs activeKey={currentTab} onChange={handleTabChange}>
@@ -208,38 +362,7 @@ const ContactList = () => {
           }
           key="contacts"
         >
-          {/* Agregar filtros de búsqueda para contactos */}
-          <Row gutter={16} style={{ marginBottom: "20px" }}>
-            <Col span={6}>
-              <Input
-                placeholder="Buscar por nombre"
-                onChange={(e) => setSearchName(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-            <Col span={6}>
-              <Input
-                placeholder="Buscar por teléfono"
-                onChange={(e) => setSearchPhone(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-            <Col span={6}>
-              <Input
-                placeholder="Buscar por correo"
-                onChange={(e) => setSearchEmail(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-            <Col span={6}>
-              <Input
-                placeholder="Buscar por asunto"
-                onChange={(e) => setSearchSubject(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-          </Row>
-          <Table dataSource={filteredContacts} columns={columnsContacts} loading={loadingContacts} />
+          <Table dataSource={contactDataContacts} columns={columnsContacts} loading={loadingContacts} />
         </TabPane>
         <TabPane
           tab={
@@ -249,31 +372,7 @@ const ContactList = () => {
           }
           key="msgpro"
         >
-          {/* Agregar filtros de búsqueda para mensajes de propiedades */}
-          <Row gutter={16} style={{ marginBottom: "20px" }}>
-            <Col span={8}>
-              <Input
-                placeholder="Buscar por nombre"
-                onChange={(e) => setSearchMsgProName(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-            <Col span={8}>
-              <Input
-                placeholder="Buscar por correo electrónico"
-                onChange={(e) => setSearchMsgProEmail(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-            <Col span={8}>
-              <Input
-                placeholder="Buscar por propiedad"
-                onChange={(e) => setSearchMsgProProperty(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </Col>
-          </Row>
-          <Table dataSource={filteredMsgPro} columns={columnsMsgPro} loading={loadingMsgPro} />
+          <Table dataSource={contactDataMsgPro} columns={columnsMsgPro} loading={loadingMsgPro} />
         </TabPane>
       </Tabs>
     </div>
