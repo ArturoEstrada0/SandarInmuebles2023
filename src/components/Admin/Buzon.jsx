@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import { Table, Tabs, notification, Badge } from "antd";
-import { collection, getDocs } from 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import { Table, Tabs, notification, Badge, Input, Row, Col } from "antd";
+import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase/firebase"; // Asegúrate de especificar la ruta correcta
+
+import { SearchOutlined } from "@ant-design/icons";
 
 const { TabPane } = Tabs;
 
@@ -16,6 +18,33 @@ const ContactList = () => {
   const [newMessagesMsgPro, setNewMessagesMsgPro] = useState([]);
   const [notificationCountContacts, setNotificationCountContacts] = useState(0);
   const [notificationCountMsgPro, setNotificationCountMsgPro] = useState(0);
+
+  // Estados para los filtros de búsqueda de contactos
+  const [searchName, setSearchName] = useState("");
+  const [searchPhone, setSearchPhone] = useState("");
+  const [searchEmail, setSearchEmail] = useState("");
+  const [searchSubject, setSearchSubject] = useState("");
+
+  // Estados para los filtros de búsqueda de mensajes de propiedades
+  const [searchMsgProName, setSearchMsgProName] = useState("");
+  const [searchMsgProEmail, setSearchMsgProEmail] = useState("");
+  const [searchMsgProProperty, setSearchMsgProProperty] = useState("");
+
+  const filteredContacts = contactDataContacts.filter(
+    (contact) =>
+      contact.name.toLowerCase().includes(searchName.toLowerCase()) &&
+      contact.phone.toLowerCase().includes(searchPhone.toLowerCase()) &&
+      contact.email.toLowerCase().includes(searchEmail.toLowerCase()) &&
+      contact.subject.toLowerCase().includes(searchSubject.toLowerCase())
+  );
+
+  // Filtrar mensajes de propiedades según los criterios de búsqueda
+  const filteredMsgPro = contactDataMsgPro.filter(
+    (msgPro) =>
+      msgPro.name.toLowerCase().includes(searchMsgProName.toLowerCase()) &&
+      msgPro.email.toLowerCase().includes(searchMsgProEmail.toLowerCase()) &&
+      msgPro.propertyName.toLowerCase().includes(searchMsgProProperty.toLowerCase())
+  );
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -167,7 +196,6 @@ const ContactList = () => {
     setLoadingMsgPro(true);
   };
 
-
   return (
     <div style={{ padding: "20px" }}>
       <h2>Bandeja de Entrada</h2>
@@ -180,7 +208,38 @@ const ContactList = () => {
           }
           key="contacts"
         >
-          <Table dataSource={contactDataContacts} columns={columnsContacts} loading={loadingContacts} />
+          {/* Agregar filtros de búsqueda para contactos */}
+          <Row gutter={16} style={{ marginBottom: "20px" }}>
+            <Col span={6}>
+              <Input
+                placeholder="Buscar por nombre"
+                onChange={(e) => setSearchName(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+            <Col span={6}>
+              <Input
+                placeholder="Buscar por teléfono"
+                onChange={(e) => setSearchPhone(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+            <Col span={6}>
+              <Input
+                placeholder="Buscar por correo"
+                onChange={(e) => setSearchEmail(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+            <Col span={6}>
+              <Input
+                placeholder="Buscar por asunto"
+                onChange={(e) => setSearchSubject(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+          </Row>
+          <Table dataSource={filteredContacts} columns={columnsContacts} loading={loadingContacts} />
         </TabPane>
         <TabPane
           tab={
@@ -190,7 +249,31 @@ const ContactList = () => {
           }
           key="msgpro"
         >
-          <Table dataSource={contactDataMsgPro} columns={columnsMsgPro} loading={loadingMsgPro} />
+          {/* Agregar filtros de búsqueda para mensajes de propiedades */}
+          <Row gutter={16} style={{ marginBottom: "20px" }}>
+            <Col span={8}>
+              <Input
+                placeholder="Buscar por nombre"
+                onChange={(e) => setSearchMsgProName(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+            <Col span={8}>
+              <Input
+                placeholder="Buscar por correo electrónico"
+                onChange={(e) => setSearchMsgProEmail(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+            <Col span={8}>
+              <Input
+                placeholder="Buscar por propiedad"
+                onChange={(e) => setSearchMsgProProperty(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </Col>
+          </Row>
+          <Table dataSource={filteredMsgPro} columns={columnsMsgPro} loading={loadingMsgPro} />
         </TabPane>
       </Tabs>
     </div>
