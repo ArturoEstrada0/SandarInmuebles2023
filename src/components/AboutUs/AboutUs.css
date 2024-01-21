@@ -1,5 +1,8 @@
 /* AboutUs.css */
 
+body {
+  font-family: 'Geometos', sans-serif;
+}
 .about-us-container {
     background-color: #fff;
     color: #333;
@@ -8,6 +11,8 @@
   }
   
   .about-us-title {
+    font-family: 'Geometos', sans-serif;
+
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 20px;
