@@ -46,13 +46,13 @@ import {
   faCity,
   faRulerCombined,
   faHome,
-  faHouse,
   faHouseFlag,
 } from "@fortawesome/free-solid-svg-icons";
 
+import axios from "axios";
+
 import { useParams } from "react-router-dom";
 import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import mapaImage from "../../assets/img/mapa.png"; // Importa la imagen del mapa
 import "./PropertyDetail.css";
 import Map from "../Map/Map";
 
@@ -63,9 +63,12 @@ const { Title, Paragraph } = Typography;
 
 const PropertyDetail = () => {
   const { id } = useParams();
-  const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [activeKey, setActiveKey] = useState("");
+  const [youtubeVideoCode, setYoutubeVideoCode] = useState("");
+  const [latitud, setLatitud] = useState("");
+  const [longitud, setLongitud] = useState("");
+  const [ubicacionCoords, setUbicacionCoords] = useState(null);
 
   const onCollapseChange = (key) => {
     setActiveKey(activeKey === key ? "" : key);
@@ -83,6 +86,9 @@ const PropertyDetail = () => {
       if (propertyDocSnapshot.exists()) {
         const propertyData = propertyDocSnapshot.data();
         setPropertyDetails(propertyData);
+        // Extrae el código del video de la URL de YouTube
+        const videoCode = extractYoutubeVideoCode(propertyData.youtubeUrl);
+        setYoutubeVideoCode(videoCode);
       } else {
         console.error(
           "No se encontró la propiedad con el ID proporcionado en Firebase."
@@ -91,6 +97,36 @@ const PropertyDetail = () => {
     } catch (error) {
       console.error("Error al obtener datos de Firestore:", error);
     }
+  };
+
+  useEffect(() => {
+    if (propertyDetails && propertyDetails.ubicacion) {
+      // Llama a la función de conversión con la dirección obtenida desde Firebase
+      convertirDireccionACoordenadas(propertyDetails.ubicacion);
+    }
+  }, [propertyDetails]);
+
+  const convertirDireccionACoordenadas = async (direccion) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${direccion}`
+      );
+
+      if (response.data && response.data.length > 0) {
+        const { lat, lon } = response.data[0];
+        setUbicacionCoords([parseFloat(lat), parseFloat(lon)]);
+      }
+    } catch (error) {
+      console.error("Error al obtener coordenadas:", error);
+    }
+  };
+
+  // Función para extraer el código del video de YouTube
+  const extractYoutubeVideoCode = (url) => {
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=))([^"&?\/\s]{11})/
+    );
+    return match && match[1];
   };
 
   const handleContactFormSubmit = async (values) => {
@@ -142,41 +178,52 @@ const PropertyDetail = () => {
   const iconStyle = {
     color: "#1890ff", // Color azul, puedes ajustarlo según tu preferencia
   };
-  
+
   const getIcon = (key) => {
     // Mapea las claves a los iconos correspondientes de Font Awesome
     const iconMapping = {
-      'Aire acondicionado': <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />,
-      'Alarma': <FontAwesomeIcon icon={faBell} style={iconStyle} />,
-      'Amueblado': <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
-      'Baño': <FontAwesomeIcon icon={faBath} style={iconStyle} />,
-      'Bodega': <FontAwesomeIcon icon={faBox} style={iconStyle} />,
-      'Cámaras de seguridad': <FontAwesomeIcon icon={faVideo} style={iconStyle} />,
-      'Cochera': <FontAwesomeIcon icon={faCar} style={iconStyle} />,
-      'Cocina': <FontAwesomeIcon icon={faUtensils} style={iconStyle} />,
-      'Gimnasio': <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
-      'Habitaciones': <FontAwesomeIcon icon={faBed} style={iconStyle} />,
-      'Jardín': <FontAwesomeIcon icon={faTree} style={iconStyle} />,
-      'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
-      'Piscina': <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
-      'Salón de eventos': <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />,
-      'Sistema de sonido': <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />,
-      'Terraza': <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
-      'Vestidor': <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
-      'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={iconStyle} />,
-      'Vista a la montaña': <FontAwesomeIcon icon={faMountain} style={iconStyle} />,
-      'Vista al mar': <FontAwesomeIcon icon={faWater} style={iconStyle} />,
-      'Vista panorámica': <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />,
-      'Área de juegos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
-      'Ático': <FontAwesomeIcon icon={faHome} style={iconStyle} />,
-      'Chimenea': <FontAwesomeIcon icon={faFire} style={iconStyle} />,
+      "Aire acondicionado": (
+        <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />
+      ),
+      Alarma: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+      Amueblado: <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
+      Baño: <FontAwesomeIcon icon={faBath} style={iconStyle} />,
+      Bodega: <FontAwesomeIcon icon={faBox} style={iconStyle} />,
+      "Cámaras de seguridad": (
+        <FontAwesomeIcon icon={faVideo} style={iconStyle} />
+      ),
+      Cochera: <FontAwesomeIcon icon={faCar} style={iconStyle} />,
+      Cocina: <FontAwesomeIcon icon={faUtensils} style={iconStyle} />,
+      Gimnasio: <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
+      Habitaciones: <FontAwesomeIcon icon={faBed} style={iconStyle} />,
+      Jardín: <FontAwesomeIcon icon={faTree} style={iconStyle} />,
+      "Mascotas permitidas": <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
+      Piscina: <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
+      "Salón de eventos": (
+        <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />
+      ),
+      "Sistema de sonido": (
+        <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />
+      ),
+      Terraza: <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
+      Vestidor: <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
+      "Vista a la ciudad": <FontAwesomeIcon icon={faCity} style={iconStyle} />,
+      "Vista a la montaña": (
+        <FontAwesomeIcon icon={faMountain} style={iconStyle} />
+      ),
+      "Vista al mar": <FontAwesomeIcon icon={faWater} style={iconStyle} />,
+      "Vista panorámica": (
+        <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />
+      ),
+      "Área de juegos": <FontAwesomeIcon icon={faChess} style={iconStyle} />,
+      Ático: <FontAwesomeIcon icon={faHome} style={iconStyle} />,
+      Chimenea: <FontAwesomeIcon icon={faFire} style={iconStyle} />,
       // Puedes agregar más iconos según sea necesario
     };
-  
+
     return iconMapping[key] || null;
   };
-  
-  
+
   const formatLabel = (key) => {
     // Puedes personalizar el formato de la etiqueta según tus necesidades
     // Por ejemplo, puedes cambiar el formato de 'Área de juegos' a 'Área de Juegos'
@@ -204,14 +251,14 @@ const PropertyDetail = () => {
         >
           <Title
             level={2}
-      style={{
-        fontFamily: "Arial, sans-serif",
-        color: "#333",
-        fontWeight: "bold",
-        marginBottom: "10px",
-        borderLeft: "3px solid #1890ff", // Agregar línea vertical a la izquierda del título
-        paddingLeft: "16px", // Ajustar el espacio entre la línea y el texto
-      }}
+            style={{
+              fontFamily: "Arial, sans-serif",
+              color: "#333",
+              fontWeight: "bold",
+              marginBottom: "10px",
+              borderLeft: "3px solid #1890ff", // Agregar línea vertical a la izquierda del título
+              paddingLeft: "16px", // Ajustar el espacio entre la línea y el texto
+            }}
           >
             {/*{propertyDetails.type}*/}
             {propertyDetails.nombre}
@@ -254,21 +301,21 @@ const PropertyDetail = () => {
                 propertyDetails.fotos &&
                 propertyDetails.fotos.length > 0 && (
                   <Carousel autoplay>
-                  {propertyDetails.fotos.map((foto, index) => (
-                    <div key={index}>
-                      <img
-                        src={foto}
-                        alt={`Property Image ${index + 1}`}
-                        style={{
-                          width: '100%',
-                          height: "28rem",
-                          objectFit: 'cover',
-                          borderRadius: '12px',
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Carousel>
+                    {propertyDetails.fotos.map((foto, index) => (
+                      <div key={index}>
+                        <img
+                          src={foto}
+                          alt={`Property Image ${index + 1}`}
+                          style={{
+                            width: "100%",
+                            height: "28rem",
+                            objectFit: "cover",
+                            borderRadius: "12px",
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
                 )}
             </div>
             <div
@@ -374,7 +421,6 @@ const PropertyDetail = () => {
             </div>
           </div>
         </Col>
-        
 
         <Col span={24}>
           <div style={{ padding: "20px" }}>
@@ -423,31 +469,30 @@ const PropertyDetail = () => {
                 {/* Línea horizontal superior */}
                 <Title level={2}>Información del inmueble</Title>
                 <Row gutter={[16, 16]}>
-                {Object.entries(propertyDetails.cardsActivadas)
-                  .filter(([key, value]) => value) // Filtra solo las características con valor true
-                  .map(([key, value]) => (
-                    <Col span={12} key={key}>
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          fontSize: "17px",
-                          lineHeight: "2",
-                        }}
-                      >
-                        <li>
-                          <strong>
-                            {getIcon(key)} {/* Función para obtener el ícono */}
-                            {formatLabel(key)}:
-                          </strong>{" "}
-                          Sí
-                        </li>
-                      </ul>
-                    </Col>
-                  ))}
-              </Row>
-
-
+                  {Object.entries(propertyDetails.cardsActivadas)
+                    .filter(([key, value]) => value) // Filtra solo las características con valor true
+                    .map(([key, value]) => (
+                      <Col span={12} key={key}>
+                        <ul
+                          style={{
+                            listStyle: "none",
+                            padding: 0,
+                            fontSize: "17px",
+                            lineHeight: "2",
+                          }}
+                        >
+                          <li>
+                            <strong>
+                              {getIcon(key)}{" "}
+                              {/* Función para obtener el ícono */}
+                              {formatLabel(key)}:
+                            </strong>{" "}
+                            Sí
+                          </li>
+                        </ul>
+                      </Col>
+                    ))}
+                </Row>
                 <hr
                   style={{
                     borderTop: "2px solid #1890ff",
@@ -470,8 +515,6 @@ const PropertyDetail = () => {
                   }}
                 />
 
-
-                
                 <Title level={2}>Descripción</Title>
                 <Paragraph style={{ fontSize: "17px", color: "#333" }}>
                   {propertyDetails.descripcion}
@@ -504,9 +547,52 @@ const PropertyDetail = () => {
                     marginBottom: "16px",
                   }}
                 />
-                <Map height={"400px"} width={"100%"} />
+                <Map
+                  height={"400px"}
+                  width={"100%"}
+                  markerCoords={ubicacionCoords}
+                />
               </div>
             </Col>
+
+            {youtubeVideoCode && (
+              <div
+                style={{
+                  marginTop: "20px",
+                  width: "50%",
+                  margin: "0 auto",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  padding: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <iframe
+                  width="100%"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
+                  title="YouTube Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ borderRadius: "8px" }}
+                ></iframe>
+                <div style={{ textAlign: "center", marginTop: "16px" }}>
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      color: "#333",
+                      fontFamily: "Geometos",
+                    }}
+                  >
+                    {propertyDetails.nombre +
+                      "  $" +
+                      propertyDetails.precio +
+                      " MXN"}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Nuevo apartado "Precio y Contrato" */}
             <Col span={24}>
