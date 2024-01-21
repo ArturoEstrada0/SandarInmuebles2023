@@ -130,7 +130,7 @@ const Contact = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
+                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily:"Geometos", fontSize:"0.8rem" }}
               >
                 Enviar Correo
               </Button>

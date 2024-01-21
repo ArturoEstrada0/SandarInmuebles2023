@@ -16,6 +16,10 @@
     font-size: 16.6px; /* Ajusta el tamaño de la fuente según tus preferencias */
   }
 
+  .card-title{
+    font-family: 'Geometos';
+  }
+
   .card-container {
     width: 60%;
     max-width: 1100px;
@@ -23,6 +27,7 @@
   }
 
   .contact-title {
+    font-family: 'Geometos';
     font-size: 30px;
     color: #e5e5e5;
     margin-bottom: 16px;

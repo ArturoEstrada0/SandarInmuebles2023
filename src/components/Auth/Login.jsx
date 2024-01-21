@@ -116,7 +116,7 @@ const Login = () => {
                   </MDBNavbarBrand>
                 </MDBNavbar>
 
-                <h2 className="fw-bold mb-2">Inicio de Sesión</h2>
+                <h2 className="Inicio">Inicio de Sesión</h2>
 
                 <MDBInput
                   wrapperClass="mb-4 mx-5 w-100"
@@ -153,7 +153,7 @@ const Login = () => {
                   Iniciar Sesión
                 </MDBBtn>
                 {error && (
-                  <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+                  <p style={{ color: "red", marginTop: "10px"}}>{error}</p>
                 )}
                 {successMessage && (
                   <p className="text-success">{successMessage}</p>
@@ -190,7 +190,7 @@ const Login = () => {
                 <div>
                   <p className="mb-0">
                     ¿No tienes una cuenta?{" "}
-                    <Link to="/registro" className="text-white-50 fw-bold">
+                    <Link to="/registro" className="Registro">
                       Regístrate
                     </Link>
                   </p>

@@ -195,7 +195,7 @@ const PropertyList = ({ onPropertyClick }) => {
         style={{ paddingTop: "32px", paddingBottom: "32px" }}
       >
         <Card className="custom-card">
-          <Title level={2} style={{ background: "white" }}>
+          <Title level={2} style={{ background: "white", fontFamily:"Geometos" , fontSize:"1.3rem"}}>
             <SearchOutlined /> Búsqueda de Propiedades
           </Title>
           <Row gutter={[16, 16]}>
@@ -264,7 +264,7 @@ const PropertyList = ({ onPropertyClick }) => {
               <Button
                 type="primary"
                 onClick={applyFilters}
-                style={{ backgroundColor: "black", color: "white" }}
+                style={{ backgroundColor: "black", color: "white" , fontFamily:"Geometos"}}
               >
                 <SearchOutlined />
                 Buscar
