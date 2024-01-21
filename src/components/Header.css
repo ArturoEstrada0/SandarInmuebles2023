@@ -1,0 +1,28 @@
+.menu-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Media query para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+  .menu-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 85px;
+    left: 0;
+    width: 100%;
+    background: #001529;
+  }
+
+  .menu-links.open {
+    display: flex;
+  }
+
+  .toggle-button {
+    display: block;
+    color: white;
+  }
+}

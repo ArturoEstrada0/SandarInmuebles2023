@@ -3,6 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 90vh;
+    margin-top: 250px;
   }
 
 .contact-container .card-container,
@@ -17,6 +18,7 @@
     width: 60%;
     max-width: 1100px;
     margin: 20px;
+
   }
 
   .contact-title {

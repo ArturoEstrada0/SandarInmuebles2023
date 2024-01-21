@@ -13,7 +13,7 @@ const AboutUs = () => {
   }, []);
 
   return (
-    <Content style={{ marginTop: '65px' }}>
+    <Content style={{ marginTop: '80px' }}>
       <div className="about-us-container" style={{ backgroundImage: `url(${aboutusF})`}}>
         <Row gutter={32}>
           <Col span={12}>

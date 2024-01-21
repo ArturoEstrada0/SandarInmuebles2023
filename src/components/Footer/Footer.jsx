@@ -1,5 +1,5 @@
 import { Layout } from'antd';
-import logo from '../../assets/img/logo.png'; // Asegúrate de importar tu logotipo correctamente
+import logo from '../../assets/img/sandarlogo1.png'; // Asegúrate de importar tu logotipo correctamente
 
 const { Footer: AntFooter } = Layout;
 
@@ -11,7 +11,7 @@ function Footer() {
   return (
     <AntFooter style={{ backgroundColor: '#171717' }}>
       <div style={{ textAlign: 'center', color: '#fff' }}>
-      <img src={logo} alt="Mi logotipo" style={{ width: '60px', height: '50px', marginBottom: '15px', marginTop: '-10px' }} />
+      <img src={logo} alt="Mi logotipo" style={{ width: '200px', height: '130px', marginBottom: '15px', marginTop: '-10px' }} />
       <p style={{ color: '#f0f2f5', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>Descubre tu hogar ideal con nosotros. 
         Nuestro compromiso es ayudarte a encontrar la propiedad que siempre has soñado. 
         Contáctanos hoy y deja que hagamos realidad tus sueños inmobiliarios.</p>

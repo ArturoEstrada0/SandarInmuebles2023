@@ -48,7 +48,7 @@ const Contact = () => {
         className={`card-container ${animationClass}`}
       >
         <Row gutter={[16, 16]}>
-          <Col span={12}>
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <Form form={form} name="contact-form" onFinish={onFinish} layout="vertical">
               <Row gutter={16}>
                 <Col span={12}>
@@ -137,7 +137,7 @@ const Contact = () => {
             </Form>
           </Col>
 
-          <Col span={12}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <div className="contact-info-container">
               <h3 className="contact-title">
                 <UserOutlined /> Información de Contacto
