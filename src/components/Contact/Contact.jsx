@@ -106,10 +106,10 @@ const Contact = () => {
                 ]}
               >
                 <Select placeholder="Seleccione un asunto">
-                  <Select.Option value="consulta">Consulta</Select.Option>
-                  <Select.Option value="cita">Solicitud de Cita</Select.Option>
-                  <Select.Option value="queja">Queja</Select.Option>
-                  <Select.Option value="otros">Otros</Select.Option>
+                  <Select.Option value="Consulta">Consulta</Select.Option>
+                  <Select.Option value="Cita">Solicitud de Cita</Select.Option>
+                  <Select.Option value="Queja">Queja</Select.Option>
+                  <Select.Option value="Otros">Otros</Select.Option>
                 </Select>
               </Form.Item>
 
