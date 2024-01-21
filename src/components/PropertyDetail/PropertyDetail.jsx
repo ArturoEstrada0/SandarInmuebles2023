@@ -593,77 +593,138 @@ const PropertyDetail = () => {
                 </div>
               </div>
             )}
+           <Col span={24}>
+        {/* Nuevo apartado "Precio y Contrato" */}
+        <div style={{ padding: "20px", backgroundColor: "#fcfeff" }}>
+          <hr
+            style={{
+              borderTop: "2px solid #1890ff",
+              margin: "0",
+              marginBottom: "16px",
+            }}
+          />
+          <div className="header">
+            <Title level={2}>Informacion del inmueble</Title>
+          </div>
+          <div className="button-group">
+            <Button
+              className={`custom-button ${
+                activeKey === "Habitaciones" ? "active" : ""
+              }`}
+              onClick={() => onCollapseChange("Habitaciones")}
+            >
+              Habitaciones
+            </Button>
+            <Button
+              className={`custom-button ${
+                activeKey === "Interiores/Exteriores" ? "active" : ""
+              }`}
+              onClick={() => onCollapseChange("Interiores/Exteriores")}
+            >
+              Interiores/Exteriores
+            </Button>
+            <Button
+              className={`custom-button ${
+                activeKey === "Estacionamiento" ? "active" : ""
+              }`}
+              onClick={() => onCollapseChange("Estacionamiento")}
+            >
+              Estacionamiento
+            </Button>
+            <Button
+              className={`custom-button ${
+                activeKey === "Seguridad/Tecnologiá" ? "active" : ""
+              }`}
+              onClick={() => onCollapseChange("Seguridad/Tecnologiá")}
+            >
+              Seguridad/Tecnologiá
+            </Button>
+          </div>
+          <div className="content-container">
+            {/* Mostrar información dinámicamente desde Firebase */}
+            {activeKey === "Habitaciones" && (
+              <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap" }}>
+                {/* Card para mostrar el número de habitaciones */}
+                <Card
+                  title="Número de Habitaciones"
+                  style={{ width: 300, margin: "10px", borderRadius: "12px" }}
+                >
+                  <p>{propertyDetails.habitaciones}</p>
+                </Card>
 
-            {/* Nuevo apartado "Precio y Contrato" */}
-            <Col span={24}>
-              <div style={{ padding: "20px", backgroundColor: "#fcfeff" }}>
-                <hr
-                  style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
-                  }}
-                />
-                <div className="header">
-                  <Title level={2}>Informacion del inmueble</Title>
-                </div>
-                <div className="button-group">
-                  <Button
-                    className={`custom-button ${
-                      activeKey === "Habitaciones" ? "active" : ""
-                    }`}
-                    onClick={() => onCollapseChange("Habitaciones")}
-                  >
-                    Habitaciones
-                  </Button>
-                  <Button
-                    className={`custom-button ${
-                      activeKey === "Interiores/Exteriores" ? "active" : ""
-                    }`}
-                    onClick={() => onCollapseChange("Interiores/Exteriores")}
-                  >
-                    Interiores/Exteriores
-                  </Button>
-                  <Button
-                    className={`custom-button ${
-                      activeKey === "Estacionamiento" ? "active" : ""
-                    }`}
-                    onClick={() => onCollapseChange("Estacionamiento")}
-                  >
-                    Estacionamiento
-                  </Button>
-                  <Button
-                    className={`custom-button ${
-                      activeKey === "Seguridad/Tecnologiá" ? "active" : ""
-                    }`}
-                    onClick={() => onCollapseChange("Seguridad/Tecnologiá")}
-                  >
-                    Seguridad/Tecnologiá
-                  </Button>
-                </div>
-                <div className="content-container">
-                  {activeKey === "Habitaciones" && (
-                    <p>Contenido relacionado a las recamaras.</p>
-                  )}
-                  {activeKey === "Interiores/Exteriores" && (
-                    <p>Contenido relacionado a los interiores y exteriores.</p>
-                  )}
-                  {activeKey === "Estacionamiento" && (
-                    <p>Contenido relacionado al estacionamiento.</p>
-                  )}
-                  {activeKey === "Seguridad/Tecnologiá" && (
-                    <p>Contenido relacionado a la seguridad y tecnologia.</p>
-                  )}
-                </div>
-                <hr
-                  style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
-                  }}
-                />
+                {/* Otras cards relacionadas a Habitaciones... */}
+                <Card
+                  title="Habitaciones Disponibles"
+                  style={{ width: 300, margin: "10px", borderRadius: "12px" }}
+                >
+                  <p>{propertyDetails.Habitaciones ? "Sí" : "No"}</p>
+                </Card>
+                {/* Agrega más propiedades según sea necesario... */}
               </div>
-            </Col>
+            )}
+            {activeKey === "Interiores/Exteriores" && (
+              <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap" }}>
+                {/* Card para mostrar detalles de Interiores/Exteriores */}
+                <Card
+                  title="Interiores/Exteriores"
+                  style={{ width: 300, margin: "10px", borderRadius: "12px" }}
+                >
+                  <p>
+                    Características: {propertyDetails.caracteristicas}
+                  </p>
+                  <p>Jardín: {propertyDetails.Jardín ? "Sí" : "No"}</p>
+                  <p>Área de juegos: {propertyDetails["Área de juegos"] ? "Sí" : "No"}</p>
+                  <p>Ático: {propertyDetails.Ático ? "Sí" : "No"}</p>
+                  <p>Vista a la ciudad: {propertyDetails["Vista a la ciudad"] ? "Sí" : "No"}</p>
+                  <p>Vista a la montaña: {propertyDetails["Vista a la montaña"] ? "Sí" : "No"}</p>
+                  {/* ... (otros detalles) */}
+                </Card>
+                {/* Agrega más cards relacionadas a Interiores/Exteriores... */}
+              </div>
+            )}
+            {activeKey === "Estacionamiento" && (
+              <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap" }}>
+                {/* Card para mostrar detalles de Estacionamiento */}
+                <Card
+                  title="Estacionamiento"
+                  style={{ width: 300, margin: "10px", borderRadius: "12px" }}
+                >
+                  <p>Cochera: {propertyDetails.Cochera ? "Sí" : "No"}</p>
+                  <p>Piscina: {propertyDetails.Piscina ? "Sí" : "No"}</p>
+                  {/* Agrega más propiedades según sea necesario... */}
+                </Card>
+                {/* Agrega más cards relacionadas a Estacionamiento... */}
+              </div>
+            )}
+            {activeKey === "Seguridad/Tecnologiá" && (
+              <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap" }}>
+                {/* Card para mostrar detalles de Seguridad/Tecnología */}
+                <Card
+                  title="Seguridad/Tecnología"
+                  style={{ width: 300, margin: "10px", borderRadius: "12px" }}
+                >
+                  <p>Alarma: {propertyDetails.Alarma ? "Sí" : "No"}</p>
+                  <p>Aire acondicionado: {propertyDetails["Aire acondicionado"] ? "Sí" : "No"}</p>
+                  <p>Cámaras de seguridad: {propertyDetails["Cámaras de seguridad"] ? "Sí" : "No"}</p>
+                  <p>Gimnasio: {propertyDetails.Gimnasio ? "Sí" : "No"}</p>
+                  {/* Agrega más propiedades según sea necesario... */}
+                </Card>
+                {/* Agrega más cards relacionadas a Seguridad/Tecnología... */}
+              </div>
+            )}
+
+         
+          </div>
+          <hr
+            style={{
+              borderTop: "2px solid #1890ff",
+              margin: "0",
+              marginBottom: "16px",
+            }}
+          />
+        </div>
+      </Col>
+
           </Row>
         </Col>
       </Row>
