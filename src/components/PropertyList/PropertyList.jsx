@@ -24,6 +24,7 @@ import {
   HeartFilled,
   HeartOutlined,
   ToolOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import "./PropertyList.css";
 import {
@@ -35,8 +36,17 @@ import {
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBath,
+  faBed,
+  faMapMarker,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth } from "../../context/AuthContext";
+
+import CustomCarousel from "./Carousel";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -98,9 +108,10 @@ const PropertyList = ({ onPropertyClick }) => {
             type: data.tipoPropiedad,
             price: data.precio,
             state: data.ubicacion,
-            rooms: features.Habitaciones || 0,
-            bathrooms: features.Baño || 0,
-            area: features.Tamaño || 0,
+            rooms: data.habitaciones || 0,
+            bathrooms: data.baños || 0,
+            area: data.tamanioPropiedad || 0,
+            areaBuild: data.metrosConstruidos || 0,
             image: data.fotos,
           };
         });
@@ -118,6 +129,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
   const handlePropertyClick = async (propertyId) => {
     // Incrementa el contador local
+
     setPropertyClickCount(propertyClickCount + 1);
 
     // Referencia al documento de la propiedad en Firestore
@@ -136,6 +148,7 @@ const PropertyList = ({ onPropertyClick }) => {
       if (onPropertyClick) {
         onPropertyClick(propertyId);
       }
+      window.location.href = `/property/${propertyId}`;
     } catch (error) {
       console.error("Error al actualizar el contador en Firestore:", error);
     }
@@ -191,7 +204,7 @@ const PropertyList = ({ onPropertyClick }) => {
         style={{ paddingTop: "32px", paddingBottom: "32px" }}
       >
         <Card className="custom-card">
-          <Title level={2} style={{ background: "white" }}>
+          <Title level={2} style={{ background: "white", fontFamily:"Geometos" , fontSize:"1.3rem"}}>
             <SearchOutlined /> Búsqueda de Propiedades
           </Title>
           <Row gutter={[16, 16]}>
@@ -260,9 +273,16 @@ const PropertyList = ({ onPropertyClick }) => {
               <Button
                 type="primary"
                 onClick={applyFilters}
-                style={{ backgroundColor: "black", color: "white" }}
+                style={{ backgroundColor: "black", color: "white" , fontFamily:"Geometos"}}
               >
-                <SearchOutlined />
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  alt="Lupa de búsqueda"
+                  style={{
+                    width: "16px",
+                    marginRight: "8px",
+                  }}
+                />
                 Buscar
               </Button>
             </Col>
@@ -277,31 +297,20 @@ const PropertyList = ({ onPropertyClick }) => {
             <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
               <Card
                 className="property-card"
-                style={{ width: 480, height: 420 }}
-                onClick={() => handlePropertyClick(property.id)}
+                style={{ width: 480, height: 465 }}
               >
-                <Carousel
-                  autoplay
-                  style={{ width: "100%", textAlign: "center" }}
+                <div
+                  className="property-image-container"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
                 >
-                  {property.image.map((image, index) => (
-                    <div key={index}>
-                      <Image
-                        src={image}
-                        alt={property.type}
-                        preview={false}
-                        style={{
-                          width: "100%",
-                          height: "200px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Carousel>
+                  <CustomCarousel images={property.image} />
+                </div>
+
                 <div
                   className="property-location"
-                  style={{ marginTop: "16px" }}
+                  style={{ marginTop: "16px", cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
                 >
                   <Text strong style={{ fontSize: "1.2rem" }}>
                     <EnvironmentOutlined
@@ -316,11 +325,14 @@ const PropertyList = ({ onPropertyClick }) => {
                     style={{
                       marginBottom: "16px",
                       marginTop: "20px",
+                      cursor: "pointer",
                     }}
+                    onClick={() => handlePropertyClick(property.id)}
                   >
                     <Col xs={8}>
                       <Text strong>
-                        <TeamOutlined
+                        <FontAwesomeIcon
+                          icon={faBed}
                           style={{
                             fontSize: "1.2rem",
                             fontWeight: "bold",
@@ -331,7 +343,8 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Col>
                     <Col xs={8}>
                       <Text strong>
-                        <TeamOutlined
+                        <FontAwesomeIcon
+                          icon={faBath}
                           alt="Baños"
                           style={{
                             width: "16px",
@@ -365,13 +378,13 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Col>
                     <Col xs={8.1}>
                       <Text strong>
-                        <ToolOutlined
+                        <AppstoreOutlined
                           style={{
                             fontSize: "1.2rem",
                             fontWeight: "bold",
                           }}
                         />{" "}
-                        Metros de contruccion: {property.area} m²
+                        Metros de contruccion: {property.areaBuild} m²
                       </Text>
                     </Col>
                   </Row>
@@ -383,22 +396,14 @@ const PropertyList = ({ onPropertyClick }) => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Button
-                    type="primary"
-                    href={`/property/${property.id}`}
-                    className="large-button centered-button"
-                    style={{
-                      backgroundColor: "black",
-                      color: "white",
-                    }}
-                  >
-                    Ver más
-                  </Button>
                   {userAuthenticated ? (
                     <Button
                       type="primary"
                       icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
-                      onClick={() => toggleFavorite(property.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(property.id);
+                      }}
                     >
                       {isFavorite
                         ? "Quitar de Favoritos"
@@ -410,7 +415,11 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Link>
                   )}
 
-                  <Text strong style={{ fontSize: "1.5rem" }}>
+                  <Text
+                    strong
+                    style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                    onClick={() => handlePropertyClick(property.id)}
+                  >
                     $ {property.price.toLocaleString()}
                   </Text>
                 </div>

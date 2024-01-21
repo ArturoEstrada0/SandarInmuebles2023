@@ -11,3 +11,12 @@
      background-size: 50% 150%; /* Ancho 50%, altura 100% */
      background-repeat: no-repeat; /* No repetir el fondo */
 }
+
+.Inicio{
+  font-family: 'Geometos';
+  font-size: 1.4rem;
+}
+.Registro{
+  font-family: 'Geometos';
+  font-size: 0.8rem;
+}

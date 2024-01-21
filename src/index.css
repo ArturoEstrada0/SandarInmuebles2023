@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'Geometos';
+    src: local('Geometos'), url('./assets/font/Geometos.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  

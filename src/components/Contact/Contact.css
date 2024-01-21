@@ -6,13 +6,20 @@
     margin-top: 250px;
   }
 
-.contact-container .card-container,
-.contact-container .card-container .ant-form-item-label,
-.contact-container .card-container .ant-input,
-.contact-container .card-container .ant-select-selector,
-.contact-container .card-container .ant-btn {
-  font-size: 17px; /* Ajusta el tamaño de la fuente según tus preferencias */
-}
+  .contact-container .card-container,
+  .contact-container .card-container .ant-form-item-label,
+  .contact-container .card-container .ant-input,
+  .contact-container .card-container .ant-select-selector,
+  .contact-container .card-container .ant-btn,
+  .contact-container .card-container .card-title,
+  .contact-container .card-container .contact-info-container h3,
+  .contact-container .card-container .contact-info {
+    font-size: 16.6px; /* Ajusta el tamaño de la fuente según tus preferencias */
+  }
+
+  .card-title{
+    font-family: 'Geometos';
+  }
 
   .card-container {
     width: 60%;
@@ -22,6 +29,7 @@
   }
 
   .contact-title {
+    font-family: 'Geometos';
     font-size: 30px;
     color: #e5e5e5;
     margin-bottom: 16px;

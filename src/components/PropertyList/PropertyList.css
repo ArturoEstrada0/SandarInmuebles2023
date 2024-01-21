@@ -30,3 +30,28 @@
   display: flex;
   align-items: center;
 }
+
+.custom-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-carousel .custom-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  background-color: black;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.custom-carousel .custom-prev {
+  left: 10px;
+}
+
+.custom-carousel .custom-next {
+  right: 10px;
+}

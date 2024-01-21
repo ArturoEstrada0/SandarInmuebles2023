@@ -52,7 +52,7 @@ function LandingPage() {
             >
               <Title
                 level={2}
-                style={{ fontSize: "2.5rem", fontFamily: "Lato, sans-serif" }}
+                style={{ fontSize: "2.2rem", fontFamily: "Geometos" }}
               >
                 Encuentra la Casa de Tus Sueños con Nosotros
               </Title>
@@ -75,7 +75,8 @@ function LandingPage() {
                     borderRadius: "4px",
                     padding: "30px 30px",
                     fontWeight: "bold",
-                    fontSize: "1rem",
+                    fontSize: "0.8rem",
+                    fontFamily: "Geometos",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
