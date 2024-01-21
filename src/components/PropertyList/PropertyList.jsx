@@ -297,7 +297,7 @@ const PropertyList = ({ onPropertyClick }) => {
             <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
               <Card
                 className="property-card"
-                style={{ width: 480, height: 420 }}
+                style={{ width: 480, height: 465 }}
               >
                 <div
                   className="property-image-container"
