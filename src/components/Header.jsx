@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "../context/AuthContext";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
+
 
 import './Header.css'
 import logo from "../assets/img/sandarlogo1.png";
@@ -21,16 +22,15 @@ const headerStyle = {
 };
 
 const logoStyle = {
-  width: "170px",
+  width: "120px",
   height: "75px",
   marginTop: "-5px",
-  marginRight: "10px",
 };
 
 const menuItemStyle = {
   fontSize: "16px",
   color: "white",
-  marginRight: "90px", // Ajuste en el margen derecho
+  marginRight: "160px", // Ajuste en el margen derecho
   textDecoration: "none",
 };
 
@@ -52,6 +52,11 @@ const Header = () => {
   const { isAuthenticated, logout } = useAuth();
   const [activeSection, setActiveSection] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showToggle, setShowToggle] = useState(window.innerWidth <= 1024);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   const handleMenuClick = (path, section) => {
     navigate(path);
@@ -64,17 +69,29 @@ const Header = () => {
     navigate("/");
   };
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setShowToggle(window.innerWidth <= 1024);
+    };
+
+    // Agrega el event listener para cambiar el estado en función del tamaño de la pantalla
+    window.addEventListener("resize", handleResize);
+
+    // Limpia el event listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
       <div style={headerStyle}>
-          {/* Toggle Button */}
-          <div className="toggle-button" onClick={toggleMenu}>
-            {menuOpen ? <CloseOutlined /> : <MenuOutlined />}
-          </div>
+                 {/* Toggle Button */}
+                 {showToggle && (
+            <div className={`toggle-button ${menuOpen ? "open" : ""}`} onClick={toggleMenu}>
+              {menuOpen ? <CloseOutlined /> : <MenuOutlined />}
+            </div>
+          )}
 
           {/* Logo */}
           <Link to="/">

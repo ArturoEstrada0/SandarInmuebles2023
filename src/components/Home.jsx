@@ -6,6 +6,8 @@ import PropertyList from './PropertyList/PropertyList'
 import Footer from './Footer/Footer'
 import ChatBubble from './Chat/ChatBubble'
 import Asesores from './Asesores/Asesores'
+import ThemeProvider from 'react-bootstrap/ThemeProvider'
+
 
 const { Content } = Layout
 
