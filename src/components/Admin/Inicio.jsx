@@ -1,13 +1,11 @@
 import { Card, Col, Row, Statistic, List } from 'antd';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+} from 'recharts';
 import { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import {
-  UserOutlined,
-  HomeOutlined,
-  TeamOutlined,
-  LikeOutlined,
-  EyeOutlined,
+  UserOutlined, HomeOutlined, TeamOutlined, LikeOutlined, EyeOutlined,
 } from '@ant-design/icons';
 
 function Inicio() {
@@ -98,54 +96,47 @@ function Inicio() {
 
   return (
     <div>
-      <h1>Inicio</h1>
-      
-      {/* Estadísticas generales */}
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Inicio</h1>
+
       <Row gutter={16}>
-        <Col span={8}>
-          <Card>
-            <Statistic title="Total de propiedades" value={totalPropiedades}  prefix={<HomeOutlined />}/>
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic title="Total de clientes" value={totalUsuarios} prefix={<UserOutlined />} />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic title="Total de contactos" value={totalContacts} prefix={<TeamOutlined />} />
-          </Card>
-        </Col>
+        {/* Estadísticas generales */}
+        {dataGeneral.map((item, index) => (
+          <Col span={8} key={index}>
+            <Card>
+              <Statistic title={item.name} value={item.valor} prefix={index === 0 ? <HomeOutlined /> : (index === 1 ? <UserOutlined /> : <TeamOutlined />)} />
+            </Card>
+          </Col>
+        ))}
       </Row>
-      
-      <Row gutter={16}>
+
+      <Row gutter={16} style={{ marginTop: '20px' }}>
         {/* Gráfico de estadísticas generales */}
         <Col span={12}>
-          <BarChart width={600} height={300} data={dataGeneral}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="valor" fill="#8884d8" />
-          </BarChart>
+          <Card title="Estadísticas Generales">
+            <BarChart width={600} height={300} data={dataGeneral}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="valor" fill="#1890ff" />
+            </BarChart>
+          </Card>
         </Col>
 
         {/* Estadísticas de propiedades */}
         <Col span={12}>
-        <div>
-            <h2> Propiedades y Estadísticas:</h2>         
-          {/* Gráfico de clics y favoritos */}
-          <BarChart width={600} height={300} data={dataPropiedades}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="valor" fill="#82ca9d" />
-          </BarChart>
-         
+          <Card title="Propiedades y Estadísticas">
+            {/* Gráfico de clics y favoritos */}
+            <BarChart width={600} height={300} data={dataPropiedades}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="valor" fill="#52c41a" />
+            </BarChart>
+
             {/* Lista de propiedades */}
             <List
               dataSource={propiedades}
@@ -153,18 +144,16 @@ function Inicio() {
                 <List.Item>
                   <strong>{item.nombre}:</strong>
                   <span>
-                  <EyeOutlined /> Vistas: {item.clickCount}, <LikeOutlined /> Favoritos: {item.favoriteCount}
-                    </span>
-                 </List.Item>
+                    <EyeOutlined /> Vistas: {item.clickCount}, <LikeOutlined /> Favoritos: {item.favoriteCount}
+                  </span>
+                </List.Item>
               )}
             />
-          </div>
+          </Card>
         </Col>
-
       </Row>
     </div>
   );
 }
-
 
 export default Inicio;
