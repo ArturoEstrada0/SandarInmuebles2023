@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from 'react';
 import { Card, Col, Row, Statistic, List } from 'antd';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
-import { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import {
   UserOutlined, HomeOutlined, TeamOutlined, LikeOutlined, EyeOutlined,
@@ -17,6 +17,27 @@ function Inicio() {
   const [propiedades, setPropiedades] = useState([]);
   const [propiedadMasClickeada, setPropiedadMasClickeada] = useState('');
   const [propiedadConMasFavoritos, setPropiedadConMasFavoritos] = useState('');
+  const [propiedadesSeleccionadas, setPropiedadesSeleccionadas] = useState(null);
+  const [metodosContacto, setMetodosContacto] = useState([]);
+  const [usuariosPorMes, setUsuariosPorMes] = useState([]);
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+  const [propiedadesPorTipo, setPropiedadesPorTipo] = useState([]);
+  const [usuariosRegistrados, setUsuariosRegistrados] = useState([
+    { mes: 1, usuarios: 10 },
+    { mes: 2, usuarios: 15 },
+    { mes: 3, usuarios: 20 },
+    { mes: 4, usuarios: 12 },
+    { mes: 5, usuarios: 25 },
+    { mes: 6, usuarios: 18 },
+    { mes: 7, usuarios: 30 },
+    { mes: 8, usuarios: 22 },
+    { mes: 9, usuarios: 27 },
+    { mes: 10, usuarios: 15 },
+    { mes: 11, usuarios: 28 },
+    { mes: 12, usuarios: 35 },
+  ]);
 
   const obtenerTotalPropiedades = async () => {
     const firestore = getFirestore();
@@ -44,7 +65,7 @@ function Inicio() {
 
   const obtenerPropiedades = async () => {
     const firestore = getFirestore();
-    const propiedadesCollection = collection(firestore, 'propiedades'); // Reemplaza 'nombre_de_tu_coleccion' con el nombre real de tu colección
+    const propiedadesCollection = collection(firestore, 'propiedades');
     const propiedadesSnapshot = await getDocs(propiedadesCollection);
 
     const propiedadesData = [];
@@ -57,7 +78,6 @@ function Inicio() {
       const data = propiedad.data();
       propiedadesData.push(data);
 
-      // Actualizar el conteo máximo de clics y favoritos
       if (data.clickCount > maxClickCount) {
         maxClickCount = data.clickCount;
         setClickCount(maxClickCount);
@@ -76,11 +96,77 @@ function Inicio() {
     setPropiedadConMasFavoritos(propiedadFavorita);
   };
 
+  const obtenerCaracteristicasPorTipo = (tipo) => {
+    switch (tipo) {
+      case 'Casa':
+        return { tipo: 'Casa', pausadas: 5, vendidas: 20, rentadas: 8 };
+      case 'Departamento':
+        return { tipo: 'Departamento', pausadas: 3, vendidas: 15, rentadas: 10 };
+      case 'Terreno':
+        return { tipo: 'Terreno', pausadas: 1, vendidas: 10, rentadas: 5 };
+      default:
+        return { tipo: 'Otros', pausadas: 7, vendidas: 11, rentadas: 10 };
+    }
+  };
+
+  const obtenerContactosPorMetodo = async () => {
+    const datosDePrueba = [
+      { metodo: 'WhatsApp', cantidad: 30 },
+      { metodo: 'Formulario', cantidad: 15 },
+      { metodo: 'Correo Electrónico', cantidad: 10 },
+    ];
+
+    setMetodosContacto(datosDePrueba);
+  };
+
+  useEffect(() => {
+    obtenerContactosPorMetodo();
+  }, []);
+
+  const obtenerPropiedadesPorTipo = async () => {
+    const datosDePrueba = [
+      { nombre: 'Propiedad1', tipo: 'casa' },
+      { nombre: 'Propiedad2', tipo: 'departamento' },
+      { nombre: 'Propiedad3', tipo: 'casa' },
+      { nombre: 'Propiedad4', tipo: 'terreno' },
+      { nombre: 'Propiedad5', tipo: 'departamento' },
+    ];
+
+    const propiedadesPorTipoData = {};
+    datosDePrueba.forEach((propiedad) => {
+      const tipo = propiedad.tipo || 'Otros';
+      if (propiedadesPorTipoData[tipo]) {
+        propiedadesPorTipoData[tipo]++;
+      } else {
+        propiedadesPorTipoData[tipo] = 1;
+      }
+    });
+
+    setPropiedadesPorTipo(Object.entries(propiedadesPorTipoData));
+
+    const obtenerTotalUsuarios = async () => {
+      const firestore = getFirestore();
+      const usuariosCollection = collection(firestore, 'usuarios');
+      const usuariosSnapshot = await getDocs(usuariosCollection);
+
+      const usuariosPorMesData = Array(12).fill(0);
+
+      usuariosSnapshot.forEach((usuario) => {
+        const fechaRegistro = usuario.data().fechaRegistro;
+        const mesRegistro = parseInt(fechaRegistro.substring(5, 7), 10);
+        usuariosPorMesData[mesRegistro - 1]++;
+      });
+
+      setUsuariosPorMes(usuariosPorMesData);
+    };
+  };
+
   useEffect(() => {
     obtenerTotalPropiedades();
     obtenerTotalUsuarios();
     obtenerTotalContacts();
     obtenerPropiedades();
+    obtenerPropiedadesPorTipo();
   }, []);
 
   const dataGeneral = [
@@ -99,7 +185,6 @@ function Inicio() {
       <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Inicio</h1>
 
       <Row gutter={16}>
-        {/* Estadísticas generales */}
         {dataGeneral.map((item, index) => (
           <Col span={8} key={index}>
             <Card>
@@ -110,7 +195,6 @@ function Inicio() {
       </Row>
 
       <Row gutter={16} style={{ marginTop: '20px' }}>
-        {/* Gráfico de estadísticas generales */}
         <Col span={12}>
           <Card title="Estadísticas Generales">
             <BarChart width={600} height={300} data={dataGeneral}>
@@ -124,10 +208,8 @@ function Inicio() {
           </Card>
         </Col>
 
-        {/* Estadísticas de propiedades */}
         <Col span={12}>
           <Card title="Propiedades y Estadísticas">
-            {/* Gráfico de clics y favoritos */}
             <BarChart width={600} height={300} data={dataPropiedades}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -137,7 +219,6 @@ function Inicio() {
               <Bar dataKey="valor" fill="#52c41a" />
             </BarChart>
 
-            {/* Lista de propiedades */}
             <List
               dataSource={propiedades}
               renderItem={(item) => (
@@ -149,6 +230,68 @@ function Inicio() {
                 </List.Item>
               )}
             />
+          </Card>
+        </Col>
+
+        <Col span={12}>
+          <Card title="Distribución de Propiedades por Tipo">
+            <PieChart width={400} height={300}>
+              <Pie
+                data={propiedadesPorTipo}
+                dataKey={(entry) => entry[1]}
+                nameKey={(entry) => entry[0]}
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                fill="#8884d8"
+                onClick={(data, index) => {
+                  const tipoSeleccionado = data.payload.name;
+                  const caracteristicas = obtenerCaracteristicasPorTipo(tipoSeleccionado);
+                  setPropiedadesSeleccionadas(caracteristicas);
+                }}
+              >
+                {propiedadesPorTipo.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+
+            {propiedadesSeleccionadas && (
+              <div style={{ marginTop: '20px' }}>
+                <h3>Características de {propiedadesSeleccionadas.tipo}</h3>
+                <p>Pausadas: {propiedadesSeleccionadas.pausadas}</p>
+                <p>Vendidas: {propiedadesSeleccionadas.vendidas}</p>
+                <p>Rentadas: {propiedadesSeleccionadas.rentadas}</p>
+              </div>
+            )}
+          </Card>
+        </Col>
+
+        <Col span={12}>
+          <Card title="Contactos por Método">
+            <BarChart width={400} height={300} data={metodosContacto}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="metodo" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="cantidad" fill="#1890ff" />
+            </BarChart>
+          </Card>
+        </Col>
+
+        <Col span={24}>
+          <Card title="Usuarios Registrados">
+            <LineChart width={600} height={300} data={usuariosRegistrados}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="mes" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="usuarios" stroke="#8884d8" />
+            </LineChart>
           </Card>
         </Col>
       </Row>
