@@ -1,15 +1,36 @@
 /* Vender.css */
 
 .vender-container {
-    text-align: center;
-    padding: 100px;
-    background-image: url('../../assets/img/venta.jpg');
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    transition: background-image 0.5s;
-    animation: fadeIn 1s ease-in-out;
-  }
+  position: relative;
+  text-align: center;
+  color: #fff;
+  transition: background-image 0.5s;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.background-container {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  max-height: 600px;
+}
+
+.background-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  max-height: 600px;
+}
+
+.overlay-content {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 1;
+}
   
   @keyframes fadeIn {
     from {
@@ -53,8 +74,48 @@
       transform: translateX(0);
     }
   }
+
+  .blue-rectangle {
+    background-color: #001529; /* Color azul */
+    padding: 135px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative; /* Añadido para posicionar el texto dentro de este contenedor */
+  }
+
+  .blue-line {
+    border-top: 1px solid #fff; /* Línea horizontal blanca sobre el texto */
+  border-bottom: 1px solid #fff; /* Nueva línea horizontal blanca debajo del texto */
+  margin: 10px 0; /* Espacio entre las líneas y el texto */
+  }
+
+  .blue-text {
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  .step-container {
+    margin-top: 20px;
+    background-color: #ffffff;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+    justify-content: space-between;
+    display: flex;
+  }
+
+  .collapse-container {
+    width: 60%; /* Ajusta según sea necesario */
+  }
+
+  .collapse-container p {
+    line-height: 1.5; /* Ajusta según sea necesario para centrar el interlineado */
+    text-align: left;
+  }
   
-  /* ... (resto del código) */
   
   .contact-form-container {
     margin-top: 50px;
