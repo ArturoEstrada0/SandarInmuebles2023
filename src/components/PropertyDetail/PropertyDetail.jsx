@@ -66,6 +66,29 @@ const PropertyDetail = () => {
   const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [activeKey, setActiveKey] = useState("");
+  const [isMobile, setIsMobile] = useState(false); // Estado para verificar si la pantalla es móvil
+  const [showForm, setShowForm] = useState(false); // Estado para controlar la visibilidad del formulario
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Actualizar el estado de isMobile en función del ancho de la pantalla
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Agregar un event listener para manejar cambios en el tamaño de la ventana
+    window.addEventListener("resize", handleResize);
+
+    // Llamar a handleResize una vez al principio para establecer el estado inicial
+    handleResize();
+
+    // Limpiar el event listener cuando el componente se desmonta
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Función para manejar la visibilidad del formulario
+  const toggleForm = () => {
+    setShowForm(!showForm);
+  };
 
   const onCollapseChange = (key) => {
     setActiveKey(activeKey === key ? "" : key);
@@ -142,41 +165,52 @@ const PropertyDetail = () => {
   const iconStyle = {
     color: "#1890ff", // Color azul, puedes ajustarlo según tu preferencia
   };
-  
+
   const getIcon = (key) => {
     // Mapea las claves a los iconos correspondientes de Font Awesome
     const iconMapping = {
-      'Aire acondicionado': <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />,
-      'Alarma': <FontAwesomeIcon icon={faBell} style={iconStyle} />,
-      'Amueblado': <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
-      'Baño': <FontAwesomeIcon icon={faBath} style={iconStyle} />,
-      'Bodega': <FontAwesomeIcon icon={faBox} style={iconStyle} />,
-      'Cámaras de seguridad': <FontAwesomeIcon icon={faVideo} style={iconStyle} />,
-      'Cochera': <FontAwesomeIcon icon={faCar} style={iconStyle} />,
-      'Cocina': <FontAwesomeIcon icon={faUtensils} style={iconStyle} />,
-      'Gimnasio': <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
-      'Habitaciones': <FontAwesomeIcon icon={faBed} style={iconStyle} />,
-      'Jardín': <FontAwesomeIcon icon={faTree} style={iconStyle} />,
-      'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
-      'Piscina': <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
-      'Salón de eventos': <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />,
-      'Sistema de sonido': <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />,
-      'Terraza': <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
-      'Vestidor': <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
-      'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={iconStyle} />,
-      'Vista a la montaña': <FontAwesomeIcon icon={faMountain} style={iconStyle} />,
-      'Vista al mar': <FontAwesomeIcon icon={faWater} style={iconStyle} />,
-      'Vista panorámica': <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />,
-      'Área de juegos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
-      'Ático': <FontAwesomeIcon icon={faHome} style={iconStyle} />,
-      'Chimenea': <FontAwesomeIcon icon={faFire} style={iconStyle} />,
+      "Aire acondicionado": (
+        <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />
+      ),
+      Alarma: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+      Amueblado: <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
+      Baño: <FontAwesomeIcon icon={faBath} style={iconStyle} />,
+      Bodega: <FontAwesomeIcon icon={faBox} style={iconStyle} />,
+      "Cámaras de seguridad": (
+        <FontAwesomeIcon icon={faVideo} style={iconStyle} />
+      ),
+      Cochera: <FontAwesomeIcon icon={faCar} style={iconStyle} />,
+      Cocina: <FontAwesomeIcon icon={faUtensils} style={iconStyle} />,
+      Gimnasio: <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
+      Habitaciones: <FontAwesomeIcon icon={faBed} style={iconStyle} />,
+      Jardín: <FontAwesomeIcon icon={faTree} style={iconStyle} />,
+      "Mascotas permitidas": <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
+      Piscina: <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
+      "Salón de eventos": (
+        <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />
+      ),
+      "Sistema de sonido": (
+        <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />
+      ),
+      Terraza: <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
+      Vestidor: <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
+      "Vista a la ciudad": <FontAwesomeIcon icon={faCity} style={iconStyle} />,
+      "Vista a la montaña": (
+        <FontAwesomeIcon icon={faMountain} style={iconStyle} />
+      ),
+      "Vista al mar": <FontAwesomeIcon icon={faWater} style={iconStyle} />,
+      "Vista panorámica": (
+        <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />
+      ),
+      "Área de juegos": <FontAwesomeIcon icon={faChess} style={iconStyle} />,
+      Ático: <FontAwesomeIcon icon={faHome} style={iconStyle} />,
+      Chimenea: <FontAwesomeIcon icon={faFire} style={iconStyle} />,
       // Puedes agregar más iconos según sea necesario
     };
-  
+
     return iconMapping[key] || null;
   };
-  
-  
+
   const formatLabel = (key) => {
     // Puedes personalizar el formato de la etiqueta según tus necesidades
     // Por ejemplo, puedes cambiar el formato de 'Área de juegos' a 'Área de Juegos'
@@ -204,14 +238,14 @@ const PropertyDetail = () => {
         >
           <Title
             level={2}
-      style={{
-        fontFamily: "Arial, sans-serif",
-        color: "#333",
-        fontWeight: "bold",
-        marginBottom: "10px",
-        borderLeft: "3px solid #1890ff", // Agregar línea vertical a la izquierda del título
-        paddingLeft: "16px", // Ajustar el espacio entre la línea y el texto
-      }}
+            style={{
+              fontFamily: "Arial, sans-serif",
+              color: "#333",
+              fontWeight: "bold",
+              marginBottom: "10px",
+              borderLeft: "3px solid #1890ff", // Agregar línea vertical a la izquierda del título
+              paddingLeft: "16px", // Ajustar el espacio entre la línea y el texto
+            }}
           >
             {/*{propertyDetails.type}*/}
             {propertyDetails.nombre}
@@ -254,127 +288,149 @@ const PropertyDetail = () => {
                 propertyDetails.fotos &&
                 propertyDetails.fotos.length > 0 && (
                   <Carousel autoplay>
-                  {propertyDetails.fotos.map((foto, index) => (
-                    <div key={index}>
-                      <img
-                        src={foto}
-                        alt={`Property Image ${index + 1}`}
-                        style={{
-                          width: '100%',
-                          height: "28rem",
-                          objectFit: 'cover',
-                          borderRadius: '12px',
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Carousel>
+                    {propertyDetails.fotos.map((foto, index) => (
+                      <div key={index}>
+                        <img
+                          src={foto}
+                          alt={`Property Image ${index + 1}`}
+                          style={{
+                            width: "100%",
+                            height: "28rem",
+                            objectFit: "cover",
+                            borderRadius: "12px",
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
                 )}
             </div>
             <div
               style={{
                 flex: "1",
-                maxWidth: "30%",
+                maxWidth: isMobile ? "100%" : "30%", // Ajustar el ancho en función de la pantalla móvil
                 maxHeight: "60vh",
                 padding: "0 20px",
+                position: "relative", // Añadido para posicionar el formulario de forma relativa
+
               }}
             >
-              <Card
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                  borderRadius: "12px",
-                }}
-              >
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
-                  <Title
-                    level={4}
-                    className="contact-title"
-                    style={{ marginBottom: "5px" }}
-                  >
-                    SANDAR INMUEBLES
-                  </Title>
-                  <Title
-                    level={4}
-                    className="contact-title"
-                    style={{ marginBottom: "20px" }}
-                  >
-                    CONTACTANOS Y PREGUNTA
-                  </Title>
-                </div>
-                <Form
-                  name="contact-form"
-                  onFinish={handleContactFormSubmit}
-                  labelCol={{ span: 0 }}
-                  wrapperCol={{ span: 24 }}
-                  style={{ flex: 1, overflowY: "auto" }}
+                <Button
+                  onClick={toggleForm}
+                  type="primary"
+                  block
+                  style={{
+                    position: "fixed",
+                    bottom: "25px",
+                    right: "0",
+                    height: "40px", // Ajusta la altura según sea necesario
+                    fontSize: "18px", // Ajusta el tamaño de la letra según sea necesario
+                    zIndex: 999, // Ajusta el índice de apilamiento según sea necesario
+                  }}
                 >
-                  <Form.Item
-                    name="name"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingresa tu nombre",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<UserOutlined />}
-                      placeholder="Nombre"
-                      style={{ borderRadius: "8px" }}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="email"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingresa tu correo electrónico",
-                      },
-                      {
-                        type: "email",
-                        message: "Ingresa un correo electrónico válido",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<MailOutlined />}
-                      placeholder="Correo Electrónico"
-                      style={{ borderRadius: "8px" }}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="message"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingresa tu mensaje",
-                      },
-                    ]}
-                  >
-                    <Input.TextArea
-                      prefix={<FormOutlined />}
-                      placeholder="Mensaje"
-                      style={{ borderRadius: "8px" }}
-                    />
-                  </Form.Item>
-                  <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{ width: "100%", borderRadius: "8px" }}
+                  {showForm ? "Ocultar" : "Contactanos y pregunta presionando aquí"}
+                </Button>
+              {showForm && (
+                <Card
+                  style={{
+                    height: "70%",
+                    display: "flex",
+                    flexDirection: "column",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    borderRadius: "12px",
+                    position: "fixed", // Ajustar el formulario flotante
+                    top:"150px",
+                    bottom: "0", // Ajustar la posición vertical según sea necesario
+                    right: "20%", // Ajustar la posición horizontal según sea necesario
+                  }}
+                >
+                  <div style={{ textAlign: "center", padding: "20px 0" }}>
+                    <Title
+                      level={4}
+                      className="contact-title"
+                      style={{ marginBottom: "5px" }}
                     >
-                      Enviar Mensaje
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Card>
+                      SANDAR INMUEBLES
+                    </Title>
+                    <Title
+                      level={4}
+                      className="contact-title"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      CONTACTANOS Y PREGUNTA
+                    </Title>
+                  </div>
+                  <Form
+                    name="contact-form"
+                    onFinish={handleContactFormSubmit}
+                    labelCol={{ span: 0 }}
+                    wrapperCol={{ span: 24 }}
+                    style={{ flex: 1, overflowY: "auto" }}
+                  >
+                    <Form.Item
+                      name="name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Por favor, ingresa tu nombre",
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<UserOutlined />}
+                        placeholder="Nombre"
+                        style={{ borderRadius: "8px" }}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Por favor, ingresa tu correo electrónico",
+                        },
+                        {
+                          type: "email",
+                          message: "Ingresa un correo electrónico válido",
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<MailOutlined />}
+                        placeholder="Correo Electrónico"
+                        style={{ borderRadius: "8px" }}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="message"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Por favor, ingresa tu mensaje",
+                        },
+                      ]}
+                    >
+                      <Input.TextArea
+                        prefix={<FormOutlined />}
+                        placeholder="Mensaje"
+                        style={{ borderRadius: "8px" }}
+                      />
+                    </Form.Item>
+                    <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ width: "100%", borderRadius: "8px" }}
+                      >
+                        Enviar Mensaje
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Card>
+              )}
             </div>
           </div>
         </Col>
-        
 
         <Col span={24}>
           <div style={{ padding: "20px" }}>
@@ -423,31 +479,30 @@ const PropertyDetail = () => {
                 {/* Línea horizontal superior */}
                 <Title level={2}>Información del inmueble</Title>
                 <Row gutter={[16, 16]}>
-                {Object.entries(propertyDetails.cardsActivadas)
-                  .filter(([key, value]) => value) // Filtra solo las características con valor true
-                  .map(([key, value]) => (
-                    <Col span={12} key={key}>
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          fontSize: "17px",
-                          lineHeight: "2",
-                        }}
-                      >
-                        <li>
-                          <strong>
-                            {getIcon(key)} {/* Función para obtener el ícono */}
-                            {formatLabel(key)}:
-                          </strong>{" "}
-                          Sí
-                        </li>
-                      </ul>
-                    </Col>
-                  ))}
-              </Row>
-
-
+                  {Object.entries(propertyDetails.cardsActivadas)
+                    .filter(([key, value]) => value) // Filtra solo las características con valor true
+                    .map(([key, value]) => (
+                      <Col span={12} key={key}>
+                        <ul
+                          style={{
+                            listStyle: "none",
+                            padding: 0,
+                            fontSize: "17px",
+                            lineHeight: "2",
+                          }}
+                        >
+                          <li>
+                            <strong>
+                              {getIcon(key)}{" "}
+                              {/* Función para obtener el ícono */}
+                              {formatLabel(key)}:
+                            </strong>{" "}
+                            Sí
+                          </li>
+                        </ul>
+                      </Col>
+                    ))}
+                </Row>
                 <hr
                   style={{
                     borderTop: "2px solid #1890ff",
@@ -470,8 +525,6 @@ const PropertyDetail = () => {
                   }}
                 />
 
-
-                
                 <Title level={2}>Descripción</Title>
                 <Paragraph style={{ fontSize: "17px", color: "#333" }}>
                   {propertyDetails.descripcion}
