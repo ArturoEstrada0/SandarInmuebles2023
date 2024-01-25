@@ -79,16 +79,12 @@ function Propiedades() {
   const [currentStep, setCurrentStep] = useState(0);
   const [dataSource, setDataSource] = useState([]);
   const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [youtubePreview, setYoutubePreview] = useState("");
   const [mapHeight, setMapHeight] = useState("300px"); // Tamaño inicial
   const [mapCenter, setMapCenter] = useState(moreliaCoords);
   const [markerCoords, setMarkerCoords] = useState(moreliaCoords);
   const [tableFilters, setTableFilters] = useState({});
-  const [tamanioPropiedad, setTamanioPropiedad] = useState("");
-const [metrosConstruidos, setMetrosConstruidos] = useState("");
+
 const [cardsActivadas, setCardsActivadas] = useState({});
-
-
 
   // Agrega un estado para las sugerencias de ubicación y la ubicación seleccionada
   const [locationSuggestions, setLocationSuggestions] = useState([]);
@@ -194,22 +190,7 @@ const [cardsActivadas, setCardsActivadas] = useState({});
     fetchData();
   }, [searchTerm, tableFilters]);
 
-  const [features] = useState([
-    "Baño",
-    "Medios Baños",
-    "Habitaciones",
-    "Cocina",
-    "Patio",
-    "Jardín",
-    "Oficina/estudio",
-    "Lavadero",
-    "Sótano",
-    "Ático",
-    "Closets",
-    "Terraza",
-    "Cochera",
-    "Numero de pisos",
-  ]);
+
 
   const [featuresChecked, setFeaturesChecked] = useState({
     Baño: false,
@@ -227,22 +208,7 @@ const [cardsActivadas, setCardsActivadas] = useState({});
     Cochera: false,
     "numero de pisos": false,
   });
-  const [featuresCount, setFeaturesCount] = useState({
-    Baño: 0,
-    "Medios Baños": 0,
-    Habitaciones: 0,
-    Cocina: 0,
-    Patio: 0,
-    Jardín: 0,
-    "Oficina/estudio": 0,
-    Lavadero: 0,
-    Sótano: 0,
-    Ático: 0,
-    Closets: 0,
-    Terraza: 0,
-    Cochera: 0,
-    "Numero de pisos": 0,
-  });
+
 
   const handleFeatureCheck = (feature) => {
     setFeaturesChecked((prevState) => ({
@@ -331,13 +297,6 @@ const [cardsActivadas, setCardsActivadas] = useState({});
             // Añadir las referencias de las imágenes a los datos
             formData = { ...formData, fotos: imageUrls, youtubeUrl };
 
-            // Añadir características activas al formulario
-            const activeFeatures = features.reduce((acc, feature) => {
-              if (featuresChecked[feature]) {
-                acc[feature] = featuresCount[feature];
-              }
-              return acc;
-            }, {});
 
             formData = { ...formData,  cardsActivadas };
             // Guardar en Firestore
@@ -481,24 +440,6 @@ const [cardsActivadas, setCardsActivadas] = useState({});
 
   const prevStep = () => {
     setCurrentStep((prev) => prev - 1);
-  };
-
-  const handleFeatureIncrement = (feature) => {
-    setFeaturesCount((prevState) => {
-      let incrementValue = 1;
-      return { ...prevState, [feature]: prevState[feature] + incrementValue };
-    });
-  };
-
-  const handleFeatureDecrement = (feature) => {
-    setFeaturesCount((prevState) => {
-      let decrementValue = 1;
-      if (prevState[feature] - decrementValue >= 0) {
-        return { ...prevState, [feature]: prevState[feature] - decrementValue };
-      } else {
-        return prevState; // Mantener el mismo estado si el valor resultante es negativo.
-      }
-    });
   };
 
   const columns = [
@@ -772,30 +713,6 @@ const [cardsActivadas, setCardsActivadas] = useState({});
                 onClick={() => handleFeatureCheck(feature)}
               >
                 {/* Agrega iconos según sea necesario */}
-                {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
                 
                 <p style={{ marginTop: "5px", textAlign: "center", fontSize: "14px" }}>{feature}</p>
               </Card>
