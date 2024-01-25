@@ -16,8 +16,8 @@ const headerStyle = {
 };
 
 const logoStyle = {
-  width: "120px",
-  height: "85px",
+  width: "90px",
+  height: "50px",
   marginTop: "-5px",
   marginRight: "10px",
 };
