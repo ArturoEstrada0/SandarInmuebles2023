@@ -61,15 +61,12 @@ const Comprar = () => {
         </Col>
       </Row>
 
-      {/* Nueva sección "SANDAR INMUEBLES" */}
-      <div className="comprar-our-company">
-  <div className="comprar-our-company-text" style={{ fontSize: '48px', fontWeight: 'bold', color: '#fff' }}>
-    <Title level={2}>
-      SANDAR INMUEBLES
-    </Title>
-  </div>
-  <div className="comprar-info-image"></div>
-</div>
+       {/* Nueva sección con imagen de fondo y texto */}
+       <div className="seccion-adicional">
+        <div className="imagen-fondo">
+          <p className="texto-centrado">SANDAR INMUEBLES</p>
+        </div>
+      </div>
     </div>
   );
 }
