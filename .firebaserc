@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "sandar-inmuebles"
-  }
+    "default": "sandar-inmuebles",
+    "produccion": "sandarinmuebles"
+  },
+  "targets": {},
+  "etags": {}
 }
