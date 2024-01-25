@@ -85,10 +85,10 @@ function Propiedades() {
   const [markerCoords, setMarkerCoords] = useState(moreliaCoords);
   const [tableFilters, setTableFilters] = useState({});
   const [tamanioPropiedad, setTamanioPropiedad] = useState("");
-  const [metrosConstruidos, setMetrosConstruidos] = useState("");
-  const [cardsActivadas, setCardsActivadas] = useState({});
+const [metrosConstruidos, setMetrosConstruidos] = useState("");
+const [cardsActivadas, setCardsActivadas] = useState({});
 
-  const [habitacionesDetails, setHabitacionesDetails] = useState([]);
+
 
   // Agrega un estado para las sugerencias de ubicación y la ubicación seleccionada
   const [locationSuggestions, setLocationSuggestions] = useState([]);
@@ -194,7 +194,55 @@ function Propiedades() {
     fetchData();
   }, [searchTerm, tableFilters]);
 
-  const [featuresChecked, setFeaturesChecked] = useState({});
+  const [features] = useState([
+    "Baño",
+    "Medios Baños",
+    "Habitaciones",
+    "Cocina",
+    "Patio",
+    "Jardín",
+    "Oficina/estudio",
+    "Lavadero",
+    "Sótano",
+    "Ático",
+    "Closets",
+    "Terraza",
+    "Cochera",
+    "Numero de pisos",
+  ]);
+
+  const [featuresChecked, setFeaturesChecked] = useState({
+    Baño: false,
+    "Medios Baños": false,
+    Habitaciones: false,
+    Cocina: false,
+    Patio: false,
+    Jardín: false,
+    "Oficina/estudio": false,
+    Lavadero: false,
+    Sótano: false,
+    Ático: false,
+    Closets: false,
+    Terraza: false,
+    Cochera: false,
+    "numero de pisos": false,
+  });
+  const [featuresCount, setFeaturesCount] = useState({
+    Baño: 0,
+    "Medios Baños": 0,
+    Habitaciones: 0,
+    Cocina: 0,
+    Patio: 0,
+    Jardín: 0,
+    "Oficina/estudio": 0,
+    Lavadero: 0,
+    Sótano: 0,
+    Ático: 0,
+    Closets: 0,
+    Terraza: 0,
+    Cochera: 0,
+    "Numero de pisos": 0,
+  });
 
   const handleFeatureCheck = (feature) => {
     setFeaturesChecked((prevState) => ({
@@ -202,24 +250,11 @@ function Propiedades() {
       [feature]: !prevState[feature],
     }));
   
-    // Actualiza el estado de cardsActivadas
+    // Actualiza el estado cardsActivadas
     setCardsActivadas((prevCards) => ({
       ...prevCards,
       [feature]: !prevCards[feature],
     }));
-  
-    // Si la característica es "Habitaciones" y está activada, inicializa los detalles de las habitaciones
-    if (feature === "Habitaciones" && !featuresChecked[feature]) {
-      // Inicializa los detalles de las habitaciones solo si no están ya inicializados
-      setHabitacionesDetails((prevDetails) => {
-        if (prevDetails.length === 0) {
-          // Agrega lógica para obtener el número de habitaciones desde los valores del formulario
-          const numHabitaciones = form.getFieldValue("habitaciones");
-          return [...Array(numHabitaciones)].map(() => ({}));
-        }
-        return prevDetails;
-      });
-    }
   };
   
 
@@ -245,7 +280,7 @@ function Propiedades() {
       });
       return;
     }
-  
+
     // Añadir datos al objeto global formData
     formData = {
       ...formData,
@@ -253,24 +288,13 @@ function Propiedades() {
       youtubeUrl,
       ubicacion: selectedLocation?.display_name,
     };
-  
+
     // Manejar específicamente la asignación de valores para tipoPropiedad y condicion
     if (step === 0) {
       formData.tipoPropiedad = values.tipoPropiedad || "";
       formData.condicion = values.condicion || "";
     }
-  
-// Añadir detalles de habitaciones al objeto formData
-if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
-  // Aquí es donde `feature` está definida como "Habitaciones"
-  formData = {
-    ...formData,
-    habitaciones: values.habitaciones,
-    habitacionesDetails: habitacionesDetails || [], // Asegúrate de que habitacionesDetails no sea undefined
-  };
-}
 
-  
     // Si es el último paso, enviar a Firebase
     if (step === 3) {
       try {
@@ -284,7 +308,7 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
           ) {
             // Crear un identificador único para la imagen
             const imageId = Date.now().toString();
-  
+
             // Subir cada imagen a Firebase Storage
             const uploadTasks = values.fotos.fileList.map(
               async (photo, index) => {
@@ -293,32 +317,39 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
                   `propiedades/${imageId}_${index}`
                 );
                 await uploadBytes(storageRef, photo.originFileObj);
-  
+
                 // Obtener la URL de descarga
                 const imageURL = await getDownloadURL(storageRef);
-  
+
                 return imageURL;
               }
             );
-  
+
             // Esperar a que todas las imágenes se suban
             const imageUrls = await Promise.all(uploadTasks);
-  
+
             // Añadir las referencias de las imágenes a los datos
             formData = { ...formData, fotos: imageUrls, youtubeUrl };
-  
+
             // Añadir características activas al formulario
-            formData = { ...formData, cardsActivadas };
-  
+            const activeFeatures = features.reduce((acc, feature) => {
+              if (featuresChecked[feature]) {
+                acc[feature] = featuresCount[feature];
+              }
+              return acc;
+            }, {});
+
+            formData = { ...formData,  cardsActivadas };
             // Guardar en Firestore
             const propiedadesCollection = collection(firestore, "propiedades");
             await addDoc(propiedadesCollection, formData);
-  
+
+
             notification.success({
               message: "Propiedad guardada",
               description: "La propiedad ha sido guardada con éxito.",
             });
-  
+
             setIsModalVisible(false);
           } else {
             console.error(
@@ -345,7 +376,6 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
       nextStep();
     }
   };
-  
   
 
   // Manejador para el cambio en la carga de archivos
@@ -453,6 +483,24 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
     setCurrentStep((prev) => prev - 1);
   };
 
+  const handleFeatureIncrement = (feature) => {
+    setFeaturesCount((prevState) => {
+      let incrementValue = 1;
+      return { ...prevState, [feature]: prevState[feature] + incrementValue };
+    });
+  };
+
+  const handleFeatureDecrement = (feature) => {
+    setFeaturesCount((prevState) => {
+      let decrementValue = 1;
+      if (prevState[feature] - decrementValue >= 0) {
+        return { ...prevState, [feature]: prevState[feature] - decrementValue };
+      } else {
+        return prevState; // Mantener el mismo estado si el valor resultante es negativo.
+      }
+    });
+  };
+
   const columns = [
     {
       title: "Imagen",
@@ -537,26 +585,14 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
     Recamaras: ["Habitaciones"],
     "Interiores / Exteriores": ["Baño", "Cocina", "Jardín", "Terraza", "Ático"],
     Estacionamiento: ["Cochera"],
-    "Seguridad / Tecnología": [
-      "Alarma",
-      "Cámaras de seguridad",
-      "Sistema de sonido",
-    ],
+    "Seguridad / Tecnología": ["Alarma", "Cámaras de seguridad", "Sistema de sonido"],
     Extras: ["Bodega", "Vestidor", "Chimenea", "Aire acondicionado"],
-    OtrasCaracteristicas: [
-      "Amueblado",
-      "Mascotas permitidas",
-      "Vista panorámica",
-    ],
-    "Amenidades del Edificio": [
-      "Gimnasio",
-      "Piscina",
-      "Salón de eventos",
-      "Área de juegos",
-    ],
+    OtrasCaracteristicas: ["Amueblado", "Mascotas permitidas", "Vista panorámica"],
+    "Amenidades del Edificio": ["Gimnasio", "Piscina", "Salón de eventos", "Área de juegos"],
     Vistas: ["Vista al mar", "Vista a la montaña", "Vista a la ciudad"],
     // Puedes agregar más secciones y características según sea necesario
   };
+
 
   return (
     <div>
@@ -712,7 +748,7 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
               </Form.Item>
             </>
           )}
-
+          
 {currentStep === 2 && (
   <>
     <Divider>Características</Divider>
@@ -729,83 +765,68 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
                   flexDirection: "column",
                   alignItems: "center",
                   padding: "10px",
-                  border: featuresChecked[feature]
-                    ? "2px solid #1890ff"
-                    : "1px solid #d9d9d9",
+                  border: featuresChecked[feature] ? "2px solid #1890ff" : "1px solid #d9d9d9",
                   borderRadius: "8px",
                   cursor: "pointer",
                 }}
                 onClick={() => handleFeatureCheck(feature)}
               >
                 {/* Agrega iconos según sea necesario */}
-                <p style={{ marginTop: "5px", textAlign: "center", fontSize: "14px" }}>
-                  {feature}
-                </p>
+                {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                
+                <p style={{ marginTop: "5px", textAlign: "center", fontSize: "14px" }}>{feature}</p>
               </Card>
               {/* Agrega un campo numérico para características específicas */}
-              {feature === "Habitaciones" && featuresChecked[feature] && (
-                <>
-                 <Form.Item
-  name="habitaciones"
-  rules={[
-    {
-      validator: async (_, value) => {
-        if (value === undefined || habitacionesDetails.length !== value) {
-          throw new Error("Ingresa el número correcto de habitaciones");
-        }
-      },
-    },
-  ]}
->
-  <InputNumber
-    style={{ width: "100%" }}
-    min={0}
-    placeholder="Número de habitaciones"
-    onChange={(value) => {
-      setHabitacionesDetails([...Array(value)].map(() => ({})));
-    }}
-  />
-</Form.Item>
-
-
-                  {/* Detalles de Habitaciones */}
-                  <Divider>Detalles de Habitaciones</Divider>
-                  <Row gutter={[16, 16]}>
-                    {[...Array(habitacionesDetails.length)].map((_, index) => (
-                      <Col span={24} key={index} style={{ marginBottom: "20px" }}>
-                      <h3 style={{ marginBottom: "10px", color: "#1890ff" }}>
-                        Recámara {index + 1}
-                      </h3>
-                      <div style={{ display: "flex", justifyContent: "space-around" }}>
-                      <Form.Item
-  label={`Baño`}
-  name={`habitacion_${index}_bano`}
-  style={{ marginBottom: 0 }}
->
-  <Checkbox />
-</Form.Item>
-<Form.Item
-  label={`Vestidor`}
-  name={`habitacion_${index}_vestidor`}
-  style={{ marginBottom: 0 }}
->
-  <Checkbox />
-</Form.Item>
-
-                        {/* Agrega más campos según sea necesario */}
-                      </div>
-                    </Col>
-                    
-                    ))}
-                  </Row>
-                </>
+              {feature === "Habitaciones" && (
+                <Form.Item
+                  name="habitaciones"
+                  rules={[
+                    { required: featuresChecked[feature], message: "Ingresa el número de habitaciones" },
+                  ]}
+                >
+                  <InputNumber style={{ width: "100%" }} min={0} placeholder="Número de habitaciones" disabled={!featuresChecked[feature]} />
+                </Form.Item>
               )}
-              {/* Agrega más lógica para otras características específicas */}
+              {feature === "Baño" && (
+                <Form.Item
+                  name="baños"
+                  rules={[
+                    { required: featuresChecked[feature], message: "Ingresa el número de baños" },
+                  ]}
+                >
+                  <InputNumber style={{ width: "100%" }} min={0} placeholder="Número de baños" disabled={!featuresChecked[feature]} />
+                </Form.Item>
+              )}
+              {/* Agrega más campos numéricos según sea necesario */}
             </Col>
           ))}
         </Row>
       </div>
     ))}
+
     {/* Mejoras visuales para Tamaño y Construcción */}
     <Divider>Tamaño y Construcción</Divider>
     <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
@@ -814,36 +835,24 @@ if (featuresChecked["Habitaciones"] && values.habitaciones > 0) {
           label="Tamaño de la Propiedad"
           name="tamanioPropiedad"
           rules={[
-            {
-              required: true,
-              message: "Ingresa el tamaño de la propiedad",
-            },
+            { required: true, message: "Ingresa el tamaño de la propiedad" },
           ]}
         >
           <InputNumber style={{ width: "100%" }} min={0} />
         </Form.Item>
-        <FontAwesomeIcon
-          icon={faHome}
-          style={{ fontSize: "16px", marginRight: "8px" }}
-        />
+        <FontAwesomeIcon icon={faHome} style={{ fontSize: '16px', marginRight: '8px' }} />
       </Col>
       <Col span={12}>
         <Form.Item
           label="Metros Construidos"
           name="metrosConstruidos"
           rules={[
-            {
-              required: true,
-              message: "Ingresa los metros construidos",
-            },
+            { required: true, message: "Ingresa los metros construidos" },
           ]}
         >
           <InputNumber style={{ width: "100%" }} min={0} />
         </Form.Item>
-        <FontAwesomeIcon
-          icon={faRulerCombined}
-          style={{ fontSize: "16px", marginRight: "8px" }}
-        />
+        <FontAwesomeIcon icon={faRulerCombined} style={{ fontSize: '16px', marginRight: '8px' }} />
       </Col>
     </Row>
   </>
