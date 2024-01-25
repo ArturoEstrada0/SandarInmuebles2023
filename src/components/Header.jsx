@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "../context/AuthContext"; // Importa el hook useAuth
-import logo from "../assets/img/logo.png";
+import logo from "../assets/img/sandarlogo1.png";
 
 const headerStyle = {
   width: "100%",
@@ -16,7 +16,7 @@ const headerStyle = {
 };
 
 const logoStyle = {
-  width: "60px",
+  width: "90px",
   height: "50px",
   marginTop: "-5px",
   marginRight: "10px",

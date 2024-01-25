@@ -6,14 +6,14 @@ import {
   DollarOutlined,
   KeyOutlined,
   MailOutlined,
+  MessageOutlined, // Importa el icono necesario
 } from '@ant-design/icons';
 import Inicio from './Inicio';
 import Clientes from './Clientes';
 import Propiedades from './Propiedades';
 import Contratos from './Contratos';
 import Buzon from './Buzon';
-
-
+import ChatGPT from './ChatGPT'; // Importa el componente ChatGPT
 
 const { Sider, Content } = Layout;
 
@@ -32,6 +32,8 @@ function AdminPanel() {
         return <Contratos />;
       case 'buzon':
         return <Buzon />;
+      case 'chatgpt': // Agrega el nuevo caso para ChatGPT
+        return <ChatGPT />;
       default:
         return <Inicio />;
     }
@@ -41,7 +43,7 @@ function AdminPanel() {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider>
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={({ key }) => setSeccion(key)}>
+        <Menu theme="dark" defaultSelectedKeys={['inicio']} mode="inline" onClick={({ key }) => setSeccion(key)}>
           <Menu.Item key="inicio" icon={<HomeOutlined />}>
             Inicio
           </Menu.Item>
@@ -56,6 +58,9 @@ function AdminPanel() {
           </Menu.Item>
           <Menu.Item key="buzon" icon={<MailOutlined />}>
             Buzon
+          </Menu.Item>
+          <Menu.Item key="chatgpt" icon={<MessageOutlined />}>
+            ChatGPT
           </Menu.Item>
         </Menu>
       </Sider>

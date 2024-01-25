@@ -44,9 +44,11 @@ const Contact = () => {
   return (
     <div className={`contact-container ${animationClass}`}>
       <Card
-        title={<span className={`card-title ${animationClass}`}>Contacto</span>}
+        title={<span className={`card-title ${animationClass}`}>Contacta con Nosotros</span>}
         className={`card-container ${animationClass}`}
+        
       >
+              <p>¿Tienes alguna pregunta o comentario? ¡Estamos aquí para ayudarte! Ponte en contacto con Sandar Inmuebles y te responderemos lo antes posible.</p>
         <Row gutter={[16, 16]}>
           <Col span={12}>
             <Form form={form} name="contact-form" onFinish={onFinish} layout="vertical">
@@ -143,6 +145,7 @@ const Contact = () => {
                 <UserOutlined /> Información de Contacto
               </h3>
               <div className="contact-info">
+                
                 <p>
                   <strong>
                     <EnvironmentOutlined />
