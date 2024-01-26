@@ -37,6 +37,7 @@ import {
 import { firestore } from "../firebase/firebase";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRulerCombined, faM, fa2 } from '@fortawesome/free-solid-svg-icons';
 import {
   faBath,
   faBed,
@@ -355,15 +356,16 @@ const PropertyList = ({ onPropertyClick }) => {
                       </Text>
                     </Col>
                     <Col xs={8}>
-                      <Text strong>
-                        <AreaChartOutlined
-                          style={{
-                            fontSize: "1.2rem",
-                            fontWeight: "bold",
-                          }}
-                        />{" "}
-                        Tamaño: {property.area} m²
-                      </Text>
+                    <Text strong>
+  <FontAwesomeIcon
+    icon={faRulerCombined}
+    style={{
+      fontSize: '1.2rem',
+      fontWeight: 'bold',
+    }}
+  />{' '}
+  Tamaño: {property.area} m²
+</Text>
                     </Col>
                     <Col xs={8.1}>
                       <Text strong>
@@ -377,16 +379,25 @@ const PropertyList = ({ onPropertyClick }) => {
                       </Text>
                     </Col>
                     <Col xs={8.1}>
-                      <Text strong>
-                        <AppstoreOutlined
-                          style={{
-                            fontSize: "1.2rem",
-                            fontWeight: "bold",
-                          }}
-                        />{" "}
-                        Metros de contruccion: {property.areaBuild} m²
-                      </Text>
-                    </Col>
+  <Text strong>
+    <FontAwesomeIcon
+      icon={faM}
+      style={{
+        fontSize: '1.2rem',
+        marginRight: '5px', // Ajusta el espaciado según sea necesario
+      }}
+    />
+    <FontAwesomeIcon
+      icon={fa2}
+      style={{
+        fontSize: '0.8rem', // Ajusta el tamaño según sea necesario
+        verticalAlign: 'text-bottom', // Alinea el "2" con la línea base
+        marginRight: '5px', // Ajusta el espaciado según sea necesario
+      }}
+    />
+    Metros de construcción: {property.areaBuild} m²
+  </Text>
+</Col>
                   </Row>
                 </div>
                 <div

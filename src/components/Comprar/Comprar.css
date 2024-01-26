@@ -1,8 +1,9 @@
 /* Comprar.css */
 
 .comprar-container {
-    padding: 20px;
-  }
+  opacity: 1; /* Asegura que la página sea visible inicialmente */
+  transition: opacity 0.5s ease-in-out; /* Agrega una transición suave */
+}
   
   .comprar-title {
     text-align: center;
@@ -74,4 +75,33 @@
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   /* Otros estilos según tus preferencias */
+}
+
+.comprar-container.loading {
+  opacity: 0;
+}
+
+/* Añade animaciones de carga según tus preferencias */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Aplica animaciones según las necesidades */
+.comprar-title,
+.comprar-info-box {
+  animation: fadeIn 1s ease-in-out, slideInUp 1s ease-in-out;
 }
