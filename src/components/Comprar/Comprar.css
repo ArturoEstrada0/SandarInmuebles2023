@@ -1,8 +1,9 @@
 /* Comprar.css */
 
 .comprar-container {
-    padding: 20px;
-  }
+  opacity: 1; /* Asegura que la página sea visible inicialmente */
+  transition: opacity 0.5s ease-in-out; /* Agrega una transición suave */
+}
   
   .comprar-title {
     text-align: center;
@@ -29,33 +30,78 @@
   .comprar-info-paragraph {
     font-size: 18px;
   }
-  
-  .comprar-our-company {
-    text-align: center;
-    margin-top: 9%;
-    position: relative;
+
+  /* Comprar.css */
+
+/* ... (estilos existentes) ... */
+
+.seccion-adicional {
+  width: 100%;
+  height: 500px;
+  background-color: #f0f0f0;
+  overflow: hidden;
+  position: relative;
+}
+
+.imagen-fondo {
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/img/parejamudandoce.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Cambiamos a posición relativa para que ::before respete este contenedor */
+}
+
+.imagen-fondo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/img/parejamudandoce.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px); /* Aplicamos el desenfoque solo al pseudo-elemento */
+  z-index: -1; /* Enviamos el pseudo-elemento al fondo */
+}
+
+.texto-centrado {
+  color: #ffffff;
+  font-size: 36px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  /* Otros estilos según tus preferencias */
+}
+
+.comprar-container.loading {
+  opacity: 0;
+}
+
+/* Añade animaciones de carga según tus preferencias */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .comprar-our-company-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    color: #fff; /* Ajusta el color del texto para asegurar la legibilidad */
+  to {
+    opacity: 1;
   }
-  
-  .comprar-info-image {
-    background-image: url(../../assets/img/acuerdo.jpg);
-    background-size: cover;
-    background-position: center;
-    height: 600px;
-    margin-top: 50px;
-    width: 100%; /* Ajuste para que la imagen ocupe todo el ancho */
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
   }
-  
-  .comprar-custom-text {
-    font-size: 48px; /* Ajusta el tamaño del texto según tu preferencia */
-    font-weight: bold; /* Opcional: Ajusta el peso de la fuente según tu preferencia */
-    color: #fff; /* Ajusta el color del texto a blanco */
+  to {
+    transform: translateY(0);
   }
+}
+
+/* Aplica animaciones según las necesidades */
+.comprar-title,
+.comprar-info-box {
+  animation: fadeIn 1s ease-in-out, slideInUp 1s ease-in-out;
+}
