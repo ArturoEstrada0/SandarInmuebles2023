@@ -294,7 +294,7 @@ const PropertyList = ({ onPropertyClick }) => {
           <Spin tip="Cargando..." />
         ) : (
           filteredProperties.map((property) => (
-            <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
+            <Col xs={24} sm={12} md={24} lg={8} key={property.id}>
               <Card
                 className="property-card"
                 style={{ width: 480, height: 465 }}

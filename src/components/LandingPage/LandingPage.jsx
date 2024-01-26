@@ -39,6 +39,8 @@ function LandingPage() {
   }, []);
 
   return (
+
+    
     <Content style={{backgroundColor: "#e2f4fe"}}>
       <div
         className="landing-page-container"

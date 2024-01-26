@@ -4,7 +4,6 @@ import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "../context/AuthContext";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
-
 import './Header.css'
 import logo from "../assets/img/sandarlogo1.png";
 
@@ -18,7 +17,6 @@ const headerStyle = {
   top: 0,
   zIndex: 1000,
   justifyContent: "space-between", // Nueva propiedad para centrar los elementos y agregar espacio entre ellos
-
 };
 
 const logoStyle = {
@@ -30,7 +28,7 @@ const logoStyle = {
 const menuItemStyle = {
   fontSize: "16px",
   color: "white",
-  marginRight: "160px", // Ajuste en el margen derecho
+  marginRight: "90px", // Ajuste en el margen derecho
   textDecoration: "none",
 };
 
@@ -45,6 +43,7 @@ const loginStyle = {
   alignItems: "center",
   color: "white",
   textDecoration: "none",
+  marginRight:'30px',
 };
 
 const Header = () => {
@@ -114,6 +113,26 @@ const Header = () => {
             >
               Nosotros
             </Link>
+
+            <Link
+          to="/vender"
+          style={
+            activeSection === "vender" ? activeMenuItemStyle : menuItemStyle
+          }
+          onClick={() => handleMenuClick("/vender", "vender")}
+        >
+          Vender
+        </Link>
+
+        <Link
+          to="/comprar"
+          style={
+            activeSection === "comprar" ? activeMenuItemStyle : menuItemStyle
+          }
+          onClick={() => handleMenuClick("/comprar", "comprar")}
+        >
+          Comprar
+        </Link>
 
             <Link
               to="/asesores"
