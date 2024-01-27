@@ -72,17 +72,17 @@ function Map({ height, width, markerCoords }) {
   }
 
   return (
-    <MapContainer
-      center={markerCoords}
-      zoom={zoom}
-      style={{ height: height, width: width }}
-      whenCreated={setMap}>
-      <TileLayer
-        url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> © CartoDB'
-        maxZoom={19}
-      />
-      {markerCoords && (
+    markerCoords && (
+      <MapContainer
+        center={markerCoords}
+        zoom={zoom}
+        style={{ height: height, width: width }}
+        whenCreated={setMap}>
+        <TileLayer
+          url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> © CartoDB'
+          maxZoom={19}
+        />
         <>
           <Marker position={markerCoords}>
             <Popup>Ubicación</Popup>
@@ -90,13 +90,17 @@ function Map({ height, width, markerCoords }) {
           <Circle
             center={markerCoords}
             radius={circleRadius}
-            pathOptions={{ color: 'blue', fillColor: 'blue', fillOpacity: 0.2 }}
+            pathOptions={{
+              color: '#1677FF',
+              fillColor: '#1677FF',
+              fillOpacity: 0.2,
+            }}
           />
         </>
-      )}
-      <MapInvalidateSize />
-      {markerCoords && <MapSetViewButton />}
-    </MapContainer>
+        <MapInvalidateSize />
+        <MapSetViewButton />
+      </MapContainer>
+    )
   )
 }
 

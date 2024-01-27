@@ -3,27 +3,14 @@ import Gallery from './Gallery'
 import ContactForm from './ContactForm'
 import Footer from '../Footer/Footer'
 import {
-  Layout,
   Row,
   Col,
-  Button,
   Typography,
-  Form,
-  Input,
   message,
   Card,
   Spin,
-  Carousel,
+  //Carousel,
 } from 'antd'
-import {
-  HomeOutlined,
-  CarOutlined,
-  BuildOutlined,
-  ApartmentOutlined,
-  ToolOutlined,
-  ClockCircleOutlined,
-  CompassOutlined,
-} from '@ant-design/icons'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -49,7 +36,6 @@ import {
   faChess,
   faWater,
   faCity,
-  faRulerCombined,
   faHome,
   faHouseFlag,
 } from '@fortawesome/free-solid-svg-icons'
@@ -63,8 +49,7 @@ import Map from '../Map/Map'
 
 import { firestore } from '../firebase/firebase'
 
-const { Content } = Layout
-const { Title, Paragraph } = Typography
+const { Title } = Typography
 
 const styleLi = {
   color: '#1677FF',
@@ -137,7 +122,7 @@ const PropertyDetail = () => {
   // Función para extraer el código del video de YouTube
   const extractYoutubeVideoCode = (url) => {
     const match = url.match(
-      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=))([^"&?\/\s]{11})/,
+      /(?:youtu\.be\/|youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=))([^"&?/\s]{11})/,
     )
     return match && match[1]
   }
@@ -398,50 +383,7 @@ const PropertyDetail = () => {
     </div>
 
     /*
-        <Col span={24}>
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
-                <hr
-                  style={{
-                    borderTop: '2px solid #1890ff',
-                    margin: '0',
-                    marginBottom: '16px',
-                  }}
-                />{' '}
-                <Title level={2}>Información del inmueble</Title>
-                <Row gutter={[16, 16]}>
-                  {Object.entries(propertyDetails.cardsActivadas)
-                    .filter(([key, value]) => value)
-                    .map(([key, value]) => (
-                      <Col span={12} key={key}>
-                        <ul
-                          style={{
-                            listStyle: 'none',
-                            padding: 0,
-                            fontSize: '17px',
-                            lineHeight: '2',
-                          }}>
-                          <li>
-                            <strong>
-                              {getIcon(key)} {formatLabel(key)}:
-                            </strong>{' '}
-                            Sí
-                          </li>
-                        </ul>
-                      </Col>
-                    ))}
-                </Row>
-                <hr
-                  style={{
-                    borderTop: '2px solid #1890ff',
-                    margin: '0',
-                    marginBottom: '16px',
-                  }}
-                />{' '}
-              </div>
-            </Col>
-
+                     
             <Col>
               <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <hr
