@@ -68,15 +68,13 @@ const { Title, Paragraph } = Typography
 
 const styleLi = {
   color: '#1677FF',
-  fontSize: '22px',
+  fontSize: '20px',
   fontWeight: 'normal',
   marginRight: '8px',
 }
 
 const PropertyDetail = () => {
   const [isTextShown, setIsTextShown] = useState(false)
-  const text =
-    'CASA EN VENTA AL SUR DE MORELIA EN FRACC. PRIVADO. ..DE $5,300,000 A $4,800,000 ..Estrena casa ubicada al Sur de Morelia en un Fraccionamiento privado con seguridad y áreas verdes. El Fraccionamiento se encuentra a 5 minutos del Centro Comercial Altozano, Hospital Ángeles y del Club de Golf Altozano, en una comunidad que cuenta con todos los servicios. ..FORTALEZAS: .1) Recámara en planta baja. .2) Diseño arquitectónico moderno. .3) Roof Garden..4) Junto a las áreas verdes. ..El fraccionamiento cuenta con áreas verdes, amplias avenidas y caseta de vigilancia. ..La residencia está construida sobre un terreno con un frente de 8 metros y un fondo de 25.5 metros y más de 243m2 de construcción, en 3 niveles. ..En Planta Baja cuenta recámara con baño completo y vestidor con vista al jardín, sala, comedor, cocina integral con vista al jardín común y medio baño ..En Primer Nivel cuenta con tres amplias recámaras, una de ellas con vestidor y baño completo, las otras dos con baño completo y closet. ..En el Segundo Nivel cuenta con amplia área de lavado y otra área de roof garden con medio baño. ..Los acabados son de granito, cristal templado, mármol y acero inoxidable. ..Además, calentador solar de 20 tubos, tanque estacionario, cisterna y cochera techada para tres vehículos. ..Conoce más en www.cbamericas.com.mx; marca a nuestras oficinas al 800 111 22 26 para agendar una cita con un asesor inmobiliario, también contamos con WhatsApp 44 33 80 37 75 ..Renuncia de Responsabilidad: 1) La información aquí contenida se considera confiable, pero no está garantizada debido a que proviene de terceras personas.'
 
   const { id } = useParams()
   const [propertyDetails, setPropertyDetails] = useState(null)
@@ -192,49 +190,44 @@ const PropertyDetail = () => {
     { key: 'Estacionamientos', label: 'Estacionamientos' },
   ]
 
-  const iconStyle = {
-    color: '#1890ff', // Color azul, puedes ajustarlo según tu preferencia
-  }
-
   const getIcon = (key) => {
-    // Mapea las claves a los iconos correspondientes de Font Awesome
     const iconMapping = {
       'Aire acondicionado': (
-        <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />
+        <FontAwesomeIcon icon={faSnowflake} style={styleLi} />
       ),
-      Alarma: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
-      Amueblado: <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
-      Baño: <FontAwesomeIcon icon={faBath} style={iconStyle} />,
-      Bodega: <FontAwesomeIcon icon={faBox} style={iconStyle} />,
+      Alarma: <FontAwesomeIcon icon={faBell} style={styleLi} />,
+      Amueblado: <FontAwesomeIcon icon={faCouch} style={styleLi} />,
+      Baño: <FontAwesomeIcon icon={faBath} style={styleLi} />,
+      Bodega: <FontAwesomeIcon icon={faBox} style={styleLi} />,
       'Cámaras de seguridad': (
-        <FontAwesomeIcon icon={faVideo} style={iconStyle} />
+        <FontAwesomeIcon icon={faVideo} style={styleLi} />
       ),
-      Cochera: <FontAwesomeIcon icon={faCar} style={iconStyle} />,
-      Cocina: <FontAwesomeIcon icon={faUtensils} style={iconStyle} />,
-      Gimnasio: <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
-      Habitaciones: <FontAwesomeIcon icon={faBed} style={iconStyle} />,
-      Jardín: <FontAwesomeIcon icon={faTree} style={iconStyle} />,
-      'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
-      Piscina: <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
+      Cochera: <FontAwesomeIcon icon={faCar} style={styleLi} />,
+      Cocina: <FontAwesomeIcon icon={faUtensils} style={styleLi} />,
+      Gimnasio: <FontAwesomeIcon icon={faDumbbell} style={styleLi} />,
+      Habitaciones: <FontAwesomeIcon icon={faBed} style={styleLi} />,
+      Jardín: <FontAwesomeIcon icon={faTree} style={styleLi} />,
+      'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={styleLi} />,
+      Piscina: <FontAwesomeIcon icon={faSwimmingPool} style={styleLi} />,
       'Salón de eventos': (
-        <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />
+        <FontAwesomeIcon icon={faGlassCheers} style={styleLi} />
       ),
       'Sistema de sonido': (
-        <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />
+        <FontAwesomeIcon icon={faVolumeUp} style={styleLi} />
       ),
-      Terraza: <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
-      Vestidor: <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
-      'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={iconStyle} />,
+      Terraza: <FontAwesomeIcon icon={faHouseFlag} style={styleLi} />,
+      Vestidor: <FontAwesomeIcon icon={faTshirt} style={styleLi} />,
+      'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={styleLi} />,
       'Vista a la montaña': (
-        <FontAwesomeIcon icon={faMountain} style={iconStyle} />
+        <FontAwesomeIcon icon={faMountain} style={styleLi} />
       ),
-      'Vista al mar': <FontAwesomeIcon icon={faWater} style={iconStyle} />,
+      'Vista al mar': <FontAwesomeIcon icon={faWater} style={styleLi} />,
       'Vista panorámica': (
-        <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />
+        <FontAwesomeIcon icon={faBinoculars} style={styleLi} />
       ),
-      'Área de juegos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
-      Ático: <FontAwesomeIcon icon={faHome} style={iconStyle} />,
-      Chimenea: <FontAwesomeIcon icon={faFire} style={iconStyle} />,
+      'Área de juegos': <FontAwesomeIcon icon={faChess} style={styleLi} />,
+      Ático: <FontAwesomeIcon icon={faHome} style={styleLi} />,
+      Chimenea: <FontAwesomeIcon icon={faFire} style={styleLi} />,
       // Puedes agregar más iconos según sea necesario
     }
 
@@ -265,92 +258,74 @@ const PropertyDetail = () => {
           </h2>
           <h4>{propertyDetails.ubicacion}</h4>
           <hr />
+
+          <Col span={24}>
+            <div style={{ marginBottom: '20px' }}>
+              <h2>Detalles de la propiedad</h2>
+              <Row gutter={[16, 16]}>
+                {details.map((detail, index) => (
+                  <Col key={index} xl={4}>
+                    <Card
+                      hoverable
+                      title={detail.label}
+                      size='small'
+                      style={{
+                        borderRadius: '5px',
+                        backgroundColor: '#f5f5f5',
+                        minHeight: '80px',
+                        padding: '4px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                      }}>
+                      <Title level={3} style={{ color: '#1890ff' }}>
+                        {propertyDetails.activeFeatures?.[detail.key] || 0}
+                      </Title>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          </Col>
+
           <div className='list-info'>
             <h2>Información del inmueble</h2>
             <ul>
-              <li>
-                <HomeOutlined style={styleLi} /> Recámaras: 3
-              </li>
-              <li>
-                <CarOutlined style={styleLi} /> Estacionamientos: 2
-              </li>
-              <li>
-                <BuildOutlined style={styleLi} /> Superficie construida: 203.0
-                m²
-              </li>
-
-              <li>
-                <HomeOutlined style={styleLi} /> Tipo: Casa
-              </li>
-              <li>
-                <BuildOutlined style={styleLi} /> Superficie terreno: 203.0 m²
-              </li>
-              <li>
-                <ApartmentOutlined style={styleLi} /> Uso de la propiedad:
-                Residencial
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Baños: 4
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> ¿Está en condominio?: No
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Medios baños: Sin especificar
-              </li>
-              <li>
-                <ApartmentOutlined style={styleLi} /> Edificios: Sin especificar
-              </li>
-              <li>
-                <ToolOutlined style={styleLi} /> Cocina: Cerrada
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Propiedades: Sin especificar
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Clima: Sin especificar
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Tipo de construcción: Casa
-                propia
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Amueblado: No
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Estado de conservación del
-                inmueble: Excelente
-              </li>
-              <li>
-                <ToolOutlined style={styleLi} /> ¿Está equipado?: No
-              </li>
-              <li>
-                <ClockCircleOutlined style={styleLi} /> Antigüedad: Sin
-                especificar
-              </li>
-              <li>
-                <HomeOutlined style={styleLi} /> Acabados: Sin especificar
-              </li>
-              <li>
-                <CompassOutlined style={styleLi} /> Orientación del inmueble:
-                Sin especificar
-              </li>
+              {Object.entries(propertyDetails.cardsActivadas)
+                .filter(([key, value]) => value)
+                .map(([key, value]) => (
+                  <Col span={12} key={key}>
+                    <li>
+                      <strong>
+                        {getIcon(key)} {formatLabel(key)}:
+                      </strong>{' '}
+                      Sí
+                    </li>
+                  </Col>
+                ))}
             </ul>
             <hr />
             <h3>Descripción</h3>
-            <p>{isTextShown ? text : `${text.substring(0, 800)}...`}</p>
-            <button
-              onClick={() => setIsTextShown(!isTextShown)}
-              style={{
-                backgroundColor: 'transparent',
-                color: '#1677FF',
-                padding: '0',
-                cursor: 'pointer',
-                border: '2px solid transparent',
-                outline: 'none',
-              }}>
-              {isTextShown ? 'Ver menos \u25B2' : 'Ver más \u25BC'}
-            </button>
+            <p>
+              {isTextShown
+                ? propertyDetails.descripcion
+                : `${propertyDetails.descripcion.substring(0, 600)}`}
+            </p>
+            {propertyDetails.descripcion.length > 600 && (
+              <button
+                onClick={() => setIsTextShown(!isTextShown)}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#1677FF',
+                  padding: '0',
+                  cursor: 'pointer',
+                  border: '2px solid transparent',
+                  outline: 'none',
+                }}>
+                {isTextShown ? 'Ver menos \u25B2' : 'Ver más \u25BC'}
+              </button>
+            )}
             <hr />
             <h3>Ubicación del inmueble</h3>
             {/* <Map height={'450px'} width={'100%'} /> */}
@@ -389,211 +364,6 @@ const PropertyDetail = () => {
     </div>
 
     /*
-    <Content style={{ marginTop: '65px' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          paddingLeft: '30px',
-          alignItems: 'center',
-        }}>
-        <div
-          style={{
-            marginBottom: '20px',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: 'none',
-            border: 'none',
-          }}>
-          <Title
-            level={2}
-            style={{
-              fontFamily: 'Arial, sans-serif',
-              color: '#333',
-              fontWeight: 'bold',
-              marginBottom: '10px',
-              borderLeft: '3px solid #1890ff',
-              paddingLeft: '16px',
-            }}>
-            {propertyDetails.nombre}
-          </Title>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <DollarCircleOutlined
-              style={{
-                fontSize: '2.5em',
-                marginRight: '15px',
-                color: '#1890ff',
-              }}
-            />
-            <Title
-              level={4}
-              style={{
-                fontFamily: 'Arial, sans-serif',
-                color: '#666',
-                marginBottom: 0,
-              }}>
-              Precio: ${propertyDetails.precio}
-            </Title>
-          </div>
-        </div>
-      </div>
-      <Row gutter={16}>
-        <Col span={24}>
-          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-            <div
-              style={{
-                flex: '1',
-                width: '70vh',
-                height: '60vh',
-                paddingLeft: '30px',
-                paddingRight: '30px',
-              }}>
-              {propertyDetails &&
-                propertyDetails.fotos &&
-                propertyDetails.fotos.length > 0 && (
-                  <Carousel autoplay>
-                    {propertyDetails.fotos.map((foto, index) => (
-                      <div key={index}>
-                        <img
-                          src={foto}
-                          alt={`Property Image ${index + 1}`}
-                          style={{
-                            width: '100%',
-                            height: '28rem',
-                            objectFit: 'cover',
-                            borderRadius: '12px',
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </Carousel>
-                )}
-            </div>
-            <div
-              style={{
-                flex: '1',
-                maxWidth: '30%',
-                maxHeight: '60vh',
-                padding: '0 20px',
-              }}>
-              <Card
-                style={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                  borderRadius: '12px',
-                }}>
-                <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                  <Title
-                    level={4}
-                    className='contact-title'
-                    style={{ marginBottom: '5px' }}>
-                    SANDAR INMUEBLES
-                  </Title>
-                  <Title
-                    level={4}
-                    className='contact-title'
-                    style={{ marginBottom: '20px' }}>
-                    CONTACTANOS Y PREGUNTA
-                  </Title>
-                </div>
-                <Form
-                  name='contact-form'
-                  onFinish={handleContactFormSubmit}
-                  labelCol={{ span: 0 }}
-                  wrapperCol={{ span: 24 }}
-                  style={{ flex: 1, overflowY: 'auto' }}>
-                  <Form.Item
-                    name='name'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Por favor, ingresa tu nombre',
-                      },
-                    ]}>
-                    <Input
-                      prefix={<UserOutlined />}
-                      placeholder='Nombre'
-                      style={{ borderRadius: '8px' }}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name='email'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Por favor, ingresa tu correo electrónico',
-                      },
-                      {
-                        type: 'email',
-                        message: 'Ingresa un correo electrónico válido',
-                      },
-                    ]}>
-                    <Input
-                      prefix={<MailOutlined />}
-                      placeholder='Correo Electrónico'
-                      style={{ borderRadius: '8px' }}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name='message'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Por favor, ingresa tu mensaje',
-                      },
-                    ]}>
-                    <Input.TextArea
-                      prefix={<FormOutlined />}
-                      placeholder='Mensaje'
-                      style={{ borderRadius: '8px' }}
-                    />
-                  </Form.Item>
-                  <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
-                    <Button
-                      type='primary'
-                      htmlType='submit'
-                      style={{ width: '100%', borderRadius: '8px' }}>
-                      Enviar Mensaje
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Card>
-            </div>
-          </div>
-        </Col>
-
-        <Col span={24}>
-          <div style={{ padding: '20px' }}>
-            <Title level={2}>Detalles de la Propiedad</Title>
-            <Row gutter={[16, 16]}>
-              {details.map((detail, index) => (
-                <Col key={index} xs={24} sm={12} md={8} lg={8} xl={3}>
-                  <Card
-                    hoverable
-                    title={detail.label}
-                    size='small'
-                    style={{
-                      borderRadius: '12px',
-                      backgroundColor: '#f5f5f5',
-                      minHeight: '80px',
-                      padding: '8px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'column',
-                    }}>
-                    <Title level={4} style={{ color: '#1890ff' }}>
-                      {propertyDetails.activeFeatures?.[detail.key] || 0}
-                    </Title>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        </Col>
-
         <Col span={24}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
