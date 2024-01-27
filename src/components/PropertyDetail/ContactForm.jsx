@@ -38,8 +38,7 @@ const ContactForm = ({ onFinish }) => {
   const [form] = Form.useForm()
 
   const handleSubmit = async (values) => {
-    await onFinish(values)
-    form.resetFields()
+    await onFinish(values, form.resetFields)
   }
 
   const prefixSelector = (

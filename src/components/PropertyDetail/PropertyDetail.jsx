@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import Gallery from './Gallery'
 import ContactForm from './ContactForm'
@@ -126,33 +127,20 @@ const PropertyDetail = () => {
     return match && match[1]
   }
 
-  const handleContactFormSubmit = async (values) => {
-    console.log('Valores del formulario de contacto:', values)
-
+  const handleContactFormSubmit = async (values, resetForm) => {
     try {
       const contactCollection = collection(firestore, 'msgpro')
-
-      const selectedProperty = propertyData.find(
-        (property) => property.id.toString() === id,
-      )
-
-      console.log('selectedProperty:', selectedProperty)
-
-      if (!selectedProperty) {
-        console.error('No se encontró la propiedad con el ID proporcionado.')
-        return
-      }
 
       const contactDataWithPropertyInfo = {
         ...values,
         propertyId: id,
-        propertyName: selectedProperty.type,
+        propertyName: propertyDetails.nombre,
+        propertyLocation: propertyDetails.ubicacion,
       }
-
-      console.log('Datos del mensaje:', contactDataWithPropertyInfo)
 
       await addDoc(contactCollection, contactDataWithPropertyInfo)
       message.success('¡Tu mensaje ha sido enviado con éxito!')
+      resetForm()
     } catch (error) {
       console.error('Error al enviar datos a Firestore:', error)
       message.error(
@@ -273,8 +261,8 @@ const PropertyDetail = () => {
             <h3 className='subtitle-section'>Información del inmueble</h3>
             <ul>
               {Object.entries(propertyDetails.cardsActivadas)
-                .filter(([key, value]) => value)
-                .map(([key, value]) => (
+                .filter(([value]) => value)
+                .map(([key]) => (
                   <Col span={12} key={key}>
                     <li>
                       {getIcon(key)}
@@ -358,7 +346,7 @@ const PropertyDetail = () => {
               {/* Nuevo apartado "Precio y Contrato" */}
               <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <div className='header'>
-                  <Title level={2}>Más información</Title>
+                  <h3 className='subtitle-section'>Más información</h3>
                 </div>
                 <div className='button-group'>
                   <Button
