@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
+import Gallery from './Gallery'
+import ContactForm from './ContactForm'
+import Footer from '../Footer/Footer'
 import {
   Layout,
   Row,
@@ -11,16 +14,18 @@ import {
   Card,
   Spin,
   Carousel,
-} from "antd";
+} from 'antd'
 import {
-  UserOutlined,
-  MailOutlined,
-  FormOutlined,
-  DollarCircleOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
+  CarOutlined,
+  BuildOutlined,
+  ApartmentOutlined,
+  ToolOutlined,
+  ClockCircleOutlined,
+  CompassOutlined,
+} from '@ant-design/icons'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBath,
   faBed,
@@ -47,149 +52,161 @@ import {
   faRulerCombined,
   faHome,
   faHouseFlag,
-} from "@fortawesome/free-solid-svg-icons";
+} from '@fortawesome/free-solid-svg-icons'
 
-import axios from "axios";
+import axios from 'axios'
 
-import { useParams } from "react-router-dom";
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import "./PropertyDetail.css";
-import Map from "../Map/Map";
+import { useParams } from 'react-router-dom'
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore'
+import './PropertyDetail.css'
+import Map from '../Map/Map'
 
-import { firestore } from "../firebase/firebase";
+import { firestore } from '../firebase/firebase'
 
-const { Content } = Layout;
-const { Title, Paragraph } = Typography;
+const { Content } = Layout
+const { Title, Paragraph } = Typography
+
+const styleLi = {
+  color: '#1677FF',
+  fontSize: '22px',
+  fontWeight: 'normal',
+  marginRight: '8px',
+}
 
 const PropertyDetail = () => {
-  const { id } = useParams();
-  const [propertyDetails, setPropertyDetails] = useState(null);
-  const [activeKey, setActiveKey] = useState("");
-  const [youtubeVideoCode, setYoutubeVideoCode] = useState("");
-  const [latitud, setLatitud] = useState("");
-  const [longitud, setLongitud] = useState("");
-  const [ubicacionCoords, setUbicacionCoords] = useState(null);
+  const [isTextShown, setIsTextShown] = useState(false)
+  const text =
+    'CASA EN VENTA AL SUR DE MORELIA EN FRACC. PRIVADO. ..DE $5,300,000 A $4,800,000 ..Estrena casa ubicada al Sur de Morelia en un Fraccionamiento privado con seguridad y áreas verdes. El Fraccionamiento se encuentra a 5 minutos del Centro Comercial Altozano, Hospital Ángeles y del Club de Golf Altozano, en una comunidad que cuenta con todos los servicios. ..FORTALEZAS: .1) Recámara en planta baja. .2) Diseño arquitectónico moderno. .3) Roof Garden..4) Junto a las áreas verdes. ..El fraccionamiento cuenta con áreas verdes, amplias avenidas y caseta de vigilancia. ..La residencia está construida sobre un terreno con un frente de 8 metros y un fondo de 25.5 metros y más de 243m2 de construcción, en 3 niveles. ..En Planta Baja cuenta recámara con baño completo y vestidor con vista al jardín, sala, comedor, cocina integral con vista al jardín común y medio baño ..En Primer Nivel cuenta con tres amplias recámaras, una de ellas con vestidor y baño completo, las otras dos con baño completo y closet. ..En el Segundo Nivel cuenta con amplia área de lavado y otra área de roof garden con medio baño. ..Los acabados son de granito, cristal templado, mármol y acero inoxidable. ..Además, calentador solar de 20 tubos, tanque estacionario, cisterna y cochera techada para tres vehículos. ..Conoce más en www.cbamericas.com.mx; marca a nuestras oficinas al 800 111 22 26 para agendar una cita con un asesor inmobiliario, también contamos con WhatsApp 44 33 80 37 75 ..Renuncia de Responsabilidad: 1) La información aquí contenida se considera confiable, pero no está garantizada debido a que proviene de terceras personas.'
+
+  const { id } = useParams()
+  const [propertyDetails, setPropertyDetails] = useState(null)
+  const [activeKey, setActiveKey] = useState('')
+  const [youtubeVideoCode, setYoutubeVideoCode] = useState('')
+  const [latitud, setLatitud] = useState('')
+  const [longitud, setLongitud] = useState('')
+  const [ubicacionCoords, setUbicacionCoords] = useState(null)
 
   const onCollapseChange = (key) => {
-    setActiveKey(activeKey === key ? "" : key);
-  };
+    setActiveKey(activeKey === key ? '' : key)
+  }
 
   useEffect(() => {
-    getPropertyDataFromFirebase();
-  }, [id]);
+    getPropertyDataFromFirebase()
+  }, [id])
 
   const getPropertyDataFromFirebase = async () => {
     try {
-      const propertyDocRef = doc(firestore, "propiedades", id);
-      const propertyDocSnapshot = await getDoc(propertyDocRef);
+      const propertyDocRef = doc(firestore, 'propiedades', id)
+      const propertyDocSnapshot = await getDoc(propertyDocRef)
 
       if (propertyDocSnapshot.exists()) {
-        const propertyData = propertyDocSnapshot.data();
-        setPropertyDetails(propertyData);
+        const propertyData = propertyDocSnapshot.data()
+        setPropertyDetails(propertyData)
         // Extrae el código del video de la URL de YouTube
-        const videoCode = extractYoutubeVideoCode(propertyData.youtubeUrl);
-        setYoutubeVideoCode(videoCode);
+        const videoCode = extractYoutubeVideoCode(propertyData.youtubeUrl)
+        setYoutubeVideoCode(videoCode)
       } else {
         console.error(
-          "No se encontró la propiedad con el ID proporcionado en Firebase."
-        );
+          'No se encontró la propiedad con el ID proporcionado en Firebase.',
+        )
       }
     } catch (error) {
-      console.error("Error al obtener datos de Firestore:", error);
+      console.error('Error al obtener datos de Firestore:', error)
     }
-  };
+  }
 
   useEffect(() => {
     if (propertyDetails && propertyDetails.ubicacion) {
       // Llama a la función de conversión con la dirección obtenida desde Firebase
-      convertirDireccionACoordenadas(propertyDetails.ubicacion);
+      convertirDireccionACoordenadas(propertyDetails.ubicacion)
     }
-  }, [propertyDetails]);
+  }, [propertyDetails])
 
   const convertirDireccionACoordenadas = async (direccion) => {
     try {
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${direccion}`
-      );
+        `https://nominatim.openstreetmap.org/search?format=json&q=${direccion}`,
+      )
 
       if (response.data && response.data.length > 0) {
-        const { lat, lon } = response.data[0];
-        setUbicacionCoords([parseFloat(lat), parseFloat(lon)]);
+        const { lat, lon } = response.data[0]
+        setUbicacionCoords([parseFloat(lat), parseFloat(lon)])
       }
     } catch (error) {
-      console.error("Error al obtener coordenadas:", error);
+      console.error('Error al obtener coordenadas:', error)
     }
-  };
+  }
 
   // Función para extraer el código del video de YouTube
   const extractYoutubeVideoCode = (url) => {
     const match = url.match(
-      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=))([^"&?\/\s]{11})/
-    );
-    return match && match[1];
-  };
+      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=))([^"&?\/\s]{11})/,
+    )
+    return match && match[1]
+  }
 
   const handleContactFormSubmit = async (values) => {
-    try {
-      const contactCollection = collection(firestore, "msgpro");
-      // Obtén la información específica de la propiedad
-      const selectedProperty = propertyData.find(
-        (property) => property.id.toString() === id
-      );
+    console.log('Valores del formulario de contacto:', values)
 
-      console.log("selectedProperty:", selectedProperty);
+    try {
+      const contactCollection = collection(firestore, 'msgpro')
+
+      const selectedProperty = propertyData.find(
+        (property) => property.id.toString() === id,
+      )
+
+      console.log('selectedProperty:', selectedProperty)
 
       if (!selectedProperty) {
-        console.error("No se encontró la propiedad con el ID proporcionado.");
-        return;
+        console.error('No se encontró la propiedad con el ID proporcionado.')
+        return
       }
 
-      // Agrega información adicional al objeto values
       const contactDataWithPropertyInfo = {
         ...values,
         propertyId: id,
-        propertyName: selectedProperty.type, // O usa selectedProperty.type, dependiendo de lo que necesites
-      };
+        propertyName: selectedProperty.type,
+      }
 
-      console.log("Datos del mensaje:", contactDataWithPropertyInfo);
+      console.log('Datos del mensaje:', contactDataWithPropertyInfo)
 
-      await addDoc(contactCollection, contactDataWithPropertyInfo);
-      message.success("¡Tu mensaje ha sido enviado con éxito!");
+      await addDoc(contactCollection, contactDataWithPropertyInfo)
+      message.success('¡Tu mensaje ha sido enviado con éxito!')
     } catch (error) {
-      console.error("Error al enviar datos a Firestore:", error);
+      console.error('Error al enviar datos a Firestore:', error)
       message.error(
-        "Hubo un error al enviar el mensaje. Por favor, inténtalo nuevamente."
-      );
+        'Hubo un error al enviar el mensaje. Por favor, inténtalo nuevamente.',
+      )
     }
-  };
+  }
 
   if (!propertyDetails) {
-    return <Spin tip="Cargando..." />;
+    return <Spin tip='Cargando...' />
   }
 
   const details = [
-    { key: "Habitaciones", label: "Habitaciones" },
-    { key: "Baño", label: "Baños" },
-    { key: "Medio_bano", label: "Medios Baños" },
-    { key: "Construccion", label: "Construcción" },
-    { key: "Estacionamientos", label: "Estacionamientos" },
-  ];
+    { key: 'Habitaciones', label: 'Habitaciones' },
+    { key: 'Baño', label: 'Baños' },
+    { key: 'Medio_bano', label: 'Medios Baños' },
+    { key: 'Construccion', label: 'Construcción' },
+    { key: 'Estacionamientos', label: 'Estacionamientos' },
+  ]
 
   const iconStyle = {
-    color: "#1890ff", // Color azul, puedes ajustarlo según tu preferencia
-  };
+    color: '#1890ff', // Color azul, puedes ajustarlo según tu preferencia
+  }
 
   const getIcon = (key) => {
     // Mapea las claves a los iconos correspondientes de Font Awesome
     const iconMapping = {
-      "Aire acondicionado": (
+      'Aire acondicionado': (
         <FontAwesomeIcon icon={faSnowflake} style={iconStyle} />
       ),
       Alarma: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
       Amueblado: <FontAwesomeIcon icon={faCouch} style={iconStyle} />,
       Baño: <FontAwesomeIcon icon={faBath} style={iconStyle} />,
       Bodega: <FontAwesomeIcon icon={faBox} style={iconStyle} />,
-      "Cámaras de seguridad": (
+      'Cámaras de seguridad': (
         <FontAwesomeIcon icon={faVideo} style={iconStyle} />
       ),
       Cochera: <FontAwesomeIcon icon={faCar} style={iconStyle} />,
@@ -197,106 +214,240 @@ const PropertyDetail = () => {
       Gimnasio: <FontAwesomeIcon icon={faDumbbell} style={iconStyle} />,
       Habitaciones: <FontAwesomeIcon icon={faBed} style={iconStyle} />,
       Jardín: <FontAwesomeIcon icon={faTree} style={iconStyle} />,
-      "Mascotas permitidas": <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
+      'Mascotas permitidas': <FontAwesomeIcon icon={faPaw} style={iconStyle} />,
       Piscina: <FontAwesomeIcon icon={faSwimmingPool} style={iconStyle} />,
-      "Salón de eventos": (
+      'Salón de eventos': (
         <FontAwesomeIcon icon={faGlassCheers} style={iconStyle} />
       ),
-      "Sistema de sonido": (
+      'Sistema de sonido': (
         <FontAwesomeIcon icon={faVolumeUp} style={iconStyle} />
       ),
       Terraza: <FontAwesomeIcon icon={faHouseFlag} style={iconStyle} />,
       Vestidor: <FontAwesomeIcon icon={faTshirt} style={iconStyle} />,
-      "Vista a la ciudad": <FontAwesomeIcon icon={faCity} style={iconStyle} />,
-      "Vista a la montaña": (
+      'Vista a la ciudad': <FontAwesomeIcon icon={faCity} style={iconStyle} />,
+      'Vista a la montaña': (
         <FontAwesomeIcon icon={faMountain} style={iconStyle} />
       ),
-      "Vista al mar": <FontAwesomeIcon icon={faWater} style={iconStyle} />,
-      "Vista panorámica": (
+      'Vista al mar': <FontAwesomeIcon icon={faWater} style={iconStyle} />,
+      'Vista panorámica': (
         <FontAwesomeIcon icon={faBinoculars} style={iconStyle} />
       ),
-      "Área de juegos": <FontAwesomeIcon icon={faChess} style={iconStyle} />,
+      'Área de juegos': <FontAwesomeIcon icon={faChess} style={iconStyle} />,
       Ático: <FontAwesomeIcon icon={faHome} style={iconStyle} />,
       Chimenea: <FontAwesomeIcon icon={faFire} style={iconStyle} />,
       // Puedes agregar más iconos según sea necesario
-    };
+    }
 
-    return iconMapping[key] || null;
-  };
+    return iconMapping[key] || null
+  }
 
   const formatLabel = (key) => {
-    // Puedes personalizar el formato de la etiqueta según tus necesidades
-    // Por ejemplo, puedes cambiar el formato de 'Área de juegos' a 'Área de Juegos'
-    return key.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase());
-  };
+    return key.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase())
+  }
 
   return (
-    <Content style={{ marginTop: "65px" }}>
+    <div className='property-detail'>
+      {propertyDetails &&
+        propertyDetails.fotos &&
+        propertyDetails.fotos.length > 0 && (
+          <Gallery
+            images={propertyDetails.fotos.map((foto) => ({
+              url: foto,
+              width: '2500',
+              height: '1600',
+            }))}
+          />
+        )}
+      <div className='body-property'>
+        <div className='detail-content'>
+          <h2 className='detail-title' style={{ fontSize: '1.8rem' }}>
+            {propertyDetails.nombre}
+          </h2>
+          <h4>{propertyDetails.ubicacion}</h4>
+          <hr />
+          <div className='list-info'>
+            <h2>Información del inmueble</h2>
+            <ul>
+              <li>
+                <HomeOutlined style={styleLi} /> Recámaras: 3
+              </li>
+              <li>
+                <CarOutlined style={styleLi} /> Estacionamientos: 2
+              </li>
+              <li>
+                <BuildOutlined style={styleLi} /> Superficie construida: 203.0
+                m²
+              </li>
+
+              <li>
+                <HomeOutlined style={styleLi} /> Tipo: Casa
+              </li>
+              <li>
+                <BuildOutlined style={styleLi} /> Superficie terreno: 203.0 m²
+              </li>
+              <li>
+                <ApartmentOutlined style={styleLi} /> Uso de la propiedad:
+                Residencial
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Baños: 4
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> ¿Está en condominio?: No
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Medios baños: Sin especificar
+              </li>
+              <li>
+                <ApartmentOutlined style={styleLi} /> Edificios: Sin especificar
+              </li>
+              <li>
+                <ToolOutlined style={styleLi} /> Cocina: Cerrada
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Propiedades: Sin especificar
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Clima: Sin especificar
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Tipo de construcción: Casa
+                propia
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Amueblado: No
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Estado de conservación del
+                inmueble: Excelente
+              </li>
+              <li>
+                <ToolOutlined style={styleLi} /> ¿Está equipado?: No
+              </li>
+              <li>
+                <ClockCircleOutlined style={styleLi} /> Antigüedad: Sin
+                especificar
+              </li>
+              <li>
+                <HomeOutlined style={styleLi} /> Acabados: Sin especificar
+              </li>
+              <li>
+                <CompassOutlined style={styleLi} /> Orientación del inmueble:
+                Sin especificar
+              </li>
+            </ul>
+            <hr />
+            <h3>Descripción</h3>
+            <p>{isTextShown ? text : `${text.substring(0, 800)}...`}</p>
+            <button
+              onClick={() => setIsTextShown(!isTextShown)}
+              style={{
+                backgroundColor: 'transparent',
+                color: '#1677FF',
+                padding: '0',
+                cursor: 'pointer',
+                border: '2px solid transparent',
+                outline: 'none',
+              }}>
+              {isTextShown ? 'Ver menos \u25B2' : 'Ver más \u25BC'}
+            </button>
+            <hr />
+            <h3>Ubicación del inmueble</h3>
+            {/* <Map height={'450px'} width={'100%'} /> */}
+            <iframe
+              src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3759.891852466602!2d-101.189493685082!3d19.67350578674289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xb845d5e0e8d5e9%3A0x9c0f4a4c0a1d0f5e!2sEsmeralda%201%2C%20Esmeralda%2C%2058010%20Morelia%2C%20Mich.!5e0!3m2!1sen!2smx!4v1623161886874!5m2!1sen!2smx'
+              width='100%'
+              height='450'
+              style={{ border: 0 }}
+              allowFullScreen=''
+              loading='lazy'></iframe>
+          </div>
+        </div>
+        <div className='detail-form'>
+          <h2 style={{ fontSize: '2rem' }}>Sandar Inmuebles</h2>
+          <div className='section-form'>
+            <h3>Venta</h3>
+            <div className='price'>
+              $
+              {propertyDetails.precio.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+              })}
+            </div>
+            <h3
+              style={{
+                fontSize: '1.3rem',
+                marginTop: '25px',
+                textTransform: 'none',
+              }}>
+              Contacta al anunciante
+            </h3>
+            <ContactForm onFinish={handleContactFormSubmit} />
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+
+    /*
+    <Content style={{ marginTop: '65px' }}>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          paddingLeft: "30px",
-          alignItems: "center",
-        }}
-      >
+          display: 'flex',
+          justifyContent: 'space-between',
+          paddingLeft: '30px',
+          alignItems: 'center',
+        }}>
         <div
           style={{
-            marginBottom: "20px",
-            padding: "20px",
-            borderRadius: "8px",
-            boxShadow: "none",
-            border: "none",
-          }}
-        >
+            marginBottom: '20px',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: 'none',
+            border: 'none',
+          }}>
           <Title
             level={2}
             style={{
-              fontFamily: "Arial, sans-serif",
-              color: "#333",
-              fontWeight: "bold",
-              marginBottom: "10px",
-              borderLeft: "3px solid #1890ff", // Agregar línea vertical a la izquierda del título
-              paddingLeft: "16px", // Ajustar el espacio entre la línea y el texto
-            }}
-          >
-            {/*{propertyDetails.type}*/}
+              fontFamily: 'Arial, sans-serif',
+              color: '#333',
+              fontWeight: 'bold',
+              marginBottom: '10px',
+              borderLeft: '3px solid #1890ff',
+              paddingLeft: '16px',
+            }}>
             {propertyDetails.nombre}
           </Title>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <DollarCircleOutlined
               style={{
-                fontSize: "2.5em",
-                marginRight: "15px",
-                color: "#1890ff",
+                fontSize: '2.5em',
+                marginRight: '15px',
+                color: '#1890ff',
               }}
             />
             <Title
               level={4}
               style={{
-                fontFamily: "Arial, sans-serif",
-                color: "#666",
+                fontFamily: 'Arial, sans-serif',
+                color: '#666',
                 marginBottom: 0,
-              }}
-            >
+              }}>
               Precio: ${propertyDetails.precio}
             </Title>
           </div>
         </div>
-        {/* Agrega aquí cualquier contenido que desees alinear a la derecha */}
       </div>
       <Row gutter={16}>
         <Col span={24}>
-          <div style={{ display: "flex", alignItems: "flex-start" }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
             <div
               style={{
-                flex: "1",
-                width: "70vh",
-                height: "60vh",
-                paddingLeft: "30px",
-                paddingRight: "30px",
-              }}
-            >
+                flex: '1',
+                width: '70vh',
+                height: '60vh',
+                paddingLeft: '30px',
+                paddingRight: '30px',
+              }}>
               {propertyDetails &&
                 propertyDetails.fotos &&
                 propertyDetails.fotos.length > 0 && (
@@ -307,10 +458,10 @@ const PropertyDetail = () => {
                           src={foto}
                           alt={`Property Image ${index + 1}`}
                           style={{
-                            width: "100%",
-                            height: "28rem",
-                            objectFit: "cover",
-                            borderRadius: "12px",
+                            width: '100%',
+                            height: '28rem',
+                            objectFit: 'cover',
+                            borderRadius: '12px',
                           }}
                         />
                       </div>
@@ -320,99 +471,90 @@ const PropertyDetail = () => {
             </div>
             <div
               style={{
-                flex: "1",
-                maxWidth: "30%",
-                maxHeight: "60vh",
-                padding: "0 20px",
-              }}
-            >
+                flex: '1',
+                maxWidth: '30%',
+                maxHeight: '60vh',
+                padding: '0 20px',
+              }}>
               <Card
                 style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                  borderRadius: "12px",
-                }}
-              >
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                  borderRadius: '12px',
+                }}>
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
                   <Title
                     level={4}
-                    className="contact-title"
-                    style={{ marginBottom: "5px" }}
-                  >
+                    className='contact-title'
+                    style={{ marginBottom: '5px' }}>
                     SANDAR INMUEBLES
                   </Title>
                   <Title
                     level={4}
-                    className="contact-title"
-                    style={{ marginBottom: "20px" }}
-                  >
+                    className='contact-title'
+                    style={{ marginBottom: '20px' }}>
                     CONTACTANOS Y PREGUNTA
                   </Title>
                 </div>
                 <Form
-                  name="contact-form"
+                  name='contact-form'
                   onFinish={handleContactFormSubmit}
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
-                  style={{ flex: 1, overflowY: "auto" }}
-                >
+                  style={{ flex: 1, overflowY: 'auto' }}>
                   <Form.Item
-                    name="name"
+                    name='name'
                     rules={[
                       {
                         required: true,
-                        message: "Por favor, ingresa tu nombre",
+                        message: 'Por favor, ingresa tu nombre',
                       },
-                    ]}
-                  >
+                    ]}>
                     <Input
                       prefix={<UserOutlined />}
-                      placeholder="Nombre"
-                      style={{ borderRadius: "8px" }}
+                      placeholder='Nombre'
+                      style={{ borderRadius: '8px' }}
                     />
                   </Form.Item>
                   <Form.Item
-                    name="email"
+                    name='email'
                     rules={[
                       {
                         required: true,
-                        message: "Por favor, ingresa tu correo electrónico",
+                        message: 'Por favor, ingresa tu correo electrónico',
                       },
                       {
-                        type: "email",
-                        message: "Ingresa un correo electrónico válido",
+                        type: 'email',
+                        message: 'Ingresa un correo electrónico válido',
                       },
-                    ]}
-                  >
+                    ]}>
                     <Input
                       prefix={<MailOutlined />}
-                      placeholder="Correo Electrónico"
-                      style={{ borderRadius: "8px" }}
+                      placeholder='Correo Electrónico'
+                      style={{ borderRadius: '8px' }}
                     />
                   </Form.Item>
                   <Form.Item
-                    name="message"
+                    name='message'
                     rules={[
                       {
                         required: true,
-                        message: "Por favor, ingresa tu mensaje",
+                        message: 'Por favor, ingresa tu mensaje',
                       },
-                    ]}
-                  >
+                    ]}>
                     <Input.TextArea
                       prefix={<FormOutlined />}
-                      placeholder="Mensaje"
-                      style={{ borderRadius: "8px" }}
+                      placeholder='Mensaje'
+                      style={{ borderRadius: '8px' }}
                     />
                   </Form.Item>
                   <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
                     <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{ width: "100%", borderRadius: "8px" }}
-                    >
+                      type='primary'
+                      htmlType='submit'
+                      style={{ width: '100%', borderRadius: '8px' }}>
                       Enviar Mensaje
                     </Button>
                   </Form.Item>
@@ -423,7 +565,7 @@ const PropertyDetail = () => {
         </Col>
 
         <Col span={24}>
-          <div style={{ padding: "20px" }}>
+          <div style={{ padding: '20px' }}>
             <Title level={2}>Detalles de la Propiedad</Title>
             <Row gutter={[16, 16]}>
               {details.map((detail, index) => (
@@ -431,19 +573,18 @@ const PropertyDetail = () => {
                   <Card
                     hoverable
                     title={detail.label}
-                    size="small"
+                    size='small'
                     style={{
-                      borderRadius: "12px",
-                      backgroundColor: "#f5f5f5",
-                      minHeight: "80px",
-                      padding: "8px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Title level={4} style={{ color: "#1890ff" }}>
+                      borderRadius: '12px',
+                      backgroundColor: '#f5f5f5',
+                      minHeight: '80px',
+                      padding: '8px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                    }}>
+                    <Title level={4} style={{ color: '#1890ff' }}>
                       {propertyDetails.activeFeatures?.[detail.key] || 0}
                     </Title>
                   </Card>
@@ -453,40 +594,34 @@ const PropertyDetail = () => {
           </div>
         </Col>
 
-        {/* Insertar componentes de Detalles, Descripción y Características debajo de Detalles de la Propiedad */}
         <Col span={24}>
           <Row gutter={[16, 16]}>
-            {/* Características */}
             <Col span={24}>
-              <div style={{ padding: "20px", backgroundColor: "#fcfeff" }}>
+              <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
-                />{" "}
-                {/* Línea horizontal superior */}
+                />{' '}
                 <Title level={2}>Información del inmueble</Title>
                 <Row gutter={[16, 16]}>
                   {Object.entries(propertyDetails.cardsActivadas)
-                    .filter(([key, value]) => value) // Filtra solo las características con valor true
+                    .filter(([key, value]) => value)
                     .map(([key, value]) => (
                       <Col span={12} key={key}>
                         <ul
                           style={{
-                            listStyle: "none",
+                            listStyle: 'none',
                             padding: 0,
-                            fontSize: "17px",
-                            lineHeight: "2",
-                          }}
-                        >
+                            fontSize: '17px',
+                            lineHeight: '2',
+                          }}>
                           <li>
                             <strong>
-                              {getIcon(key)}{" "}
-                              {/* Función para obtener el ícono */}
-                              {formatLabel(key)}:
-                            </strong>{" "}
+                              {getIcon(key)} {formatLabel(key)}:
+                            </strong>{' '}
                             Sí
                           </li>
                         </ul>
@@ -495,61 +630,57 @@ const PropertyDetail = () => {
                 </Row>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
-                />{" "}
-                {/* Línea horizontal inferior */}
+                />{' '}
               </div>
             </Col>
 
-            {/* Descripción */}
             <Col>
-              <div style={{ padding: "20px", backgroundColor: "#fcfeff" }}>
+              <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
                 />
 
                 <Title level={2}>Descripción</Title>
-                <Paragraph style={{ fontSize: "17px", color: "#333" }}>
+                <Paragraph style={{ fontSize: '17px', color: '#333' }}>
                   {propertyDetails.descripcion}
                 </Paragraph>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
                 />
               </div>
             </Col>
 
-            {/* Mapa demostrativo */}
             <Col span={24}>
               <div
                 style={{
-                  padding: "20px",
-                  backgroundColor: "#fcfeff",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignContent: "center",
-                }}
-              >
+                  padding: '20px',
+                  backgroundColor: '#fcfeff',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                }}>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
                 />
                 <Map
-                  height={"400px"}
-                  width={"100%"}
+                  height={'400px'}
+                  width={'100%'}
                   markerCoords={ubicacionCoords}
                 />
               </div>
@@ -558,229 +689,198 @@ const PropertyDetail = () => {
             {youtubeVideoCode && (
               <div
                 style={{
-                  marginTop: "20px",
-                  width: "50%",
-                  margin: "0 auto",
-                  backgroundColor: "#fff",
-                  borderRadius: "8px",
-                  padding: "16px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                }}
-              >
+                  marginTop: '20px',
+                  width: '50%',
+                  margin: '0 auto',
+                  backgroundColor: '#fff',
+                  borderRadius: '8px',
+                  padding: '16px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                }}>
                 <iframe
-                  width="100%"
-                  height="315"
+                  width='100%'
+                  height='315'
                   src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
-                  title="YouTube Video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  title='YouTube Video'
+                  frameBorder='0'
+                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
                   allowFullScreen
-                  style={{ borderRadius: "8px" }}
-                ></iframe>
-                <div style={{ textAlign: "center", marginTop: "16px" }}>
+                  style={{ borderRadius: '8px' }}></iframe>
+                <div style={{ textAlign: 'center', marginTop: '16px' }}>
                   <p
                     style={{
-                      fontSize: "16px",
-                      color: "#333",
-                      fontFamily: "Geometos",
-                    }}
-                  >
+                      fontSize: '16px',
+                      color: '#333',
+                      fontFamily: 'Geometos',
+                    }}>
                     {propertyDetails.nombre +
-                      "  $" +
+                      '  $' +
                       propertyDetails.precio +
-                      " MXN"}
+                      ' MXN'}
                   </p>
                 </div>
               </div>
             )}
             <Col span={24}>
-              {/* Nuevo apartado "Precio y Contrato" */}
-              <div style={{ padding: "20px", backgroundColor: "#fcfeff" }}>
+              <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
                 />
-                <div className="header">
+                <div className='header'>
                   <Title level={2}>Informacion del inmueble</Title>
                 </div>
-                <div className="button-group">
+                <div className='button-group'>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Habitaciones" ? "active" : ""
+                      activeKey === 'Habitaciones' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Habitaciones")}
-                  >
+                    onClick={() => onCollapseChange('Habitaciones')}>
                     Habitaciones
                   </Button>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Interiores/Exteriores" ? "active" : ""
+                      activeKey === 'Interiores/Exteriores' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Interiores/Exteriores")}
-                  >
+                    onClick={() => onCollapseChange('Interiores/Exteriores')}>
                     Interiores/Exteriores
                   </Button>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Estacionamiento" ? "active" : ""
+                      activeKey === 'Estacionamiento' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Estacionamiento")}
-                  >
+                    onClick={() => onCollapseChange('Estacionamiento')}>
                     Estacionamiento
                   </Button>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Seguridad/Tecnologiá" ? "active" : ""
+                      activeKey === 'Seguridad/Tecnologiá' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Seguridad/Tecnologiá")}
-                  >
+                    onClick={() => onCollapseChange('Seguridad/Tecnologiá')}>
                     Seguridad/Tecnologiá
                   </Button>
                 </div>
-                <div className="content-container">
-                  {/* Mostrar información dinámicamente desde Firebase */}
-                  {activeKey === "Habitaciones" && (
+                <div className='content-container'>
+                  {activeKey === 'Habitaciones' && (
                     <div
                       style={{
-                        marginTop: "20px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {/* Card para mostrar el número de habitaciones */}
+                        marginTop: '20px',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                      }}>
                       <Card
-                        title="Número de Habitaciones"
+                        title='Número de Habitaciones'
                         style={{
                           width: 300,
-                          margin: "10px",
-                          borderRadius: "12px",
-                        }}
-                      >
+                          margin: '10px',
+                          borderRadius: '12px',
+                        }}>
                         <p>{propertyDetails.habitaciones}</p>
                       </Card>
-
-                      {/* Otras cards relacionadas a Habitaciones... */}
                       <Card
-                        title="Habitaciones Disponibles"
+                        title='Habitaciones Disponibles'
                         style={{
                           width: 300,
-                          margin: "10px",
-                          borderRadius: "12px",
-                        }}
-                      >
-                        <p>{propertyDetails.Habitaciones ? "Sí" : "No"}</p>
+                          margin: '10px',
+                          borderRadius: '12px',
+                        }}>
+                        <p>{propertyDetails.Habitaciones ? 'Sí' : 'No'}</p>
                       </Card>
-                      {/* Agrega más propiedades según sea necesario... */}
                     </div>
                   )}
-                  {activeKey === "Interiores/Exteriores" && (
+                  {activeKey === 'Interiores/Exteriores' && (
                     <div
                       style={{
-                        marginTop: "20px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {/* Card para mostrar detalles de Interiores/Exteriores */}
+                        marginTop: '20px',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                      }}>
                       <Card
-                        title="Interiores/Exteriores"
+                        title='Interiores/Exteriores'
                         style={{
                           width: 300,
-                          margin: "10px",
-                          borderRadius: "12px",
-                        }}
-                      >
+                          margin: '10px',
+                          borderRadius: '12px',
+                        }}>
                         <p>
                           Características: {propertyDetails.caracteristicas}
                         </p>
-                        <p>Jardín: {propertyDetails.Jardín ? "Sí" : "No"}</p>
+                        <p>Jardín: {propertyDetails.Jardín ? 'Sí' : 'No'}</p>
                         <p>
-                          Área de juegos:{" "}
-                          {propertyDetails["Área de juegos"] ? "Sí" : "No"}
+                          Área de juegos:{' '}
+                          {propertyDetails['Área de juegos'] ? 'Sí' : 'No'}
                         </p>
-                        <p>Ático: {propertyDetails.Ático ? "Sí" : "No"}</p>
+                        <p>Ático: {propertyDetails.Ático ? 'Sí' : 'No'}</p>
                         <p>
-                          Vista a la ciudad:{" "}
-                          {propertyDetails["Vista a la ciudad"] ? "Sí" : "No"}
+                          Vista a la ciudad:{' '}
+                          {propertyDetails['Vista a la ciudad'] ? 'Sí' : 'No'}
                         </p>
                         <p>
-                          Vista a la montaña:{" "}
-                          {propertyDetails["Vista a la montaña"] ? "Sí" : "No"}
+                          Vista a la montaña:{' '}
+                          {propertyDetails['Vista a la montaña'] ? 'Sí' : 'No'}
                         </p>
-                        {/* ... (otros detalles) */}
                       </Card>
-                      {/* Agrega más cards relacionadas a Interiores/Exteriores... */}
                     </div>
                   )}
-                  {activeKey === "Estacionamiento" && (
+                  {activeKey === 'Estacionamiento' && (
                     <div
                       style={{
-                        marginTop: "20px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {/* Card para mostrar detalles de Estacionamiento */}
+                        marginTop: '20px',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                      }}>
                       <Card
-                        title="Estacionamiento"
+                        title='Estacionamiento'
                         style={{
                           width: 300,
-                          margin: "10px",
-                          borderRadius: "12px",
-                        }}
-                      >
-                        <p>Cochera: {propertyDetails.Cochera ? "Sí" : "No"}</p>
-                        <p>Piscina: {propertyDetails.Piscina ? "Sí" : "No"}</p>
-                        {/* Agrega más propiedades según sea necesario... */}
+                          margin: '10px',
+                          borderRadius: '12px',
+                        }}>
+                        <p>Cochera: {propertyDetails.Cochera ? 'Sí' : 'No'}</p>
+                        <p>Piscina: {propertyDetails.Piscina ? 'Sí' : 'No'}</p>
                       </Card>
-                      {/* Agrega más cards relacionadas a Estacionamiento... */}
                     </div>
                   )}
-                  {activeKey === "Seguridad/Tecnologiá" && (
+                  {activeKey === 'Seguridad/Tecnologiá' && (
                     <div
                       style={{
-                        marginTop: "20px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {/* Card para mostrar detalles de Seguridad/Tecnología */}
+                        marginTop: '20px',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                      }}>
                       <Card
-                        title="Seguridad/Tecnología"
+                        title='Seguridad/Tecnología'
                         style={{
                           width: 300,
-                          margin: "10px",
-                          borderRadius: "12px",
-                        }}
-                      >
-                        <p>Alarma: {propertyDetails.Alarma ? "Sí" : "No"}</p>
+                          margin: '10px',
+                          borderRadius: '12px',
+                        }}>
+                        <p>Alarma: {propertyDetails.Alarma ? 'Sí' : 'No'}</p>
                         <p>
-                          Aire acondicionado:{" "}
-                          {propertyDetails["Aire acondicionado"] ? "Sí" : "No"}
+                          Aire acondicionado:{' '}
+                          {propertyDetails['Aire acondicionado'] ? 'Sí' : 'No'}
                         </p>
                         <p>
-                          Cámaras de seguridad:{" "}
-                          {propertyDetails["Cámaras de seguridad"]
-                            ? "Sí"
-                            : "No"}
+                          Cámaras de seguridad:{' '}
+                          {propertyDetails['Cámaras de seguridad']
+                            ? 'Sí'
+                            : 'No'}
                         </p>
                         <p>
-                          Gimnasio: {propertyDetails.Gimnasio ? "Sí" : "No"}
+                          Gimnasio: {propertyDetails.Gimnasio ? 'Sí' : 'No'}
                         </p>
-                        {/* Agrega más propiedades según sea necesario... */}
                       </Card>
-                      {/* Agrega más cards relacionadas a Seguridad/Tecnología... */}
                     </div>
                   )}
                 </div>
                 <hr
                   style={{
-                    borderTop: "2px solid #1890ff",
-                    margin: "0",
-                    marginBottom: "16px",
+                    borderTop: '2px solid #1890ff',
+                    margin: '0',
+                    marginBottom: '16px',
                   }}
                 />
               </div>
@@ -789,7 +889,8 @@ const PropertyDetail = () => {
         </Col>
       </Row>
     </Content>
-  );
-};
+    */
+  )
+}
 
-export default PropertyDetail;
+export default PropertyDetail

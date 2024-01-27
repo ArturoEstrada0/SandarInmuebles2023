@@ -1,4 +1,4 @@
-.button-group {
+/* .button-group {
   display: flex;
   justify-content: space-around;
   margin-bottom: 20px;
@@ -8,14 +8,100 @@
   border: none;
   font-size: 16px;
   cursor: pointer;
-  text-decoration: none; /* Agregada para eliminar el subrayado predeterminado del enlace */
-  transition: border-bottom 0.3s ease; /* Agregada para la transición del subrayado */
+  text-decoration: none;
+  transition: border-bottom 0.3s ease;
 }
 
 .custom-button.active {
-  border-bottom: 2px solid #1890ff; /* Agregada para el subrayado activo */
+  border-bottom: 2px solid #1890ff;
 }
 
 .content-container {
   text-align: center;
+} */
+.property-detail {
+  display: flex;
+  flex-direction: column;
+}
+.images-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+
+.image-lar {
+  display: grid;
+}
+.image-sm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 3px;
+}
+
+.image-lar img,
+.image-sm img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.body-property {
+  display: flex;
+  flex-direction: row;
+  padding: 25px;
+}
+.images-container a img {
+  box-shadow: 0.2s ease-in-out;
+}
+
+.images-container a:hover img {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+.detail-content {
+  flex: 8;
+  padding: 25px;
+}
+
+.detail-form {
+  flex: 4;
+  padding: 25px;
+}
+.section-form {
+  margin: 0;
+  padding: 20px;
+  padding-top: 10px;
+  background-color: #f2f2f2;
+}
+.section-form h3 {
+  margin: 10px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #1677ff;
+  text-transform: uppercase;
+}
+.section-form .price {
+  background-color: #fff;
+  padding: 10px;
+  margin: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1677ff;
+  text-align: center;
+}
+.list-info ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-info li {
+  width: 50%;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
 }
