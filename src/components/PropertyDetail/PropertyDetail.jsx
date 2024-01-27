@@ -4,6 +4,7 @@ import Gallery from './Gallery'
 import ContactForm from './ContactForm'
 import Footer from '../Footer/Footer'
 import {
+  Grid,
   Row,
   Col,
   Typography,
@@ -11,7 +12,7 @@ import {
   Card,
   Spin,
   Button,
-  //Carousel,
+  Carousel,
 } from 'antd'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -52,6 +53,7 @@ import Map from '../Map/Map'
 import { firestore } from '../firebase/firebase'
 
 const { Title } = Typography
+const { useBreakpoint } = Grid
 
 const styleLi = {
   color: '#1677FF',
@@ -67,6 +69,8 @@ const PropertyDetail = () => {
   const [activeKey, setActiveKey] = useState('')
   const [youtubeVideoCode, setYoutubeVideoCode] = useState('')
   const [ubicacionCoords, setUbicacionCoords] = useState(null)
+
+  const screens = useBreakpoint()
 
   const onCollapseChange = (key) => {
     setActiveKey(activeKey === key ? '' : key)
@@ -210,17 +214,33 @@ const PropertyDetail = () => {
 
   return (
     <div className='property-detail'>
-      {propertyDetails &&
-        propertyDetails.fotos &&
-        propertyDetails.fotos.length > 0 && (
-          <Gallery
-            images={propertyDetails.fotos.map((foto) => ({
-              url: foto,
-              width: '2500',
-              height: '1600',
-            }))}
-          />
-        )}
+      <>
+        {propertyDetails &&
+          propertyDetails.fotos &&
+          propertyDetails.fotos.length > 0 &&
+          (screens.lg ? (
+            <Gallery
+              images={propertyDetails.fotos.map((foto) => ({
+                url: foto,
+                width: '2500',
+                height: '1600',
+              }))}
+            />
+          ) : (
+            <Carousel>
+              {propertyDetails.fotos.map((foto, index) => (
+                <div key={index}>
+                  <img
+                    src={foto}
+                    alt={`foto-${index}`}
+                    width='2500'
+                    height='1600'
+                  />
+                </div>
+              ))}
+            </Carousel>
+          ))}
+      </>
       <div className='body-property'>
         <div className='detail-content'>
           <h2 className='title-main'>{propertyDetails.nombre}</h2>
@@ -298,7 +318,8 @@ const PropertyDetail = () => {
                 <div
                   style={{
                     marginTop: '20px',
-                    width: '80%',
+                    marginBottom: '20px',
+                    width: '85%',
                     margin: '0 auto',
                     backgroundColor: '#fff',
                     borderRadius: '8px',
@@ -307,7 +328,7 @@ const PropertyDetail = () => {
                   }}>
                   <iframe
                     width='100%'
-                    height='315'
+                    height='325'
                     src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
                     title='YouTube Video'
                     frameBorder='0'
@@ -343,7 +364,6 @@ const PropertyDetail = () => {
             />
             <hr />
             <Col span={24}>
-              {/* Nuevo apartado "Precio y Contrato" */}
               <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <div className='header'>
                   <h3 className='subtitle-section'>Más información</h3>
