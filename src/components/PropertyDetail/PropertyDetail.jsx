@@ -321,15 +321,55 @@ const PropertyDetail = () => {
               </button>
             )}
             <hr />
+            {youtubeVideoCode && (
+              <>
+                <div
+                  style={{
+                    marginTop: '20px',
+                    width: '80%',
+                    margin: '0 auto',
+                    backgroundColor: '#fff',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  }}>
+                  <iframe
+                    width='100%'
+                    height='315'
+                    src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
+                    title='YouTube Video'
+                    frameBorder='0'
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                    allowFullScreen
+                    style={{ borderRadius: '8px' }}></iframe>
+                  <hr />
+                  <div style={{ textAlign: 'center', marginTop: '16px' }}>
+                    <p
+                      style={{
+                        fontSize: '16px',
+                        color: '#333',
+                        fontFamily: 'Geometos',
+                      }}>
+                      {propertyDetails.nombre +
+                        ' $' +
+                        propertyDetails.precio.toLocaleString('es-MX', {
+                          minimumFractionDigits: 2,
+                        }) +
+                        ' MXN'}
+                    </p>
+                  </div>
+                </div>
+                <hr />
+              </>
+            )}
+
             <h3 className='subtitle-section'>Ubicación del inmueble</h3>
-            {/* <Map height={'450px'} width={'100%'} /> */}
-            <iframe
-              src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3759.891852466602!2d-101.189493685082!3d19.67350578674289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xb845d5e0e8d5e9%3A0x9c0f4a4c0a1d0f5e!2sEsmeralda%201%2C%20Esmeralda%2C%2058010%20Morelia%2C%20Mich.!5e0!3m2!1sen!2smx!4v1623161886874!5m2!1sen!2smx'
-              width='100%'
-              height='450'
-              style={{ border: 0 }}
-              allowFullScreen=''
-              loading='lazy'></iframe>
+            <Map
+              height={'400px'}
+              width={'100%'}
+              markerCoords={ubicacionCoords}
+            />
+            {console.log(ubicacionCoords)}
           </div>
         </div>
         <div className='detail-form'>
