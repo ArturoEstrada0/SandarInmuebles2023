@@ -68,9 +68,8 @@ const { Title, Paragraph } = Typography
 
 const styleLi = {
   color: '#1677FF',
-  fontSize: '20px',
   fontWeight: 'normal',
-  marginRight: '8px',
+  marginRight: '10px',
 }
 
 const PropertyDetail = () => {
@@ -228,7 +227,6 @@ const PropertyDetail = () => {
       'Área de juegos': <FontAwesomeIcon icon={faChess} style={styleLi} />,
       Ático: <FontAwesomeIcon icon={faHome} style={styleLi} />,
       Chimenea: <FontAwesomeIcon icon={faFire} style={styleLi} />,
-      // Puedes agregar más iconos según sea necesario
     }
 
     return iconMapping[key] || null
@@ -253,15 +251,13 @@ const PropertyDetail = () => {
         )}
       <div className='body-property'>
         <div className='detail-content'>
-          <h2 className='detail-title' style={{ fontSize: '1.8rem' }}>
-            {propertyDetails.nombre}
-          </h2>
-          <h4>{propertyDetails.ubicacion}</h4>
+          <h2 className='title-main'>{propertyDetails.nombre}</h2>
+          <h4 className='subtitle-main'>{propertyDetails.ubicacion}</h4>
           <hr />
 
           <Col span={24}>
             <div style={{ marginBottom: '20px' }}>
-              <h2>Detalles de la propiedad</h2>
+              <h3 className='subtitle-section'>Detalles de la propiedad</h3>
               <Row gutter={[16, 16]}>
                 {details.map((detail, index) => (
                   <Col key={index} xl={4}>
@@ -290,23 +286,21 @@ const PropertyDetail = () => {
           </Col>
 
           <div className='list-info'>
-            <h2>Información del inmueble</h2>
+            <h3 className='subtitle-section'>Información del inmueble</h3>
             <ul>
               {Object.entries(propertyDetails.cardsActivadas)
                 .filter(([key, value]) => value)
                 .map(([key, value]) => (
                   <Col span={12} key={key}>
                     <li>
-                      <strong>
-                        {getIcon(key)} {formatLabel(key)}:
-                      </strong>{' '}
-                      Sí
+                      {getIcon(key)}
+                      {formatLabel(key)}
                     </li>
                   </Col>
                 ))}
             </ul>
             <hr />
-            <h3>Descripción</h3>
+            <h3 className='subtitle-section'>Descripción</h3>
             <p>
               {isTextShown
                 ? propertyDetails.descripcion
@@ -327,7 +321,7 @@ const PropertyDetail = () => {
               </button>
             )}
             <hr />
-            <h3>Ubicación del inmueble</h3>
+            <h3 className='subtitle-section'>Ubicación del inmueble</h3>
             {/* <Map height={'450px'} width={'100%'} /> */}
             <iframe
               src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3759.891852466602!2d-101.189493685082!3d19.67350578674289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xb845d5e0e8d5e9%3A0x9c0f4a4c0a1d0f5e!2sEsmeralda%201%2C%20Esmeralda%2C%2058010%20Morelia%2C%20Mich.!5e0!3m2!1sen!2smx!4v1623161886874!5m2!1sen!2smx'

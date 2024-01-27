@@ -28,6 +28,20 @@
   grid-template-columns: 1fr 1fr;
   gap: 3px;
 }
+.title-main {
+  font-size: 2.5rem;
+  font-weight: semibold;
+}
+.subtitle-main {
+  font-size: 1.2rem;
+  font-weight: semibold;
+  color: #1677ff;
+}
+.subtitle-section {
+  font-size: 1.6rem;
+  font-weight: semibold;
+  margin-top: 20px;
+}
 
 .image-lar {
   display: grid;
@@ -97,11 +111,11 @@
   justify-content: space-between;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-left: 15px;
 }
 
 .list-info li {
   width: 50%;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   margin-bottom: 10px;
 }
