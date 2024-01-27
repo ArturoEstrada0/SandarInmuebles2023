@@ -1,4 +1,4 @@
-/* .button-group {
+.button-group {
   display: flex;
   justify-content: space-around;
   margin-bottom: 20px;
@@ -18,7 +18,7 @@
 
 .content-container {
   text-align: center;
-} */
+}
 .property-detail {
   display: flex;
   flex-direction: column;

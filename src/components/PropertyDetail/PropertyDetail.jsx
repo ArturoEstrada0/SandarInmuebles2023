@@ -9,6 +9,7 @@ import {
   message,
   Card,
   Spin,
+  Button,
   //Carousel,
 } from 'antd'
 
@@ -64,8 +65,6 @@ const PropertyDetail = () => {
   const [propertyDetails, setPropertyDetails] = useState(null)
   const [activeKey, setActiveKey] = useState('')
   const [youtubeVideoCode, setYoutubeVideoCode] = useState('')
-  const [latitud, setLatitud] = useState('')
-  const [longitud, setLongitud] = useState('')
   const [ubicacionCoords, setUbicacionCoords] = useState(null)
 
   const onCollapseChange = (key) => {
@@ -354,130 +353,12 @@ const PropertyDetail = () => {
               width={'100%'}
               markerCoords={ubicacionCoords}
             />
-            {console.log(ubicacionCoords)}
-          </div>
-        </div>
-        <div className='detail-form'>
-          <h2 style={{ fontSize: '2rem' }}>Sandar Inmuebles</h2>
-          <div className='section-form'>
-            <h3>Venta</h3>
-            <div className='price'>
-              $
-              {propertyDetails.precio.toLocaleString('es-MX', {
-                minimumFractionDigits: 2,
-              })}
-            </div>
-            <h3
-              style={{
-                fontSize: '1.3rem',
-                marginTop: '25px',
-                textTransform: 'none',
-              }}>
-              Contacta al anunciante
-            </h3>
-            <ContactForm onFinish={handleContactFormSubmit} />
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </div>
-
-    /*
-                     
-            <Col>
-              <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
-                <hr
-                  style={{
-                    borderTop: '2px solid #1890ff',
-                    margin: '0',
-                    marginBottom: '16px',
-                  }}
-                />
-
-                <Title level={2}>Descripción</Title>
-                <Paragraph style={{ fontSize: '17px', color: '#333' }}>
-                  {propertyDetails.descripcion}
-                </Paragraph>
-                <hr
-                  style={{
-                    borderTop: '2px solid #1890ff',
-                    margin: '0',
-                    marginBottom: '16px',
-                  }}
-                />
-              </div>
-            </Col>
-
+            <hr />
             <Col span={24}>
-              <div
-                style={{
-                  padding: '20px',
-                  backgroundColor: '#fcfeff',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                }}>
-                <hr
-                  style={{
-                    borderTop: '2px solid #1890ff',
-                    margin: '0',
-                    marginBottom: '16px',
-                  }}
-                />
-                <Map
-                  height={'400px'}
-                  width={'100%'}
-                  markerCoords={ubicacionCoords}
-                />
-              </div>
-            </Col>
-
-            {youtubeVideoCode && (
-              <div
-                style={{
-                  marginTop: '20px',
-                  width: '50%',
-                  margin: '0 auto',
-                  backgroundColor: '#fff',
-                  borderRadius: '8px',
-                  padding: '16px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                }}>
-                <iframe
-                  width='100%'
-                  height='315'
-                  src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
-                  title='YouTube Video'
-                  frameBorder='0'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  allowFullScreen
-                  style={{ borderRadius: '8px' }}></iframe>
-                <div style={{ textAlign: 'center', marginTop: '16px' }}>
-                  <p
-                    style={{
-                      fontSize: '16px',
-                      color: '#333',
-                      fontFamily: 'Geometos',
-                    }}>
-                    {propertyDetails.nombre +
-                      '  $' +
-                      propertyDetails.precio +
-                      ' MXN'}
-                  </p>
-                </div>
-              </div>
-            )}
-            <Col span={24}>
+              {/* Nuevo apartado "Precio y Contrato" */}
               <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
-                <hr
-                  style={{
-                    borderTop: '2px solid #1890ff',
-                    margin: '0',
-                    marginBottom: '16px',
-                  }}
-                />
                 <div className='header'>
-                  <Title level={2}>Informacion del inmueble</Title>
+                  <Title level={2}>Más información</Title>
                 </div>
                 <div className='button-group'>
                   <Button
@@ -506,10 +387,11 @@ const PropertyDetail = () => {
                       activeKey === 'Seguridad/Tecnologiá' ? 'active' : ''
                     }`}
                     onClick={() => onCollapseChange('Seguridad/Tecnologiá')}>
-                    Seguridad/Tecnologiá
+                    Seguridad/Tecnología
                   </Button>
                 </div>
                 <div className='content-container'>
+                  {/* Mostrar información dinámicamente desde Firebase */}
                   {activeKey === 'Habitaciones' && (
                     <div
                       style={{
@@ -517,6 +399,7 @@ const PropertyDetail = () => {
                         display: 'flex',
                         flexWrap: 'wrap',
                       }}>
+                      {/* Card para mostrar el número de habitaciones */}
                       <Card
                         title='Número de Habitaciones'
                         style={{
@@ -526,6 +409,8 @@ const PropertyDetail = () => {
                         }}>
                         <p>{propertyDetails.habitaciones}</p>
                       </Card>
+
+                      {/* Otras cards relacionadas a Habitaciones... */}
                       <Card
                         title='Habitaciones Disponibles'
                         style={{
@@ -535,6 +420,7 @@ const PropertyDetail = () => {
                         }}>
                         <p>{propertyDetails.Habitaciones ? 'Sí' : 'No'}</p>
                       </Card>
+                      {/* Agrega más propiedades según sea necesario... */}
                     </div>
                   )}
                   {activeKey === 'Interiores/Exteriores' && (
@@ -544,6 +430,7 @@ const PropertyDetail = () => {
                         display: 'flex',
                         flexWrap: 'wrap',
                       }}>
+                      {/* Card para mostrar detalles de Interiores/Exteriores */}
                       <Card
                         title='Interiores/Exteriores'
                         style={{
@@ -568,7 +455,9 @@ const PropertyDetail = () => {
                           Vista a la montaña:{' '}
                           {propertyDetails['Vista a la montaña'] ? 'Sí' : 'No'}
                         </p>
+                        {/* ... (otros detalles) */}
                       </Card>
+                      {/* Agrega más cards relacionadas a Interiores/Exteriores... */}
                     </div>
                   )}
                   {activeKey === 'Estacionamiento' && (
@@ -578,6 +467,7 @@ const PropertyDetail = () => {
                         display: 'flex',
                         flexWrap: 'wrap',
                       }}>
+                      {/* Card para mostrar detalles de Estacionamiento */}
                       <Card
                         title='Estacionamiento'
                         style={{
@@ -587,7 +477,9 @@ const PropertyDetail = () => {
                         }}>
                         <p>Cochera: {propertyDetails.Cochera ? 'Sí' : 'No'}</p>
                         <p>Piscina: {propertyDetails.Piscina ? 'Sí' : 'No'}</p>
+                        {/* Agrega más propiedades según sea necesario... */}
                       </Card>
+                      {/* Agrega más cards relacionadas a Estacionamiento... */}
                     </div>
                   )}
                   {activeKey === 'Seguridad/Tecnologiá' && (
@@ -597,6 +489,7 @@ const PropertyDetail = () => {
                         display: 'flex',
                         flexWrap: 'wrap',
                       }}>
+                      {/* Card para mostrar detalles de Seguridad/Tecnología */}
                       <Card
                         title='Seguridad/Tecnología'
                         style={{
@@ -618,7 +511,9 @@ const PropertyDetail = () => {
                         <p>
                           Gimnasio: {propertyDetails.Gimnasio ? 'Sí' : 'No'}
                         </p>
+                        {/* Agrega más propiedades según sea necesario... */}
                       </Card>
+                      {/* Agrega más cards relacionadas a Seguridad/Tecnología... */}
                     </div>
                   )}
                 </div>
@@ -631,11 +526,32 @@ const PropertyDetail = () => {
                 />
               </div>
             </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Content>
-    */
+          </div>
+        </div>
+        <div className='detail-form'>
+          <h2 style={{ fontSize: '2rem' }}>Sandar Inmuebles</h2>
+          <div className='section-form'>
+            <h3>Venta</h3>
+            <div className='price'>
+              $
+              {propertyDetails.precio.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+              })}
+            </div>
+            <h3
+              style={{
+                fontSize: '1.3rem',
+                marginTop: '25px',
+                textTransform: 'none',
+              }}>
+              Contacta al anunciante
+            </h3>
+            <ContactForm onFinish={handleContactFormSubmit} />
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
   )
 }
 
