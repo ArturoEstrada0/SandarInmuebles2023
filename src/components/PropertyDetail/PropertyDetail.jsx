@@ -421,15 +421,7 @@ const PropertyDetail = () => {
                       </Card>
 
                       {/* Otras cards relacionadas a Habitaciones... */}
-                      <Card
-                        title='Habitaciones Disponibles'
-                        style={{
-                          width: 300,
-                          margin: '10px',
-                          borderRadius: '12px',
-                        }}>
-                        <p>{propertyDetails.Habitaciones ? 'Sí' : 'No'}</p>
-                      </Card>
+                 
                       {/* Agrega más propiedades según sea necesario... */}
                     </div>
                   )}
