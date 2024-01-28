@@ -71,7 +71,7 @@ const Vender = () => {
               style={{ marginBottom: '20px' }}
             />
             <Step
-              title={<span style={{ fontSize: '1.5em' }}>Feedback del Cliente</span>}
+              title={<span style={{ fontSize: '1.5em' }}>Retroalimentación del Cliente</span>}
               description={<span style={{ fontSize: '1.1em' }}>Recopilar comentarios para ajustar la estrategia de venta.</span>}
               onClick={() => handleStepClick(3)}
               style={{ marginBottom: '20px' }}
