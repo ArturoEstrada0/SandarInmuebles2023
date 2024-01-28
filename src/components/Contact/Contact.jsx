@@ -156,7 +156,7 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    4434395522
+                    443-205-71-94
                   </a>
                 </p>
                 <p>
