@@ -1,77 +1,79 @@
 /* PropertyList.css */
+
 .property-list {
   margin-top: -140px;
   padding: 20px;
+  transition: height 0.5s ease; /* Agregar transición a la altura */
 }
 
-.centered-card {
-  margin: 0 10%;
-}
 
-.filters {
-  display: flex;
-  justify-content: space-between;
-}
+  .centered-card {
+    margin: 0 10%;
+  }
 
-.search-button {
-  margin-top: 16px;
-}
+  .filters {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.property-info-row {
-  margin-top: 20px; /* Ajusta el valor según tu preferencia */
-}
+  .search-button {
+    margin-top: 16px;
+  }
 
-.large-button {
-  font-size: 1.5rem; /* Ajusta el tamaño del texto del botón */
-  padding: 10px 20px; /* Ajusta el relleno (padding) para aumentar el tamaño del botón */
-}
+  .property-info-row {
+    margin-top: 20px; /* Ajusta el valor según tu preferencia */
+  }
 
-.centered-button {
-  display: flex;
-  align-items: center;
-}
+  .large-button {
+    font-size: 1.5rem; /* Ajusta el tamaño del texto del botón */
+    padding: 10px 20px; /* Ajusta el relleno (padding) para aumentar el tamaño del botón */
+  }
 
-.custom-carousel {
-  position: relative;
-  overflow: hidden;
-}
+  .centered-button {
+    display: flex;
+    align-items: center;
+  }
 
-.custom-carousel .custom-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-  background-color: black;
-  padding: 8px;
-  border-radius: 50%;
-}
+  .custom-carousel {
+    position: relative;
+    overflow: hidden;
+  }
 
-.custom-carousel .custom-prev {
-  left: 10px;
-}
+  .custom-carousel .custom-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    background-color: black;
+    padding: 8px;
+    border-radius: 50%;
+  }
 
-.custom-carousel .custom-next {
-  right: 10px;
-}
+  .custom-carousel .custom-prev {
+    left: 10px;
+  }
 
-.sale-mark {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #ff0000; /* Color de fondo rojo para la marca de venta */
-  color: #ffffff; /* Color de texto blanco para la marca de venta */
-  padding: 8px; /* Espacio interno de 8px alrededor del texto */
-  border-radius: 4px; /* Bordes redondeados */
-}
+  .custom-carousel .custom-next {
+    right: 10px;
+  }
 
-.rent-mark {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #00ff00; /* Color de fondo verde para la marca de renta */
-  color: #ffffff; /* Color de texto blanco para la marca de renta */
-  padding: 8px; /* Espacio interno de 8px alrededor del texto */
-  border-radius: 4px; /* Bordes redondeados */
-}
+  .property-image-container {
+    position: relative; /* Asegura que el contenedor de la imagen tenga posición relativa */
+    cursor: pointer;
+  }
+  
+  .sale-mark,
+  .rent-mark {
+    position: absolute; /* Posicionamiento absoluto para las etiquetas */
+    top: 0px; /* Ajusta la posición vertical según sea necesario */
+    left: 0px; /* Ajusta la posición horizontal según sea necesario */
+    background-color: #ffffff8e; /* Color de fondo rojo para la marca de venta */
+    color: #333; /* Color de texto blanco para la marca de venta */
+    font-weight: bold;
+    padding: 10px; /* Espacio interno de 8px alrededor del texto */
+    border-radius: 2px; /* Bordes redondeados */
+    z-index: 1; /* Ajusta el índice z para que esté por encima de las imágenes */
+  }
+  

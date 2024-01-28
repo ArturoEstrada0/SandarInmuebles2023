@@ -62,6 +62,8 @@ const PropertyList = ({ onPropertyClick }) => {
   const [filterState, setFilterState] = useState("all");
   const [isFavorite, setIsFavorite] = useState(false);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [visibleRows, setVisibleRows] = useState(3); // Estado para controlar el número de filas visibles
+
 
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -80,6 +82,11 @@ const PropertyList = ({ onPropertyClick }) => {
   const handleMaxPriceChange = (e) => {
     setMaxPrice(e.target.value);
   };
+
+  const handleShowMoreClick = () => {
+    setVisibleRows(visibleRows + 3); // Incrementar el número de filas visibles al hacer clic en "Ver más"
+  };
+
   const [mexicanStates, setMexicanStates] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
@@ -109,6 +116,7 @@ const PropertyList = ({ onPropertyClick }) => {
             id: doc.id,
             name: data.nombre,
             type: data.tipoPropiedad,
+            condicion: data.condicion,
             price: data.precio,
             state: data.ubicacion,
             rooms: data.habitaciones || 0,
@@ -296,22 +304,21 @@ const PropertyList = ({ onPropertyClick }) => {
         {loading ? (
           <Spin tip="Cargando..." />
         ) : (
-          filteredProperties.map((property) => (
+          filteredProperties.slice(0, visibleRows).map((property) => ( // Limitar el mapeo al número de filas visibles
             <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
               <Card
                 className="property-card"
                 style={{ width: 480, height: 465 }}
               >
-  <div className="property-image-container"  style={{ cursor: "pointer" }}>
-    {property.type}
-    {property.type === "Venta" && (
-      <div className="sale-mark">En Venta</div>
-    )}
-    {property.type === "Renta" && (
-      <div className="rent-mark">En Renta</div>
-    )}
-    <CustomCarousel images={property.image} />
-  </div>
+                <div className="property-image-container"  style={{ cursor: "pointer" }}>
+                  {property.condicion === "Venta" && (
+                    <div className="sale-mark">Venta</div>
+                  )}
+                  {property.condicion === "Renta" && (
+                    <div className="rent-mark">Renta</div>
+                  )}
+                  <CustomCarousel images={property.image} />
+                </div>
 
                 <div
                   className="property-location"
@@ -438,6 +445,14 @@ const PropertyList = ({ onPropertyClick }) => {
           ))
         )}
       </Row>
+      {/* Botón "Ver más" */}
+      {visibleRows < filteredProperties.length && (
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <Button type="primary" onClick={handleShowMoreClick}>
+            Ver más
+          </Button>
+        </div>
+      )}
     </Content>
   );
 };
