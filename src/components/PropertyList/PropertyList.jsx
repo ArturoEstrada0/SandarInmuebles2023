@@ -60,7 +60,8 @@ const PropertyList = ({ onPropertyClick }) => {
   const [filterType, setFilterType] = useState("all");
   const [filterPrice, setFilterPrice] = useState([0, 1000000]);
   const [filterState, setFilterState] = useState("all");
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [filterCondition, setFilterCondition] = useState("all"); // Cambia el nombre del estado
+
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [visibleRows, setVisibleRows] = useState(3); // Estado para controlar el número de filas visibles
 
@@ -76,12 +77,20 @@ const PropertyList = ({ onPropertyClick }) => {
   }, [isAuthenticated]);
 
   const handleMinPriceChange = (e) => {
-    setMinPrice(e.target.value);
+    const value = e.target.value;
+    if (!isNaN(value) || value === "") {
+      setMinPrice(value);
+    }
   };
+  
 
   const handleMaxPriceChange = (e) => {
-    setMaxPrice(e.target.value);
+    const value = e.target.value;
+    if (!isNaN(value) || value === "") {
+      setMaxPrice(value);
+    }
   };
+  
 
   const handleShowMoreClick = () => {
     setVisibleRows(visibleRows + 3); // Incrementar el número de filas visibles al hacer clic en "Ver más"
@@ -93,25 +102,13 @@ const PropertyList = ({ onPropertyClick }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        const statesSnapshot = await getDocs(collection(firestore, "states"));
-        const states = statesSnapshot.docs.map((doc) => doc.data().name);
-        setMexicanStates(states);
-      } catch (error) {
-        console.error("Error al obtener estados:", error);
-      }
-    };
-
     const fetchProperties = async () => {
       try {
-        const propertiesSnapshot = await getDocs(
-          collection(firestore, "propiedades")
-        );
+        const propertiesSnapshot = await getDocs(collection(firestore, "propiedades"));
         const properties = propertiesSnapshot.docs.map((doc) => {
           const data = doc.data();
           const features = data.activeFeatures || {};
-
+  
           return {
             id: doc.id,
             name: data.nombre,
@@ -126,17 +123,24 @@ const PropertyList = ({ onPropertyClick }) => {
             image: data.fotos,
           };
         });
-        setPropertyData(properties);
-        setFilteredProperties(properties);
+  
+        // Inicializa el estado propertyData con isFavorite para cada propiedad
+        const initialPropertyData = properties.map(property => ({
+          ...property,
+          isFavorite: false // Inicializar el estado isFavorite para cada propiedad
+        }));
+        
+        setPropertyData(initialPropertyData);
+        setFilteredProperties(initialPropertyData);
         setLoading(false);
       } catch (error) {
         console.error("Error al obtener propiedades:", error);
       }
     };
-
-    fetchStates();
+  
     fetchProperties();
   }, []);
+  
 
   const handlePropertyClick = async (propertyId) => {
     // Incrementa el contador local
@@ -165,6 +169,8 @@ const PropertyList = ({ onPropertyClick }) => {
     }
   };
 
+  const [favoriteProperties, setFavoriteProperties] = useState([]);
+
   const toggleFavorite = async (propertyId) => {
     try {
       if (!isAuthenticated) {
@@ -172,41 +178,52 @@ const PropertyList = ({ onPropertyClick }) => {
         // o muestra un mensaje para iniciar sesión
         return;
       }
-
-      // Actualiza el estado local de favoritos
-      setIsFavorite(!isFavorite);
-
-      // Referencia al documento de la propiedad en Firestore
+  
+      const propertyIndex = propertyData.findIndex(property => property.id === propertyId);
+      const updatedPropertyData = [...propertyData];
+      updatedPropertyData[propertyIndex] = {
+        ...updatedPropertyData[propertyIndex],
+        isFavorite: !updatedPropertyData[propertyIndex].isFavorite,
+      };
+  
+      setPropertyData(updatedPropertyData); // Actualiza el estado propertyData
+  
+      if (favoriteProperties.includes(propertyId)) {
+        setFavoriteProperties(favoriteProperties.filter(id => id !== propertyId));
+      } else {
+        setFavoriteProperties([...favoriteProperties, propertyId]);
+      }
+  
       const propertyDocRef = doc(
         collection(firestore, "propiedades"),
         propertyId
       );
-
-      // Actualiza el contador de favoritos en Firestore
+  
       await updateDoc(propertyDocRef, {
-        favoriteCount: isFavorite ? decrement(1) : increment(1),
+        favoriteCount: increment(favoriteProperties.includes(propertyId) ? -1 : 1),
       });
-
-      // Resto del código de toggleFavorite
     } catch (error) {
       console.error("Error al actualizar favoritos en Firestore:", error);
     }
   };
+  
+  
 
-  const applyFilters = () => {
-    const filtered = propertyData.filter((property) => {
-      const isTypeMatch = filterType === "all" || property.type === filterType;
-      const isPriceMatch =
-        (minPrice === "" || property.price >= parseInt(minPrice, 10)) &&
-        (maxPrice === "" || property.price <= parseInt(maxPrice, 10));
-      const isStateMatch =
-        filterState === "all" || property.state === filterState;
+const applyFilters = () => {
+  const filtered = propertyData.filter((property) => {
+    const isConditionMatch =
+      filterCondition === "all" || property.condicion === filterCondition; // Modifica la lógica aquí
 
-      return isTypeMatch && isPriceMatch && isStateMatch;
-    });
+    const isTypeMatch = filterType === "all" || property.type === filterType;
+    const isPriceMatch =
+      (minPrice === "" || property.price >= parseInt(minPrice, 10)) &&
+      (maxPrice === "" || property.price <= parseInt(maxPrice, 10));
 
-    setFilteredProperties(filtered);
-  };
+    return isConditionMatch && isTypeMatch && isPriceMatch; // Actualiza aquí también
+  });
+
+  setFilteredProperties(filtered);
+};
 
   return (
     <Content className="property-list">
@@ -252,23 +269,20 @@ const PropertyList = ({ onPropertyClick }) => {
                 />
               </div>
             </Col>
-            <Col xs={24} sm={12} md={6} lg={6}>
-              <Text strong>
-                <EnvironmentOutlined /> Estado
-              </Text>
-              <Select
-                value={filterState}
-                onChange={(value) => setFilterState(value)}
-                style={{ width: "100%" }}
-              >
-                <Option value="all">Todos</Option>
-                {mexicanStates.map((state) => (
-                  <Option key={state} value={state}>
-                    {state}
-                  </Option>
-                ))}
-              </Select>
-            </Col>
+            <Col xs={24} sm={12} md={8} lg={6}>
+  <Text strong>
+    <DollarOutlined /> Tipo de Venta o Renta
+  </Text>
+  <Select
+    value={filterCondition}
+    onChange={(value) => setFilterCondition(value)}
+    style={{ width: "100%" }}
+  >
+    <Option value="all">Todos</Option>
+    <Option value="Venta">Venta</Option>
+    <Option value="Renta">Renta</Option>
+  </Select>
+</Col>
             <Col
               xs={24}
               sm={12}
@@ -310,7 +324,9 @@ const PropertyList = ({ onPropertyClick }) => {
                 className="property-card"
                 style={{ width: 480, height: 465 }}
               >
-                <div className="property-image-container"  style={{ cursor: "pointer" }}>
+                <div className="property-image-container"  style={{ cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
+                  >
                   {property.condicion === "Venta" && (
                     <div className="sale-mark">Venta</div>
                   )}
@@ -406,31 +422,23 @@ const PropertyList = ({ onPropertyClick }) => {
 </Col>
                   </Row>
                 </div>
-                <div
-                  className="property-actions"
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
+              <div className="property-actions" style={{ display: "flex", justifyContent: "space-between" }}>
+              {userAuthenticated ? (
+                <Button
+                  type="primary"
+                  icon={property.isFavorite ? <HeartFilled /> : <HeartOutlined />} // Utiliza property.isFavorite
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(property.id);
                   }}
                 >
-                  {userAuthenticated ? (
-                    <Button
-                      type="primary"
-                      icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(property.id);
-                      }}
-                    >
-                      {isFavorite
-                        ? "Quitar de Favoritos"
-                        : "Añadir a Favoritos"}
-                    </Button>
-                  ) : (
-                    <Link to="/login">
-                      <Button type="primary">Añadir a Favoritos</Button>
-                    </Link>
-                  )}
+                  {property.isFavorite ? "Quitar de Favoritos" : "Añadir a Favoritos"} {/* Utiliza property.isFavorite */}
+                </Button>
+              ) : (
+                <Link to="/login">
+                  <Button type="primary">Añadir a Favoritos</Button>
+                </Link>
+              )}
 
                   <Text
                     strong

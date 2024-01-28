@@ -158,13 +158,14 @@ const PropertyDetail = () => {
     return <Spin tip='Cargando...' />
   }
 
-  const details = [
-    { key: 'Habitaciones', label: 'Habitaciones' },
-    { key: 'Baño', label: 'Baños' },
-    { key: 'Medio_bano', label: 'Medios Baños' },
-    { key: 'Construccion', label: 'Construcción' },
-    { key: 'Estacionamientos', label: 'Estacionamientos' },
-  ]
+ // Definir los detalles de la propiedad y sus etiquetas correspondientes
+ const details = [
+  { key: 'habitaciones', label: 'Habitaciones' },
+  { key: 'baños', label: 'Baños' },
+  { key: 'mediosBaños', label: 'Medios Baños' },
+  { key: 'metrosConstruidos', label: 'Construcción' },
+  { key: 'estacionamientos', label: 'Estacionamientos' },
+];
 
   const getIcon = (key) => {
     const iconMapping = {
@@ -249,34 +250,34 @@ const PropertyDetail = () => {
           <hr />
 
           <Col span={24}>
-            <div style={{ marginBottom: '20px' }}>
-              <h3 className='subtitle-section' style={{fontFamily:'Geometos', fontSize:'1.3em'}}>Detalles de la propiedad</h3>
-              <Row gutter={[16, 16]}>
-                {details.map((detail, index) => (
-                  <Col key={index} xl={4}>
-                    <Card
-                      hoverable
-                      title={detail.label}
-                      size='small'
-                      style={{
-                        borderRadius: '5px',
-                        backgroundColor: '#f5f5f5',
-                        minHeight: '80px',
-                        padding: '4px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-                      }}>
-                      <Title level={3} style={{ color: '#1890ff' }}>
-                        {propertyDetails.activeFeatures?.[detail.key] || 0}
-                      </Title>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          </Col>
+          <div style={{ marginBottom: '20px' }}>
+            <h3 className='subtitle-section'>Detalles de la propiedad</h3>
+            <Row gutter={[16, 16]}>
+              {details.map((detail, index) => (
+                <Col key={index} xl={4}>
+                  <Card
+                    hoverable
+                    title={detail.label}
+                    size='small'
+                    style={{
+                      borderRadius: '5px',
+                      backgroundColor: '#f5f5f5',
+                      minHeight: '80px',
+                      padding: '4px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                    }}>
+                    <Title level={3} style={{ color: '#1890ff' }}>
+                      {propertyDetails[detail.key] || 0}
+                    </Title>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </Col>
 
           <div className='list-info'>
             <h3 className='subtitle-section' style={{fontFamily:'Geometos', fontSize:'1.1em'}}>Información del inmueble</h3>
