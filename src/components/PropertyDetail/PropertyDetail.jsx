@@ -162,9 +162,9 @@ const PropertyDetail = () => {
  const details = [
   { key: 'habitaciones', label: 'Habitaciones' },
   { key: 'baños', label: 'Baños' },
-  { key: 'mediosBaños', label: 'Medios Baños' },
+  { key: 'medio Baño', label: 'Medios Baños' },
   { key: 'metrosConstruidos', label: 'Construcción' },
-  { key: 'estacionamientos', label: 'Estacionamientos' },
+  { key: 'estacionamiento', label: 'Estacionamientos' },
 ];
 
   const getIcon = (key) => {
