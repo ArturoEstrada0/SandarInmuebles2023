@@ -11,7 +11,7 @@ function ChatBubble() {
     const [whatsappMessage, setWhatsappMessage] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const whatsappURL = 'https://api.whatsapp.com/send?phone=4434395522';
+    const whatsappURL = 'https://api.whatsapp.com/send?phone=4432057194';
 
     const openWhatsAppModal = () => {
         setIsModalVisible(true);
@@ -38,7 +38,7 @@ function ChatBubble() {
                 }}
                 icon={<CommentOutlined /> /* Color del icono */}
             >
-                <a href={`mailto:arturoestrada301@gmail.com`} target="_blank" rel="noopener noreferrer">
+                <a href={`mailto:sandarinmuebles@gmail.com`} target="_blank" rel="noopener noreferrer">
                     <FloatButton icon={<MailOutlined />} />
                 </a>
                 <FloatButton icon={<WhatsAppOutlined />} onClick={openWhatsAppModal} style={{ marginTop: '10px' }} />
@@ -67,9 +67,8 @@ function ChatBubble() {
                         style={{ width: '100%' }}
                     >
                         <Option value="Venta">Venta</Option>
-                        <Option value="Alquiler">Alquiler</Option>
-                        <Option value="Consultas">Consultas</Option>
-                        <Option value="Mantenimiento">Mantenimiento</Option>
+                        <Option value="Compra">Compra</Option>
+                        <Option value="Informacion">Información</Option>
                         {/* Agrega más categorías según tus necesidades */}
                     </Select>
                 </div>
