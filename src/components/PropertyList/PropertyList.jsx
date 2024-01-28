@@ -302,13 +302,16 @@ const PropertyList = ({ onPropertyClick }) => {
                 className="property-card"
                 style={{ width: 480, height: 465 }}
               >
-                <div
-                  className="property-image-container"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handlePropertyClick(property.id)}
-                >
-                  <CustomCarousel images={property.image} />
-                </div>
+  <div className="property-image-container"  style={{ cursor: "pointer" }}>
+    {property.type}
+    {property.type === "Venta" && (
+      <div className="sale-mark">En Venta</div>
+    )}
+    {property.type === "Renta" && (
+      <div className="rent-mark">En Renta</div>
+    )}
+    <CustomCarousel images={property.image} />
+  </div>
 
                 <div
                   className="property-location"

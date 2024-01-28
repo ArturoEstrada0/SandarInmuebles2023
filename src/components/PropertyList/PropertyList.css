@@ -55,3 +55,23 @@
 .custom-carousel .custom-next {
   right: 10px;
 }
+
+.sale-mark {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff0000; /* Color de fondo rojo para la marca de venta */
+  color: #ffffff; /* Color de texto blanco para la marca de venta */
+  padding: 8px; /* Espacio interno de 8px alrededor del texto */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+.rent-mark {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #00ff00; /* Color de fondo verde para la marca de renta */
+  color: #ffffff; /* Color de texto blanco para la marca de renta */
+  padding: 8px; /* Espacio interno de 8px alrededor del texto */
+  border-radius: 4px; /* Bordes redondeados */
+}
