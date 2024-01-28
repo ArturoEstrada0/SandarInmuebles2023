@@ -49,6 +49,8 @@ import { useAuth } from "../../context/AuthContext";
 
 import CustomCarousel from "./Carousel";
 
+import m2Image from '../../assets/img/m2.png';
+
 const { Content } = Layout;
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -356,17 +358,19 @@ const PropertyList = ({ onPropertyClick }) => {
                       </Text>
                     </Col>
                     <Col xs={8}>
-                    <Text strong>
-  <FontAwesomeIcon
-    icon={faRulerCombined}
-    style={{
-      fontSize: '1.2rem',
-      fontWeight: 'bold',
-    }}
-  />{' '}
-  Tamaño: {property.area} m²
-</Text>
-                    </Col>
+  <Text strong>
+    <img
+      src={m2Image}
+      alt="m2"
+      style={{
+        width: '1.2rem',
+        height: '1.2rem',
+        marginRight: '5px', // O ajusta según sea necesario
+      }}
+    />
+    Terreno: {property.area} m²
+  </Text>
+</Col>
                     <Col xs={8.1}>
                       <Text strong>
                         <HomeOutlined
@@ -381,17 +385,9 @@ const PropertyList = ({ onPropertyClick }) => {
                     <Col xs={8.1}>
   <Text strong>
     <FontAwesomeIcon
-      icon={faM}
+      icon={faRulerCombined}
       style={{
         fontSize: '1.2rem',
-        marginRight: '5px', // Ajusta el espaciado según sea necesario
-      }}
-    />
-    <FontAwesomeIcon
-      icon={fa2}
-      style={{
-        fontSize: '0.8rem', // Ajusta el tamaño según sea necesario
-        verticalAlign: 'text-bottom', // Alinea el "2" con la línea base
         marginRight: '5px', // Ajusta el espaciado según sea necesario
       }}
     />
