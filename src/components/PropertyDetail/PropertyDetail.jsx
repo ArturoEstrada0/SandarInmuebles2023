@@ -51,6 +51,7 @@ import './PropertyDetail.css'
 import Map from '../Map/Map'
 
 import { firestore } from '../firebase/firebase'
+import logo from '../../assets/img/logo.png';
 
 const { Title } = Typography
 const { useBreakpoint } = Grid
@@ -243,13 +244,13 @@ const PropertyDetail = () => {
       </>
       <div className='body-property'>
         <div className='detail-content'>
-          <h2 className='title-main'>{propertyDetails.nombre}</h2>
-          <h4 className='subtitle-main'>{propertyDetails.ubicacion}</h4>
+          <h2 className='title-main' style={{fontFamily:'Geometos', fontSize:'2em'}}>{propertyDetails.nombre}</h2>
+          <h4 className='subtitle-main' style={{fontFamily:'Geometos', fontSize:'1.1em'}}>{propertyDetails.ubicacion}</h4>
           <hr />
 
           <Col span={24}>
             <div style={{ marginBottom: '20px' }}>
-              <h3 className='subtitle-section'>Detalles de la propiedad</h3>
+              <h3 className='subtitle-section' style={{fontFamily:'Geometos', fontSize:'1.3em'}}>Detalles de la propiedad</h3>
               <Row gutter={[16, 16]}>
                 {details.map((detail, index) => (
                   <Col key={index} xl={4}>
@@ -278,7 +279,7 @@ const PropertyDetail = () => {
           </Col>
 
           <div className='list-info'>
-            <h3 className='subtitle-section'>Información del inmueble</h3>
+            <h3 className='subtitle-section' style={{fontFamily:'Geometos', fontSize:'1.1em'}}>Información del inmueble</h3>
             <ul>
               {Object.entries(propertyDetails.cardsActivadas)
                 .filter(([value]) => value)
@@ -292,7 +293,7 @@ const PropertyDetail = () => {
                 ))}
             </ul>
             <hr />
-            <h3 className='subtitle-section'>Descripción</h3>
+            <h3 className='subtitle-section' style={{fontFamily:'Geometos'}}>Descripción</h3>
             <p>
               {isTextShown
                 ? propertyDetails.descripcion
@@ -356,7 +357,7 @@ const PropertyDetail = () => {
               </>
             )}
 
-            <h3 className='subtitle-section'>Ubicación del inmueble</h3>
+            <h3 className='subtitle-section' style={{fontFamily:'Geometos'}}>Ubicación del inmueble</h3>
             <Map
               height={'400px'}
               width={'100%'}
@@ -366,7 +367,7 @@ const PropertyDetail = () => {
             <Col span={24}>
               <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
                 <div className='header'>
-                  <h3 className='subtitle-section'>Más información</h3>
+                  <h3 className='subtitle-section' style={{fontFamily:'Geometos'}}>Más información</h3>
                 </div>
                 <div className='button-group'>
                   <Button
@@ -537,9 +538,10 @@ const PropertyDetail = () => {
           </div>
         </div>
         <div className='detail-form'>
-          <h2 style={{ fontSize: '2rem' }}>Sandar Inmuebles</h2>
+        <img src={logo} alt='Descripción de la imagen' />
+          <h2>Sandar Inmuebles</h2>
           <div className='section-form'>
-            <h3>Venta</h3>
+            <h3 style={{fontFamily:'Geometos'}}>Venta</h3>
             <div className='price'>
               $
               {propertyDetails.precio.toLocaleString('es-MX', {
@@ -548,11 +550,12 @@ const PropertyDetail = () => {
             </div>
             <h3
               style={{
-                fontSize: '1.3rem',
+                fontSize: '1.1rem',
                 marginTop: '25px',
                 textTransform: 'none',
+                fontFamily: 'Geometos',
               }}>
-              Contacta al anunciante
+              Contacta con el anunciante
             </h3>
             <ContactForm onFinish={handleContactFormSubmit} />
           </div>

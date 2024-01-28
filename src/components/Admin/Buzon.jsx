@@ -322,6 +322,66 @@ const ContactList = () => {
       onFilter: (value, record) => record.name.toLowerCase().includes(value.toLowerCase()),
     },
     {
+      title: "Apellido",
+      dataIndex: "lastname",
+      key: "lastname",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Apellido"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.email.toLowerCase().includes(value.toLowerCase()),
+    },
+    {
+      title: "Telefono",
+      dataIndex: "phone",
+      key: "phone",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Buscar Apellido"
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => confirm()}
+            style={{ width: 188, marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90, marginRight: 8 }}
+          >
+            Buscar
+          </Button>
+          <Button onClick={() => clearFilters()} size="small" style={{ width: 90 }}>
+            Reiniciar
+          </Button>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
+      onFilter: (value, record) => record.email.toLowerCase().includes(value.toLowerCase()),
+    },
+    {
       title: "Correo Electrónico",
       dataIndex: "email",
       key: "email",
@@ -353,8 +413,8 @@ const ContactList = () => {
     },
     {
       title: "Mensaje",
-      dataIndex: "message",
-      key: "message",
+      dataIndex: "intro",
+      key: "intro",
     },
     {
       title: "Propiedad",

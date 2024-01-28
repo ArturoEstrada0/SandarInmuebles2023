@@ -60,8 +60,7 @@ const ContactForm = ({ onFinish }) => {
       onFinish={handleSubmit}
       initialValues={{
         prefix: '52',
-        intro:
-          '¡Hola! Estoy interesada/o en una propiedad que vi en el sitio web de Sandar Inmuebles. ¿Podrías contactarme, por favor? ¡Muchas gracias!',
+        intro:'¡Hola!, Me interesa esta propiedad que vi en el sitio web de Sandar Inmuebles.\nY me gustaría tener más detalles de la misma. ¿Podrían contactarme, por favor?\n¡Muchas gracias!',
       }}
       style={{
         maxWidth: 600,
@@ -178,7 +177,7 @@ const ContactForm = ({ onFinish }) => {
             message: 'Ingresa un mensaje!',
           },
         ]}>
-        <Input.TextArea showCount maxLength={300} style={{ height: '110px' }} />
+        <Input.TextArea showCount maxLength={350} style={{ height: '150px' }} />
       </Form.Item>
 
       <Form.Item {...tailFormItemLayout}>
