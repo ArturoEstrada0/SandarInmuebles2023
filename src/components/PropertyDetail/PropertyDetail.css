@@ -119,3 +119,23 @@
   font-size: 1.05rem;
   margin-bottom: 10px;
 }
+
+.detail-form {
+  position: relative; /* Establece el contenedor como relativo para que la posición absoluta de la imagen sea relativa a este */
+}
+
+.detail-form img {
+  position: absolute;
+  right: 20; /* Coloca la imagen a la izquierda del contenedor */
+  width: 100px; /* Tamaño deseado para la imagen */
+  top: 2.5%; /* Centra verticalmente la imagen */
+  transform: translateY(-55%); /* Ajusta la posición verticalmente */
+  margin-right: 60px; /* Espacio entre la imagen y el h2 */
+  filter: invert(100%); /* Cambia el color de la imagen a blanco */
+}
+
+.detail-form h2 {
+  margin-left: 90px; /* Ajusta el margen izquierdo para dejar espacio para la imagen */
+  font-size: 1.7rem;
+  font-family: 'Geometos';
+}
