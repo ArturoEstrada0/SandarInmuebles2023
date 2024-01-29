@@ -29,6 +29,7 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import YouTube from "react-youtube";
@@ -85,6 +86,8 @@ function Propiedades() {
   const [mapCenter, setMapCenter] = useState(moreliaCoords);
   const [markerCoords, setMarkerCoords] = useState(moreliaCoords);
   const [tableFilters, setTableFilters] = useState({});
+    const [pausedProperties, setPausedProperties] = useState([]);
+
 
 const [cardsActivadas, setCardsActivadas] = useState({});
 
@@ -94,8 +97,45 @@ const [cardsActivadas, setCardsActivadas] = useState({});
 
   const [searchTerm, setSearchTerm] = useState("");
 
+
   // Antes de la función Propiedades()
   let locationCache = {};
+
+  const handlePauseProperty = async (propertyId) => {
+    try {
+      const propiedadesCollection = collection(firestore, "propiedades");
+      await updateDoc(doc(propiedadesCollection, propertyId), { status: "pausada" });
+      setDataSource(prevDataSource => prevDataSource.map(property => {
+        if (property.key === propertyId) {
+          return { ...property, status: "pausada" };
+        }
+        return property;
+      }));
+    } catch (error) {
+      console.error("Error al pausar la propiedad:", error);
+    }
+  };
+  
+  const handleResumeProperty = async (propertyId) => {
+    try {
+      const propiedadesCollection = collection(firestore, "propiedades");
+      await updateDoc(doc(propiedadesCollection, propertyId), { status: "activa" });
+      setDataSource(prevDataSource => prevDataSource.map(property => {
+        if (property.key === propertyId) {
+          return { ...property, status: "activa" };
+        }
+        return property;
+      }));
+    } catch (error) {
+      console.error("Error al reanudar la propiedad:", error);
+    }
+  };
+  
+  const isPropertyPaused = (property) => {
+    return property.status === "pausada";
+  };
+  
+
 
   // Dentro de handleLocationChange
   const handleLocationChange = async (newLocation) => {
@@ -512,6 +552,23 @@ const [cardsActivadas, setCardsActivadas] = useState({});
         </Space>
       ),
     },
+    {
+      title: "Pausada",
+      dataIndex: "key",
+      key: "pausada",
+      render: (key, record) => (
+        <Checkbox
+          checked={isPropertyPaused(record)}
+          onChange={() => {
+            if (isPropertyPaused(record)) {
+              handleResumeProperty(key);
+            } else {
+              handlePauseProperty(key);
+            }
+          }}
+        />
+      ),
+    },
   ];
 
   function getYouTubeVideoId(url) {
@@ -715,33 +772,7 @@ const [cardsActivadas, setCardsActivadas] = useState({});
                 onClick={() => handleFeatureCheck(feature)}
               >
                 {/* Agrega iconos según sea necesario */}
-                {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Medio Baño" && <FontAwesomeIcon icon={faToilet} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Estacionamiento" && <FontAwesomeIcon icon={faParking} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                
+              
                 
                 <p style={{ marginTop: "5px", textAlign: "center", fontSize: "14px" }}>{feature}</p>
               </Card>
