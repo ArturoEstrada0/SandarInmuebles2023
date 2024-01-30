@@ -34,7 +34,7 @@ const AboutUsIntro = () => (
       Sobre Nosotros
     </Title>
     <Paragraph className="about-us-paragraph">
-      ¡Bienvenido a Sandar Inmuebles! Somos tu aliado en el emocionante mundo de bienes raíces. Nuestra misión es convertir tus sueños en realidad, ofreciéndote un servicio de primera clase con la experiencia y la pasión que mereces. Estamos comprometidos con tu satisfacción en cada paso del camino.
+    Sandar Inmuebles es una agencia inmobiliaria que se dedica a ayudarte a encontrar la propiedad de tus sueños. Nuestro compromiso es ofrecer a nuestros clientes las mejores opciones de viviendas, terrenos y propiedades comerciales en el mercado. Contamos con un equipo de expertos en bienes raíces que te guiará en cada paso del proceso de compra o venta.
     </Paragraph>
   </div>
 );

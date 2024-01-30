@@ -46,13 +46,13 @@ import {
   faCity,
   faRulerCombined,
   faHome,
-  faHouse,
   faHouseFlag,
 } from "@fortawesome/free-solid-svg-icons";
 
+import axios from "axios";
+
 import { useParams } from "react-router-dom";
 import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import mapaImage from "../../assets/img/mapa.png"; // Importa la imagen del mapa
 import "./PropertyDetail.css";
 import Map from "../Map/Map";
 
@@ -63,32 +63,12 @@ const { Title, Paragraph } = Typography;
 
 const PropertyDetail = () => {
   const { id } = useParams();
-  const [imageHeight, setImageHeight] = useState("60vh");
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [activeKey, setActiveKey] = useState("");
-  const [isMobile, setIsMobile] = useState(false); // Estado para verificar si la pantalla es móvil
-  const [showForm, setShowForm] = useState(false); // Estado para controlar la visibilidad del formulario
-
-  useEffect(() => {
-    const handleResize = () => {
-      // Actualizar el estado de isMobile en función del ancho de la pantalla
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    // Agregar un event listener para manejar cambios en el tamaño de la ventana
-    window.addEventListener("resize", handleResize);
-
-    // Llamar a handleResize una vez al principio para establecer el estado inicial
-    handleResize();
-
-    // Limpiar el event listener cuando el componente se desmonta
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Función para manejar la visibilidad del formulario
-  const toggleForm = () => {
-    setShowForm(!showForm);
-  };
+  const [youtubeVideoCode, setYoutubeVideoCode] = useState("");
+  const [latitud, setLatitud] = useState("");
+  const [longitud, setLongitud] = useState("");
+  const [ubicacionCoords, setUbicacionCoords] = useState(null);
 
   const onCollapseChange = (key) => {
     setActiveKey(activeKey === key ? "" : key);
@@ -106,6 +86,9 @@ const PropertyDetail = () => {
       if (propertyDocSnapshot.exists()) {
         const propertyData = propertyDocSnapshot.data();
         setPropertyDetails(propertyData);
+        // Extrae el código del video de la URL de YouTube
+        const videoCode = extractYoutubeVideoCode(propertyData.youtubeUrl);
+        setYoutubeVideoCode(videoCode);
       } else {
         console.error(
           "No se encontró la propiedad con el ID proporcionado en Firebase."
@@ -114,6 +97,36 @@ const PropertyDetail = () => {
     } catch (error) {
       console.error("Error al obtener datos de Firestore:", error);
     }
+  };
+
+  useEffect(() => {
+    if (propertyDetails && propertyDetails.ubicacion) {
+      // Llama a la función de conversión con la dirección obtenida desde Firebase
+      convertirDireccionACoordenadas(propertyDetails.ubicacion);
+    }
+  }, [propertyDetails]);
+
+  const convertirDireccionACoordenadas = async (direccion) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${direccion}`
+      );
+
+      if (response.data && response.data.length > 0) {
+        const { lat, lon } = response.data[0];
+        setUbicacionCoords([parseFloat(lat), parseFloat(lon)]);
+      }
+    } catch (error) {
+      console.error("Error al obtener coordenadas:", error);
+    }
+  };
+
+  // Función para extraer el código del video de YouTube
+  const extractYoutubeVideoCode = (url) => {
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=))([^"&?\/\s]{11})/
+    );
+    return match && match[1];
   };
 
   const handleContactFormSubmit = async (values) => {
@@ -557,12 +570,54 @@ const PropertyDetail = () => {
                     marginBottom: "16px",
                   }}
                 />
-                <Map height={"400px"} width={"100%"} />
+                <Map
+                  height={"400px"}
+                  width={"100%"}
+                  markerCoords={ubicacionCoords}
+                />
               </div>
             </Col>
 
-            {/* Nuevo apartado "Precio y Contrato" */}
+            {youtubeVideoCode && (
+              <div
+                style={{
+                  marginTop: "20px",
+                  width: "50%",
+                  margin: "0 auto",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  padding: "16px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <iframe
+                  width="100%"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
+                  title="YouTube Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ borderRadius: "8px" }}
+                ></iframe>
+                <div style={{ textAlign: "center", marginTop: "16px" }}>
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      color: "#333",
+                      fontFamily: "Geometos",
+                    }}
+                  >
+                    {propertyDetails.nombre +
+                      "  $" +
+                      propertyDetails.precio +
+                      " MXN"}
+                  </p>
+                </div>
+              </div>
+            )}
             <Col span={24}>
+              {/* Nuevo apartado "Precio y Contrato" */}
               <div style={{ padding: "20px", backgroundColor: "#fcfeff" }}>
                 <hr
                   style={{
@@ -609,17 +664,139 @@ const PropertyDetail = () => {
                   </Button>
                 </div>
                 <div className="content-container">
+                  {/* Mostrar información dinámicamente desde Firebase */}
                   {activeKey === "Habitaciones" && (
-                    <p>Contenido relacionado a las recamaras.</p>
+                    <div
+                      style={{
+                        marginTop: "20px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {/* Card para mostrar el número de habitaciones */}
+                      <Card
+                        title="Número de Habitaciones"
+                        style={{
+                          width: 300,
+                          margin: "10px",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <p>{propertyDetails.habitaciones}</p>
+                      </Card>
+
+                      {/* Otras cards relacionadas a Habitaciones... */}
+                      <Card
+                        title="Habitaciones Disponibles"
+                        style={{
+                          width: 300,
+                          margin: "10px",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <p>{propertyDetails.Habitaciones ? "Sí" : "No"}</p>
+                      </Card>
+                      {/* Agrega más propiedades según sea necesario... */}
+                    </div>
                   )}
                   {activeKey === "Interiores/Exteriores" && (
-                    <p>Contenido relacionado a los interiores y exteriores.</p>
+                    <div
+                      style={{
+                        marginTop: "20px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {/* Card para mostrar detalles de Interiores/Exteriores */}
+                      <Card
+                        title="Interiores/Exteriores"
+                        style={{
+                          width: 300,
+                          margin: "10px",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <p>
+                          Características: {propertyDetails.caracteristicas}
+                        </p>
+                        <p>Jardín: {propertyDetails.Jardín ? "Sí" : "No"}</p>
+                        <p>
+                          Área de juegos:{" "}
+                          {propertyDetails["Área de juegos"] ? "Sí" : "No"}
+                        </p>
+                        <p>Ático: {propertyDetails.Ático ? "Sí" : "No"}</p>
+                        <p>
+                          Vista a la ciudad:{" "}
+                          {propertyDetails["Vista a la ciudad"] ? "Sí" : "No"}
+                        </p>
+                        <p>
+                          Vista a la montaña:{" "}
+                          {propertyDetails["Vista a la montaña"] ? "Sí" : "No"}
+                        </p>
+                        {/* ... (otros detalles) */}
+                      </Card>
+                      {/* Agrega más cards relacionadas a Interiores/Exteriores... */}
+                    </div>
                   )}
                   {activeKey === "Estacionamiento" && (
-                    <p>Contenido relacionado al estacionamiento.</p>
+                    <div
+                      style={{
+                        marginTop: "20px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {/* Card para mostrar detalles de Estacionamiento */}
+                      <Card
+                        title="Estacionamiento"
+                        style={{
+                          width: 300,
+                          margin: "10px",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <p>Cochera: {propertyDetails.Cochera ? "Sí" : "No"}</p>
+                        <p>Piscina: {propertyDetails.Piscina ? "Sí" : "No"}</p>
+                        {/* Agrega más propiedades según sea necesario... */}
+                      </Card>
+                      {/* Agrega más cards relacionadas a Estacionamiento... */}
+                    </div>
                   )}
                   {activeKey === "Seguridad/Tecnologiá" && (
-                    <p>Contenido relacionado a la seguridad y tecnologia.</p>
+                    <div
+                      style={{
+                        marginTop: "20px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {/* Card para mostrar detalles de Seguridad/Tecnología */}
+                      <Card
+                        title="Seguridad/Tecnología"
+                        style={{
+                          width: 300,
+                          margin: "10px",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <p>Alarma: {propertyDetails.Alarma ? "Sí" : "No"}</p>
+                        <p>
+                          Aire acondicionado:{" "}
+                          {propertyDetails["Aire acondicionado"] ? "Sí" : "No"}
+                        </p>
+                        <p>
+                          Cámaras de seguridad:{" "}
+                          {propertyDetails["Cámaras de seguridad"]
+                            ? "Sí"
+                            : "No"}
+                        </p>
+                        <p>
+                          Gimnasio: {propertyDetails.Gimnasio ? "Sí" : "No"}
+                        </p>
+                        {/* Agrega más propiedades según sea necesario... */}
+                      </Card>
+                      {/* Agrega más cards relacionadas a Seguridad/Tecnología... */}
+                    </div>
                   )}
                 </div>
                 <hr

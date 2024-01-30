@@ -24,7 +24,6 @@ import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
 import Registro from "./components/Auth/Registro";
 
 import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
-import Asesores from "./components/Asesores/Asesores";
 
 import { collection, getDoc, getDocs, doc } from "firebase/firestore";
 import { firestore } from "./components/firebase/firebase";
@@ -102,7 +101,6 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/aboutUs" element={<AboutUs />} />
-            <Route path="/asesores" element={<Asesores />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/propertyList" element={<PropertyList />} />
             <Route
@@ -112,12 +110,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
             <Route path="/registro" element={<Registro />} />
-            <Route path="/vender" element={<Vender />} />
-            <Route path="/comprar" element={<Comprar />} />
-
           </>
         )}
-      </Routes>
+    </Routes>
     </Router>
   );
 }

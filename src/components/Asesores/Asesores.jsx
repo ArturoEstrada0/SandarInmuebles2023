@@ -20,11 +20,7 @@ export default function Asesores() {
           Encuentra a tu Asesor
           </Title>
         <p>
-          Texto descriptivo o información sobre los asesores que puede ir aquí.
-          Puedes agregar múltiples párrafos según sea necesario.
-          Vender, rentar o comprar una propiedad es un momento sumamente importante en la vida; por eso te acercamos 
-          a los asesores 
-          más destacados de la industria para acompañarte en ese camino.
+        Nuestros expertos en bienes raíces te proporcionarán asesoramiento profesional durante todo el proceso de compra o venta de propiedades. Estamos comprometidos en ayudarte a tomar decisiones informadas y estratégicas.
         </p>
         <Divider/>
         <div className='button-asesor'>
