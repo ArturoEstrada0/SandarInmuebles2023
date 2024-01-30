@@ -816,15 +816,19 @@ const handlePausarPropiedad = async (propertyId) => {
                   ))}
                 </ul>
               )}
-              <Form.Item
-                label="Precio"
-                name="precio"
-                rules={[
-                  { required: true, message: "Por favor ingresa el precio" },
-                ]}
-              >
-                <InputNumber min={0} />
-              </Form.Item>
+            <Form.Item
+  label="Precio"
+  name="precio"
+  rules={[
+    { required: true, message: "Por favor ingresa el precio" },
+  ]}
+>
+  <InputNumber
+    min={0}
+    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} // Agrega el símbolo "$" y separa los miles con comas
+    parser={value => value.replace(/\$\s?|(,*)/g, '')} // Elimina el símbolo "$" y las comas antes de analizar el valor
+  />
+</Form.Item>
 
               <Form.Item
                 label="Ubicación en Mapa"
