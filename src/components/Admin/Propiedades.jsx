@@ -17,8 +17,9 @@ import {
   Select,
   Radio,
   Card,
+  Switch,
 } from "antd";
-import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PauseCircleOutlined, PauseOutlined, PlayCircleOutlined, SearchOutlined, StarOutlined, UploadOutlined } from "@ant-design/icons";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import axios from "axios"; // Importa Axios
 
@@ -64,6 +65,8 @@ import {
   faParking,
   faToilet,
 } from "@fortawesome/free-solid-svg-icons";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 // Antes de tu función Propiedades()
 const storage = getStorage(app);
 
@@ -131,10 +134,68 @@ const [cardsActivadas, setCardsActivadas] = useState({});
     }
   };
   
+  
   const isPropertyPaused = (property) => {
     return property.status === "pausada";
   };
   
+
+  const [highlightedProperties, setHighlightedProperties] = useState([]);
+
+const handleHighlightProperty = async (propertyId) => {
+  try {
+    // Verifica si la propiedad ya está destacada
+    const isHighlighted = highlightedProperties.includes(propertyId);
+    if (isHighlighted) {
+      // Si ya está destacada, la eliminamos de la lista de destacadas
+      setHighlightedProperties(highlightedProperties.filter(id => id !== propertyId));
+    } else {
+      // Si no está destacada, la añadimos a la lista de destacadas
+      setHighlightedProperties([...highlightedProperties, propertyId]);
+    }
+
+    // Actualiza el estado en Firebase
+    const propiedadesCollection = collection(firestore, "propiedades");
+    await updateDoc(doc(propiedadesCollection, propertyId), { highlighted: !isHighlighted });
+  } catch (error) {
+    console.error("Error al destacar la propiedad:", error);
+  }
+};
+
+
+const handleDestacarPropiedad = async (propertyId) => {
+  try {
+    const propertyIndex = dataSource.findIndex((property) => property.key === propertyId);
+    const updatedProperties = [...dataSource];
+    updatedProperties[propertyIndex].highlighted = !updatedProperties[propertyIndex].highlighted;
+    setDataSource(updatedProperties);
+
+    // Actualiza el documento en Firestore
+    await updateDoc(doc(collection(firestore, "propiedades"), propertyId), {
+      highlighted: updatedProperties[propertyIndex].highlighted,
+    });
+  } catch (error) {
+    console.error("Error al destacar la propiedad:", error);
+  }
+};
+
+const handlePausarPropiedad = async (propertyId) => {
+  try {
+    const propertyIndex = dataSource.findIndex((property) => property.key === propertyId);
+    const updatedProperties = [...dataSource];
+    updatedProperties[propertyIndex].status = isPropertyPaused(updatedProperties[propertyIndex]) ? "activa" : "pausada";
+    setDataSource(updatedProperties);
+
+    // Actualiza el documento en Firestore
+    await updateDoc(doc(collection(firestore, "propiedades"), propertyId), {
+      status: updatedProperties[propertyIndex].status,
+    });
+  } catch (error) {
+    console.error("Error al pausar la propiedad:", error);
+  }
+};
+
+
 
 
   // Dentro de handleLocationChange
@@ -274,7 +335,7 @@ const [cardsActivadas, setCardsActivadas] = useState({});
   };
 
   // Manejador para editar propiedades
-  const handleEdit = (record) => {
+  const handleEditarPropiedad = (record) => {
     form.setFieldsValue({ ...record, imagen: [] });
     setIsModalVisible(true);
   };
@@ -410,7 +471,7 @@ const [cardsActivadas, setCardsActivadas] = useState({});
     }
   };
 
-  const handleDelete = (propertyId) => {
+  const handleEliminarPropiedad = (propertyId) => {
     Modal.confirm({
       title: "Confirmar eliminación",
       content: "¿Estás seguro de que deseas eliminar esta propiedad?",
@@ -476,6 +537,42 @@ const [cardsActivadas, setCardsActivadas] = useState({});
     fetchData();
   }, [searchTerm]);
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const propiedadesCollection = collection(firestore, "propiedades");
+        const propiedadesSnapshot = await getDocs(propiedadesCollection);
+  
+        const nuevasPropiedades = [];
+        const nuevasPropiedadesHighlight = []; // Nuevo array para destacado
+  
+        propiedadesSnapshot.forEach((doc) => {
+          const propiedadData = doc.data();
+          const propiedad = {
+            key: doc.id,
+            ...propiedadData,
+          };
+  
+          nuevasPropiedades.push(propiedad);
+  
+          // Verificar si la propiedad está destacada y actualizar el estado
+          if (propiedad.highlighted) {
+            nuevasPropiedadesHighlight.push(propiedad.key);
+          }
+        });
+  
+        setDataSource(nuevasPropiedades);
+        setHighlightedProperties(nuevasPropiedadesHighlight); // Actualizar el estado
+      } catch (error) {
+        console.error("Error al obtener propiedades:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+
   const nextStep = () => {
     setCurrentStep((prev) => prev + 1);
   };
@@ -485,6 +582,7 @@ const [cardsActivadas, setCardsActivadas] = useState({});
   };
 
   const columns = [
+   
     {
       title: "Imagen",
       dataIndex: "fotos",
@@ -518,8 +616,8 @@ const [cardsActivadas, setCardsActivadas] = useState({});
       dataIndex: "condicion",
       key: "condicion",
       filters: [
-        { text: "Venta", value: "venta" },
-        { text: "Renta", value: "renta" },
+        { text: "Venta", value: "Venta" },
+        { text: "Renta", value: "Renta" },
         // Agrega más opciones según sea necesario
       ],
       onFilter: (value, record) => record.condicion === value,
@@ -533,6 +631,11 @@ const [cardsActivadas, setCardsActivadas] = useState({});
       title: "Precio",
       dataIndex: "precio",
       key: "precio",
+      render: (precio) => (
+        <>
+          ${precio.toLocaleString()}
+        </>
+      ),
       sorter: (a, b) => a.precio - b.precio, // Agrega esta línea para permitir ordenar por precio
       sortDirections: ["ascend", "descend"],
     },
@@ -540,35 +643,44 @@ const [cardsActivadas, setCardsActivadas] = useState({});
     // Puedes añadir más columnas como descripción y características si lo necesitas
     {
       title: "Acciones",
+      dataIndex: "acciones",
       key: "acciones",
       render: (text, record) => (
-        <Space>
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Editar
+        <Space size="middle">
+          <Button
+            type="primary"
+            onClick={() => handleEditarPropiedad(record.key)}
+            icon={<EditOutlined />}
+          />
+          <Button danger
+            onClick={() => handleEliminarPropiedad(record.key)}
+            icon={<DeleteOutlined />}
+          />
+          <Button
+            onClick={() => handleDestacarPropiedad(record.key)}
+          >
+            <FontAwesomeIcon
+              icon={record.highlighted ? solidStar : regularStar}
+              style={{ color: record.highlighted ? "gold" : "gray" }}
+            />
           </Button>
-          <Button danger onClick={() => handleDelete(record.key)}>
-            Eliminar
-          </Button>
+          <Button
+            type={!isPropertyPaused(record) ? "primary" : "default"}
+            icon={!isPropertyPaused(record) ? <PlayCircleOutlined /> : <PauseCircleOutlined />}
+            onClick={() => {
+              if (!isPropertyPaused(record)) {
+                handlePauseProperty(record.key);
+              } else {
+                handleResumeProperty(record.key);
+              }
+            }}
+            style={{ backgroundColor: !isPropertyPaused(record) ? "#52c41a" : "#f0f0f0" }}
+          />
         </Space>
       ),
     },
-    {
-      title: "Pausada",
-      dataIndex: "key",
-      key: "pausada",
-      render: (key, record) => (
-        <Checkbox
-          checked={isPropertyPaused(record)}
-          onChange={() => {
-            if (isPropertyPaused(record)) {
-              handleResumeProperty(key);
-            } else {
-              handlePauseProperty(key);
-            }
-          }}
-        />
-      ),
-    },
+    
+    
   ];
 
   function getYouTubeVideoId(url) {
@@ -772,51 +884,133 @@ const [cardsActivadas, setCardsActivadas] = useState({});
                 onClick={() => handleFeatureCheck(feature)}
               >
                 {/* Agrega iconos según sea necesario */}
-              
+                {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Medio Baño" && <FontAwesomeIcon icon={faToilet} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Estacionamiento" && <FontAwesomeIcon icon={faParking} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                
                 
                 <p style={{ marginTop: "5px", textAlign: "center", fontSize: "14px" }}>{feature}</p>
               </Card>
               {/* Agrega un campo numérico para características específicas */}
               {feature === "Habitaciones" && (
-                <Form.Item
-                  name="habitaciones"
-                  rules={[
-                    { required: featuresChecked[feature], message: "Ingresa el número de habitaciones" },
-                  ]}
-                >
-                  <InputNumber style={{ width: "100%" }} min={0} placeholder="Número de habitaciones" disabled={!featuresChecked[feature]} />
-                </Form.Item>
-              )}
-              {feature === "Baño" && (
-                <Form.Item
-                  name="baños"
-                  rules={[
-                    { required: featuresChecked[feature], message: "Ingresa el número de baños" },
-                  ]}
-                >
-                  <InputNumber style={{ width: "100%" }} min={0} placeholder="Número de baños" disabled={!featuresChecked[feature]} />
-                </Form.Item>
-              )}
-              {feature === "Medio Baño" && (
-                <Form.Item
-                  name="medio Baño"
-                  rules={[
-                    { required: featuresChecked[feature], message: "Ingresa el número de Medio Baño" },
-                  ]}
-                >
-                  <InputNumber style={{ width: "100%" }} min={0} placeholder="Número de Medio Baño" disabled={!featuresChecked[feature]} />
-                </Form.Item>
-              )}
-              {feature === "Estacionamiento" && (
-                <Form.Item
-                  name="estacionamiento"
-                  rules={[
-                    { required: featuresChecked[feature], message: "Ingresa el número de Estacionamientos" },
-                  ]}
-                >
-                  <InputNumber style={{ width: "100%" }} min={0} placeholder="Número de Estacionamientos" disabled={!featuresChecked[feature]} />
-                </Form.Item>
-              )}
+  <Form.Item
+    name="habitaciones"
+    initialValue={0} // Establece el valor inicial en 0
+    rules={[
+      {
+        validator: (_, value) => {
+          if (value || value === 0) {
+            return Promise.resolve(); // Acepta valor numérico
+          }
+          return Promise.reject("Ingresa el número de habitaciones");
+        },
+      }
+    ]}
+  >
+    <InputNumber
+      style={{ width: "100%" }}
+      min={0}
+      placeholder="Número de habitaciones"
+      disabled={!featuresChecked[feature]}
+    />
+  </Form.Item>
+)}
+
+{feature === "Baño" && (
+  <Form.Item
+    name="baños"
+    initialValue={0} // Establece el valor inicial en 0
+    rules={[
+      {
+        validator: (_, value) => {
+          if (value || value === 0) {
+            return Promise.resolve(); // Acepta valor numérico
+          }
+          return Promise.reject("Ingresa el número de baños");
+        },
+      }
+    ]}
+  >
+    <InputNumber
+      style={{ width: "100%" }}
+      min={0}
+      placeholder="Número de baños"
+      disabled={!featuresChecked[feature]}
+    />
+  </Form.Item>
+)}
+
+{feature === "Medio Baño" && (
+  <Form.Item
+    name="medio Baño"
+    initialValue={0} // Establece el valor inicial en 0
+    rules={[
+      {
+        validator: (_, value) => {
+          if (value || value === 0) {
+            return Promise.resolve(); // Acepta valor numérico
+          }
+          return Promise.reject("Ingresa el número de Medio Baño");
+        },
+      }
+    ]}
+  >
+    <InputNumber
+      style={{ width: "100%" }}
+      min={0}
+      placeholder="Número de Medio Baño"
+      disabled={!featuresChecked[feature]}
+    />
+  </Form.Item>
+)}
+
+{feature === "Estacionamiento" && (
+  <Form.Item
+    name="estacionamiento"
+    initialValue={0} // Establece el valor inicial en 0
+    rules={[
+      {
+        validator: (_, value) => {
+          if (value || value === 0) {
+            return Promise.resolve(); // Acepta valor numérico
+          }
+          return Promise.reject("Ingresa el número de Estacionamientos");
+        },
+      }
+    ]}
+  >
+    <InputNumber
+      style={{ width: "100%" }}
+      min={0}
+      placeholder="Número de Estacionamientos"
+      disabled={!featuresChecked[feature]}
+    />
+  </Form.Item>
+)}
+
            
               {/* Agrega más campos numéricos según sea necesario */}
             </Col>
