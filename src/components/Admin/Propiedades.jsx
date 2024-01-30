@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Steps,
   Divider,
-  Checkbox,
   Table,
   Button,
   Modal,
@@ -17,11 +16,12 @@ import {
   Select,
   Radio,
   Card,
-  Switch,
+  Spin,
 } from "antd";
 import { DeleteOutlined, EditOutlined, PauseCircleOutlined, PauseOutlined, PlayCircleOutlined, SearchOutlined, StarOutlined, UploadOutlined } from "@ant-design/icons";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import axios from "axios"; // Importa Axios
+import axios from "axios";
+import CustomSpinner from "./CustomSpinner"; // Importa tu componente de spinner personalizado
 
 import { app, firestore } from "../firebase/firebase";
 import {
@@ -37,44 +37,20 @@ import YouTube from "react-youtube";
 import Map from "../Map/Map";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBath,
-  faBed,
-  faSwimmingPool,
-  faMountain,
-  faCar,
-  faTree,
-  faUtensils,
-  faBell,
-  faVideo,
-  faVolumeUp,
-  faTshirt,
-  faBox,
-  faFire,
-  faSnowflake,
-  faCouch,
-  faPaw,
-  faBinoculars,
-  faDumbbell,
-  faGlassCheers,
-  faChess,
-  faWater,
-  faCity,
+
   faRulerCombined,
   faHome,
-  faHouseFlag,
-  faParking,
-  faToilet,
+
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
-// Antes de tu función Propiedades()
+
 const storage = getStorage(app);
 
 const { Step } = Steps;
 
-// Antes de la función Propiedades()
 let formData = {
-  youtubeUrl: "", // Agrega el campo para la URL de YouTube
+  youtubeUrl: "", 
 };
 const moreliaCoords = [19.706, -101.195];
 
@@ -89,19 +65,16 @@ function Propiedades() {
   const [mapCenter, setMapCenter] = useState(moreliaCoords);
   const [markerCoords, setMarkerCoords] = useState(moreliaCoords);
   const [tableFilters, setTableFilters] = useState({});
-    const [pausedProperties, setPausedProperties] = useState([]);
 
 
 const [cardsActivadas, setCardsActivadas] = useState({});
 
-  // Agrega un estado para las sugerencias de ubicación y la ubicación seleccionada
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
 
 
-  // Antes de la función Propiedades()
   let locationCache = {};
 
   const handlePauseProperty = async (propertyId) => {
@@ -142,26 +115,6 @@ const [cardsActivadas, setCardsActivadas] = useState({});
 
   const [highlightedProperties, setHighlightedProperties] = useState([]);
 
-const handleHighlightProperty = async (propertyId) => {
-  try {
-    // Verifica si la propiedad ya está destacada
-    const isHighlighted = highlightedProperties.includes(propertyId);
-    if (isHighlighted) {
-      // Si ya está destacada, la eliminamos de la lista de destacadas
-      setHighlightedProperties(highlightedProperties.filter(id => id !== propertyId));
-    } else {
-      // Si no está destacada, la añadimos a la lista de destacadas
-      setHighlightedProperties([...highlightedProperties, propertyId]);
-    }
-
-    // Actualiza el estado en Firebase
-    const propiedadesCollection = collection(firestore, "propiedades");
-    await updateDoc(doc(propiedadesCollection, propertyId), { highlighted: !isHighlighted });
-  } catch (error) {
-    console.error("Error al destacar la propiedad:", error);
-  }
-};
-
 
 const handleDestacarPropiedad = async (propertyId) => {
   try {
@@ -170,7 +123,6 @@ const handleDestacarPropiedad = async (propertyId) => {
     updatedProperties[propertyIndex].highlighted = !updatedProperties[propertyIndex].highlighted;
     setDataSource(updatedProperties);
 
-    // Actualiza el documento en Firestore
     await updateDoc(doc(collection(firestore, "propiedades"), propertyId), {
       highlighted: updatedProperties[propertyIndex].highlighted,
     });
@@ -179,29 +131,8 @@ const handleDestacarPropiedad = async (propertyId) => {
   }
 };
 
-const handlePausarPropiedad = async (propertyId) => {
-  try {
-    const propertyIndex = dataSource.findIndex((property) => property.key === propertyId);
-    const updatedProperties = [...dataSource];
-    updatedProperties[propertyIndex].status = isPropertyPaused(updatedProperties[propertyIndex]) ? "activa" : "pausada";
-    setDataSource(updatedProperties);
-
-    // Actualiza el documento en Firestore
-    await updateDoc(doc(collection(firestore, "propiedades"), propertyId), {
-      status: updatedProperties[propertyIndex].status,
-    });
-  } catch (error) {
-    console.error("Error al pausar la propiedad:", error);
-  }
-};
-
-
-
-
-  // Dentro de handleLocationChange
   const handleLocationChange = async (newLocation) => {
     try {
-      // Verificar si la ubicación está en la caché
       if (locationCache[newLocation]) {
         setLocationSuggestions(locationCache[newLocation]);
         return;
@@ -211,21 +142,18 @@ const handlePausarPropiedad = async (propertyId) => {
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           newLocation
         )}`,
-        { timeout: 50000 } // Tiempo de espera en milisegundos (ajusta según sea necesario)
+        { timeout: 50000 } 
       );
 
-      // Actualizar las sugerencias solo si hay cambios en la entrada
       if (newLocation.trim() !== "") {
         setLocationSuggestions(response.data || []);
 
-        // Almacenar en la caché
         locationCache[newLocation] = response.data || [];
 
-        // Si no hay ubicación seleccionada, actualiza el centro del mapa y las coordenadas del marcador
         if (!selectedLocation) {
           setMapCenter(moreliaCoords);
           setMarkerCoords(moreliaCoords);
-          setMapHeight("500px"); // Ajusta el tamaño según tus necesidades
+          setMapHeight("500px"); 
         }
       } else {
         setLocationSuggestions([]);
@@ -238,17 +166,14 @@ const handlePausarPropiedad = async (propertyId) => {
     }
   };
 
-  // Dentro de handleLocationSelect
   const handleLocationSelect = (suggestion) => {
     setSelectedLocation(suggestion);
-    setLocationSuggestions([]); // Oculta las sugerencias después de la selección
+    setLocationSuggestions([]); 
 
-    // Actualizar las coordenadas del marcador
     setMarkerCoords([suggestion.lat, suggestion.lon]);
 
-    // No es necesario setMapCenter aquí, ya que se manejará automáticamente en el componente Map
 
-    setMapHeight("500px"); // Ajusta el tamaño según tus necesidades
+    setMapHeight("500px"); 
   };
 
   useEffect(() => {
@@ -273,7 +198,6 @@ const handlePausarPropiedad = async (propertyId) => {
           nuevasPropiedades.push(propiedad);
         });
 
-        // Filtrar propiedades según el término de búsqueda y los filtros de la tabla
         const filteredPropiedades = nuevasPropiedades.filter(
           (propiedad) =>
             Object.entries(tableFilters).every(([key, filter]) =>
@@ -319,7 +243,6 @@ const handlePausarPropiedad = async (propertyId) => {
       [feature]: !prevState[feature],
     }));
   
-    // Actualiza el estado cardsActivadas
     setCardsActivadas((prevCards) => ({
       ...prevCards,
       [feature]: !prevCards[feature],
@@ -327,58 +250,49 @@ const handlePausarPropiedad = async (propertyId) => {
   };
   
 
-  // Manejador para agregar propiedades
   const handleAdd = () => {
     form.resetFields();
     setFileList([]);
     setIsModalVisible(true);
   };
 
-  // Manejador para editar propiedades
   const handleEditarPropiedad = (record) => {
     form.setFieldsValue({ ...record, imagen: [] });
     setIsModalVisible(true);
   };
 
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
   const onFormSubmit = async (values, step) => {
-    // Validar que todos los campos obligatorios estén llenos
-    if (step === 0 && (!values.nombre || !values.ubicacion || !values.precio)) {
-      notification.error({
-        message: "Error al guardar en Firebase",
-        description: "Por favor, completa todos los campos obligatorios.",
-      });
-      return;
-    }
-
-    // Añadir datos al objeto global formData
-    formData = {
-      ...formData,
-      ...values,
-      youtubeUrl,
-      ubicacion: selectedLocation?.display_name,
-    };
-
-    // Manejar específicamente la asignación de valores para tipoPropiedad y condicion
-    if (step === 0) {
-      formData.tipoPropiedad = values.tipoPropiedad || "";
-      formData.condicion = values.condicion || "";
-    }
-
-    // Si es el último paso, enviar a Firebase
-    if (step === 3) {
-      try {
-        // Verificar que app está definido
+    setUploading(true); // Establecer el estado uploading a true cuando comienza la subida
+  
+    try {
+      if (step === 0 && (!values.nombre || !values.ubicacion || !values.precio)) {
+        throw new Error("Por favor, completa todos los campos obligatorios.");
+      }
+  
+      formData = {
+        ...formData,
+        ...values,
+        youtubeUrl,
+        ubicacion: selectedLocation?.display_name,
+      };
+  
+      if (step === 0) {
+        formData.tipoPropiedad = values.tipoPropiedad || "";
+        formData.condicion = values.condicion || "";
+      }
+  
+      if (step === 3) {
         if (typeof app !== "undefined") {
-          // Verificar que hay fotos antes de intentar acceder a values.fotos
           if (
             values.fotos &&
             values.fotos.fileList &&
             values.fotos.fileList.length > 0
           ) {
-            // Crear un identificador único para la imagen
             const imageId = Date.now().toString();
-
-            // Subir cada imagen a Firebase Storage
+  
             const uploadTasks = values.fotos.fileList.map(
               async (photo, index) => {
                 const storageRef = ref(
@@ -386,72 +300,62 @@ const handlePausarPropiedad = async (propertyId) => {
                   `propiedades/${imageId}_${index}`
                 );
                 await uploadBytes(storageRef, photo.originFileObj);
-
-                // Obtener la URL de descarga
+  
                 const imageURL = await getDownloadURL(storageRef);
-
+  
                 return imageURL;
               }
             );
-
-            // Esperar a que todas las imágenes se suban
+  
             const imageUrls = await Promise.all(uploadTasks);
-
-            // Añadir las referencias de las imágenes a los datos
+  
             formData = { ...formData, fotos: imageUrls, youtubeUrl };
-
-
             formData = { ...formData,  cardsActivadas };
-            // Guardar en Firestore
+  
             const propiedadesCollection = collection(firestore, "propiedades");
             await addDoc(propiedadesCollection, formData);
-
-
+  
             notification.success({
               message: "Propiedad guardada",
               description: "La propiedad ha sido guardada con éxito.",
             });
-
+  
             setIsModalVisible(false);
           } else {
-            console.error(
-              "No se proporcionaron fotos en el formulario. Por favor, selecciona al menos una foto."
-            );
             throw new Error(
-              "No se proporcionaron fotos en el formulario. Por favor, selecciona al menos una foto."
+              "Por favor, selecciona al menos una foto para la propiedad."
             );
           }
         } else {
           throw new Error("Firebase no está definido");
         }
-      } catch (error) {
-        console.error("Error al guardar en Firebase:", error);
-        notification.error({
-          message: "Error al guardar en Firebase",
-          description:
-            error.message ||
-            "Ocurrió un error al intentar guardar la propiedad.",
-        });
+      } else {
+        nextStep();
       }
-    } else {
-      // Si no es el último paso, avanzar al siguiente
-      nextStep();
+    } catch (error) {
+      console.error("Error al guardar en Firebase:", error);
+      notification.error({
+        message: "Error al guardar en Firebase",
+        description:
+          error.message ||
+          "Ocurrió un error al intentar guardar la propiedad.",
+      });
+    } finally {
+      setLoading(false);
+      setUploading(false); // Establecer el estado uploading a false en cualquier caso
     }
   };
   
 
-  // Manejador para el cambio en la carga de archivos
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
 
-  // Funcion para ELIMINAR propiedades
   const deleteProperty = async (propertyId) => {
     try {
       const propiedadesCollection = collection(firestore, "propiedades");
       await deleteDoc(doc(propiedadesCollection, propertyId));
 
-      // Actualizar el estado local eliminando la propiedad
       setDataSource((prevDataSource) =>
         prevDataSource.filter((property) => property.key !== propertyId)
       );
@@ -484,7 +388,6 @@ const handlePausarPropiedad = async (propertyId) => {
     });
   };
 
-  // Previsualización de imágenes
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -500,7 +403,6 @@ const handlePausarPropiedad = async (propertyId) => {
     imgWindow.document.write(image.outerHTML);
   };
 
-  // Función para manejar la búsqueda
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
@@ -521,7 +423,6 @@ const handlePausarPropiedad = async (propertyId) => {
           nuevasPropiedades.push(propiedad);
         });
 
-        // Filtrar propiedades según el término de búsqueda
         const filteredPropiedades = nuevasPropiedades.filter((propiedad) =>
           Object.values(propiedad).some((value) =>
             value.toString().toLowerCase().includes(searchTerm.toLowerCase())
@@ -545,7 +446,7 @@ const handlePausarPropiedad = async (propertyId) => {
         const propiedadesSnapshot = await getDocs(propiedadesCollection);
   
         const nuevasPropiedades = [];
-        const nuevasPropiedadesHighlight = []; // Nuevo array para destacado
+        const nuevasPropiedadesHighlight = [];
   
         propiedadesSnapshot.forEach((doc) => {
           const propiedadData = doc.data();
@@ -556,14 +457,14 @@ const handlePausarPropiedad = async (propertyId) => {
   
           nuevasPropiedades.push(propiedad);
   
-          // Verificar si la propiedad está destacada y actualizar el estado
+
           if (propiedad.highlighted) {
             nuevasPropiedadesHighlight.push(propiedad.key);
           }
         });
   
         setDataSource(nuevasPropiedades);
-        setHighlightedProperties(nuevasPropiedadesHighlight); // Actualizar el estado
+        setHighlightedProperties(nuevasPropiedadesHighlight);
       } catch (error) {
         console.error("Error al obtener propiedades:", error);
       }
@@ -607,7 +508,6 @@ const handlePausarPropiedad = async (propertyId) => {
       filters: [
         { text: "Casa", value: "Casa" },
         { text: "Departamento", value: "Departamento" },
-        // Agrega más opciones según sea necesario
       ],
       onFilter: (value, record) => record.tipoPropiedad === value,
     },
@@ -618,7 +518,6 @@ const handlePausarPropiedad = async (propertyId) => {
       filters: [
         { text: "Venta", value: "Venta" },
         { text: "Renta", value: "Renta" },
-        // Agrega más opciones según sea necesario
       ],
       onFilter: (value, record) => record.condicion === value,
     },
@@ -636,11 +535,10 @@ const handlePausarPropiedad = async (propertyId) => {
           ${precio.toLocaleString()}
         </>
       ),
-      sorter: (a, b) => a.precio - b.precio, // Agrega esta línea para permitir ordenar por precio
+      sorter: (a, b) => a.precio - b.precio,
       sortDirections: ["ascend", "descend"],
     },
 
-    // Puedes añadir más columnas como descripción y características si lo necesitas
     {
       title: "Acciones",
       dataIndex: "acciones",
@@ -684,12 +582,10 @@ const handlePausarPropiedad = async (propertyId) => {
   ];
 
   function getYouTubeVideoId(url) {
-    // Expresión regular para extraer el ID del video de una URL de YouTube
     const regex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
 
-    // Si se encontró un ID, devuelve el primer grupo capturado (ID del video)
     return match ? match[1] : null;
   }
 
@@ -702,13 +598,16 @@ const handlePausarPropiedad = async (propertyId) => {
     OtrasCaracteristicas: ["Amueblado", "Mascotas permitidas", "Vista panorámica"],
     "Amenidades del Edificio": ["Gimnasio", "Piscina", "Salón de eventos", "Área de juegos"],
     Vistas: ["Vista al mar", "Vista a la montaña", "Vista a la ciudad"],
-    // Puedes agregar más secciones y características según sea necesario
   };
 
 
   return (
     <div>
-      <h1>Propiedades</h1>
+    {uploading && ( // Mostrar el spinner si el estado uploading es true
+      <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(255, 255, 255, 0.5)", zIndex: 9999 }}>
+        <Spin size="large" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
+      </div>
+    )}      <h1>Propiedades</h1>
       <Space direction="vertical">
         <Button type="primary" onClick={handleAdd}>
           Añadir propiedad
@@ -727,19 +626,28 @@ const handlePausarPropiedad = async (propertyId) => {
       </Space>
       <Table dataSource={dataSource} columns={columns} />
       <Modal
-        title="Propiedad"
-        visible={isModalVisible}
-        onOk={form.submit}
-        onCancel={() => setIsModalVisible(false)}
-        width={800}
-        style={{ minWidth: "800px" }} // Ajuste para asegurar un ancho mínimo
-      >
+  title="Propiedad"
+  visible={isModalVisible}
+  onOk={form.submit}
+  onCancel={() => setIsModalVisible(false)}
+  width={800}
+  style={{ minWidth: "800px" }} 
+  footer={[
+    <Button key="back" onClick={() => setIsModalVisible(false)}>
+      Cancelar
+    </Button>,
+    <Button key="submit" type="primary" loading={uploading} onClick={form.submit}>
+      Guardar
+    </Button>,
+  ]}
+>
         <Steps current={currentStep} style={{ marginBottom: "20px" }}>
           <Step title="Información Básica" />
           <Step title="Descripción" />
           <Step title="Características" />
           <Step title="Fotos" />
         </Steps>
+        
         <Form
           form={form}
           layout="vertical"
@@ -825,8 +733,8 @@ const handlePausarPropiedad = async (propertyId) => {
 >
   <InputNumber
     min={0}
-    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} // Agrega el símbolo "$" y separa los miles con comas
-    parser={value => value.replace(/\$\s?|(,*)/g, '')} // Elimina el símbolo "$" y las comas antes de analizar el valor
+    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 
+    parser={value => value.replace(/\$\s?|(,*)/g, '')} 
   />
 </Form.Item>
 
@@ -888,46 +796,18 @@ const handlePausarPropiedad = async (propertyId) => {
                 onClick={() => handleFeatureCheck(feature)}
               >
                 {/* Agrega iconos según sea necesario */}
-                {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Medio Baño" && <FontAwesomeIcon icon={faToilet} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Estacionamiento" && <FontAwesomeIcon icon={faParking} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                
-                
+  
                 <p style={{ marginTop: "5px", textAlign: "center", fontSize: "14px" }}>{feature}</p>
               </Card>
-              {/* Agrega un campo numérico para características específicas */}
               {feature === "Habitaciones" && (
   <Form.Item
     name="habitaciones"
-    initialValue={0} // Establece el valor inicial en 0
+    initialValue={0} 
     rules={[
       {
         validator: (_, value) => {
           if (value || value === 0) {
-            return Promise.resolve(); // Acepta valor numérico
+            return Promise.resolve(); 
           }
           return Promise.reject("Ingresa el número de habitaciones");
         },
@@ -946,12 +826,12 @@ const handlePausarPropiedad = async (propertyId) => {
 {feature === "Baño" && (
   <Form.Item
     name="baños"
-    initialValue={0} // Establece el valor inicial en 0
+    initialValue={0}
     rules={[
       {
         validator: (_, value) => {
           if (value || value === 0) {
-            return Promise.resolve(); // Acepta valor numérico
+            return Promise.resolve(); 
           }
           return Promise.reject("Ingresa el número de baños");
         },
@@ -970,12 +850,12 @@ const handlePausarPropiedad = async (propertyId) => {
 {feature === "Medio Baño" && (
   <Form.Item
     name="medio Baño"
-    initialValue={0} // Establece el valor inicial en 0
+    initialValue={0}
     rules={[
       {
         validator: (_, value) => {
           if (value || value === 0) {
-            return Promise.resolve(); // Acepta valor numérico
+            return Promise.resolve();
           }
           return Promise.reject("Ingresa el número de Medio Baño");
         },
@@ -994,12 +874,12 @@ const handlePausarPropiedad = async (propertyId) => {
 {feature === "Estacionamiento" && (
   <Form.Item
     name="estacionamiento"
-    initialValue={0} // Establece el valor inicial en 0
+    initialValue={0} 
     rules={[
       {
         validator: (_, value) => {
           if (value || value === 0) {
-            return Promise.resolve(); // Acepta valor numérico
+            return Promise.resolve(); 
           }
           return Promise.reject("Ingresa el número de Estacionamientos");
         },
@@ -1016,14 +896,12 @@ const handlePausarPropiedad = async (propertyId) => {
 )}
 
            
-              {/* Agrega más campos numéricos según sea necesario */}
             </Col>
           ))}
         </Row>
       </div>
     ))}
 
-    {/* Mejoras visuales para Tamaño y Construcción */}
     <Divider>Tamaño y Construcción</Divider>
     <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
       <Col span={12}>
@@ -1079,7 +957,6 @@ const handlePausarPropiedad = async (propertyId) => {
                   value={youtubeUrl}
                   onChange={(e) => {
                     setYoutubeUrl(e.target.value);
-                    // Actualiza el estado con la nueva URL de YouTube
                   }}
                 />
               </Form.Item>
