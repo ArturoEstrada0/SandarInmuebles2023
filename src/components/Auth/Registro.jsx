@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, setDoc, doc } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
@@ -28,8 +28,7 @@ const Registro = () => {
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const [phone, setPhone] = useState("");
-
-  const [successMessage, setSuccessMessage] = useState(""); // Nuevo estado
+  const [successMessage, setSuccessMessage] = useState("");
 
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,9 +42,17 @@ const Registro = () => {
   const authInstance = getAuth();
   const firestore = getFirestore();
 
+  const checkIfEmailExists = async (email) => {
+    const usersRef = collection(firestore, "usuarios");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
+
   const register = async () => {
     setError("");
-    setSuccessMessage(""); // Limpiar el mensaje de éxito al intentar registrar nuevamente
+    setSuccessMessage("");
+
     if (!name || !email || !password || !confirmPassword) {
       setError("Por favor, complete todos los campos.");
       return;
@@ -68,7 +75,12 @@ const Registro = () => {
     }
 
     try {
-      // Registro del usuario en Firebase Auth
+      const emailExists = await checkIfEmailExists(email);
+      if (emailExists) {
+        setError("El correo electrónico ya está registrado.");
+        return;
+      }
+
       const userCredential = await createUserWithEmailAndPassword(
         authInstance,
         email,
@@ -76,16 +88,12 @@ const Registro = () => {
       );
       const user = userCredential.user;
 
-      // Añadir el nombre y el rol al perfil del usuario
       await updateProfile(user, {
         displayName: name,
         role: role,
       });
 
-      // Añadir información adicional del usuario a la colección en Firestore
       const usersCollection = collection(firestore, "usuarios");
-
-      // Utilizar el UID del usuario como ID del documento
       const userDocRef = doc(usersCollection, user.uid);
 
       await setDoc(userDocRef, {
@@ -95,9 +103,6 @@ const Registro = () => {
         phone: phone,
       });
 
-      console.log("Usuario registrado exitosamente", user);
-
-      // Establecer el mensaje de éxito
       setSuccessMessage("Registro exitoso. ¡Bienvenido!");
     } catch (error) {
       console.error("Error al registrar:", error);
@@ -196,17 +201,6 @@ const Registro = () => {
                 onChange={(e) => setPhone(e.target.value)}
               />
 
-              {/* <MDBInput
-                wrapperClass="mb-4 mx-5 w-100"
-                labelClass="text-white"
-                label="Rol"
-                size="lg"
-                id="form5"
-                type="text"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              /> */}
-
               <div className="d-flex flex-row justify-content-center mb-4">
                 <MDBCheckbox
                   name="flexCheck"
@@ -225,6 +219,11 @@ const Registro = () => {
               </MDBBtn>
               {error && (
                 <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+              )}
+              {successMessage && (
+                <p style={{ color: "green", marginTop: "10px" }}>
+                  {successMessage}
+                </p>
               )}
               <div>
                 <p className="mb-0">

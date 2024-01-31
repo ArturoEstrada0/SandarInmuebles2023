@@ -333,28 +333,19 @@ const PropertyList = ({ onPropertyClick }) => {
         {loading ? (
           <Spin tip="Cargando..." />
         ) : (
-          filteredProperties.slice(0, visibleRows).map(
-            (
-              property // Limitar el mapeo al número de filas visibles
-            ) => (
-              <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
-                <Card
-                  className="property-card"
-                  style={{ width: 480, height: 465 }}
+          filteredProperties.map((property) => (
+            <Col xs={24} sm={12} md={8} lg={8} key={property.id}>
+              <Card
+                className="property-card"
+                style={{ width: 480, height: 465 }}
+              >
+                <div
+                  className="property-image-container"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
                 >
-                  <div
-                    className="property-image-container"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handlePropertyClick(property.id)}
-                  >
-                    {property.condicion === "Venta" && (
-                      <div className="sale-mark">Venta</div>
-                    )}
-                    {property.condicion === "Renta" && (
-                      <div className="rent-mark">Renta</div>
-                    )}
-                    <CustomCarousel images={property.image} />
-                  </div>
+                  <CustomCarousel images={property.image} />
+                </div>
 
                   <div
                     className="property-location"

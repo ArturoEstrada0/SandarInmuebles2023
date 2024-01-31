@@ -52,7 +52,11 @@ const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const [activeSection, setActiveSection] = useState("");
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showToggle, setShowToggle] = useState(window.innerWidth <= 1024);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
   const handleMenuClick = (path, section) => {
     navigate(path);
     setActiveSection(section);

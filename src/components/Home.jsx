@@ -16,7 +16,7 @@ const { Content } = Layout
 function Home() {
   return (
     <Layout>
-      <Content style={{ marginTop: '90px' }}>
+      <Content style={{ marginTop: '65px' }}>
       <ThemeProvider
   breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
   minBreakpoint="xxs">
