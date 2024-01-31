@@ -105,7 +105,7 @@ function Configuracion() {
 <Button
   shape="circle"
   icon={<FontAwesomeIcon icon={faSync} style={{ color: 'gray' }} />}
-  onClick={handleReloadAboutUs}
+  onClick={handleReloadContact}
   style={{ position: 'absolute', top: '10px', right: '10px', backgroundColor: 'transparent', border: 'none' }}
 />
 
