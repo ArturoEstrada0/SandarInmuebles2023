@@ -14,6 +14,7 @@ import Propiedades from './Propiedades';
 import Contratos from './Contratos';
 import Buzon from './Buzon';
 import ChatGPT from './ChatGPT'; // Importa el componente ChatGPT
+import Configuracion from './Configuracion';
 
 const { Sider, Content } = Layout;
 
@@ -34,6 +35,8 @@ function AdminPanel() {
         return <Buzon />;
       case 'chatgpt': // Agrega el nuevo caso para ChatGPT
         return <ChatGPT />;
+      case 'configuracion': // Agrega el nuevo caso para ChatGPT
+        return <Configuracion />;
       default:
         return <Inicio />;
     }
@@ -61,6 +64,9 @@ function AdminPanel() {
           </Menu.Item>
           <Menu.Item key="chatgpt" icon={<MessageOutlined />}>
             ChatGPT
+          </Menu.Item>
+          <Menu.Item key="configuracion" icon={<MessageOutlined />}>
+            Configuracion
           </Menu.Item>
         </Menu>
       </Sider>

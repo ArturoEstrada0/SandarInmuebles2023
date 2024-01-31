@@ -146,36 +146,25 @@ const Contact = () => {
               </h3>
               <div className="contact-info">
                 
-                <p>
-                  <strong>
-                    <EnvironmentOutlined />
-                  </strong>{' '}
-                  <a
-                    href="https://www.google.com/maps?q=Dirección+de+tu+empresa"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Dirección de tu empresa
-                  </a>
-                </p>
+             
                 <p>
                   <strong>
                     <PhoneFilled />
                   </strong>{' '}
                   <a
-                    href="https://wa.me/4434395522"
+                    href="https://wa.me/4432057194"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    4434395522
+                    443-205-71-94
                   </a>
                 </p>
                 <p>
                   <strong>
                     <MailFilled />
                   </strong>{' '}
-                  <a href="mailto:arturoestrada301@gmail.com">
-                    arturoestrada301@gmail.com
+                  <a href="mailto:sandarinmuebles@gmail.com">
+                  sandarinmuebles@gmail.com
                   </a>
                 </p>
               </div>
