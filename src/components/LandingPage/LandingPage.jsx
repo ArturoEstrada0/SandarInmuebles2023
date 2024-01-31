@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Layout, Row, Col, Button, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+import { firestore } from '../firebase/firebase'; // Importamos el objeto firestore para interactuar con Firestore
+import { collection, doc, getDoc } from 'firebase/firestore'; // Importamos las funciones necesarias para obtener el documento de Firestore
 import CountUp from "react-countup";
 import "./LandingPage.css";
 
@@ -12,6 +14,7 @@ function LandingPage() {
   const [animated, setAnimated] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [imageURLs, setImageURLs] = useState([]);
+  const [landingPageData, setLandingPageData] = useState(null); // Estado para almacenar los datos de la página de inicio
 
   useEffect(() => {
     setAnimated(true);
@@ -43,10 +46,24 @@ function LandingPage() {
         console.error("Error al obtener las imágenes:", error);
       }
     };
+
+    const fetchLandingPageData = async () => {
+      try {
+        const docRef = doc(firestore, 'landingPageData', 'pageData'); // Cambia 'pageData' al ID real de tu documento
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setLandingPageData(data);
+        }
+      } catch (error) {
+        console.error('Error al obtener los datos de la página de inicio:', error);
+      }
+    };
   
     fetchImages();
+    fetchLandingPageData();
   }, []);
-  
+
     return (
       <Content style={{ backgroundColor: "#e2f4fe" }}>
         <div className="landing-page-container">
@@ -60,7 +77,7 @@ function LandingPage() {
                   level={2}
                   style={{ fontSize: "2.2rem", fontFamily: "Geometos" }}
                 >
-                  Encuentra la Casa de Tus Sueños con Nosotros
+                  {landingPageData && landingPageData.title} {/* Mostramos el título dinámico */}
                 </Title>
                 <Paragraph
                   style={{
@@ -68,9 +85,7 @@ function LandingPage() {
                     fontFamily: "Lato, sans-serif",
                   }}
                 >
-                  Encuentra la casa de tus sueños con nosotros. Te ofrecemos una
-                  amplia variedad de opciones que se adaptarán a tus necesidades.
-                  ¡Explora nuestros inmuebles ahora!
+                  {landingPageData && landingPageData.subtitle} {/* Mostramos el subtítulo dinámico */}
                 </Paragraph>
                 <Link to="/inmuebles">
                   <Button
@@ -156,4 +171,4 @@ function LandingPage() {
     );
   }
 
-  export default LandingPage;
+export default LandingPage;

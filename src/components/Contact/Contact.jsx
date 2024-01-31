@@ -1,26 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Button, Form, Row, Col, Select, Card, message } from 'antd';
-import {
-  UserOutlined,
-  MailOutlined,
-  PhoneOutlined,
-  MessageOutlined,
-  EnvironmentOutlined,
-  PhoneFilled,
-  MailFilled,
-} from '@ant-design/icons';
-import { collection, addDoc } from 'firebase/firestore';
+import { UserOutlined, MailOutlined, PhoneOutlined, MessageOutlined, PhoneFilled, MailFilled } from '@ant-design/icons';
+import { collection, addDoc, getDocs, query, doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
-import 'animate.css'; // Importa la biblioteca Animate.css
+import 'animate.css';
 import './Contact.css';
 
 const Contact = () => {
   const [form] = Form.useForm();
   const [animationClass, setAnimationClass] = useState('');
+  const [contactInfo, setContactInfo] = useState(null);
+  const [contactTitle, setContactTitle] = useState('');
+  const [contactParagraph, setContactParagraph] = useState('');
 
   useEffect(() => {
-    // Agrega la clase de animación después de que el componente se monta
     setAnimationClass('animate__animated animate__fadeInUp');
+
+    const fetchContactInfo = async () => {
+      try {
+        const contactCollectionRef = collection(firestore, 'contactData');
+        const q = query(contactCollectionRef);
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          setContactInfo(doc.data());
+        });
+
+        const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
+        const docSnap = await getDoc(contactDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setContactTitle(data.title || '');
+          setContactParagraph(data.paragraph || '');
+        }
+      } catch (error) {
+        console.error('Error al obtener la información de contacto:', error);
+      }
+    };
+
+    fetchContactInfo();
   }, []);
 
   const onFinish = async (values) => {
@@ -36,7 +54,7 @@ const Contact = () => {
       console.log('Error al enviar datos a Firestore: ', error);
       message.error('Error al enviar el mensaje. Por favor, inténtalo de nuevo.');
     }
-    // Puedes reiniciar la animación cada vez que se envía el formulario
+
     setAnimationClass('');
     setAnimationClass('animate__animated animate__fadeInUp');
   };
@@ -44,11 +62,10 @@ const Contact = () => {
   return (
     <div className={`contact-container ${animationClass}`}>
       <Card
-        title={<span className={`card-title ${animationClass}`}>Contacta con Nosotros</span>}
+        title={<span className={`card-title ${animationClass}`}>{contactTitle}</span>}
         className={`card-container ${animationClass}`}
-        
       >
-              <p>¿Tienes alguna pregunta o comentario? ¡Estamos aquí para ayudarte! Ponte en contacto con Sandar Inmuebles y te responderemos lo antes posible.</p>
+        <p>{contactParagraph}</p>
         <Row gutter={[16, 16]}>
           <Col span={12}>
             <Form form={form} name="contact-form" onFinish={onFinish} layout="vertical">
@@ -57,12 +74,7 @@ const Contact = () => {
                   <Form.Item
                     label={<span style={{ fontSize: '16.5px' }}>Nombre</span>}
                     name="name"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Por favor, ingrese su nombre.',
-                      },
-                    ]}
+                    rules={[{ required: true, message: 'Por favor, ingrese su nombre.' }]}
                   >
                     <Input prefix={<UserOutlined />} placeholder="Nombre completo" />
                   </Form.Item>
@@ -71,12 +83,7 @@ const Contact = () => {
                   <Form.Item
                     label={<span style={{ fontSize: '16.5px' }}>Teléfono</span>}
                     name="phone"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Por favor, ingrese su número de teléfono.',
-                      },
-                    ]}
+                    rules={[{ required: true, message: 'Por favor, ingrese su número de teléfono.' }]}
                   >
                     <Input prefix={<PhoneOutlined />} placeholder="Número de teléfono" />
                   </Form.Item>
@@ -87,11 +94,7 @@ const Contact = () => {
                 label={<span style={{ fontSize: '16.5px' }}>Correo electrónico</span>}
                 name="email"
                 rules={[
-                  {
-                    required: true,
-                    type: 'email',
-                    message: 'Por favor, ingrese un correo electrónico válido.',
-                  },
+                  { required: true, type: 'email', message: 'Por favor, ingrese un correo electrónico válido.' },
                 ]}
               >
                 <Input prefix={<MailOutlined />} placeholder="Correo electrónico" />
@@ -100,12 +103,7 @@ const Contact = () => {
               <Form.Item
                 label={<span style={{ fontSize: '16.5px' }}>Asunto</span>}
                 name="subject"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Por favor, seleccione un asunto.',
-                  },
-                ]}
+                rules={[{ required: true, message: 'Por favor, seleccione un asunto.' }]}
               >
                 <Select placeholder="Seleccione un asunto">
                   <Select.Option value="Consulta">Consulta</Select.Option>
@@ -118,21 +116,15 @@ const Contact = () => {
               <Form.Item
                 label={<span style={{ fontSize: '16.5px' }}>Mensaje</span>}
                 name="message"
-                rules={[
-                  { required: true, message: 'Por favor, ingrese un mensaje.' },
-                ]}
+                rules={[{ required: true, message: 'Por favor, ingrese un mensaje.' }]}
               >
-                <Input.TextArea
-                  rows={4}
-                  prefix={<MessageOutlined />}
-                  placeholder="Escriba su mensaje..."
-                />
+                <Input.TextArea rows={4} prefix={<MessageOutlined />} placeholder="Escriba su mensaje..." />
               </Form.Item>
 
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily:"Geometos", fontSize:"0.8rem" }}
+                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily: "Geometos", fontSize: "0.8rem" }}
               >
                 Enviar Correo
               </Button>
@@ -141,33 +133,23 @@ const Contact = () => {
 
           <Col span={12}>
             <div className="contact-info-container">
-              <h3 className="contact-title">
-                <UserOutlined /> Información de Contacto
-              </h3>
-              <div className="contact-info">
-                
-             
-                <p>
-                  <strong>
-                    <PhoneFilled />
-                  </strong>{' '}
-                  <a
-                    href="https://wa.me/4432057194"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    443-205-71-94
-                  </a>
-                </p>
-                <p>
-                  <strong>
-                    <MailFilled />
-                  </strong>{' '}
-                  <a href="mailto:sandarinmuebles@gmail.com">
-                  sandarinmuebles@gmail.com
-                  </a>
-                </p>
-              </div>
+              <h3 className="contact-title"><UserOutlined /> Información de Contacto</h3>
+              {contactInfo && (
+                <div className="contact-info">
+                  <p>
+                    <strong><PhoneFilled /></strong>{' '}
+                    <a href={`tel:${contactInfo.phoneNumber}`}>
+                      {contactInfo.phoneNumber}
+                    </a>
+                  </p>
+                  <p>
+                    <strong><MailFilled /></strong>{' '}
+                    <a href={`mailto:${contactInfo.email}`}>
+                      {contactInfo.email}
+                    </a>
+                  </p>
+                </div>
+              )}
             </div>
           </Col>
         </Row>
