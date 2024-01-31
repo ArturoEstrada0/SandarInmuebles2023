@@ -6,25 +6,18 @@ import {
   Col,
   Select,
   Card,
-  Slider,
   Button,
   Typography,
-  Image,
   Spin,
   Input,
-  Carousel,
 } from "antd";
 import {
   HomeOutlined,
   DollarOutlined,
-  TeamOutlined,
-  AreaChartOutlined,
   SearchOutlined,
   EnvironmentOutlined,
   HeartFilled,
   HeartOutlined,
-  ToolOutlined,
-  AppstoreOutlined,
 } from "@ant-design/icons";
 import "./PropertyList.css";
 import {
@@ -37,13 +30,8 @@ import {
 import { firestore } from "../firebase/firebase";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRulerCombined, faM, fa2 } from "@fortawesome/free-solid-svg-icons";
-import {
-  faBath,
-  faBed,
-  faMapMarker,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faRulerCombined } from "@fortawesome/free-solid-svg-icons";
+import { faBath, faBed, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth } from "../../context/AuthContext";
 
@@ -93,7 +81,6 @@ const PropertyList = ({ onPropertyClick }) => {
     setVisibleRows(visibleRows + 3); // Incrementar el número de filas visibles al hacer clic en "Ver más"
   };
 
-  const [mexicanStates, setMexicanStates] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -133,7 +120,36 @@ const PropertyList = ({ onPropertyClick }) => {
 
         setPropertyData(initialPropertyData);
         setFilteredProperties(initialPropertyData);
+
         setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener propiedades:", error);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  const [highlightedProperties, setHighlightedProperties] = useState([]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const propertiesSnapshot = await getDocs(
+          collection(firestore, "propiedades")
+        );
+        const properties = propertiesSnapshot.docs
+          .filter((doc) => doc.data().status === "activa") // Filtrar por el status "activa"
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+        const highlighted = properties.filter(
+          (property) => property.highlighted
+        );
+
+        setHighlightedProperties(highlighted);
       } catch (error) {
         console.error("Error al obtener propiedades:", error);
       }
@@ -329,6 +345,144 @@ const PropertyList = ({ onPropertyClick }) => {
           </Row>
         </Card>
       </div>
+      {/* Sección para propiedades destacadas */}
+      <div style={{ padding: "20px 0" }}>
+        <Title level={3}>Propiedades Destacadas</Title>
+        <Row gutter={[16, 16]}>
+          {highlightedProperties.map((property) => (
+            <Col key={property.id} xs={24} sm={12} md={8} lg={8}>
+              <Card className="property-card">
+                <div
+                  className="property-image-container"
+                  onClick={() => handlePropertyClick(property.id)}
+                >
+                  {/* Renderiza la marca de venta o renta si es aplicable */}
+                  {property.condicion === "Venta" && (
+                    <div className="sale-mark">Venta</div>
+                  )}
+                  {property.condicion === "Renta" && (
+                    <div className="rent-mark">Renta</div>
+                  )}
+                  {/* Renderiza el carrusel de imágenes */}
+                  <CustomCarousel images={property.fotos} />
+                </div>
+                <div
+                  className="property-location"
+                  onClick={() => handlePropertyClick(property.id)}
+                >
+                  {/* Renderiza la ubicación */}
+                  <Text strong style={{ fontSize: "1.2rem" }}>
+                    <EnvironmentOutlined
+                      style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+                    />{" "}
+                    {property.state}, {property.ubicacion}
+                  </Text>
+                </div>
+                <div
+                  className="property-details"
+                  onClick={() => handlePropertyClick(property.id)}
+                >
+                  {/* Renderiza los detalles de la propiedad */}
+                  <Row
+                    gutter={[16, 16]}
+                    style={{ marginBottom: "16px", marginTop: "20px" }}
+                  >
+                    <Col xs={8}>
+                      <Text strong>
+                        <FontAwesomeIcon
+                          icon={faBed}
+                          style={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                        />{" "}
+                        Habitaciones: {property.habitaciones}
+                      </Text>
+                    </Col>
+                    <Col xs={8}>
+                      <Text strong>
+                        <FontAwesomeIcon
+                          icon={faBath}
+                          alt="Baños"
+                          style={{ width: "16px", marginRight: "8px" }}
+                        />{" "}
+                        Baños: {property.baños}
+                      </Text>
+                    </Col>
+                    <Col xs={8}>
+                      <Text strong>
+                        <img
+                          src={m2Image}
+                          alt="m2"
+                          style={{
+                            width: "1.2rem",
+                            height: "1.2rem",
+                            marginRight: "5px",
+                          }}
+                        />{" "}
+                        {property.tamanioPropiedad} m²
+                      </Text>
+                    </Col>
+                    <Col xs={8.1}>
+                      <Text strong>
+                        <HomeOutlined
+                          style={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                        />{" "}
+                        {property.tipoPropiedad}
+                      </Text>
+                    </Col>
+                    <Col xs={8.1}>
+                      <Text strong>
+                        <FontAwesomeIcon
+                          icon={faRulerCombined}
+                          style={{ fontSize: "1.2rem", marginRight: "5px" }}
+                        />{" "}
+                        {property.metrosConstruidos} m²
+                      </Text>
+                    </Col>
+                  </Row>
+                </div>
+                <div
+                  className="property-actions"
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  {/* Renderiza el botón de favoritos */}
+                  {userAuthenticated ? (
+                    <Button
+                      type="primary"
+                      icon={
+                        property.isFavorite ? (
+                          <HeartFilled />
+                        ) : (
+                          <HeartOutlined />
+                        )
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(property.id);
+                      }}
+                    >
+                      {property.isFavorite
+                        ? "Quitar de Favoritos"
+                        : "Añadir a Favoritos"}
+                    </Button>
+                  ) : (
+                    <Link to="/login">
+                      <Button type="primary">Añadir a Favoritos</Button>
+                    </Link>
+                  )}
+                  {/* Renderiza el precio */}
+                  <Text
+                    strong
+                    style={{ fontSize: "1.5rem" }}
+                    onClick={() => handlePropertyClick(property.id)}
+                  >
+                    {" "}
+                    $ {property.precio.toLocaleString()} MXN
+                  </Text>
+                </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
       <Row gutter={[16, 16]}>
         {loading ? (
           <Spin tip="Cargando..." />
@@ -414,7 +568,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               marginRight: "5px", // O ajusta según sea necesario
                             }}
                           />
-                          Terreno: {property.area} m²
+                          {property.area} m²
                         </Text>
                       </Col>
                       <Col xs={8.1}>
@@ -425,7 +579,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               fontWeight: "bold",
                             }}
                           />{" "}
-                          Tipo: {property.type}
+                          {property.type}
                         </Text>
                       </Col>
                       <Col xs={8.1}>
@@ -437,7 +591,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               marginRight: "5px", // Ajusta el espaciado según sea necesario
                             }}
                           />
-                          Metros de construcción: {property.areaBuild} m²
+                          {property.areaBuild} m²
                         </Text>
                       </Col>
                     </Row>
@@ -477,7 +631,7 @@ const PropertyList = ({ onPropertyClick }) => {
                       style={{ fontSize: "1.5rem", cursor: "pointer" }}
                       onClick={() => handlePropertyClick(property.id)}
                     >
-                      $ {property.price.toLocaleString()}
+                      $ {property.price.toLocaleString()} MXN
                     </Text>
                   </div>
                 </Card>

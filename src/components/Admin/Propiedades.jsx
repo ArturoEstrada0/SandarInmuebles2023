@@ -21,7 +21,6 @@ import {
 import { DeleteOutlined, EditOutlined, PauseCircleOutlined, PauseOutlined, PlayCircleOutlined, SearchOutlined, StarOutlined, UploadOutlined } from "@ant-design/icons";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import axios from "axios";
-import CustomSpinner from "./CustomSpinner"; // Importa tu componente de spinner personalizado
 
 import { app, firestore } from "../firebase/firebase";
 import {
@@ -312,6 +311,9 @@ const handleDestacarPropiedad = async (propertyId) => {
             formData = { ...formData, fotos: imageUrls, youtubeUrl };
             formData = { ...formData,  cardsActivadas };
   
+            // Agregar status como "activa"
+            formData = { ...formData, status: "activa" };
+  
             const propiedadesCollection = collection(firestore, "propiedades");
             await addDoc(propiedadesCollection, formData);
   
@@ -345,6 +347,7 @@ const handleDestacarPropiedad = async (propertyId) => {
       setUploading(false); // Establecer el estado uploading a false en cualquier caso
     }
   };
+  
   
 
   const handleUploadChange = ({ fileList: newFileList }) => {
@@ -508,6 +511,11 @@ const handleDestacarPropiedad = async (propertyId) => {
       filters: [
         { text: "Casa", value: "Casa" },
         { text: "Departamento", value: "Departamento" },
+        { text: "Terreno", value: "Terreno" },
+        { text: "Edificio", value: "Edificio" },
+        { text: "Oficina", value: "Oficina" },
+        { text: "Bodega", value: "Bodega" },
+        { text: "Local", value: "Local" },
       ],
       onFilter: (value, record) => record.tipoPropiedad === value,
     },
