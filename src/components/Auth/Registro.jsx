@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, setDoc, doc, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  setDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
@@ -153,52 +161,62 @@ const Registro = () => {
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
                 labelClass="text-white"
+                inputClass="text-white" // Aquí se define el color del texto
                 label="Nombre"
                 size="lg"
                 id="form1"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                style={{ color: "white" }}
               />
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
                 labelClass="text-white"
+                inputClass="text-white" // Aquí se define el color del texto
                 label="Correo Electrónico"
                 size="lg"
                 id="form2"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                style={{ color: "white" }}
               />
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
                 labelClass="text-white"
+                inputClass="text-white" // Aquí se define el color del texto
                 label="Contraseña"
                 size="lg"
                 id="form3"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                style={{ color: "white" }}
               />
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
                 labelClass="text-white"
+                inputClass="text-white" // Aquí se define el color del texto
                 label="Confirmar Contraseña"
                 size="lg"
                 id="form4"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{ color: "white" }}
               />
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
                 labelClass="text-white"
+                inputClass="white" // Aquí se define el color del texto
                 label="Teléfono"
                 size="lg"
                 id="form6"
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                style={{ color: "white" }}
               />
 
               <div className="d-flex flex-row justify-content-center mb-4">

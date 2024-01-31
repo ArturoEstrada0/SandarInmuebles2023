@@ -126,6 +126,8 @@ const Login = () => {
                   id="formControlEmail"
                   type="email"
                   size="lg"
+                  style={{ color: "white" }}
+
                 />
                 <MDBInput
                   wrapperClass="mb-4 mx-5 w-100"
@@ -136,6 +138,8 @@ const Login = () => {
                   id="formControlPassword"
                   type="password"
                   size="lg"
+                  style={{ color: "white" }}
+
                 />
 
                 <p className="small mb-3 pb-lg-2">
