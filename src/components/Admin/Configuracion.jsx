@@ -1,9 +1,14 @@
-import React from 'react'
+import React from 'react';
+import ImageUploadForm from './ImageUploadForm';
 
 function Configuracion() {
   return (
-    <div>Configuracion</div>
-  )
+    <div>
+      <h1>Configuración</h1>
+      <ImageUploadForm />
+      
+    </div>
+  );
 }
 
-export default Configuracion
+export default Configuracion;

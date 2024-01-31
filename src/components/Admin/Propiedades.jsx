@@ -347,7 +347,9 @@ function Propiedades() {
       setLoading(false)
       setUploading(false) // Establecer el estado uploading a false en cualquier caso
     }
-  }
+  };
+  
+  
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
@@ -504,8 +506,13 @@ function Propiedades() {
       dataIndex: 'tipoPropiedad',
       key: 'tipoPropiedad',
       filters: [
-        { text: 'Casa', value: 'Casa' },
-        { text: 'Departamento', value: 'Departamento' },
+        { text: "Casa", value: "Casa" },
+        { text: "Departamento", value: "Departamento" },
+        { text: "Terreno", value: "Terreno" },
+        { text: "Edificio", value: "Edificio" },
+        { text: "Oficina", value: "Oficina" },
+        { text: "Bodega", value: "Bodega" },
+        { text: "Local", value: "Local" },
       ],
       onFilter: (value, record) => record.tipoPropiedad === value,
     },
