@@ -67,14 +67,32 @@
   .sale-mark,
   .rent-mark {
     position: absolute; /* Posicionamiento absoluto para las etiquetas */
-    top: 0px; /* Ajusta la posición vertical según sea necesario */
-    left: 0px; /* Ajusta la posición horizontal según sea necesario */
-    background-color: #ffffff8e; /* Color de fondo rojo para la marca de venta */
-    color: #333; /* Color de texto blanco para la marca de venta */
+    top: 10px; /* Ajusta la posición vertical según sea necesario */
+    left: 10px; /* Ajusta la posición horizontal según sea necesario */
+    background-color: #1677ff; /* Color de fondo rojo para la marca de venta */
+    color: #ffffff; /* Color de texto blanco para la marca de venta */
+    font-size: 15px;
     font-weight: bold;
-    padding: 10px; /* Espacio interno de 8px alrededor del texto */
-    border-radius: 2px; /* Bordes redondeados */
+    padding: -0px 8px; /* Espacio interno de 8px alrededor del texto */
+    border-radius: 5px; /* Bordes redondeados */
     z-index: 1; /* Ajusta el índice z para que esté por encima de las imágenes */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
   
+  .property-card-container {
+    position: relative;
+  }
+  
+  .logo-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+  }
+  
+  .logo {
+    width: 150px; /* Ajusta el tamaño según sea necesario */
+  }
   
