@@ -63,7 +63,7 @@ const PropertyList = ({ onPropertyClick }) => {
   const [contactInfo, setContactInfo] = useState(null);
 
   const [userAuthenticated, setUserAuthenticated] = useState(false);
-  const [visibleRows, setVisibleRows] = useState(3); // Estado para controlar el número de filas visibles
+  const [visibleRows, setVisibleRows] = useState(50); // Estado para controlar el número de filas visibles
 
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -76,10 +76,9 @@ const PropertyList = ({ onPropertyClick }) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-
     const fetchContactInfo = async () => {
       try {
-        const contactCollectionRef = collection(firestore, 'contactData');
+        const contactCollectionRef = collection(firestore, "contactData");
         const q = query(contactCollectionRef);
         const querySnapshot = await getDocs(q);
 
@@ -87,21 +86,19 @@ const PropertyList = ({ onPropertyClick }) => {
           setContactInfo(doc.data());
         });
 
-        const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
+        const contactDocRef = doc(firestore, "contactData", "contactInfo");
         const docSnap = await getDoc(contactDocRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-       
         }
       } catch (error) {
-        console.error('Error al obtener la información de contacto:', error);
+        console.error("Error al obtener la información de contacto:", error);
       }
     };
 
     fetchContactInfo();
   }, []);
 
-  
   const handleMinPriceChange = (e) => {
     const value = e.target.value;
     if (!isNaN(value) || value === "") {
@@ -333,20 +330,19 @@ const PropertyList = ({ onPropertyClick }) => {
   // Función para cerrar el modal
   const closeModal = () => {
     setWhatsappModalVisible(false);
-    
   };
 
   // Función para manejar el envío de datos
   const handleSubmit = (property) => {
-    console.log(property)
+    console.log(property);
     // Aquí puedes generar el mensaje de WhatsApp con los datos del usuario
     const message = `¡Hola! 👋\n\nEstoy interesad@ en la propiedad *${property.name}* ubicada en *${property.state}*. \n\nMi nombre es *${userData.name}* , mi teléfono es 📲 *${userData.phone}*  y mi correo electrónico es 📧 *${userData.email}*. \n\n¿Podrías proporcionarme más detalles sobre esta propiedad? 🏡\n\n🔗 URL de la propiedad: https://sandar-inmuebles.web.app/property/${property.id}`;
 
     // Abre la ventana de chat de WhatsApp con el mensaje predefinido
     window.open(
-      `https://api.whatsapp.com/send?phone=${contactInfo.phoneNumber}&text=${encodeURIComponent(
-        message
-      )}`
+      `https://api.whatsapp.com/send?phone=${
+        contactInfo.phoneNumber
+      }&text=${encodeURIComponent(message)}`
     );
 
     // Cierra el modal después de enviar el mensaje
@@ -572,7 +568,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               alt="Baños"
                               style={{ fontSize: "2rem", marginRight: "8px" }} // Aumenta el tamaño del ícono
                             />{" "}
-                            Medios Baños: {property.baños}
+                            Medios Baños: {property.medioBaño ?? 0}
                           </Text>
                         </Col>
                         <Col xs={8}>
@@ -769,7 +765,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               onClick={() => handleSubmit(property)}
                             >
                               Enviar
-                            </Button>
+                            </Button>,
                           ]}
                         >
                           {/* Logotipo */}
@@ -826,288 +822,294 @@ const PropertyList = ({ onPropertyClick }) => {
       <div style={{ padding: "20px 0" }}>
         <Title level={3}>Otras Propiedades</Title>
         <Row gutter={[16, 16]}>
-  {loading ? (
-    <Spin tip="Cargando..." />
-  ) : (
-    filteredProperties.slice(0, visibleRows).map((property) => (
-      <Col key={property.id} xs={24}>
-        <Card className="property-card">
-          <Row gutter={[16, 16]}>
-            {/* Columna para la foto */}
-            <Col xs={24} sm={12} md={12} lg={8}>
-              <div
-                className="property-image-container"
-                onClick={() => handlePropertyClick(property.id)}
-              >
-                {/* Renderiza la marca de venta o renta si es aplicable */}
-                {property.condicion === "Venta" && (
-                  <div className="sale-mark">Venta</div>
-                )}
-                {property.condicion === "Renta" && (
-                  <div className="rent-mark">Renta</div>
-                )}
-                <CustomCarousel images={property.image} />
-              </div>
-            </Col>
-            {/* Columna para la información */}
-            <Col xs={24} sm={12} md={12} lg={16}>
-              <div
-                className="property-name"
-                style={{ cursor: "pointer" }}
-                onClick={() => handlePropertyClick(property.id)}
-              >
-                {/* Renderiza el nombre de propiedad */}
-                <Text
-                  style={{
-                    fontSize: "1.2rem",
-                    color: "#1677ff",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {property.name}
-                </Text>
-              </div>
-
-              <div
-                className="property-location"
-                style={{ cursor: "pointer" }}
-                onClick={() => handlePropertyClick(property.id)}
-              >
-                {/* Renderiza la ubicación */}
-                <Text
-                  style={{
-                    fontSize: "1.1rem",
-                    color: "#333",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <EnvironmentFilled
-                    style={{ fontSize: "1.1rem", fontWeight: "bold" }}
-                  />{" "}
-                  {property.state}
-                </Text>
-              </div>
-
-              <div
-                className="property-price"
-                style={{ cursor: "pointer" }}
-                onClick={() => handlePropertyClick(property.id)}
-              >
-                {/* Renderiza el precio */}
-                <Text
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "bold",
-                    marginTop: "10px",
-                  }}
-                  onClick={() => handlePropertyClick(property.id)}
-                >
-                  {" "}
-                  $ {property.price.toLocaleString()} MXN
-                </Text>
-              </div>
-              <div className="property-details">
-                {/* Renderiza los detalles de la propiedad */}
-                <Row
-                  gutter={[16, 16]}
-                  style={{ marginBottom: "16px", marginTop: "20px" }}
-                >
-                  <Col xs={8}>
-                    <Text strong style={{ fontSize: "1.2rem" }}>
-                      <FontAwesomeIcon
-                        icon={faBed}
-                        style={{ fontSize: "2rem", fontWeight: "bold" }}
-                      />{" "}
-                      Recámaras: {property.rooms}
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong style={{ fontSize: "1.2rem" }}>
-                      <FontAwesomeIcon
-                        icon={faBath}
-                        alt="Baños"
-                        style={{ fontSize: "2rem", marginRight: "8px" }}
-                      />{" "}
-                      Baños: {property.bathrooms}
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong style={{ fontSize: "1.2rem" }}>
-                      <FontAwesomeIcon
-                        icon={faToilet}
-                        alt="Baños"
-                        style={{ fontSize: "2rem", marginRight: "8px" }}
-                      />{" "}
-                      Medios Baños: {property.bathrooms}
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong style={{ fontSize: "1.2rem" }}>
-                      <HomeOutlined
-                        style={{
-                          fontSize: "2rem",
-                          fontWeight: "bold",
-                        }}
-                      />{" "}
-                      {property.type}
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong style={{ fontSize: "1.2rem" }}>
-                      <img
-                        src={m2Image}
-                        alt="m2"
-                        style={{
-                          width: "2rem",
-                          height: "2rem",
-                          marginRight: "5px",
-                        }}
-                      />
-                      {property.area} m²
-                    </Text>
-                  </Col>
-                  <Col xs={8}>
-                    <Text strong style={{ fontSize: "1.2rem" }}>
-                      <FontAwesomeIcon
-                        icon={faRulerCombined}
-                        style={{
-                          fontSize: "2rem",
-                          marginRight: "5px",
-                        }}
-                      />
-                      {property.areaBuild} m²
-                    </Text>
-                  </Col>
-                </Row>
-              </div>
-              <div className="property-actions" style={{ display: "flex" }}>
-                {/* Renderiza el botón de favoritos */}
-                {userAuthenticated ? (
-                  <Button
-                    type="primary"
-                    icon={
-                      property.isFavorite ? <HeartFilled /> : <HeartOutlined />
-                    }
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(property.id);
-                    }}
-                  >
-                    {property.isFavorite
-                      ? "Quitar de Favoritos"
-                      : "Añadir a Favoritos"}
-                  </Button>
-                ) : (
-                  <Link to="/login">
-                    <Button type="primary">Añadir a Favoritos</Button>
-                  </Link>
-                )}
-
-                {/* Contenedor para los botones de YouTube y WhatsApp */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginLeft: "16px",
-                  }}
-                >
-                  {/* Botón de YouTube */}
-                  <Button
-                    type="primary"
-                    style={{
-                      backgroundColor: "#FF0000",
-                      borderColor: "#FF0000",
-                      marginRight: "8px",
-                    }}
-                    icon={<YoutubeFilled />}
-                    onClick={() =>
-                      handleYoutubeButtonClick(property.youtube)
-                    }
-                  >
-                    YouTube
-                  </Button>
-                  {/* Botón de WhatsApp */}
-                  <Button
-                    type="primary"
-                    style={{
-                      backgroundColor: "#25D366",
-                      borderColor: "#25D366",
-                    }}
-                    icon={<WhatsAppOutlined />}
-                    onClick={openModal}
-                  >
-                    WhatsApp
-                  </Button>
-
-                  {/* Modal para solicitar datos del usuario */}
-                  <Modal
-                    title="Datos de Contacto"
-                    visible={whatsappModalVisible}
-                    onCancel={closeModal}
-                    footer={[
-                      <Button key="cancel" onClick={closeModal}>
-                        Cancelar
-                      </Button>,
-                      <Button
-                        key="submit"
-                        type="primary"
-                        onClick={() => handleSubmit(property)}
+          {loading ? (
+            <Spin tip="Cargando..." />
+          ) : (
+            filteredProperties.slice(0, visibleRows).map((property) => (
+              <Col key={property.id} xs={24}>
+                <Card className="property-card">
+                  <Row gutter={[16, 16]}>
+                    {/* Columna para la foto */}
+                    <Col xs={24} sm={12} md={12} lg={8}>
+                      <div
+                        className="property-image-container"
+                        onClick={() => handlePropertyClick(property.id)}
                       >
-                        Enviar
-                      </Button>,
-                    ]}
-                  >
-                    {/* Logotipo */}
-                    <div
-                      style={{
-                        textAlign: "center",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <img
-                        src={logo}
-                        alt="Sandar Inmuebles"
-                        style={{ width: "50%", maxWidth: "200px" }}
-                      />
-                    </div>
-                    <Form>
-                      <Form.Item label="Nombre">
-                        <Input
-                          name="name"
-                          value={userData.name}
-                          onChange={handleUserDataChange}
-                        />
-                      </Form.Item>
-                      <Form.Item label="Teléfono">
-                        <Input
-                          name="phone"
-                          value={userData.phone}
-                          onChange={handleUserDataChange}
-                        />
-                      </Form.Item>
-                      <Form.Item label="Correo electrónico">
-                        <Input
-                          name="email"
-                          value={userData.email}
-                          onChange={handleUserDataChange}
-                        />
-                      </Form.Item>
-                    </Form>
-                  </Modal>
-                </div>
-              </div>
-            </Col>
-          </Row>
-          {/* Logotipo */}
-          <div className="logo-container">
-            <img src={logo} alt="Sandar Inmuebles" className="logo" />
-          </div>
-        </Card>
-      </Col>
-    ))
-  )}
-</Row>
+                        {/* Renderiza la marca de venta o renta si es aplicable */}
+                        {property.condicion === "Venta" && (
+                          <div className="sale-mark">Venta</div>
+                        )}
+                        {property.condicion === "Renta" && (
+                          <div className="rent-mark">Renta</div>
+                        )}
+                        <CustomCarousel images={property.image} />
+                      </div>
+                    </Col>
+                    {/* Columna para la información */}
+                    <Col xs={24} sm={12} md={12} lg={16}>
+                      <div
+                        className="property-name"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
+                        {/* Renderiza el nombre de propiedad */}
+                        <Text
+                          style={{
+                            fontSize: "1.2rem",
+                            color: "#1677ff",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {property.name}
+                        </Text>
+                      </div>
 
+                      <div
+                        className="property-location"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
+                        {/* Renderiza la ubicación */}
+                        <Text
+                          style={{
+                            fontSize: "1.1rem",
+                            color: "#333",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <EnvironmentFilled
+                            style={{ fontSize: "1.1rem", fontWeight: "bold" }}
+                          />{" "}
+                          {property.state}
+                        </Text>
+                      </div>
+
+                      <div
+                        className="property-price"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
+                        {/* Renderiza el precio */}
+                        <Text
+                          style={{
+                            fontSize: "1.5rem",
+                            fontWeight: "bold",
+                            marginTop: "10px",
+                          }}
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
+                          {" "}
+                          $ {property.price.toLocaleString()} MXN
+                        </Text>
+                      </div>
+                      <div className="property-details">
+                        {/* Renderiza los detalles de la propiedad */}
+                        <Row
+                          gutter={[16, 16]}
+                          style={{ marginBottom: "16px", marginTop: "20px" }}
+                        >
+                          <Col xs={8}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
+                              <FontAwesomeIcon
+                                icon={faBed}
+                                style={{ fontSize: "2rem", fontWeight: "bold" }}
+                              />{" "}
+                              Recámaras: {property.rooms}
+                            </Text>
+                          </Col>
+                          <Col xs={8}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
+                              <FontAwesomeIcon
+                                icon={faBath}
+                                alt="Baños"
+                                style={{ fontSize: "2rem", marginRight: "8px" }}
+                              />{" "}
+                              Baños: {property.bathrooms}
+                            </Text>
+                          </Col>
+                          <Col xs={8}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
+                              <FontAwesomeIcon
+                                icon={faToilet}
+                                alt="Baños"
+                                style={{ fontSize: "2rem", marginRight: "8px" }}
+                              />{" "}
+                              Medios Baños: {property.medioBaño ?? 0}
+                            </Text>
+                          </Col>
+                          <Col xs={8}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
+                              <HomeOutlined
+                                style={{
+                                  fontSize: "2rem",
+                                  fontWeight: "bold",
+                                }}
+                              />{" "}
+                              {property.type}
+                            </Text>
+                          </Col>
+                          <Col xs={8}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
+                              <img
+                                src={m2Image}
+                                alt="m2"
+                                style={{
+                                  width: "2rem",
+                                  height: "2rem",
+                                  marginRight: "5px",
+                                }}
+                              />
+                              {property.area} m²
+                            </Text>
+                          </Col>
+                          <Col xs={8}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
+                              <FontAwesomeIcon
+                                icon={faRulerCombined}
+                                style={{
+                                  fontSize: "2rem",
+                                  marginRight: "5px",
+                                }}
+                              />
+                              {property.areaBuild} m²
+                            </Text>
+                          </Col>
+                        </Row>
+                      </div>
+                      <div
+                        className="property-actions"
+                        style={{ display: "flex" }}
+                      >
+                        {/* Renderiza el botón de favoritos */}
+                        {userAuthenticated ? (
+                          <Button
+                            type="primary"
+                            icon={
+                              property.isFavorite ? (
+                                <HeartFilled />
+                              ) : (
+                                <HeartOutlined />
+                              )
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(property.id);
+                            }}
+                          >
+                            {property.isFavorite
+                              ? "Quitar de Favoritos"
+                              : "Añadir a Favoritos"}
+                          </Button>
+                        ) : (
+                          <Link to="/login">
+                            <Button type="primary">Añadir a Favoritos</Button>
+                          </Link>
+                        )}
+
+                        {/* Contenedor para los botones de YouTube y WhatsApp */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginLeft: "16px",
+                          }}
+                        >
+                          {/* Botón de YouTube */}
+                          <Button
+                            type="primary"
+                            style={{
+                              backgroundColor: "#FF0000",
+                              borderColor: "#FF0000",
+                              marginRight: "8px",
+                            }}
+                            icon={<YoutubeFilled />}
+                            onClick={() =>
+                              handleYoutubeButtonClick(property.youtube)
+                            }
+                          >
+                            YouTube
+                          </Button>
+                          {/* Botón de WhatsApp */}
+                          <Button
+                            type="primary"
+                            style={{
+                              backgroundColor: "#25D366",
+                              borderColor: "#25D366",
+                            }}
+                            icon={<WhatsAppOutlined />}
+                            onClick={openModal}
+                          >
+                            WhatsApp
+                          </Button>
+
+                          {/* Modal para solicitar datos del usuario */}
+                          <Modal
+                            title="Datos de Contacto"
+                            visible={whatsappModalVisible}
+                            onCancel={closeModal}
+                            footer={[
+                              <Button key="cancel" onClick={closeModal}>
+                                Cancelar
+                              </Button>,
+                              <Button
+                                key="submit"
+                                type="primary"
+                                onClick={() => handleSubmit(property)}
+                              >
+                                Enviar
+                              </Button>,
+                            ]}
+                          >
+                            {/* Logotipo */}
+                            <div
+                              style={{
+                                textAlign: "center",
+                                marginBottom: "20px",
+                              }}
+                            >
+                              <img
+                                src={logo}
+                                alt="Sandar Inmuebles"
+                                style={{ width: "50%", maxWidth: "200px" }}
+                              />
+                            </div>
+                            <Form>
+                              <Form.Item label="Nombre">
+                                <Input
+                                  name="name"
+                                  value={userData.name}
+                                  onChange={handleUserDataChange}
+                                />
+                              </Form.Item>
+                              <Form.Item label="Teléfono">
+                                <Input
+                                  name="phone"
+                                  value={userData.phone}
+                                  onChange={handleUserDataChange}
+                                />
+                              </Form.Item>
+                              <Form.Item label="Correo electrónico">
+                                <Input
+                                  name="email"
+                                  value={userData.email}
+                                  onChange={handleUserDataChange}
+                                />
+                              </Form.Item>
+                            </Form>
+                          </Modal>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                  {/* Logotipo */}
+                  <div className="logo-container">
+                    <img src={logo} alt="Sandar Inmuebles" className="logo" />
+                  </div>
+                </Card>
+              </Col>
+            ))
+          )}
+        </Row>
       </div>
 
       {/* Botón "Ver más" */}

@@ -905,7 +905,7 @@ function Propiedades() {
 
                           {feature === 'Medio Baño' && (
                             <Form.Item
-                              name='medio Baño'
+                              name='medioBaño'
                               initialValue={0}
                               rules={[
                                 {
