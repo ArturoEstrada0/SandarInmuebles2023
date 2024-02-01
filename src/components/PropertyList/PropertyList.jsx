@@ -350,7 +350,7 @@ const PropertyList = ({ onPropertyClick }) => {
         <Title level={3}>Propiedades Destacadas</Title>
         <Row gutter={[16, 16]}>
           {highlightedProperties.map((property) => (
-      <Col key={property.id} xs={24} sm={12} md={12} lg={12}>
+      <Col key={property.id} xs={24} sm={24} md={24} lg={24}>
       <Card className="property-card">
                 <div
                   className="property-image-container"
@@ -491,7 +491,7 @@ const PropertyList = ({ onPropertyClick }) => {
             (
               property // Limitar el mapeo al número de filas visibles
             ) => (
-              <Col key={property.id} xs={24} sm={12} md={12} lg={12}>
+              <Col key={property.id} xs={24} sm={24} md={24} lg={24}>
               <Card
                   className="property-card"
                   style={{ width: 480, height: 465 }}
