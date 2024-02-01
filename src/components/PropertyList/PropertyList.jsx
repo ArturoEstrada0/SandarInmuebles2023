@@ -722,21 +722,23 @@ const PropertyList = ({ onPropertyClick }) => {
                             </Form.Item>
                           </Form>
                         </Modal>
-                        {/* Botón de YouTube */}
-                        <Button
-                          type="primary"
-                          style={{
-                            backgroundColor: "#FF0000",
-                            borderColor: "#FF0000",
-                            marginLeft: "16px",
-                          }}
-                          icon={<YoutubeFilled />}
-                          onClick={() =>
-                            handleYoutubeButtonClick(property.youtubeUrl)
-                          }
-                        >
-                          YouTube
-                        </Button>
+                        
+                        {property.youtubeUrl !== "" && (
+                          <Button
+                            type="primary"
+                            style={{
+                              backgroundColor: "#FF0000",
+                              borderColor: "#FF0000",
+                              marginLeft: "16px",
+                            }}
+                            icon={<YoutubeFilled />}
+                            onClick={() =>
+                              handleYoutubeButtonClick(property.youtubeUrl)
+                            }
+                          >
+                            YouTube
+                          </Button>
+                        )}
                         {/* Modal para mostrar el video de YouTube y las fotos de la propiedad */}
                         <Modal
                           title="Detalles de la Propiedad"
@@ -1026,21 +1028,23 @@ const PropertyList = ({ onPropertyClick }) => {
                           >
                             WhatsApp
                           </Button>
-                          {/* Botón de YouTube */}
-                          <Button
-                            type="primary"
-                            style={{
-                              backgroundColor: "#FF0000",
-                              borderColor: "#FF0000",
-                              marginLeft: "16px",
-                            }}
-                            icon={<YoutubeFilled />}
-                            onClick={() =>
-                              handleYoutubeButtonClick(property.youtube)
-                            }
-                          >
-                            YouTube
-                          </Button>
+
+                          {property.youtube !== "" && (
+                            <Button
+                              type="primary"
+                              style={{
+                                backgroundColor: "#FF0000",
+                                borderColor: "#FF0000",
+                                marginLeft: "16px",
+                              }}
+                              icon={<YoutubeFilled />}
+                              onClick={() =>
+                                handleYoutubeButtonClick(property.youtube)
+                              }
+                            >
+                              YouTube
+                            </Button>
+                          )}
 
                           {/* Modal para solicitar datos del usuario */}
                           <Modal
