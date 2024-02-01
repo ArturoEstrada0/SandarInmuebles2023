@@ -347,201 +347,54 @@ const PropertyList = ({ onPropertyClick }) => {
       </div>
       {/* Sección para propiedades destacadas */}
       <div style={{ padding: "20px 0" }}>
-        <Title level={3}>Propiedades Destacadas</Title>
-        <Row gutter={[16, 16]}>
-          {highlightedProperties.map((property) => (
-      <Col key={property.id} xs={24} sm={24} md={24} lg={24}>
-      <Card className="property-card">
-                <div
-                  className="property-image-container"
-                  onClick={() => handlePropertyClick(property.id)}
-                >
-                  {/* Renderiza la marca de venta o renta si es aplicable */}
-                  {property.condicion === "Venta" && (
-                    <div className="sale-mark">Venta</div>
-                  )}
-                  {property.condicion === "Renta" && (
-                    <div className="rent-mark">Renta</div>
-                  )}
-                  {/* Renderiza el carrusel de imágenes */}
-                  <CustomCarousel images={property.fotos} />
-                </div>
-                <div
-                  className="property-location"
-                  onClick={() => handlePropertyClick(property.id)}
-                >
-                  {/* Renderiza la ubicación */}
-                  <Text strong style={{ fontSize: "1.2rem" }}>
-                    <EnvironmentOutlined
-                      style={{ fontSize: "1.5rem", fontWeight: "bold" }}
-                    />{" "}
-                    {property.state}, {property.ubicacion}
-                  </Text>
-                </div>
-                <div
-                  className="property-details"
-                  onClick={() => handlePropertyClick(property.id)}
-                >
-                  {/* Renderiza los detalles de la propiedad */}
-                  <Row
-                    gutter={[16, 16]}
-                    style={{ marginBottom: "16px", marginTop: "20px" }}
-                  >
-                    <Col xs={8}>
-                      <Text strong>
-                        <FontAwesomeIcon
-                          icon={faBed}
-                          style={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                        />{" "}
-                        Habitaciones: {property.habitaciones}
-                      </Text>
-                    </Col>
-                    <Col xs={8}>
-                      <Text strong>
-                        <FontAwesomeIcon
-                          icon={faBath}
-                          alt="Baños"
-                          style={{ width: "16px", marginRight: "8px" }}
-                        />{" "}
-                        Baños: {property.baños}
-                      </Text>
-                    </Col>
-                    <Col xs={8}>
-                      <Text strong>
-                        <img
-                          src={m2Image}
-                          alt="m2"
-                          style={{
-                            width: "1.2rem",
-                            height: "1.2rem",
-                            marginRight: "5px",
-                          }}
-                        />{" "}
-                        {property.tamanioPropiedad} m²
-                      </Text>
-                    </Col>
-                    <Col xs={8.1}>
-                      <Text strong>
-                        <HomeOutlined
-                          style={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                        />{" "}
-                        {property.tipoPropiedad}
-                      </Text>
-                    </Col>
-                    <Col xs={8.1}>
-                      <Text strong>
-                        <FontAwesomeIcon
-                          icon={faRulerCombined}
-                          style={{ fontSize: "1.2rem", marginRight: "5px" }}
-                        />{" "}
-                        {property.metrosConstruidos} m²
-                      </Text>
-                    </Col>
-                  </Row>
-                </div>
-                <div
-                  className="property-actions"
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  {/* Renderiza el botón de favoritos */}
-                  {userAuthenticated ? (
-                    <Button
-                      type="primary"
-                      icon={
-                        property.isFavorite ? (
-                          <HeartFilled />
-                        ) : (
-                          <HeartOutlined />
-                        )
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(property.id);
-                      }}
-                    >
-                      {property.isFavorite
-                        ? "Quitar de Favoritos"
-                        : "Añadir a Favoritos"}
-                    </Button>
-                  ) : (
-                    <Link to="/login">
-                      <Button type="primary">Añadir a Favoritos</Button>
-                    </Link>
-                  )}
-                  {/* Renderiza el precio */}
-                  <Text
-                    strong
-                    style={{ fontSize: "1.5rem" }}
-                    onClick={() => handlePropertyClick(property.id)}
-                  >
-                    {" "}
-                    $ {property.precio.toLocaleString()} MXN
-                  </Text>
-                </div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </div>
+      {/* Sección para propiedades destacadas */}
+      <Title level={3}>Propiedades Destacadas</Title>
       <Row gutter={[16, 16]}>
-        {loading ? (
-          <Spin tip="Cargando..." />
-        ) : (
-          filteredProperties.slice(0, visibleRows).map(
-            (
-              property // Limitar el mapeo al número de filas visibles
-            ) => (
-              <Col key={property.id} xs={24} sm={24} md={24} lg={24}>
-              <Card
-                  className="property-card"
-                  style={{ width: 480, height: 465 }}
-                >
+        {highlightedProperties.map((property) => (
+          <Col key={property.id} xs={24} sm={24} md={24} lg={24}>
+            <Card className="property-card">
+              <Row gutter={[16, 16]}>
+                {/* Columna para la foto */}
+                <Col xs={24} sm={12} md={12} lg={8}>
                   <div
                     className="property-image-container"
-                    style={{ cursor: "pointer" }}
                     onClick={() => handlePropertyClick(property.id)}
                   >
+                    {/* Renderiza la marca de venta o renta si es aplicable */}
                     {property.condicion === "Venta" && (
                       <div className="sale-mark">Venta</div>
                     )}
                     {property.condicion === "Renta" && (
                       <div className="rent-mark">Renta</div>
                     )}
-                    <CustomCarousel images={property.image} />
+                    {/* Renderiza el carrusel de imágenes */}
+                    <CustomCarousel images={property.fotos} />
                   </div>
-
+                </Col>
+                {/* Columna para la información */}
+                <Col xs={24} sm={12} md={12} lg={16}>
                   <div
                     className="property-location"
-                    style={{ marginTop: "16px", cursor: "pointer" }}
                     onClick={() => handlePropertyClick(property.id)}
                   >
+                    {/* Renderiza la ubicación */}
                     <Text strong style={{ fontSize: "1.2rem" }}>
                       <EnvironmentOutlined
                         style={{ fontSize: "1.5rem", fontWeight: "bold" }}
                       />{" "}
-                      {property.state}, {property.city}
+                      {property.state}, {property.ubicacion}
                     </Text>
                   </div>
                   <div className="property-details">
-                    <Row
-                      gutter={[16, 16]}
-                      style={{
-                        marginBottom: "16px",
-                        marginTop: "20px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handlePropertyClick(property.id)}
-                    >
+                    {/* Renderiza los detalles de la propiedad */}
+                    <Row gutter={[16, 16]} style={{ marginBottom: "16px", marginTop: "20px" }}>
                       <Col xs={8}>
                         <Text strong>
                           <FontAwesomeIcon
                             icon={faBed}
-                            style={{
-                              fontSize: "1.2rem",
-                              fontWeight: "bold",
-                            }}
+                            style={{ fontSize: "1.2rem", fontWeight: "bold" }}
                           />{" "}
-                          Habitaciones: {property.rooms}
+                          Habitaciones: {property.habitaciones}
                         </Text>
                       </Col>
                       <Col xs={8}>
@@ -549,12 +402,9 @@ const PropertyList = ({ onPropertyClick }) => {
                           <FontAwesomeIcon
                             icon={faBath}
                             alt="Baños"
-                            style={{
-                              width: "16px",
-                              marginRight: "8px",
-                            }}
+                            style={{ width: "16px", marginRight: "8px" }}
                           />{" "}
-                          Baños: {property.bathrooms}
+                          Baños: {property.baños}
                         </Text>
                       </Col>
                       <Col xs={8}>
@@ -565,33 +415,27 @@ const PropertyList = ({ onPropertyClick }) => {
                             style={{
                               width: "1.2rem",
                               height: "1.2rem",
-                              marginRight: "5px", // O ajusta según sea necesario
+                              marginRight: "5px",
                             }}
-                          />
-                          {property.area} m²
+                          />{" "}
+                          {property.tamanioPropiedad} m²
                         </Text>
                       </Col>
                       <Col xs={8.1}>
                         <Text strong>
                           <HomeOutlined
-                            style={{
-                              fontSize: "1.2rem",
-                              fontWeight: "bold",
-                            }}
+                            style={{ fontSize: "1.2rem", fontWeight: "bold" }}
                           />{" "}
-                          {property.type}
+                          {property.tipoPropiedad}
                         </Text>
                       </Col>
                       <Col xs={8.1}>
                         <Text strong>
                           <FontAwesomeIcon
                             icon={faRulerCombined}
-                            style={{
-                              fontSize: "1.2rem",
-                              marginRight: "5px", // Ajusta el espaciado según sea necesario
-                            }}
-                          />
-                          {property.areaBuild} m²
+                            style={{ fontSize: "1.2rem", marginRight: "5px" }}
+                          />{" "}
+                          {property.metrosConstruidos} m²
                         </Text>
                       </Col>
                     </Row>
@@ -600,6 +444,7 @@ const PropertyList = ({ onPropertyClick }) => {
                     className="property-actions"
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
+                    {/* Renderiza el botón de favoritos */}
                     {userAuthenticated ? (
                       <Button
                         type="primary"
@@ -609,7 +454,7 @@ const PropertyList = ({ onPropertyClick }) => {
                           ) : (
                             <HeartOutlined />
                           )
-                        } // Utiliza property.isFavorite
+                        }
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleFavorite(property.id);
@@ -617,29 +462,187 @@ const PropertyList = ({ onPropertyClick }) => {
                       >
                         {property.isFavorite
                           ? "Quitar de Favoritos"
-                          : "Añadir a Favoritos"}{" "}
-                        {/* Utiliza property.isFavorite */}
+                          : "Añadir a Favoritos"}
                       </Button>
                     ) : (
                       <Link to="/login">
                         <Button type="primary">Añadir a Favoritos</Button>
                       </Link>
                     )}
-
+                    {/* Renderiza el precio */}
                     <Text
                       strong
-                      style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                      style={{ fontSize: "1.5rem" }}
                       onClick={() => handlePropertyClick(property.id)}
                     >
-                      $ {property.price.toLocaleString()} MXN
+                      {" "}
+                      $ {property.precio.toLocaleString()} MXN
                     </Text>
                   </div>
-                </Card>
-              </Col>
-            )
-          )
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      {/* Sección para propiedades filtradas */}
+      <Row gutter={[16, 16]}>
+        {loading ? (
+          <Spin tip="Cargando..." />
+        ) : (
+          filteredProperties.slice(0, visibleRows).map((property) => (
+            <Col key={property.id} xs={24} sm={24} md={24} lg={24}>
+              <Card
+                className="property-card"
+                style={{ width: 480, height: 465 }}
+              >
+                {/* Contenido de la tarjeta */}
+                <div
+                  className="property-image-container"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
+                >
+                  {property.condicion === "Venta" && (
+                    <div className="sale-mark">Venta</div>
+                  )}
+                  {property.condicion === "Renta" && (
+                    <div className="rent-mark">Renta</div>
+                  )}
+                  <CustomCarousel images={property.image} />
+                </div>
+
+                <div
+                  className="property-location"
+                  style={{ marginTop: "16px", cursor: "pointer" }}
+                  onClick={() => handlePropertyClick(property.id)}
+                >
+                  <Text strong style={{ fontSize: "1.2rem" }}>
+                    <EnvironmentOutlined
+                      style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+                    />{" "}
+                    {property.state}, {property.city}
+                  </Text>
+                </div>
+                <div className="property-details">
+                  <Row
+                    gutter={[16, 16]}
+                    style={{
+                      marginBottom: "16px",
+                      marginTop: "20px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handlePropertyClick(property.id)}
+                  >
+                    <Col xs={8}>
+                      <Text strong>
+                        <FontAwesomeIcon
+                          icon={faBed}
+                          style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                          }}
+                        />{" "}
+                        Habitaciones: {property.rooms}
+                      </Text>
+                    </Col>
+                    <Col xs={8}>
+                      <Text strong>
+                        <FontAwesomeIcon
+                          icon={faBath}
+                          alt="Baños"
+                          style={{
+                            width: "16px",
+                            marginRight: "8px",
+                          }}
+                        />{" "}
+                        Baños: {property.bathrooms}
+                      </Text>
+                    </Col>
+                    <Col xs={8}>
+                      <Text strong>
+                        <img
+                          src={m2Image}
+                          alt="m2"
+                          style={{
+                            width: "1.2rem",
+                            height: "1.2rem",
+                            marginRight: "5px", // O ajusta según sea necesario
+                          }}
+                        />
+                        {property.area} m²
+                      </Text>
+                    </Col>
+                    <Col xs={8.1}>
+                      <Text strong>
+                        <HomeOutlined
+                          style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                          }}
+                        />{" "}
+                        {property.type}
+                      </Text>
+                    </Col>
+                    <Col xs={8.1}>
+                      <Text strong>
+                        <FontAwesomeIcon
+                          icon={faRulerCombined}
+                          style={{
+                            fontSize: "1.2rem",
+                            marginRight: "5px", // Ajusta el espaciado según sea necesario
+                          }}
+                        />
+                        {property.areaBuild} m²
+                      </Text>
+                    </Col>
+                  </Row>
+                </div>
+                <div
+                  className="property-actions"
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  {userAuthenticated ? (
+                    <Button
+                      type="primary"
+                      icon={
+                        property.isFavorite ? (
+                          <HeartFilled />
+                        ) : (
+                          <HeartOutlined />
+                        )
+                      } // Utiliza property.isFavorite
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(property.id);
+                      }}
+                    >
+                      {property.isFavorite
+                        ? "Quitar de Favoritos"
+                        : "Añadir a Favoritos"}{" "}
+                      {/* Utiliza property.isFavorite */}
+                    </Button>
+                  ) : (
+                    <Link to="/login">
+                      <Button type="primary">Añadir a Favoritos</Button>
+                    </Link>
+                  )}
+
+                  <Text
+                    strong
+                    style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                    onClick={() => handlePropertyClick(property.id)}
+                  >
+                    $ {property.price.toLocaleString()} MXN
+                  </Text>
+                </div>
+              </Card>
+            </Col>
+          ))
         )}
       </Row>
+      </div>
+
       {/* Botón "Ver más" */}
       {visibleRows < filteredProperties.length && (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
