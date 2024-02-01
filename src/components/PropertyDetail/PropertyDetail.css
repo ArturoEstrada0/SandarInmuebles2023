@@ -140,3 +140,7 @@
   font-size: 1.7rem;
   font-family: 'Geometos';
 }
+.card-more-info:hover {
+  cursor: pointer;
+  transform: scale(1.04);
+}
