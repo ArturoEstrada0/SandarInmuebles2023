@@ -654,13 +654,81 @@ const PropertyList = ({ onPropertyClick }) => {
                           marginLeft: "16px",
                         }}
                       >
+                        {/* Botón de WhatsApp */}
+                        <Button
+                          type="primary"
+                          style={{
+                            backgroundColor: "#25D366",
+                            borderColor: "#25D366",
+                          }}
+                          icon={<WhatsAppOutlined />}
+                          onClick={openModal}
+                        >
+                          WhatsApp
+                        </Button>
+
+                        {/* Modal para solicitar datos del usuario */}
+                        <Modal
+                          title="Datos de Contacto"
+                          visible={whatsappModalVisible}
+                          onCancel={closeModal}
+                          footer={[
+                            <Button key="cancel" onClick={closeModal}>
+                              Cancelar
+                            </Button>,
+                            <Button
+                              key="submit"
+                              type="primary"
+                              onClick={() => handleSubmit(property)}
+                            >
+                              Enviar
+                            </Button>,
+                          ]}
+                        >
+                          {/* Logotipo */}
+                          <div
+                            style={{
+                              textAlign: "center",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            <img
+                              src={logo}
+                              alt="Sandar Inmuebles"
+                              style={{ width: "50%", maxWidth: "200px" }}
+                            />
+                          </div>
+                          <Form>
+                            <Form.Item label="Nombre">
+                              <Input
+                                name="name"
+                                value={userData.name}
+                                onChange={handleUserDataChange}
+                              />
+                            </Form.Item>
+                            <Form.Item label="Teléfono">
+                              <Input
+                                name="phone"
+                                value={userData.phone}
+                                onChange={handleUserDataChange}
+                              />
+                            </Form.Item>
+                            <Form.Item label="Correo electrónico">
+                              <Input
+                                name="email"
+                                value={userData.email}
+                                onChange={handleUserDataChange}
+                              />
+                            </Form.Item>
+                          </Form>
+                        </Modal>
                         {/* Botón de YouTube */}
                         <Button
                           type="primary"
                           style={{
                             backgroundColor: "#FF0000",
                             borderColor: "#FF0000",
-                            marginRight: "8px",
+                            marginLeft: "16px",
                           }}
                           icon={<YoutubeFilled />}
                           onClick={() =>
@@ -736,74 +804,6 @@ const PropertyList = ({ onPropertyClick }) => {
                               </div>
                             </Col>
                           </Row>
-                        </Modal>
-                        {/* Botón de WhatsApp */}
-                        <Button
-                          type="primary"
-                          style={{
-                            backgroundColor: "#25D366",
-                            borderColor: "#25D366",
-                          }}
-                          icon={<WhatsAppOutlined />}
-                          onClick={openModal}
-                        >
-                          WhatsApp
-                        </Button>
-
-                        {/* Modal para solicitar datos del usuario */}
-                        <Modal
-                          title="Datos de Contacto"
-                          visible={whatsappModalVisible}
-                          onCancel={closeModal}
-                          footer={[
-                            <Button key="cancel" onClick={closeModal}>
-                              Cancelar
-                            </Button>,
-                            <Button
-                              key="submit"
-                              type="primary"
-                              onClick={() => handleSubmit(property)}
-                            >
-                              Enviar
-                            </Button>,
-                          ]}
-                        >
-                          {/* Logotipo */}
-                          <div
-                            style={{
-                              textAlign: "center",
-                              marginBottom: "20px",
-                            }}
-                          >
-                            <img
-                              src={logo}
-                              alt="Sandar Inmuebles"
-                              style={{ width: "50%", maxWidth: "200px" }}
-                            />
-                          </div>
-                          <Form>
-                            <Form.Item label="Nombre">
-                              <Input
-                                name="name"
-                                value={userData.name}
-                                onChange={handleUserDataChange}
-                              />
-                            </Form.Item>
-                            <Form.Item label="Teléfono">
-                              <Input
-                                name="phone"
-                                value={userData.phone}
-                                onChange={handleUserDataChange}
-                              />
-                            </Form.Item>
-                            <Form.Item label="Correo electrónico">
-                              <Input
-                                name="email"
-                                value={userData.email}
-                                onChange={handleUserDataChange}
-                              />
-                            </Form.Item>
-                          </Form>
                         </Modal>
                       </div>
                     </div>
@@ -1014,21 +1014,6 @@ const PropertyList = ({ onPropertyClick }) => {
                             marginLeft: "16px",
                           }}
                         >
-                          {/* Botón de YouTube */}
-                          <Button
-                            type="primary"
-                            style={{
-                              backgroundColor: "#FF0000",
-                              borderColor: "#FF0000",
-                              marginRight: "8px",
-                            }}
-                            icon={<YoutubeFilled />}
-                            onClick={() =>
-                              handleYoutubeButtonClick(property.youtube)
-                            }
-                          >
-                            YouTube
-                          </Button>
                           {/* Botón de WhatsApp */}
                           <Button
                             type="primary"
@@ -1040,6 +1025,21 @@ const PropertyList = ({ onPropertyClick }) => {
                             onClick={openModal}
                           >
                             WhatsApp
+                          </Button>
+                          {/* Botón de YouTube */}
+                          <Button
+                            type="primary"
+                            style={{
+                              backgroundColor: "#FF0000",
+                              borderColor: "#FF0000",
+                              marginLeft: "16px",
+                            }}
+                            icon={<YoutubeFilled />}
+                            onClick={() =>
+                              handleYoutubeButtonClick(property.youtube)
+                            }
+                          >
+                            YouTube
                           </Button>
 
                           {/* Modal para solicitar datos del usuario */}
