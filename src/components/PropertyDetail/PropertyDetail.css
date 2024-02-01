@@ -38,7 +38,8 @@
   color: #1677ff;
 }
 .subtitle-section {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
+  font-family: 'Geometos';
   font-weight: semibold;
   margin-top: 20px;
 }
@@ -79,6 +80,7 @@
 .detail-form {
   flex: 4;
   padding: 25px;
+  position: relative;
 }
 .section-form {
   margin: 0;
@@ -119,23 +121,26 @@
   font-size: 1.05rem;
   margin-bottom: 10px;
 }
-
-.detail-form {
-  position: relative; /* Establece el contenedor como relativo para que la posición absoluta de la imagen sea relativa a este */
+.sandar-logo {
+  height: 90px;
+  display: flex;
+  align-items: center;
 }
 
 .detail-form img {
   position: absolute;
-  right: 20; /* Coloca la imagen a la izquierda del contenedor */
-  width: 100px; /* Tamaño deseado para la imagen */
-  top: 2.5%; /* Centra verticalmente la imagen */
-  transform: translateY(-55%); /* Ajusta la posición verticalmente */
-  margin-right: 60px; /* Espacio entre la imagen y el h2 */
-  filter: invert(100%); /* Cambia el color de la imagen a blanco */
+  right: 20;
+  width: 80px;
+  margin-right: 60px;
+  filter: invert(100%);
 }
 
 .detail-form h2 {
-  margin-left: 90px; /* Ajusta el margen izquierdo para dejar espacio para la imagen */
+  margin-left: 90px;
   font-size: 1.7rem;
   font-family: 'Geometos';
+}
+.card-more-info:hover {
+  cursor: pointer;
+  transform: scale(1.04);
 }
