@@ -66,7 +66,7 @@ const FirebaseTextSaver = () => {
 
   return (
     <div style={{ maxWidth: '400px', margin: 'auto', textAlign: 'center' }}>
-      <Title level={3} style={{ marginBottom: '20px' }}>Editor de Texto para Landing Page</Title>
+      <Title level={3} style={{ marginBottom: '20px' }}>Editor de Texto</Title>
       <div style={{ marginBottom: '10px', textAlign: 'left' }}>
         <label htmlFor="title">Título:</label>
         <Input.TextArea
@@ -96,7 +96,7 @@ const FirebaseTextSaver = () => {
         disabled={loading || (!title && !subtitle)}
         style={{ width: '100%', marginBottom: '10px' }}
       >
-        {loading ? 'Guardando...' : 'Guardar en Firebase'}
+        {loading ? 'Guardando...' : 'Guardar'}
       </Button>
       {savingStatus === 'success' && (
         <CheckCircleOutlined style={{ color: 'green', fontSize: '24px' }} />
