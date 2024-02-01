@@ -439,18 +439,27 @@ const PropertyDetail = () => {
                       marginTop: '20px',
                       display: 'flex',
                       flexWrap: 'wrap',
+                      justifyContent: 'space-around',
                     }}>
-                    {activeKey === 'Habitaciones' && (
-                      <Card
-                        title='Número de Habitaciones'
-                        style={{
-                          width: '100%',
-                          margin: '10px',
-                          borderRadius: '12px',
-                        }}>
-                        <p>{propertyDetails.habitaciones}</p>
-                      </Card>
-                    )}
+                    {activeKey === 'Habitaciones' &&
+                      Array.from({ length: propertyDetails.habitaciones }).map(
+                        (_, index) => (
+                          <Card
+                            className='card-more-info'
+                            key={index}
+                            title={`Habitación ${index + 1}`}
+                            style={{
+                              flex: '1 0 30%',
+                              maxWidth: '31%',
+                              margin: '10px',
+                              borderRadius: '12px',
+                              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                              transition: 'transform 0.3s ease-in-out',
+                            }}>
+                            <p>Habitación {index + 1}</p>
+                          </Card>
+                        ),
+                      )}
                     {activeKey === 'Interiores/Exteriores' && (
                       <>
                         <Card
@@ -521,17 +530,25 @@ const PropertyDetail = () => {
                         </Card>
                       </>
                     )}
-                    {activeKey === 'Estacionamiento' && (
-                      <Card
-                        title='Estacionamientos'
-                        style={{
-                          width: '100%',
-                          margin: '10px',
-                          borderRadius: '12px',
-                        }}>
-                        <p>{propertyDetails.estacionamiento}</p>
-                      </Card>
-                    )}
+                    {activeKey === 'Estacionamiento' &&
+                      Array.from({
+                        length: propertyDetails.estacionamiento,
+                      }).map((_, index) => (
+                        <Card
+                          className='card-more-info'
+                          key={index}
+                          title={`Estacionamiento ${index + 1}`}
+                          style={{
+                            flex: '1 0 30%',
+                            maxWidth: '31%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                            transition: 'transform 0.3s ease-in-out',
+                          }}>
+                          <p>Estacionamiento {index + 1}</p>
+                        </Card>
+                      ))}
                     {activeKey === 'Seguridad/Tecnologiá' && (
                       <Card
                         style={{
