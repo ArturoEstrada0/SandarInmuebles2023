@@ -33,11 +33,13 @@ import {
   doc,
   updateDoc,
   increment,
+  getDoc,
+  query,
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRulerCombined } from "@fortawesome/free-solid-svg-icons";
+import { faRulerCombined, faToilet } from "@fortawesome/free-solid-svg-icons";
 import { faBath, faBed, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth } from "../../context/AuthContext";
@@ -58,6 +60,7 @@ const PropertyList = ({ onPropertyClick }) => {
   const [filterPrice, setFilterPrice] = useState([0, 1000000]);
   const [filterState, setFilterState] = useState("all");
   const [filterCondition, setFilterCondition] = useState("all"); // Cambia el nombre del estado
+  const [contactInfo, setContactInfo] = useState(null);
 
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [visibleRows, setVisibleRows] = useState(3); // Estado para controlar el número de filas visibles
@@ -72,6 +75,33 @@ const PropertyList = ({ onPropertyClick }) => {
     setUserAuthenticated(isAuthenticated);
   }, [isAuthenticated]);
 
+  useEffect(() => {
+
+    const fetchContactInfo = async () => {
+      try {
+        const contactCollectionRef = collection(firestore, 'contactData');
+        const q = query(contactCollectionRef);
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          setContactInfo(doc.data());
+        });
+
+        const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
+        const docSnap = await getDoc(contactDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+       
+        }
+      } catch (error) {
+        console.error('Error al obtener la información de contacto:', error);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
+  
   const handleMinPriceChange = (e) => {
     const value = e.target.value;
     if (!isNaN(value) || value === "") {
@@ -189,6 +219,8 @@ const PropertyList = ({ onPropertyClick }) => {
       if (onPropertyClick) {
         onPropertyClick(propertyId);
       }
+      const propertyURL = `/property/${propertyId}`;
+
       window.location.href = `/property/${propertyId}`;
     } catch (error) {
       console.error("Error al actualizar el contador en Firestore:", error);
@@ -301,17 +333,18 @@ const PropertyList = ({ onPropertyClick }) => {
   // Función para cerrar el modal
   const closeModal = () => {
     setWhatsappModalVisible(false);
+    
   };
 
   // Función para manejar el envío de datos
   const handleSubmit = (property) => {
     console.log(property)
     // Aquí puedes generar el mensaje de WhatsApp con los datos del usuario
-    const message = `Hola, estoy interesado en la propiedad "${property.name}" ubicada en "${property.state}". Mi nombre es ${userData.name}, mi teléfono es ${userData.phone} y mi correo electrónico es ${userData.email}. ¿Podrías proporcionarme más detalles sobre esta propiedad?`;
+    const message = `¡Hola! 👋\n\nEstoy interesad@ en la propiedad *${property.name}* ubicada en *${property.state}*. \n\nMi nombre es *${userData.name}* , mi teléfono es 📲 *${userData.phone}*  y mi correo electrónico es 📧 *${userData.email}*. \n\n¿Podrías proporcionarme más detalles sobre esta propiedad? 🏡\n\n🔗 URL de la propiedad: https://sandar-inmuebles.web.app/property/${property.id}`;
 
     // Abre la ventana de chat de WhatsApp con el mensaje predefinido
     window.open(
-      `https://api.whatsapp.com/send?phone=4434395522&text=${encodeURIComponent(
+      `https://api.whatsapp.com/send?phone=${contactInfo.phoneNumber}&text=${encodeURIComponent(
         message
       )}`
     );
@@ -535,7 +568,7 @@ const PropertyList = ({ onPropertyClick }) => {
                             {" "}
                             {/* Aumenta el tamaño del texto */}
                             <FontAwesomeIcon
-                              icon={faBath}
+                              icon={faToilet}
                               alt="Baños"
                               style={{ fontSize: "2rem", marginRight: "8px" }} // Aumenta el tamaño del ícono
                             />{" "}
@@ -901,7 +934,7 @@ const PropertyList = ({ onPropertyClick }) => {
                   <Col xs={8}>
                     <Text strong style={{ fontSize: "1.2rem" }}>
                       <FontAwesomeIcon
-                        icon={faBath}
+                        icon={faToilet}
                         alt="Baños"
                         style={{ fontSize: "2rem", marginRight: "8px" }}
                       />{" "}
