@@ -60,7 +60,8 @@ const ContactForm = ({ onFinish }) => {
       onFinish={handleSubmit}
       initialValues={{
         prefix: '52',
-        intro:'¡Hola!, Me interesa esta propiedad que vi en el sitio web de Sandar Inmuebles.\nY me gustaría tener más detalles de la misma. ¿Podrían contactarme, por favor?\n¡Muchas gracias!',
+        intro:
+          '¡Hola!,\nMe interesa esta propiedad que vi en el sitio web de Sandar Inmuebles. Me gustaría obtener más detalles de la misma. ¿Podrían contactarme, por favor?\n\n¡Muchas gracias!',
       }}
       style={{
         maxWidth: 600,
