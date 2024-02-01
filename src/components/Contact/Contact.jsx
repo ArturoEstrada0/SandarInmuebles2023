@@ -9,7 +9,7 @@ import {
   PhoneFilled,
   MailFilled,
 } from '@ant-design/icons';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import 'animate.css'; // Importa la biblioteca Animate.css
 import './Contact.css';
@@ -17,11 +17,26 @@ import './Contact.css';
 const Contact = () => {
   const [form] = Form.useForm();
   const [animationClass, setAnimationClass] = useState('');
+  const [contactCount, setContactCount] = useState(0);
+
 
   useEffect(() => {
     // Agrega la clase de animación después de que el componente se monta
     setAnimationClass('animate__animated animate__fadeInUp');
   }, []);
+
+  const fetchCounter = async () => {
+    try {
+      // Actualiza el contador de contactos
+      setContactCount(prevCount => prevCount + 1);
+
+      // Guarda el contador en Firebase
+      const docRef = doc(firestore, 'msgCount', 'contactCount');
+      await setDoc(docRef, { count: contactCount + 1 });
+    } catch (error) {
+      console.error('Error al guardar el contador de contactos en Firebase', error);
+    }
+  };
 
   const onFinish = async (values) => {
     try {
@@ -133,6 +148,7 @@ const Contact = () => {
                 type="primary"
                 htmlType="submit"
                 style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily:"Geometos", fontSize:"0.8rem" }}
+                onClick={fetchCounter}
               >
                 Enviar Correo
               </Button>

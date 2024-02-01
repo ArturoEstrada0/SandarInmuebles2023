@@ -33,76 +33,122 @@ function ChatBubble() {
     setIsModalVisible(false);
   };
 
-    const sendWhatsAppMessage = () => {
-        // Combinar el mensaje con el URL de WhatsApp y la categoría
-        const message = `*Categoría:* ${selectedCategory}\n*Nombre:* ${personName}\n*Mensaje:* ${whatsappMessage}`;
-        const fullURL = `${whatsappURL}&text=${encodeURIComponent(message)}`;
-        window.open(fullURL, '_blank');
-        setIsModalVisible(false);
-    };
+  const sendWhatsAppMessage = async () => {
+    const message = `*Categoría:* ${selectedCategory}\n*Nombre:* ${personName}\n*Teléfono:* ${phoneNumber}\n*Mensaje:* ${whatsappMessage}`;
+    const fullURL = `${whatsappURL}&text=${encodeURIComponent(message)}`;
+    window.open(fullURL, "_blank");
+    setIsModalVisible(false);
+    setWhatsappCount((prevCount) => prevCount + 1);
 
-    return (
-        <>
-            <FloatButton.Group
-                trigger="hover"
-                style={{
-                    right: 25,
-                }}
-                icon={<CommentOutlined /> /* Color del icono */}
-            >
-                <a href={`mailto:sandarinmuebles@gmail.com`} target="_blank" rel="noopener noreferrer">
-                    <FloatButton icon={<MailOutlined />} />
-                </a>
-                <FloatButton icon={<WhatsAppOutlined />} onClick={openWhatsAppModal} style={{ marginTop: '10px' }} />
-            </FloatButton.Group>
+    // Guardar el contador en Firebase
+    try {
+      const docRef = doc(firestore, "msgCount", "whatsappCount");
+      await setDoc(docRef, { count: whatsappCount + 1 });
+    } catch (error) {
+      console.error(
+        "Error al guardar el contador de WhatsApp en Firebase",
+        error
+      );
+    }
+  };
 
-            <Modal
-                title="Enviar Mensaje de WhatsApp"
-                visible={isModalVisible}
-                onOk={sendWhatsAppMessage}
-                onCancel={closeWhatsAppModal}
-                footer={[
-                    <Button key="cancel" onClick={closeWhatsAppModal}>
-                        Cancelar
-                    </Button>,
-                    <Button key="send" type="primary" onClick={sendWhatsAppMessage}>
-                        Enviar
-                    </Button>,
-                ]}
-            >
-                <div style={{ marginBottom: '16px' }}>
-                    <label>Categoría:</label>
-                    <Select
-                        value={selectedCategory}
-                        onChange={(value) => setSelectedCategory(value)}
-                        placeholder="Selecciona una categoría"
-                        style={{ width: '100%' }}
-                    >
-                        <Option value="Venta">Venta</Option>
-                        <Option value="Compra">Compra</Option>
-                        <Option value="Informacion">Información</Option>
-                        {/* Agrega más categorías según tus necesidades */}
-                    </Select>
-                </div>
-                <div style={{ marginBottom: '16px' }}>
-                    <label>Nombre:</label>
-                    <Input
-                        value={personName}
-                        onChange={(e) => setPersonName(e.target.value)}
-                        placeholder="Nombre"
-                    />
-                </div>
-                <div style={{ marginBottom: '16px' }}>
-                    <label>Mensaje:</label>
-                    <Input.TextArea
-                        value={whatsappMessage}
-                        onChange={(e) => setWhatsappMessage(e.target.value)}
-                        placeholder="Escribe tu mensaje..."
-                    />
-                </div>
-            </Modal>
-        </>
-    );
+  const sendEmailMessage = async () => {
+    // Actualiza el contador de correo electrónico utilizando una función de actualización de estado
+    setEmailCount(prevCount => prevCount + 1);
+  
+    // Guarda el contador en Firebase
+    try {
+      const docRef = doc(firestore, "msgCount", "emailCount");
+      await setDoc(docRef, { count: emailCount + 1 });
+    } catch (error) {
+      console.error(
+        "Error al guardar el contador de correos electrónicos en Firebase",
+        error
+      );
+    }
+  };
+
+  return (
+    <>
+      <FloatButton.Group
+        trigger="hover"
+        style={{
+          right: 25,
+        }}
+        icon={<CommentOutlined /> /* Color del icono */}
+        onClick={sendEmailMessage}
+
+      >
+        <a
+          href={`mailto:arturoestrada301@gmail.com`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FloatButton icon={<MailOutlined />} />
+        </a>
+        <FloatButton
+          icon={<WhatsAppOutlined />}
+          onClick={openWhatsAppModal}
+          style={{ marginTop: "10px" }}
+        />
+      </FloatButton.Group>
+
+      <Modal
+        title="Enviar Mensaje de WhatsApp"
+        visible={isModalVisible}
+        onOk={sendWhatsAppMessage}
+        onCancel={closeWhatsAppModal}
+        footer={[
+          <Button key="cancel" onClick={closeWhatsAppModal}>
+            Cancelar
+          </Button>,
+          <Button key="send" type="primary" onClick={sendWhatsAppMessage}>
+            Enviar
+          </Button>,
+        ]}
+      >
+        <div style={{ marginBottom: "16px" }}>
+          <label>Categoría:</label>
+          <Select
+            value={selectedCategory}
+            onChange={(value) => setSelectedCategory(value)}
+            placeholder="Selecciona una categoría"
+            style={{ width: "100%" }}
+          >
+            <Option value="Venta">Venta</Option>
+            <Option value="Alquiler">Alquiler</Option>
+            <Option value="Consultas">Consultas</Option>
+            <Option value="Mantenimiento">Mantenimiento</Option>
+            {/* Agrega más categorías según tus necesidades */}
+          </Select>
+        </div>
+        <div style={{ marginBottom: "16px" }}>
+          <label>Nombre:</label>
+          <Input
+            value={personName}
+            onChange={(e) => setPersonName(e.target.value)}
+            placeholder="Nombre"
+          />
+        </div>
+        <div style={{ marginBottom: "16px" }}>
+          <label>Mensaje:</label>
+          <Input.TextArea
+            value={whatsappMessage}
+            onChange={(e) => setWhatsappMessage(e.target.value)}
+            placeholder="Escribe tu mensaje..."
+          />
+        </div>
+        <div style={{ marginBottom: "16px" }}>
+          <label>Teléfono:</label>
+          <Input
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            placeholder="Teléfono"
+          />
+        </div>
+      </Modal>
+    </>
+  );
 }
 
 export default ChatBubble;
