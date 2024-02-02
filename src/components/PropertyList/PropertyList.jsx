@@ -450,374 +450,372 @@ const PropertyList = ({ onPropertyClick }) => {
         </Card>
       </div>
       {/* Sección para propiedades destacadas */}
-      <div style={{ padding: "20px 0" }}>
-        <Title level={3}>Propiedades Destacadas</Title>
-        <Row gutter={[16, 16]}>
-          {highlightedProperties.map((property) => (
-            <Col key={property.id} xs={24}>
-              <Card className="property-card">
-                <Row gutter={[16, 16]}>
-                  {/* Columna para la foto */}
-                  <Col xs={24} sm={12} md={12} lg={8}>
-                    <div
-                      className="property-image-container"
-                      onClick={() => handlePropertyClick(property.id)}
-                    >
-                      {/* Renderiza la marca de venta o renta si es aplicable */}
-                      {property.condicion === "Venta" && (
-                        <div className="sale-mark">Venta</div>
-                      )}
-                      {property.condicion === "Renta" && (
-                        <div className="rent-mark">Renta</div>
-                      )}
-                      <CustomCarousel images={property.fotos} />
-                    </div>
-                  </Col>
-                  {/* Columna para la información */}
-                  <Col xs={24} sm={12} md={12} lg={14}>
-                    <div
-                      className="property-name"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handlePropertyClick(property.id)}
-                    >
-                      {/* Renderiza el nombre de propiedad */}
-                      <Text
-                        style={{
-                          fontSize: "1.2rem",
-                          color: "#1677ff",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {property.nombre}
-                      </Text>
-                    </div>
-
-                    <div
-                      className="property-location"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handlePropertyClick(property.id)}
-                    >
-                      {/* Renderiza la ubicación */}
-                      <Text
-                        style={{
-                          fontSize: "1.1rem",
-                          color: "#333",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        <EnvironmentFilled
-                          style={{ fontSize: "1.1rem", fontWeight: "bold" }}
-                        />{" "}
-                        {property.ubicacion}
-                      </Text>
-                    </div>
-
-                    <div
-                      className="property-price"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handlePropertyClick(property.id)}
-                    >
-                      {/* Renderiza el precio */}
-                      <Text
-                        style={{
-                          fontSize: "1.5rem",
-                          fontWeight: "bold",
-                          marginTop: "10px",
-                        }}
-                        onClick={() => handlePropertyClick(property.id)}
-                      >
-                        {" "}
-                        $ {property.precio.toLocaleString()} MXN
-                      </Text>
-                    </div>
-                    <div className="property-details">
-                      {/* Renderiza los detalles de la propiedad */}
-                      <Row
-                        gutter={[16, 16]}
-                        style={{ marginBottom: "16px", marginTop: "20px" }}
-                      >
-                        <Col xs={8}>
-                          <Text strong style={{ fontSize: "1.2rem" }}>
-                            {" "}
-                            {/* Aumenta el tamaño del texto */}
-                            <FontAwesomeIcon
-                              icon={faBed}
-                              style={{ fontSize: "2rem", fontWeight: "bold" }} // Aumenta el tamaño del ícono
-                            />{" "}
-                            Recámaras: {property.habitaciones}
-                          </Text>
-                        </Col>
-                        <Col xs={8}>
-                          <Text strong style={{ fontSize: "1.2rem" }}>
-                            {" "}
-                            {/* Aumenta el tamaño del texto */}
-                            <FontAwesomeIcon
-                              icon={faBath}
-                              alt="Baños"
-                              style={{ fontSize: "2rem", marginRight: "8px" }} // Aumenta el tamaño del ícono
-                            />{" "}
-                            Baños: {property.baños}
-                          </Text>
-                        </Col>
-                        <Col xs={8}>
-                          <Text strong style={{ fontSize: "1.2rem" }}>
-                            {" "}
-                            {/* Aumenta el tamaño del texto */}
-                            <FontAwesomeIcon
-                              icon={faToilet}
-                              alt="Baños"
-                              style={{ fontSize: "2rem", marginRight: "8px" }} // Aumenta el tamaño del ícono
-                            />{" "}
-                            Medios Baños: {property.medioBaño ?? 0}
-                          </Text>
-                        </Col>
-                        <Col xs={8}>
-                          <Text strong style={{ fontSize: "1.2rem" }}>
-                            {" "}
-                            {/* Aumenta el tamaño del texto */}
-                            <HomeOutlined
-                              style={{
-                                fontSize: "2rem",
-                                fontWeight: "bold",
-                              }}
-                            />{" "}
-                            {property.tipoPropiedad}
-                          </Text>
-                        </Col>
-                        <Col xs={8}>
-                          <Text strong style={{ fontSize: "1.2rem" }}>
-                            {" "}
-                            {/* Aumenta el tamaño del texto */}
-                            <img
-                              src={m2Image}
-                              alt="m2"
-                              style={{
-                                width: "2rem",
-                                height: "2rem",
-                                marginRight: "5px", // Ajusta según sea necesario
-                              }}
-                            />
-                            {property.tamanioPropiedad} m²
-                          </Text>
-                        </Col>
-                        <Col xs={8}>
-                          <Text strong style={{ fontSize: "1.2rem" }}>
-                            {" "}
-                            {/* Aumenta el tamaño del texto */}
-                            <FontAwesomeIcon
-                              icon={faRulerCombined}
-                              style={{
-                                fontSize: "2rem",
-                                marginRight: "5px",
-                              }}
-                            />
-                            {property.metrosConstruidos} m²
-                          </Text>
-                        </Col>
-                      </Row>
-                    </div>
-                    <div
-                      className="property-actions"
-                      style={{ display: "flex" }}
-                    >
-                      {/* Renderiza el botón de favoritos */}
-                      {userAuthenticated ? (
-                        <Button
-                          type="primary"
-                          icon={
-                            property.isFavorite ? (
-                              <HeartFilled />
-                            ) : (
-                              <HeartOutlined />
-                            )
-                          }
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(property.id);
-                          }}
+      <div
+        style={{ display: "flex", justifyContent: "left", minHeight: "100vh" }}
+      >
+        <div style={{ width: "100%" }}>
+          <div style={{ padding: "20px 0" }}>
+            <Title level={3}>Propiedades Destacadas</Title>
+            <Row gutter={[16, 16]}>
+              {highlightedProperties.map((property) => (
+                <Col key={property.id} xs={24}>
+                  <Card className="property-card" style={{ width: "100%" }}>
+                    <Row gutter={[16, 16]}>
+                      <Col xs={24} sm={12} md={12} lg={8}>
+                        <div
+                          className="property-image-container"
+                          onClick={() => handlePropertyClick(property.id)}
                         >
-                          {property.isFavorite
-                            ? "Quitar de Favoritos"
-                            : "Añadir a Favoritos"}
-                        </Button>
-                      ) : (
-                        <Link to="/login">
-                          <Button type="primary">Añadir a Favoritos</Button>
-                        </Link>
-                      )}
-
-                      {/* Contenedor para los botones de YouTube y WhatsApp */}
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginLeft: "16px",
-                        }}
+                          {property.condicion === "Venta" && (
+                            <div className="sale-mark">Venta</div>
+                          )}
+                          {property.condicion === "Renta" && (
+                            <div className="rent-mark">Renta</div>
+                          )}
+                          <CustomCarousel images={property.fotos} />
+                        </div>
+                      </Col>
+                      <Col
+                        xs={24}
+                        sm={12}
+                        md={12}
+                        lg={14}
+                        style={{ margin: "0px 30px" }}
                       >
-                        {/* Botón de WhatsApp */}
-                        <Button
-                          type="primary"
-                          style={{
-                            backgroundColor: "#25D366",
-                            borderColor: "#25D366",
-                          }}
-                          icon={<WhatsAppOutlined />}
-                          onClick={openModal}
+                        <div
+                          className="property-name"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handlePropertyClick(property.id)}
                         >
-                          WhatsApp
-                        </Button>
-
-                        {/* Modal para solicitar datos del usuario */}
-                        <Modal
-                          title="Datos de Contacto"
-                          visible={whatsappModalVisible}
-                          onCancel={closeModal}
-                          footer={[
-                            <Button key="cancel" onClick={closeModal}>
-                              Cancelar
-                            </Button>,
+                          <Text
+                            style={{
+                              fontSize: "1.6rem",
+                              color: "#1677ff",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {property.nombre}
+                          </Text>
+                        </div>
+                        <div
+                          className="property-location"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
+                          <Text
+                            style={{
+                              fontSize: "1.1rem",
+                              color: "#333",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <EnvironmentFilled
+                              style={{ fontSize: "1.1rem", fontWeight: "bold" }}
+                            />{" "}
+                            {property.ubicacion}
+                          </Text>
+                        </div>
+                        <div
+                          className="property-price"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
+                          <Text
+                            style={{
+                              fontSize: "1.5rem",
+                              fontWeight: "bold",
+                              marginTop: "10px",
+                            }}
+                          >
+                            $ {property.precio.toLocaleString()} MXN
+                          </Text>
+                        </div>
+                        <div className="property-details">
+                          <Row
+                            gutter={[16, 16]}
+                            style={{ marginBottom: "16px", marginTop: "20px" }}
+                          >
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
+                                <FontAwesomeIcon
+                                  icon={faBed}
+                                  style={{
+                                    fontSize: "2rem",
+                                    fontWeight: "bold",
+                                    marginRight: "5px",
+                                  }}
+                                />
+                                Recámaras: {property.habitaciones}
+                              </Text>
+                            </Col>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
+                                <FontAwesomeIcon
+                                  icon={faBath}
+                                  alt="Baños"
+                                  style={{
+                                    fontSize: "2rem",
+                                    marginRight: "5px",
+                                  }}
+                                />
+                                Baños: {property.baños}
+                              </Text>
+                            </Col>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
+                                <FontAwesomeIcon
+                                  icon={faToilet}
+                                  alt="Baños"
+                                  style={{
+                                    fontSize: "2rem",
+                                    marginRight: "5px",
+                                  }}
+                                />
+                                Medios Baños: {property.medioBaño ?? 0}
+                              </Text>
+                            </Col>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
+                                <HomeOutlined
+                                  style={{
+                                    fontSize: "2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                />
+                                {property.tipoPropiedad}
+                              </Text>
+                            </Col>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
+                                <img
+                                  src={m2Image}
+                                  alt="m2"
+                                  style={{
+                                    width: "2rem",
+                                    height: "2rem",
+                                    marginRight: "5px",
+                                  }}
+                                />
+                                {property.tamanioPropiedad} m²
+                              </Text>
+                            </Col>
+                            <Col xs={8}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
+                                <FontAwesomeIcon
+                                  icon={faRulerCombined}
+                                  style={{
+                                    fontSize: "2rem",
+                                    marginRight: "5px",
+                                  }}
+                                />
+                                {property.metrosConstruidos} m²
+                              </Text>
+                            </Col>
+                          </Row>
+                        </div>
+                        <div
+                          className="property-actions"
+                          style={{ display: "flex" }}
+                        >
+                          {userAuthenticated ? (
                             <Button
-                              key="submit"
                               type="primary"
-                              onClick={() => handleSubmit(property)}
+                              icon={
+                                property.isFavorite ? (
+                                  <HeartFilled />
+                                ) : (
+                                  <HeartOutlined />
+                                )
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(property.id);
+                              }}
                             >
-                              Enviar
-                            </Button>,
-                          ]}
-                        >
-                          {/* Logotipo */}
+                              {property.isFavorite
+                                ? "Quitar de Favoritos"
+                                : "Añadir a Favoritos"}
+                            </Button>
+                          ) : (
+                            <Link to="/login">
+                              <Button
+                                style={{ fontSize: "12px" }}
+                                type="primary"
+                              >
+                                Añadir a Favoritos
+                              </Button>
+                            </Link>
+                          )}
                           <div
                             style={{
-                              textAlign: "center",
-                              marginBottom: "20px",
-                            }}
-                          >
-                            <img
-                              src={logo}
-                              alt="Sandar Inmuebles"
-                              style={{ width: "50%", maxWidth: "200px" }}
-                            />
-                          </div>
-                          <Form>
-                            <Form.Item label="Nombre">
-                              <Input
-                                name="name"
-                                value={userData.name}
-                                onChange={handleUserDataChange}
-                              />
-                            </Form.Item>
-                            <Form.Item label="Teléfono">
-                              <Input
-                                name="phone"
-                                value={userData.phone}
-                                onChange={handleUserDataChange}
-                              />
-                            </Form.Item>
-                            <Form.Item label="Correo electrónico">
-                              <Input
-                                name="email"
-                                value={userData.email}
-                                onChange={handleUserDataChange}
-                              />
-                            </Form.Item>
-                          </Form>
-                        </Modal>
-                        
-                        {property.youtubeUrl !== "" && (
-                          <Button
-                            type="primary"
-                            style={{
-                              backgroundColor: "#FF0000",
-                              borderColor: "#FF0000",
+                              display: "flex",
+                              alignItems: "center",
                               marginLeft: "16px",
                             }}
-                            icon={<YoutubeFilled />}
-                            onClick={() =>
-                              handleYoutubeButtonClick(property.youtubeUrl)
-                            }
                           >
-                            YouTube
-                          </Button>
-                        )}
-                        {/* Modal para mostrar el video de YouTube y las fotos de la propiedad */}
-                        <Modal
-                          title="Detalles de la Propiedad"
-                          visible={youtubeModalVisible}
-                          onCancel={() => setYoutubeModalVisible(false)}
-                          footer={null}
-                          centered
-                          width={1200}
-                          bodyStyle={{ padding: "20px" }}
-                        >
-                          <Row gutter={[16, 16]}>
-                            <Col span={16}>
-                              {/* Video de YouTube */}
-                              <iframe
-                                width="100%"
-                                height="450"
-                                src={`https://www.youtube.com/embed/${videoId}`}
-                                frameborder="0"
-                                allowfullscreen
-                                title="YouTube Video"
-                              ></iframe>
-                            </Col>
-                            <Col span={8}>
-                              <Text>Fotos de la propiedad:</Text>
-                              <div style={{ marginTop: "10px", width: "100%" }}>
-                                <Carousel autoplay>
-                                  {property.fotos.map((photo, index) => (
-                                    <div key={index}>
-                                      <img
-                                        src={photo}
-                                        alt={`Property Photo ${index}`}
-                                        style={{
-                                          width: "100%",
-                                          height: "auto",
-                                          objectFit: "cover",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => handlePhotoClick(photo)}
-                                      />
-                                    </div>
-                                  ))}
-                                </Carousel>
-                              </div>
-                              <div style={{ marginTop: "20px" }}>
+                            <Button
+                              type="primary"
+                              style={{
+                                backgroundColor: "#25D366",
+                                borderColor: "#25D366",
+                              }}
+                              icon={<WhatsAppOutlined />}
+                              onClick={openModal}
+                            >
+                              WhatsApp
+                            </Button>
+                            <Modal
+                              title="Datos de Contacto"
+                              visible={whatsappModalVisible}
+                              onCancel={closeModal}
+                              footer={[
+                                <Button key="cancel" onClick={closeModal}>
+                                  Cancelar
+                                </Button>,
                                 <Button
+                                  key="submit"
                                   type="primary"
-                                  onClick={() =>
-                                    handlePropertyClick(property.id)
-                                  }
+                                  onClick={() => handleSubmit(property)}
                                 >
-                                  Ver más detalles
-                                </Button>
-                              </div>
+                                  Enviar
+                                </Button>,
+                              ]}
+                            >
                               <div
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "center",
+                                  textAlign: "center",
+                                  marginBottom: "20px",
                                 }}
                               >
                                 <img
                                   src={logo}
                                   alt="Sandar Inmuebles"
-                                  style={{ width: "50%" }}
+                                  style={{ width: "50%", maxWidth: "200px" }}
                                 />
                               </div>
-                            </Col>
-                          </Row>
-                        </Modal>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </Card>
-              <div className="logo-container">
-                <img src={logo} alt="Sandar Inmuebles" className="logo" />
-              </div>
-            </Col>
-          ))}
-        </Row>
+                              <Form>
+                                <Form.Item label="Nombre">
+                                  <Input
+                                    name="name"
+                                    value={userData.name}
+                                    onChange={handleUserDataChange}
+                                  />
+                                </Form.Item>
+                                <Form.Item label="Teléfono">
+                                  <Input
+                                    name="phone"
+                                    value={userData.phone}
+                                    onChange={handleUserDataChange}
+                                  />
+                                </Form.Item>
+                                <Form.Item label="Correo electrónico">
+                                  <Input
+                                    name="email"
+                                    value={userData.email}
+                                    onChange={handleUserDataChange}
+                                  />
+                                </Form.Item>
+                              </Form>
+                            </Modal>
+                            {property.youtubeUrl !== "" && (
+                              <Button
+                                type="primary"
+                                style={{
+                                  backgroundColor: "#e31925",
+                                  borderColor: "#e31925",
+                                  marginLeft: "16px",
+                                }}
+                                icon={<YoutubeFilled />}
+                                onClick={() =>
+                                  handleYoutubeButtonClick(property.youtubeUrl)
+                                }
+                              >
+                                YouTube
+                              </Button>
+                            )}
+                            <Modal
+                              title="Detalles de la Propiedad"
+                              visible={youtubeModalVisible}
+                              onCancel={() => setYoutubeModalVisible(false)}
+                              footer={null}
+                              centered
+                              width={1200}
+                              bodyStyle={{ padding: "20px" }}
+                            >
+                              <Row gutter={[16, 16]}>
+                                <Col span={16}>
+                                  <iframe
+                                    width="100%"
+                                    height="450"
+                                    src={`https://www.youtube.com/embed/${videoId}`}
+                                    frameborder="0"
+                                    allowfullscreen
+                                    title="YouTube Video"
+                                  ></iframe>
+                                </Col>
+                                <Col span={8}>
+                                  <Text>Fotos de la propiedad:</Text>
+                                  <div
+                                    style={{ marginTop: "10px", width: "100%" }}
+                                  >
+                                    <Carousel autoplay>
+                                      {property.fotos.map((photo, index) => (
+                                        <div key={index}>
+                                          <img
+                                            src={photo}
+                                            alt={`Property Photo ${index}`}
+                                            style={{
+                                              width: "100%",
+                                              height: "auto",
+                                              objectFit: "cover",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() =>
+                                              handlePhotoClick(photo)
+                                            }
+                                          />
+                                        </div>
+                                      ))}
+                                    </Carousel>
+                                  </div>
+                                  <div style={{ marginTop: "20px" }}>
+                                    <Button
+                                      type="primary"
+                                      onClick={() =>
+                                        handlePropertyClick(property.id)
+                                      }
+                                    >
+                                      Ver más detalles
+                                    </Button>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <img
+                                      src={logo}
+                                      alt="Sandar Inmuebles"
+                                      style={{ width: "50%" }}
+                                    />
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Modal>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>
+                  <div className="logo-container">
+                    <img src={logo} alt="Sandar Inmuebles" className="logo" />
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </div>
       </div>
 
       {/* Sección para propiedades filtradas */}
@@ -1004,7 +1002,9 @@ const PropertyList = ({ onPropertyClick }) => {
                           </Button>
                         ) : (
                           <Link to="/login">
-                            <Button type="primary">Añadir a Favoritos</Button>
+                            <Button style={{ fontSize: "12px" }} type="primary">
+                              Añadir a Favoritos
+                            </Button>
                           </Link>
                         )}
 
@@ -1033,8 +1033,8 @@ const PropertyList = ({ onPropertyClick }) => {
                             <Button
                               type="primary"
                               style={{
-                                backgroundColor: "#FF0000",
-                                borderColor: "#FF0000",
+                                backgroundColor: "#e31925",
+                                borderColor: "#e31925",
                                 marginLeft: "16px",
                               }}
                               icon={<YoutubeFilled />}
