@@ -18,6 +18,7 @@ const Gallery = ({ images }) => {
       <div className='image-lar'>
         <a href={images[0].url} data-pswp-width='2500' data-pswp-height='1600'>
           <img
+            style={{ maxHeight: '50vh', objectFit: 'cover' }}
             loading='lazy'
             src={images[0].url}
             alt={`Property Image ${images[0].id}`}
@@ -32,6 +33,7 @@ const Gallery = ({ images }) => {
             data-pswp-width='2500'
             data-pswp-height='1600'>
             <img
+              style={{ maxHeight: '25vh', objectFit: 'cover' }}
               loading='lazy'
               src={image.url}
               alt={`Property Image ${i + 1}`}

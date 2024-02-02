@@ -22,6 +22,7 @@
 .property-detail {
   display: flex;
   flex-direction: column;
+  margin-top: 65px;
 }
 .images-container {
   display: grid;
