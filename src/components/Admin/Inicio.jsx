@@ -182,7 +182,7 @@ function Inicio() {
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Inicio</h1>
+      <h1>Inicio</h1>
 
       <Row gutter={16}>
         {dataGeneral.map((item, index) => (

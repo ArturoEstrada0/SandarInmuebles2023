@@ -124,7 +124,7 @@ const Contact = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily: "Geometos", fontSize: "0.8rem" }}
+                style={{ backgroundColor: '#001529', borderColor: '#001529', fontFamily: "Geometos", fontSize: "0.8rem" }}
               >
                 Enviar Correo
               </Button>

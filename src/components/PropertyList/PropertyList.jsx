@@ -430,7 +430,7 @@ const PropertyList = ({ onPropertyClick }) => {
                 type="primary"
                 onClick={applyFilters}
                 style={{
-                  backgroundColor: "black",
+                  backgroundColor: "#001529",
                   color: "white",
                   fontFamily: "Geometos",
                 }}

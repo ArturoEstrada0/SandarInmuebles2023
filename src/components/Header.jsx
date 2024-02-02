@@ -5,9 +5,9 @@ import { useAuth } from "../context/AuthContext";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
 import './Header.css'
-import logo from "../assets/img/sandarlogo1.png";
+import logo from "../assets/img/logo2.png";
+import texto from "../assets/img/sandarcom.png"
 
-    
 const headerStyle = {
   width: "100%",
   display: "flex",
@@ -24,8 +24,9 @@ const logoStyle = {
   width: "90px",
   height: "50px",
   marginTop: "-5px",
-  marginRight: "10px",
+  marginRight: "0",  // Ajusta el margen derecho según tu preferencia
 };
+
 
 const menuItemStyle = {
   fontSize: "16px",
@@ -90,6 +91,12 @@ const Header = () => {
           <Link to="/">
             <img
               src={logo}
+              alt="Mi logotipo"
+              style={logoStyle}
+              className="logo"
+            />
+            <img
+              src={texto}
               alt="Mi logotipo"
               style={logoStyle}
               className="logo"
@@ -168,9 +175,7 @@ const Header = () => {
               <UserOutlined style={{ marginRight: "5px" }} />
               Iniciar Sesión
             </Link>
-          )}    
-    
-  
+          )}
       </div>
     </>
   );

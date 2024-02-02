@@ -249,7 +249,7 @@ const Vender = () => {
         </Form.Item>
 
         <Form.Item>
-            <Button type="primary" htmlType="submit" style={{fontFamily:'Geometos', fontSize:'0.9em'}}>
+            <Button type="primary" htmlType="submit" style={{fontFamily:'Geometos', fontSize:'0.9em', backgroundColor:'#001529'}}>
                 Enviar Mensaje
             </Button>
         </Form.Item>
