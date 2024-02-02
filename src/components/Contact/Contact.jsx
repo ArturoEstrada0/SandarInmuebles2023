@@ -26,15 +26,18 @@ const Contact = () => {
   }, []);
 
   const fetchCounter = async () => {
+    // Actualiza el contador de correo electrónico utilizando una función de actualización de estado
+    setContactCount(prevCount => prevCount + 1);
+  
+    // Guarda el contador en Firebase
     try {
-      // Actualiza el contador de contactos
-      setContactCount(prevCount => prevCount + 1);
-
-      // Guarda el contador en Firebase
-      const docRef = doc(firestore, 'msgCount', 'contactCount');
+      const docRef = doc(firestore, "msgCount", "contactCount");
       await setDoc(docRef, { count: contactCount + 1 });
     } catch (error) {
-      console.error('Error al guardar el contador de contactos en Firebase', error);
+      console.error(
+        "Error al guardar el contador de correos electrónicos en Firebase",
+        error
+      );
     }
   };
 
