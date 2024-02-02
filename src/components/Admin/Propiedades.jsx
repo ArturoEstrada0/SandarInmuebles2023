@@ -278,6 +278,8 @@ function Propiedades() {
 
       formData = {
         ...formData,
+        status: 'activo', // Establecer el estado en 'activo' por defecto
+
         ...values,
         youtubeUrl,
         ubicacion: selectedLocation?.display_name,
