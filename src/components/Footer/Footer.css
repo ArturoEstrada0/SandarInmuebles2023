@@ -1,0 +1,17 @@
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* Ajusta según tus necesidades */
+  }
+  
+  .footer-logo {
+    width: 120px;
+    height: 85px;
+    margin-right: 5px; /* Ajusta según tus necesidades */
+  }
+  
+  .footer-text-logo {
+    width: 120px;
+    height: 85px;
+    margin-left: 5px; /* Ajusta según tus necesidades */
+  }
