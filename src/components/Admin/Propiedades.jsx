@@ -278,7 +278,7 @@ function Propiedades() {
 
       formData = {
         ...formData,
-        status: 'activo', // Establecer el estado en 'activo' por defecto
+        status: 'activa', // Establecer el estado en 'activo' por defecto
 
         ...values,
         youtubeUrl,
@@ -777,32 +777,22 @@ function Propiedades() {
                   ))}
                 </ul>
               )}
-<Form.Item
+             <Form.Item
   label='Precio'
   name='precio'
   rules={[
     { required: true, message: 'Por favor ingresa el precio' },
-    {
-      validator: (_, value) => {
-        if (isNaN(value)) {
-          return Promise.reject('El precio debe ser un número válido');
-        }
-        return Promise.resolve();
-      },
-    },
   ]}
 >
-  <InputNumber
-    min={0}
-    formatter={(value) =>
-      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    }
-    parser={(value) => parseFloat(value.replace(/\$\s?|(,*)/g, ''))}
-    style={{ width: '50%' }}
-  /> MXN
+    <InputNumber
+      style={{ width: '50%' }}
+      min={0}
+      formatter={(value) =>
+        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      }
+      parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+    />
 </Form.Item>
-
-
 
 
               <Form.Item
