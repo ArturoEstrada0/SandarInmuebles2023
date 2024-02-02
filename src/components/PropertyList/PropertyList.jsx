@@ -119,6 +119,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
   const [propertyData, setPropertyData] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
+  const[highlightedProperties, setHighlightedProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -157,6 +158,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
         setPropertyData(initialPropertyData);
         setFilteredProperties(initialPropertyData);
+        setHighlightedProperties(initialPropertyData);
 
         setLoading(false);
       } catch (error) {
@@ -167,7 +169,6 @@ const PropertyList = ({ onPropertyClick }) => {
     fetchProperties();
   }, []);
 
-  const [highlightedProperties, setHighlightedProperties] = useState([]);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -278,10 +279,12 @@ const PropertyList = ({ onPropertyClick }) => {
         (minPrice === "" || property.price >= parseInt(minPrice, 10)) &&
         (maxPrice === "" || property.price <= parseInt(maxPrice, 10));
 
+
       return isConditionMatch && isTypeMatch && isPriceMatch; // Actualiza aquí también
     });
 
     setFilteredProperties(filtered);
+
   };
 
   const [youtubeModalVisible, setYoutubeModalVisible] = useState(false);
@@ -455,7 +458,7 @@ const PropertyList = ({ onPropertyClick }) => {
       >
         <div style={{ width: "100%" }}>
           <div style={{ padding: "20px 0" }}>
-            <Title level={3}>Propiedades Destacadas</Title>
+            <Title style={{fontFamily:'Geometos', borderLeft: '3px solid #1890ff', marginLeft:'20px', paddingLeft: '15px'}} level={3}>Propiedades Destacadas</Title>
             <Row gutter={[16, 16]}>
               {highlightedProperties.map((property) => (
                 <Col key={property.id} xs={24}>
@@ -467,10 +470,10 @@ const PropertyList = ({ onPropertyClick }) => {
                           onClick={() => handlePropertyClick(property.id)}
                         >
                           {property.condicion === "Venta" && (
-                            <div className="sale-mark">Venta</div>
+                            <div style={{fontFamily:'Geometos'}} className="sale-mark">Venta</div>
                           )}
                           {property.condicion === "Renta" && (
-                            <div className="rent-mark">Renta</div>
+                            <div style={{fontFamily:'Geometos'}} className="rent-mark">Renta</div>
                           )}
                           <CustomCarousel images={property.fotos} />
                         </div>
@@ -492,7 +495,8 @@ const PropertyList = ({ onPropertyClick }) => {
                               fontSize: "1.6rem",
                               color: "#1677ff",
                               fontWeight: "bold",
-                            }}
+                              fontFamily:"Geometos"
+                        }}
                           >
                             {property.nombre}
                           </Text>
@@ -721,11 +725,14 @@ const PropertyList = ({ onPropertyClick }) => {
                               <Button
                                 type="primary"
                                 style={{
-                                  backgroundColor: "#e31925",
+                                  backgroundColor: "#ffff",
                                   borderColor: "#e31925",
                                   marginLeft: "16px",
+                                  color:"black",
+                                  
+
                                 }}
-                                icon={<YoutubeFilled />}
+                                icon={<YoutubeFilled  style={{ color: 'red' }}/>}
                                 onClick={() =>
                                   handleYoutubeButtonClick(property.youtubeUrl)
                                 }
@@ -820,7 +827,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
       {/* Sección para propiedades filtradas */}
       <div style={{ padding: "20px 0" }}>
-        <Title level={3}>Otras Propiedades</Title>
+        <Title style={{fontFamily:'Geometos', borderLeft: '3px solid #1890ff', marginLeft:'20px',  paddingLeft: '15px'}} level={3}>Otras Propiedades</Title>
         <Row gutter={[16, 16]}>
           {loading ? (
             <Spin tip="Cargando..." />
@@ -837,16 +844,18 @@ const PropertyList = ({ onPropertyClick }) => {
                       >
                         {/* Renderiza la marca de venta o renta si es aplicable */}
                         {property.condicion === "Venta" && (
-                          <div className="sale-mark">Venta</div>
+                          <div style={{fontFamily:'Geometos'}} className="sale-mark">Venta</div>
                         )}
                         {property.condicion === "Renta" && (
-                          <div className="rent-mark">Renta</div>
+                          <div style={{fontFamily:'Geometos'}} className="rent-mark">Renta</div>
                         )}
                         <CustomCarousel images={property.image} />
                       </div>
                     </Col>
                     {/* Columna para la información */}
-                    <Col xs={24} sm={12} md={12} lg={16}>
+                    <Col xs={24} sm={12} md={12} lg={14}
+                    style={{ margin: "0px 30px" }}
+                    >
                       <div
                         className="property-name"
                         style={{ cursor: "pointer" }}
@@ -855,9 +864,10 @@ const PropertyList = ({ onPropertyClick }) => {
                         {/* Renderiza el nombre de propiedad */}
                         <Text
                           style={{
-                            fontSize: "1.2rem",
+                            fontSize: "1.6rem",
                             color: "#1677ff",
                             fontWeight: "bold",
+                            fontFamily:"Geometos",
                           }}
                         >
                           {property.name}
@@ -895,6 +905,7 @@ const PropertyList = ({ onPropertyClick }) => {
                             fontSize: "1.5rem",
                             fontWeight: "bold",
                             marginTop: "10px",
+
                           }}
                           onClick={() => handlePropertyClick(property.id)}
                         >
@@ -908,16 +919,16 @@ const PropertyList = ({ onPropertyClick }) => {
                           gutter={[16, 16]}
                           style={{ marginBottom: "16px", marginTop: "20px" }}
                         >
-                          <Col xs={8}>
+                          <Col xs={8}  style={{ marginRight: "-60px" }}>
                             <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faBed}
-                                style={{ fontSize: "2rem", fontWeight: "bold" }}
+                                style={{ fontSize: "2rem", fontWeight: "bold" , marginRight: "5px",}}
                               />{" "}
                               Recámaras: {property.rooms}
                             </Text>
                           </Col>
-                          <Col xs={8}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
                             <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faBath}
@@ -927,7 +938,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               Baños: {property.bathrooms}
                             </Text>
                           </Col>
-                          <Col xs={8}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
                             <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faToilet}
@@ -937,7 +948,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               Medios Baños: {property.medioBaño ?? 0}
                             </Text>
                           </Col>
-                          <Col xs={8}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
                             <Text strong style={{ fontSize: "1.2rem" }}>
                               <HomeOutlined
                                 style={{
@@ -948,7 +959,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               {property.type}
                             </Text>
                           </Col>
-                          <Col xs={8}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
                             <Text strong style={{ fontSize: "1.2rem" }}>
                               <img
                                 src={m2Image}
@@ -962,7 +973,7 @@ const PropertyList = ({ onPropertyClick }) => {
                               {property.area} m²
                             </Text>
                           </Col>
-                          <Col xs={8}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
                             <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faRulerCombined}
@@ -1033,11 +1044,12 @@ const PropertyList = ({ onPropertyClick }) => {
                             <Button
                               type="primary"
                               style={{
-                                backgroundColor: "#e31925",
+                                backgroundColor: "#ffff",
                                 borderColor: "#e31925",
                                 marginLeft: "16px",
+                                color: "black",
                               }}
-                              icon={<YoutubeFilled />}
+                              icon={<YoutubeFilled style={{ color: 'red' }}/>}
                               onClick={() =>
                                 handleYoutubeButtonClick(property.youtube)
                               }

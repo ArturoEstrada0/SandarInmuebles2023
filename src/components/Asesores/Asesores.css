@@ -3,17 +3,18 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: 150px;
+    margin-top: 100px;
     margin-bottom: 30px;
+    padding: 50px;
   }
   
   .image-container img {
     max-width: 100%;
     height: auto;
-    max-height: 270px; /* Ajusta la altura máxima según tus preferencias */
+    max-height: 370px; /* Ajusta la altura máxima según tus preferencias */
   }
   
-  .text-container {
+  .asesor-container {
     margin: 20px 0; /* Agrega márgenes superior e inferior */
     max-width: 50%; /* Establece el ancho máximo al 50% de la pantalla */
     color: #333; /* Color de texto para el párrafo */
@@ -21,11 +22,11 @@
   }
   
   
-  .text-container h4 {
+  .asesor-container h4 {
     color: blue; /* Color azul para el h4 */
   }
   
-  .text-container hr {
+  .asesor-container hr {
     width: 50%; /* Ancho de la línea horizontal al 50% de la pantalla */
     margin: 10px auto; /* Ajusta el margen superior e inferior y centra la línea horizontal */
     border: 2px solid blue; /* Color y grosor de la línea horizontal */
@@ -51,7 +52,7 @@
     margin-left: 50%;
 }
   
-  .text-container p{
+  .asesor-container p{
     font-size: 18px;
     line-height: 1.6;
     margin-bottom: 30px;
