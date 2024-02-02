@@ -777,11 +777,19 @@ function Propiedades() {
                   ))}
                 </ul>
               )}
-              <Form.Item
+<Form.Item
   label='Precio'
   name='precio'
   rules={[
     { required: true, message: 'Por favor ingresa el precio' },
+    {
+      validator: (_, value) => {
+        if (isNaN(value)) {
+          return Promise.reject('El precio debe ser un número válido');
+        }
+        return Promise.resolve();
+      },
+    },
   ]}
 >
   <InputNumber
@@ -789,10 +797,12 @@ function Propiedades() {
     formatter={(value) =>
       `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
-    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-    style={{ width: '50%' }} // Establecer el ancho del campo de entrada
+    parser={(value) => parseFloat(value.replace(/\$\s?|(,*)/g, ''))}
+    style={{ width: '50%' }}
   /> MXN
 </Form.Item>
+
+
 
 
               <Form.Item
