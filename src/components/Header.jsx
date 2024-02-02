@@ -135,15 +135,6 @@ const Header = () => {
         </Link>
 
             <Link
-              to="/asesores"
-              style={
-                activeSection === "asesores" ? activeMenuItemStyle : menuItemStyle
-              }
-              onClick={() => handleMenuClick("/asesores", "asesores")}
-            >
-              Asesores
-            </Link>
-            <Link
               to="/contact"
               style={
                 activeSection === "contact" ? activeMenuItemStyle : menuItemStyle

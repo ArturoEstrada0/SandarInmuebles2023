@@ -107,6 +107,8 @@ function App() {
               path="/property/:id"
               element={<PropertyDetail propertyData={propertyData} />}
             />
+            <Route path="/vender" element={<Vender />} /> {/* Agrega esta línea */}
+            <Route path="/comprar" element={<Comprar />} />
             <Route path="/login" element={<Login />} />
             <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
             <Route path="/registro" element={<Registro />} />
