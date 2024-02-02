@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row, Statistic, List } from 'antd';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer
 } from 'recharts';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import {
   UserOutlined, HomeOutlined, TeamOutlined, LikeOutlined, EyeOutlined,
 } from '@ant-design/icons';
+import { firestore } from '../firebase/firebase';
+import HistogramaRegistro from './HistogramaRegistro';
 
 function Inicio() {
   const [totalPropiedades, setTotalPropiedades] = useState(0);
@@ -20,6 +22,8 @@ function Inicio() {
   const [propiedadesSeleccionadas, setPropiedadesSeleccionadas] = useState(null);
   const [metodosContacto, setMetodosContacto] = useState([]);
   const [usuariosPorMes, setUsuariosPorMes] = useState([]);
+  const [datosContador, setDatosContador] = useState([]);
+
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -109,18 +113,33 @@ function Inicio() {
     }
   };
 
-  const obtenerContactosPorMetodo = async () => {
-    const datosDePrueba = [
-      { metodo: 'WhatsApp', cantidad: 30 },
-      { metodo: 'Formulario', cantidad: 15 },
-      { metodo: 'Correo Electrónico', cantidad: 10 },
-    ];
-
-    setMetodosContacto(datosDePrueba);
-  };
-
   useEffect(() => {
-    obtenerContactosPorMetodo();
+    const fetchDatosContador = async () => {
+
+        try {
+          const docRefWhatsApp = doc(firestore, 'msgCount', 'whatsappCount');
+          const docSnapWhatsApp = await getDoc(docRefWhatsApp);
+          const whatsappCount = docSnapWhatsApp.exists() ? docSnapWhatsApp.data().count : 0;
+  
+          const docRefEmail = doc(firestore, 'msgCount', 'emailCount');
+          const docSnapEmail = await getDoc(docRefEmail);
+          const emailCount = docSnapEmail.exists() ? docSnapEmail.data().count : 0;
+        const docRef = doc(firestore, 'msgCount', 'contactCount');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const contador = docSnap.data().count;
+          setDatosContador([{ metodo: 'Formulario de Contacto', cantidad: contador },
+          { metodo: 'WhatsApp', cantidad: whatsappCount },
+          { metodo: 'Correo Electrónico', cantidad: emailCount }]);
+          
+        }
+      } catch (error) {
+        console.error('Error al obtener datos del contador:', error);
+      }
+
+    };
+
+    fetchDatosContador();
   }, []);
 
   const obtenerPropiedadesPorTipo = async () => {
@@ -182,7 +201,7 @@ function Inicio() {
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Inicio</h1>
+      <h1>Inicio</h1>
 
       <Row gutter={16}>
         {dataGeneral.map((item, index) => (
@@ -270,28 +289,23 @@ function Inicio() {
         </Col>
 
         <Col span={12}>
-          <Card title="Contactos por Método">
-            <BarChart width={400} height={300} data={metodosContacto}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="metodo" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="cantidad" fill="#1890ff" />
-            </BarChart>
-          </Card>
-        </Col>
+      <Card title="Contactos por Método">
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={datosContador}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="metodo" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="cantidad" fill="#1890ff" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
+    </Col>
 
         <Col span={24}>
-          <Card title="Usuarios Registrados">
-            <LineChart width={600} height={300} data={usuariosRegistrados}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="mes" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="usuarios" stroke="#8884d8" />
-            </LineChart>
+          <Card title="Trafico de Sandar Inmuebles">
+            <HistogramaRegistro />
           </Card>
         </Col>
       </Row>

@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
+import { addDoc, auth, firestore } from "../firebase/firebase"; // Asegúrate de importar 'auth' y 'firestore' desde tu archivo de configuración de Firebase
+
 
 import {
   MDBBtn,
@@ -19,6 +21,7 @@ import {
 } from "mdb-react-ui-kit";
 
 import "./Login.css";
+import { collection } from "firebase/firestore";
 
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,8 +60,14 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Inicio de sesión exitoso"); // Establece el mensaje de éxito
-      navigate('/');
 
+     // Agregar registro de inicio de sesión a Firestore con formato Unix
+     const loginHistoryRef = collection(firestore, "loginHistory");
+     await addDoc(loginHistoryRef, {
+       email: email,
+       timestamp: new Date().getTime() // Obtener la marca de tiempo en formato Unix
+     });
+      navigate("/");
     } catch (error) {
       setError("Error al ingresar, intente de nuevo");
     }
@@ -71,14 +80,13 @@ const Login = () => {
   };
 
   return (
-    <div className="fondo-cards"   style={{ marginTop: '67px' }}
-    >
+    <div className="fondo-cards" style={{ marginTop: "67px" }}>
       <MDBContainer fluid>
         <MDBRow className="d-flex justify-content-center align-items-center">
           <MDBCol col="10" md="6">
             <img
               src="src/assets/img/inicioS.svg"
-              class="img-fluid"
+              className="img-fluid"
               alt="Phone image"
             />
           </MDBCol>
@@ -88,15 +96,15 @@ const Login = () => {
               style={{ borderRadius: "1rem", maxWidth: "400px" }}
             >
               <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
-                  <Link to="/">
-                    <LeftOutlined
-                      style={{
-                        fontSize: "1.5rem",
-                        marginRight: "350px",
-                        color: "white",
-                      }}
-                    />
-                  </Link>
+                <Link to="/">
+                  <LeftOutlined
+                    style={{
+                      fontSize: "1.5rem",
+                      marginRight: "350px",
+                      color: "white",
+                    }}
+                  />
+                </Link>
                 <MDBNavbar
                   expand="lg"
                   light
@@ -126,6 +134,7 @@ const Login = () => {
                   id="formControlEmail"
                   type="email"
                   size="lg"
+                  style={{ color: "white" }}
                 />
                 <MDBInput
                   wrapperClass="mb-4 mx-5 w-100"
@@ -136,6 +145,7 @@ const Login = () => {
                   id="formControlPassword"
                   type="password"
                   size="lg"
+                  style={{ color: "white" }}
                 />
 
                 <p className="small mb-3 pb-lg-2">
@@ -153,7 +163,7 @@ const Login = () => {
                   Iniciar Sesión
                 </MDBBtn>
                 {error && (
-                  <p style={{ color: "red", marginTop: "10px"}}>{error}</p>
+                  <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
                 )}
                 {successMessage && (
                   <p className="text-success">{successMessage}</p>

@@ -16,7 +16,6 @@ import AboutUs from "./components/AboutUs/AboutUs";
 import Vender from "./components/Vender/Vender";
 import Comprar from "./components/Comprar/Comprar";
 
-
 import Contact from "./components/Contact/Contact";
 import AdminPanel from "./components/Admin/AdminPanel";
 
@@ -29,6 +28,7 @@ import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 import { collection, getDoc, getDocs, doc } from "firebase/firestore";
 import { firestore } from "./components/firebase/firebase";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -107,11 +107,11 @@ function App() {
               path="/property/:id"
               element={<PropertyDetail propertyData={propertyData} />}
             />
+            <Route path="/vender" element={<Vender />} /> {/* Agrega esta línea */}
+            <Route path="/comprar" element={<Comprar />} />
             <Route path="/login" element={<Login />} />
             <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
             <Route path="/registro" element={<Registro />} />
-            <Route path="/vender" element={<Vender />} />
-            <Route path="/comprar" element={<Comprar />} />
           </>
         )}
     </Routes>

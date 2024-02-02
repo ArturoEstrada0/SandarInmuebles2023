@@ -97,3 +97,15 @@
     width: 150px; /* Ajusta el tamaño según sea necesario */
   }
   
+
+  
+  /* PropertyList.css */
+
+/* Ajuste para dispositivos móviles */
+@media screen and (max-width: 768px) {
+  .property-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}

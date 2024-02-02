@@ -92,7 +92,7 @@ function LandingPage() {
                     size="large"
                     className="banner-button"
                     style={{
-                      background: "black",
+                      background: "#001529",
                       color: "white",
                       border: "1px solid white",
                       borderRadius: "4px",

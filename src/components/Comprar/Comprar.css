@@ -1,13 +1,12 @@
 /* Comprar.css */
 
 .comprar-container {
-  opacity: 1; /* Asegura que la página sea visible inicialmente */
-  transition: opacity 0.5s ease-in-out; /* Agrega una transición suave */
+  animation: fadeIn 1s ease-in-out;
 }
   
   .comprar-title {
     text-align: center;
-    margin-top: 70px;
+    margin-top: 80px;
     /* border-bottom: 2px solid #1890ff; */ /* Comentada para quitar la línea azul */
     padding-bottom: 10px;
   }

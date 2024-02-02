@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Button, Form, Row, Col, Select, Card, message } from 'antd';
 import { UserOutlined, MailOutlined, PhoneOutlined, MessageOutlined, PhoneFilled, MailFilled } from '@ant-design/icons';
-import { collection, addDoc, getDocs, query, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, doc, getDoc, setDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import 'animate.css';
 import './Contact.css';
@@ -12,34 +12,51 @@ const Contact = () => {
   const [contactInfo, setContactInfo] = useState(null);
   const [contactTitle, setContactTitle] = useState('');
   const [contactParagraph, setContactParagraph] = useState('');
+  const [ContactCount, setContactCount] = useState('')
+  const [contactCount, setcontactCount] = useState('')
+useEffect(() => {
+  setAnimationClass('animate__animated animate__fadeInUp');
 
-  useEffect(() => {
-    setAnimationClass('animate__animated animate__fadeInUp');
+  const fetchContactInfo = async () => {
+    try {
+      const contactCollectionRef = collection(firestore, 'contactData');
+      const q = query(contactCollectionRef);
+      const querySnapshot = await getDocs(q);
 
-    const fetchContactInfo = async () => {
-      try {
-        const contactCollectionRef = collection(firestore, 'contactData');
-        const q = query(contactCollectionRef);
-        const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setContactInfo(doc.data());
+      });
 
-        querySnapshot.forEach((doc) => {
-          setContactInfo(doc.data());
-        });
-
-        const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
-        const docSnap = await getDoc(contactDocRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setContactTitle(data.title || '');
-          setContactParagraph(data.paragraph || '');
-        }
-      } catch (error) {
-        console.error('Error al obtener la información de contacto:', error);
+      const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
+      const docSnap = await getDoc(contactDocRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setContactTitle(data.title || '');
+        setContactParagraph(data.paragraph || '');
       }
-    };
+    } catch (error) {
+      console.error('Error al obtener la información de contacto:', error);
+    }
+  };
 
-    fetchContactInfo();
-  }, []);
+  fetchContactInfo();
+}, []);
+
+  const fetchCounter = async () => {
+    // Actualiza el contador de correo electrónico utilizando una función de actualización de estado
+    setContactCount(prevCount => prevCount + 1);
+  
+    // Guarda el contador en Firebase
+    try {
+      const docRef = doc(firestore, "msgCount", "contactCount");
+      await setDoc(docRef, { count: contactCount + 1 });
+    } catch (error) {
+      console.error(
+        "Error al guardar el contador de correos electrónicos en Firebase",
+        error
+      );
+    }
+  };
 
   const onFinish = async (values) => {
     try {
@@ -67,7 +84,7 @@ const Contact = () => {
       >
         <p>{contactParagraph}</p>
         <Row gutter={[16, 16]}>
-          <Col span={12}>
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <Form form={form} name="contact-form" onFinish={onFinish} layout="vertical">
               <Row gutter={16}>
                 <Col span={12}>
@@ -124,14 +141,14 @@ const Contact = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily: "Geometos", fontSize: "0.8rem" }}
+                style={{ backgroundColor: '#001529', borderColor: '#001529', fontFamily: "Geometos", fontSize: "0.8rem" }}
               >
                 Enviar Correo
               </Button>
             </Form>
           </Col>
 
-          <Col span={12}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <div className="contact-info-container">
               <h3 className="contact-title"><UserOutlined /> Información de Contacto</h3>
               {contactInfo && (

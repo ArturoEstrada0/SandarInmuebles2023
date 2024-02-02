@@ -43,7 +43,7 @@ function AdminPanel() {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', marginTop: "65px" }}>
       <Sider>
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['inicio']} mode="inline" onClick={({ key }) => setSeccion(key)}>

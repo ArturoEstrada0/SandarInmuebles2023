@@ -5,9 +5,9 @@ import { useAuth } from "../context/AuthContext";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
 import './Header.css'
-import logo from "../assets/img/sandarlogo1.png";
+import logo from "../assets/img/logo2.png";
+import texto from "../assets/img/sandarcom.png"
 
-    
 const headerStyle = {
   width: "100%",
   display: "flex",
@@ -24,8 +24,9 @@ const logoStyle = {
   width: "90px",
   height: "50px",
   marginTop: "-5px",
-  marginRight: "10px",
+  marginRight: "0",  // Ajusta el margen derecho según tu preferencia
 };
+
 
 const menuItemStyle = {
   fontSize: "16px",
@@ -94,6 +95,12 @@ const Header = () => {
               style={logoStyle}
               className="logo"
             />
+            <img
+              src={texto}
+              alt="Mi logotipo"
+              style={logoStyle}
+              className="logo"
+            />
           </Link>
           {/* Navigation Links */}
           <div className={`menu-links ${menuOpen ? "open" : ""}`}>
@@ -128,15 +135,6 @@ const Header = () => {
         </Link>
 
             <Link
-              to="/asesores"
-              style={
-                activeSection === "asesores" ? activeMenuItemStyle : menuItemStyle
-              }
-              onClick={() => handleMenuClick("/asesores", "asesores")}
-            >
-              Asesores
-            </Link>
-            <Link
               to="/contact"
               style={
                 activeSection === "contact" ? activeMenuItemStyle : menuItemStyle
@@ -168,9 +166,7 @@ const Header = () => {
               <UserOutlined style={{ marginRight: "5px" }} />
               Iniciar Sesión
             </Link>
-          )}    
-    
-  
+          )}
       </div>
     </>
   );
