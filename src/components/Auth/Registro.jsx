@@ -9,6 +9,7 @@ import {
   getDocs,
   query,
   where,
+  Timestamp,
 } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { Link } from "react-router-dom";
@@ -37,6 +38,8 @@ const Registro = () => {
   const [error, setError] = useState("");
   const [phone, setPhone] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [registrationDate, setRegistrationDate] = useState(0); // Nuevo estado para la fecha de registro
+
 
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -100,6 +103,7 @@ const Registro = () => {
         displayName: name,
         role: role,
       });
+      const timestamp = new Date().getTime(); // Definir timestamp antes de su uso
 
       const usersCollection = collection(firestore, "usuarios");
       const userDocRef = doc(usersCollection, user.uid);
@@ -109,6 +113,8 @@ const Registro = () => {
         name: name,
         email: email,
         phone: phone,
+        registrationDate: timestamp, // timestamp es un número de marca de tiempo UNIX
+
       });
 
       setSuccessMessage("Registro exitoso. ¡Bienvenido!");

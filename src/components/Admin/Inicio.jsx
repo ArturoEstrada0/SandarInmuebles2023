@@ -8,6 +8,7 @@ import {
   UserOutlined, HomeOutlined, TeamOutlined, LikeOutlined, EyeOutlined,
 } from '@ant-design/icons';
 import { firestore } from '../firebase/firebase';
+import HistogramaRegistro from './HistogramaRegistro';
 
 function Inicio() {
   const [totalPropiedades, setTotalPropiedades] = useState(0);
@@ -303,7 +304,8 @@ function Inicio() {
     </Col>
 
         <Col span={24}>
-          <Card title="Usuarios Registrados">
+          <Card title="Trafico de Sandar Inmuebles">
+            <HistogramaRegistro />
           </Card>
         </Col>
       </Row>
