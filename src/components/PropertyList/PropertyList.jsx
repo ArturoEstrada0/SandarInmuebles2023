@@ -451,7 +451,7 @@ const PropertyList = ({ onPropertyClick }) => {
       </div>
       {/* Sección para propiedades destacadas */}
       <div style={{ padding: "20px 0" }}>
-        <Title level={3}>Propiedades Destacadas</Title>
+        <Title style={{fontFamily:'Geometos', borderLeft: '3px solid #1890ff', marginLeft:'20px', paddingLeft: '15px'}} level={3}>Propiedades Destacadas</Title>
         <Row gutter={[16, 16]}>
           {highlightedProperties.map((property) => (
             <Col key={property.id} xs={24}>
@@ -465,10 +465,10 @@ const PropertyList = ({ onPropertyClick }) => {
                     >
                       {/* Renderiza la marca de venta o renta si es aplicable */}
                       {property.condicion === "Venta" && (
-                        <div className="sale-mark">Venta</div>
+                        <div style={{fontFamily:'Geometos'}} className="sale-mark">Venta</div>
                       )}
                       {property.condicion === "Renta" && (
-                        <div className="rent-mark">Renta</div>
+                        <div style={{fontFamily:'Geometos'}} className="rent-mark">Renta</div>
                       )}
                       <CustomCarousel images={property.fotos} />
                     </div>
@@ -486,6 +486,7 @@ const PropertyList = ({ onPropertyClick }) => {
                           fontSize: "1.2rem",
                           color: "#1677ff",
                           fontWeight: "bold",
+                          fontFamily:"Geometos"
                         }}
                       >
                         {property.nombre}
@@ -822,7 +823,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
       {/* Sección para propiedades filtradas */}
       <div style={{ padding: "20px 0" }}>
-        <Title level={3}>Otras Propiedades</Title>
+        <Title style={{fontFamily:'Geometos', borderLeft: '3px solid #1890ff', marginLeft:'20px',  paddingLeft: '15px'}} level={3}>Otras Propiedades</Title>
         <Row gutter={[16, 16]}>
           {loading ? (
             <Spin tip="Cargando..." />
@@ -839,10 +840,10 @@ const PropertyList = ({ onPropertyClick }) => {
                       >
                         {/* Renderiza la marca de venta o renta si es aplicable */}
                         {property.condicion === "Venta" && (
-                          <div className="sale-mark">Venta</div>
+                          <div style={{fontFamily:'Geometos'}} className="sale-mark">Venta</div>
                         )}
                         {property.condicion === "Renta" && (
-                          <div className="rent-mark">Renta</div>
+                          <div style={{fontFamily:'Geometos'}} className="rent-mark">Renta</div>
                         )}
                         <CustomCarousel images={property.image} />
                       </div>
@@ -860,6 +861,7 @@ const PropertyList = ({ onPropertyClick }) => {
                             fontSize: "1.2rem",
                             color: "#1677ff",
                             fontWeight: "bold",
+                            fontFamily:"Geometos",
                           }}
                         >
                           {property.name}
@@ -897,6 +899,7 @@ const PropertyList = ({ onPropertyClick }) => {
                             fontSize: "1.5rem",
                             fontWeight: "bold",
                             marginTop: "10px",
+
                           }}
                           onClick={() => handlePropertyClick(property.id)}
                         >

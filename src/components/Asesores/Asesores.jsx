@@ -14,7 +14,7 @@ export default function Asesores() {
         {/* Aquí deberías poner la ruta de tu imagen */}
         <img src={asesores} alt="Imagen de asesor" />
       </div>
-      <div className="text-container">
+      <div className="asesor-container">
         {/*<h4>ASESORES</h4>*/}
         <Title level={2} className="asesor-title">
           Encuentra a tu Asesor
@@ -22,7 +22,7 @@ export default function Asesores() {
         <p>
         Nuestros expertos en bienes raíces te proporcionarán asesoramiento profesional durante todo el proceso de compra o venta de propiedades. Estamos comprometidos en ayudarte a tomar decisiones informadas y estratégicas.
         </p>
-        <Divider/>
+        <Divider style={{ borderWidth: '2px', margin: '20px 0', marginLeft:'40px' }} />
         <div className='button-asesor'>
         <button>Contactar</button>
         </div>
