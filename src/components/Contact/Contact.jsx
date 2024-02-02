@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Button, Form, Row, Col, Select, Card, message } from 'antd';
 import { UserOutlined, MailOutlined, PhoneOutlined, MessageOutlined, PhoneFilled, MailFilled } from '@ant-design/icons';
-import { collection, addDoc, getDocs, query, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, doc, getDoc, setDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import 'animate.css';
 import './Contact.css';
@@ -9,34 +9,38 @@ import './Contact.css';
 const Contact = () => {
   const [form] = Form.useForm();
   const [animationClass, setAnimationClass] = useState('');
+  const [contactInfo, setContactInfo] = useState(null);
+  const [contactTitle, setContactTitle] = useState('');
+  const [contactParagraph, setContactParagraph] = useState('');
+  const [ContactCount, setContactCount] = useState('')
+  const [contactCount, setcontactCount] = useState('')
+useEffect(() => {
+  setAnimationClass('animate__animated animate__fadeInUp');
 
-  useEffect(() => {
-    setAnimationClass('animate__animated animate__fadeInUp');
+  const fetchContactInfo = async () => {
+    try {
+      const contactCollectionRef = collection(firestore, 'contactData');
+      const q = query(contactCollectionRef);
+      const querySnapshot = await getDocs(q);
 
-    const fetchContactInfo = async () => {
-      try {
-        const contactCollectionRef = collection(firestore, 'contactData');
-        const q = query(contactCollectionRef);
-        const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setContactInfo(doc.data());
+      });
 
-        querySnapshot.forEach((doc) => {
-          setContactInfo(doc.data());
-        });
-
-        const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
-        const docSnap = await getDoc(contactDocRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setContactTitle(data.title || '');
-          setContactParagraph(data.paragraph || '');
-        }
-      } catch (error) {
-        console.error('Error al obtener la información de contacto:', error);
+      const contactDocRef = doc(firestore, 'contactData', 'contactInfo');
+      const docSnap = await getDoc(contactDocRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setContactTitle(data.title || '');
+        setContactParagraph(data.paragraph || '');
       }
-    };
+    } catch (error) {
+      console.error('Error al obtener la información de contacto:', error);
+    }
+  };
 
-    fetchContactInfo();
-  }, []);
+  fetchContactInfo();
+}, []);
 
   const fetchCounter = async () => {
     // Actualiza el contador de correo electrónico utilizando una función de actualización de estado

@@ -8,7 +8,6 @@ import {
   UserOutlined, HomeOutlined, TeamOutlined, LikeOutlined, EyeOutlined,
 } from '@ant-design/icons';
 import { firestore } from '../firebase/firebase';
-import RegistroGrafico from './RegistroGrafico';
 
 function Inicio() {
   const [totalPropiedades, setTotalPropiedades] = useState(0);
@@ -305,7 +304,6 @@ function Inicio() {
 
         <Col span={24}>
           <Card title="Usuarios Registrados">
-            <RegistroGrafico />
           </Card>
         </Col>
       </Row>
