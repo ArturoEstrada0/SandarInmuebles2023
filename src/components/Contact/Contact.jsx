@@ -9,9 +9,6 @@ import './Contact.css';
 const Contact = () => {
   const [form] = Form.useForm();
   const [animationClass, setAnimationClass] = useState('');
-  const [contactInfo, setContactInfo] = useState(null);
-  const [contactTitle, setContactTitle] = useState('');
-  const [contactParagraph, setContactParagraph] = useState('');
 
   useEffect(() => {
     setAnimationClass('animate__animated animate__fadeInUp');
@@ -41,6 +38,22 @@ const Contact = () => {
     fetchContactInfo();
   }, []);
 
+  const fetchCounter = async () => {
+    // Actualiza el contador de correo electrónico utilizando una función de actualización de estado
+    setContactCount(prevCount => prevCount + 1);
+  
+    // Guarda el contador en Firebase
+    try {
+      const docRef = doc(firestore, "msgCount", "contactCount");
+      await setDoc(docRef, { count: contactCount + 1 });
+    } catch (error) {
+      console.error(
+        "Error al guardar el contador de correos electrónicos en Firebase",
+        error
+      );
+    }
+  };
+
   const onFinish = async (values) => {
     try {
       const contactCollection = collection(firestore, 'contacts');
@@ -67,7 +80,7 @@ const Contact = () => {
       >
         <p>{contactParagraph}</p>
         <Row gutter={[16, 16]}>
-          <Col span={12}>
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <Form form={form} name="contact-form" onFinish={onFinish} layout="vertical">
               <Row gutter={16}>
                 <Col span={12}>
@@ -124,14 +137,14 @@ const Contact = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily: "Geometos", fontSize: "0.8rem" }}
+                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', fontFamily:"Geometos", fontSize:"0.8rem" }}
               >
                 Enviar Correo
               </Button>
             </Form>
           </Col>
 
-          <Col span={12}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <div className="contact-info-container">
               <h3 className="contact-title"><UserOutlined /> Información de Contacto</h3>
               {contactInfo && (
