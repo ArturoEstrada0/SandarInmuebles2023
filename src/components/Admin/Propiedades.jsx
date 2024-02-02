@@ -44,7 +44,7 @@ import { getStorage } from 'firebase/storage'
 import YouTube from 'react-youtube'
 import Map from '../Map/Map'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRulerCombined, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faRulerCombined, faHome, faBath, faToilet, faBed, faTree, faUtensils, faHouseFlag, faMountain, faCar, faParking, faVideo, faBell, faVolumeUp, faBox, faTshirt, faFire, faSnowflake, faCouch, faPaw, faBinoculars, faDumbbell, faSwimmingPool, faGlassCheers, faChess, faWater, faCity } from '@fortawesome/free-solid-svg-icons'
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
 
@@ -720,11 +720,20 @@ function Propiedades() {
                     message: 'Por favor selecciona el tipo de propiedad',
                   },
                 ]}>
+                                                {/*departamneto, casa, terreno, despacho, oficina, bodega, edificio, rancho, hectareas*/}
+
                 <Select>
                   <Select.Option value='Casa'>Casa</Select.Option>
                   <Select.Option value='Departamento'>
                     Departamento
                   </Select.Option>
+                  <Select.Option value='Terreno'>Terreno</Select.Option>
+                  <Select.Option value='Despacho'>Despacho</Select.Option>
+                  <Select.Option value='Oficina'>Oficina</Select.Option>
+                  <Select.Option value='Bodega'>Bodega</Select.Option>
+                  <Select.Option value='Edificio'>Edificio</Select.Option>
+                  <Select.Option value='Rancho'>Rancho</Select.Option>
+                  <Select.Option value='Hectareas'>Hectareas</Select.Option>
                   {/* Agrega más opciones según sea necesario */}
                 </Select>
               </Form.Item>
@@ -767,19 +776,22 @@ function Propiedades() {
                 </ul>
               )}
               <Form.Item
-                label='Precio'
-                name='precio'
-                rules={[
-                  { required: true, message: 'Por favor ingresa el precio' },
-                ]}>
-                <InputNumber
-                  min={0}
-                  formatter={(value) =>
-                    `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                />
-              </Form.Item>
+  label='Precio'
+  name='precio'
+  rules={[
+    { required: true, message: 'Por favor ingresa el precio' },
+  ]}
+>
+  <InputNumber
+    min={0}
+    formatter={(value) =>
+      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
+    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+    style={{ width: '50%' }} // Establecer el ancho del campo de entrada
+  /> MXN
+</Form.Item>
+
 
               <Form.Item
                 label='Ubicación en Mapa'
@@ -843,7 +855,34 @@ function Propiedades() {
                             }}
                             onClick={() => handleFeatureCheck(feature)}>
                             {/* Agrega iconos según sea necesario */}
-
+                            {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Medio Baño" && <FontAwesomeIcon icon={faToilet} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Estacionamiento" && <FontAwesomeIcon icon={faParking} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
+                            
+                            
                             <p
                               style={{
                                 marginTop: '5px',
