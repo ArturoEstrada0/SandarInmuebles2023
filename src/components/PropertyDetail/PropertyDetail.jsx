@@ -42,6 +42,8 @@ import {
   faCity,
   faHome,
   faHouseFlag,
+  faToilet,
+  faRulerCombined
 } from '@fortawesome/free-solid-svg-icons'
 
 import axios from 'axios'
@@ -160,12 +162,12 @@ const PropertyDetail = () => {
   }
 
   const details = [
-    { key: 'habitaciones', label: 'Habitaciones' },
-    { key: 'baños', label: 'Baños' },
-    { key: 'medio Baño', label: 'Medios Baños' },
-    { key: 'metrosConstruidos', label: 'Construcción' },
-    { key: 'estacionamiento', label: 'Estacionamientos' },
-  ]
+    { key: 'habitaciones', label: 'Habitaciones', icon: faBed },
+    { key: 'baños', label: 'Baños', icon: faBath },
+    { key: 'medio Baño', label: 'Medios Baños', icon: faToilet },
+    { key: 'metrosConstruidos', label: 'Construcción', icon: faRulerCombined},
+    { key: 'estacionamiento', label: 'Estacionamientos', icon: faCar },
+  ];
 
   const getIcon = (key) => {
     const iconMapping = {
@@ -291,34 +293,40 @@ const PropertyDetail = () => {
           <hr />
 
           <Col span={24}>
-            <div style={{ marginBottom: '20px' }}>
-              <h3 className='subtitle-section'>Detalles de la propiedad</h3>
-              <Row gutter={[16, 16]}>
-                {details.map((detail, index) => (
-                  <Col key={index} xl={4}>
-                    <Card
-                      hoverable
-                      title={detail.label}
-                      size='small'
-                      style={{
-                        borderRadius: '5px',
-                        backgroundColor: '#f5f5f5',
-                        minHeight: '80px',
-                        padding: '4px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-                      }}>
-                      <Title level={3} style={{ color: '#1890ff' }}>
-                        {propertyDetails[detail.key] || 0}
-                      </Title>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          </Col>
+  <div style={{ marginBottom: '20px' }}>
+    <h3 className='subtitle-section'>Detalles de la propiedad</h3>
+    <Row gutter={[16, 16]}>
+    {details.map((detail, index) => (
+  <Col key={index} xl={4}>
+    <Card
+      hoverable
+      title={detail.label}
+      size='small'
+      style={{
+        borderRadius: '5px',
+        backgroundColor: '#f5f5f5',
+        minHeight: '80px',
+        padding: '4px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
+      <div style={{ marginBottom: '10px' }}>
+        <FontAwesomeIcon
+          icon={detail.icon}
+          className="custom-icon"
+        />
+      </div>
+      <Title level={3} style={{ color: '#1890ff', textAlign: 'center' }}>
+        {propertyDetails[detail.key] || 0}
+      </Title>
+    </Card>
+  </Col>
+))}
+    </Row>
+  </div>
+</Col>
 
           <div className='list-info'>
             <h3 className='subtitle-section'>Información del inmueble</h3>
@@ -453,22 +461,30 @@ const PropertyDetail = () => {
                       justifyContent: 'space-around',
                     }}>
                     {activeKey === 'Habitaciones' &&
-                      Array.from({ length: propertyDetails.habitaciones }).map(
-                        (_, index) => (
-                          <Card
-                            className='card-more-info'
-                            key={index}
-                            title={`Habitación ${index + 1}`}
-                            style={{
-                              flex: '1 0 30%',
-                              maxWidth: '31%',
-                              margin: '10px',
-                              borderRadius: '12px',
-                              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                              transition: 'transform 0.3s ease-in-out',
-                            }}>
-                            <p>Habitación {index + 1}</p>
-                          </Card>
+  Array.from({ length: propertyDetails.habitaciones }).map((_, index) => (
+    <Card
+      className='card-more-info'
+      key={index}
+      style={{
+        flex: '1 0 30%',
+        maxWidth: '31%',
+        margin: '10px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.3s ease-in-out',
+      }}
+      title={
+        <>
+          {`Habitación ${index + 1}`}
+        </>
+      }
+    >
+      <p>Habitación {index + 1}</p>
+      <FontAwesomeIcon
+        icon={faBed}
+        style={{ color: '#1890ff', fontSize: '24px', marginTop: '10px' }}
+      />
+    </Card>
                         ),
                       )}
                     {activeKey === 'Interiores/Exteriores' && (
