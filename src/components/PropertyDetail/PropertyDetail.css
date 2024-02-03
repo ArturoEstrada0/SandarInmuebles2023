@@ -16,6 +16,11 @@
   border-bottom: 2px solid #1890ff;
 }
 
+.custom-icon {
+  font-size: 27px;
+  color: #1677FF;
+}
+
 .content-container {
   text-align: center;
 }
