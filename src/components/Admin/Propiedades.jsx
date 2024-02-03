@@ -138,20 +138,6 @@ function Propiedades() {
   };
   
 
-  const generarFichaTecnica = (key) => {
-    // Acceder a la colección "propiedades" en Firebase y obtener la propiedad con el key proporcionado
-    database.collection('propiedades').doc(key).get().then((doc) => {
-      if (doc.exists) {
-        // Aquí puedes acceder a los datos de la propiedad y generar la ficha técnica
-        const propiedad = doc.data();
-        console.log('Ficha técnica generada para la propiedad:', propiedad);
-      } else {
-        console.log('No se encontró la propiedad con el key:', key);
-      }
-    }).catch((error) => {
-      console.error('Error al generar la ficha técnica:', error);
-    });
-  };
 
   const [highlightedProperties, setHighlightedProperties] = useState([])
 

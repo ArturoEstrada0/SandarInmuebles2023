@@ -143,6 +143,7 @@ const PropertyList = ({ onPropertyClick }) => {
               state: data.ubicacion,
               rooms: data.habitaciones || 0,
               bathrooms: data.baños || 0,
+              halfBaths: data.medioBaño || 0,
               area: data.tamanioPropiedad || 0,
               areaBuild: data.metrosConstruidos || 0,
               youtube: data.youtubeUrl || "",
@@ -945,7 +946,7 @@ const PropertyList = ({ onPropertyClick }) => {
                                 alt="Baños"
                                 style={{ fontSize: "2rem", marginRight: "8px" }}
                               />{" "}
-                              Medios Baños: {property.medioBaño ?? 0}
+                              Medios Baños: {property.halfBaths ?? 0}
                             </Text>
                           </Col>
                           <Col xs={8} style={{ marginRight: "-60px" }}>
