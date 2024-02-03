@@ -122,24 +122,21 @@ function Propiedades() {
   };
 
   const handleCopiarEnlace = (enlace) => {
-    // Crear un campo de texto oculto
-    const textField = document.createElement("textarea");
+    const textField = document.createElement('textarea');
     textField.innerText = enlace;
     document.body.appendChild(textField);
-
-    // Seleccionar el contenido del campo de texto
     textField.select();
-    textField.setSelectionRange(0, 99999); // Para dispositivos móviles
-
-    // Copiar el texto seleccionado al portapapeles
-    document.execCommand("copy");
-
-    // Eliminar el campo de texto temporal
+    textField.setSelectionRange(0, 99999);
+    document.execCommand('copy');
     textField.remove();
-
-    // Opcional: mostrar una notificación o feedback al usuario
-    alert("Enlace copiado al portapapeles");
+  
+    // Mostrar notificación de Ant Design
+    notification.success({
+      message: 'Enlace copiado',
+      description: 'El enlace se ha copiado exitosamente al portapapeles.',
+    });
   };
+  
 
   const generarFichaTecnica = (key) => {
     // Acceder a la colección "propiedades" en Firebase y obtener la propiedad con el key proporcionado
