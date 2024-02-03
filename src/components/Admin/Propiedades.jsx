@@ -19,6 +19,7 @@ import {
   Spin,
 } from 'antd'
 import {
+  CopyOutlined,
   DeleteOutlined,
   EditOutlined,
   PauseCircleOutlined,
@@ -117,8 +118,43 @@ function Propiedades() {
   }
 
   const isPropertyPaused = (property) => {
-    return property.status === 'pausada'
-  }
+    return property.status === "pausada";
+  };
+
+  const handleCopiarEnlace = (enlace) => {
+    // Crear un campo de texto oculto
+    const textField = document.createElement("textarea");
+    textField.innerText = enlace;
+    document.body.appendChild(textField);
+
+    // Seleccionar el contenido del campo de texto
+    textField.select();
+    textField.setSelectionRange(0, 99999); // Para dispositivos móviles
+
+    // Copiar el texto seleccionado al portapapeles
+    document.execCommand("copy");
+
+    // Eliminar el campo de texto temporal
+    textField.remove();
+
+    // Opcional: mostrar una notificación o feedback al usuario
+    alert("Enlace copiado al portapapeles");
+  };
+
+  const generarFichaTecnica = (key) => {
+    // Acceder a la colección "propiedades" en Firebase y obtener la propiedad con el key proporcionado
+    database.collection('propiedades').doc(key).get().then((doc) => {
+      if (doc.exists) {
+        // Aquí puedes acceder a los datos de la propiedad y generar la ficha técnica
+        const propiedad = doc.data();
+        console.log('Ficha técnica generada para la propiedad:', propiedad);
+      } else {
+        console.log('No se encontró la propiedad con el key:', key);
+      }
+    }).catch((error) => {
+      console.error('Error al generar la ficha técnica:', error);
+    });
+  };
 
   const [highlightedProperties, setHighlightedProperties] = useState([])
 
@@ -584,6 +620,17 @@ function Propiedades() {
                 : '#f0f0f0',
             }}
           />
+
+          <Button
+            onClick={() =>
+              handleCopiarEnlace(
+                `https://sandar-inmuebles.web.app/property/${record.key}`
+              )
+            }
+          >
+            <CopyOutlined />
+          </Button>
+          
         </Space>
       ),
     },
@@ -719,9 +766,8 @@ function Propiedades() {
                     required: true,
                     message: 'Por favor selecciona el tipo de propiedad',
                   },
-                ]}>
-                                                {/*departamneto, casa, terreno, despacho, oficina, bodega, edificio, rancho, hectareas*/}
-
+                ]}
+              >
                 <Select>
                   <Select.Option value='Casa'>Casa</Select.Option>
                   <Select.Option value='Departamento'>

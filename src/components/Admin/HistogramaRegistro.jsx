@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getFirestore, collection, getDocs, Timestamp, query, where } from 'firebase/firestore';
 import Chart from 'chart.js/auto';
+import { Col } from 'antd';
 
 function HistogramaRegistro() {
   const [registroData, setRegistroData] = useState([]);
@@ -196,6 +197,8 @@ function HistogramaRegistro() {
   };
 
   return (
+
+
     <div>
       <div>
         <select value={selectedMonth} onChange={(e) => handleMonthChange(parseInt(e.target.value))}>

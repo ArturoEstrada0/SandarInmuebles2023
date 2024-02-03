@@ -1,14 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Col, Row, Statistic, List } from 'antd';
+import React, { useEffect, useState } from "react";
+import { Card, Col, Row, Statistic, List } from "antd";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer
-} from 'recharts';
-import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+} from "recharts";
 import {
-  UserOutlined, HomeOutlined, TeamOutlined, LikeOutlined, EyeOutlined,
-} from '@ant-design/icons';
-import { firestore } from '../firebase/firebase';
-import HistogramaRegistro from './HistogramaRegistro';
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import {
+  UserOutlined,
+  HomeOutlined,
+  TeamOutlined,
+  LikeOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
+import { firestore } from "../firebase/firebase";
+import HistogramaRegistro from "./HistogramaRegistro";
+import { Doughnut } from "react-chartjs-2";
 
 function Inicio() {
   const [totalPropiedades, setTotalPropiedades] = useState(0);
@@ -17,16 +38,15 @@ function Inicio() {
   const [clickCount, setClickCount] = useState(0);
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [propiedades, setPropiedades] = useState([]);
-  const [propiedadMasClickeada, setPropiedadMasClickeada] = useState('');
-  const [propiedadConMasFavoritos, setPropiedadConMasFavoritos] = useState('');
-  const [propiedadesSeleccionadas, setPropiedadesSeleccionadas] = useState(null);
+  const [propiedadMasClickeada, setPropiedadMasClickeada] = useState("");
+  const [propiedadConMasFavoritos, setPropiedadConMasFavoritos] = useState("");
+  const [propiedadesSeleccionadas, setPropiedadesSeleccionadas] =
+    useState(null);
   const [metodosContacto, setMetodosContacto] = useState([]);
   const [usuariosPorMes, setUsuariosPorMes] = useState([]);
   const [datosContador, setDatosContador] = useState([]);
 
-
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
+  const azules = ["#7FB3D5", "#5D9CEC", "#4A89DC"];
   const [propiedadesPorTipo, setPropiedadesPorTipo] = useState([]);
   const [usuariosRegistrados, setUsuariosRegistrados] = useState([
     { mes: 1, usuarios: 10 },
@@ -45,7 +65,7 @@ function Inicio() {
 
   const obtenerTotalPropiedades = async () => {
     const firestore = getFirestore();
-    const propiedadesCollection = collection(firestore, 'propiedades');
+    const propiedadesCollection = collection(firestore, "propiedades");
     const propiedadesSnapshot = await getDocs(propiedadesCollection);
     const totalPropiedades = propiedadesSnapshot.size;
     setTotalPropiedades(totalPropiedades);
@@ -53,7 +73,7 @@ function Inicio() {
 
   const obtenerTotalUsuarios = async () => {
     const firestore = getFirestore();
-    const usuariosCollection = collection(firestore, 'usuarios');
+    const usuariosCollection = collection(firestore, "usuarios");
     const usuariosSnapshot = await getDocs(usuariosCollection);
     const totalUsuarios = usuariosSnapshot.size;
     setTotalUsuarios(totalUsuarios);
@@ -61,7 +81,7 @@ function Inicio() {
 
   const obtenerTotalContacts = async () => {
     const firestore = getFirestore();
-    const contactsCollection = collection(firestore, 'contacts');
+    const contactsCollection = collection(firestore, "contacts");
     const contactsSnapshot = await getDocs(contactsCollection);
     const totalContacts = contactsSnapshot.size;
     setTotalContacts(totalContacts);
@@ -69,14 +89,14 @@ function Inicio() {
 
   const obtenerPropiedades = async () => {
     const firestore = getFirestore();
-    const propiedadesCollection = collection(firestore, 'propiedades');
+    const propiedadesCollection = collection(firestore, "propiedades");
     const propiedadesSnapshot = await getDocs(propiedadesCollection);
 
     const propiedadesData = [];
     let maxClickCount = 0;
     let maxFavoriteCount = 0;
-    let propiedadClickeada = '';
-    let propiedadFavorita = '';
+    let propiedadClickeada = "";
+    let propiedadFavorita = "";
 
     propiedadesSnapshot.forEach((propiedad) => {
       const data = propiedad.data();
@@ -102,41 +122,49 @@ function Inicio() {
 
   const obtenerCaracteristicasPorTipo = (tipo) => {
     switch (tipo) {
-      case 'Casa':
-        return { tipo: 'Casa', pausadas: 5, vendidas: 20, rentadas: 8 };
-      case 'Departamento':
-        return { tipo: 'Departamento', pausadas: 3, vendidas: 15, rentadas: 10 };
-      case 'Terreno':
-        return { tipo: 'Terreno', pausadas: 1, vendidas: 10, rentadas: 5 };
+      case "Casa":
+        return { tipo: "Casa", pausadas: 5, vendidas: 20, rentadas: 8 };
+      case "Departamento":
+        return {
+          tipo: "Departamento",
+          pausadas: 3,
+          vendidas: 15,
+          rentadas: 10,
+        };
+      case "Terreno":
+        return { tipo: "Terreno", pausadas: 1, vendidas: 10, rentadas: 5 };
       default:
-        return { tipo: 'Otros', pausadas: 7, vendidas: 11, rentadas: 10 };
+        return { tipo: "Otros", pausadas: 7, vendidas: 11, rentadas: 10 };
     }
   };
 
   useEffect(() => {
     const fetchDatosContador = async () => {
+      try {
+        const docRefWhatsApp = doc(firestore, "msgCount", "whatsappCount");
+        const docSnapWhatsApp = await getDoc(docRefWhatsApp);
+        const whatsappCount = docSnapWhatsApp.exists()
+          ? docSnapWhatsApp.data().count
+          : 0;
 
-        try {
-          const docRefWhatsApp = doc(firestore, 'msgCount', 'whatsappCount');
-          const docSnapWhatsApp = await getDoc(docRefWhatsApp);
-          const whatsappCount = docSnapWhatsApp.exists() ? docSnapWhatsApp.data().count : 0;
-  
-          const docRefEmail = doc(firestore, 'msgCount', 'emailCount');
-          const docSnapEmail = await getDoc(docRefEmail);
-          const emailCount = docSnapEmail.exists() ? docSnapEmail.data().count : 0;
-        const docRef = doc(firestore, 'msgCount', 'contactCount');
+        const docRefEmail = doc(firestore, "msgCount", "emailCount");
+        const docSnapEmail = await getDoc(docRefEmail);
+        const emailCount = docSnapEmail.exists()
+          ? docSnapEmail.data().count
+          : 0;
+        const docRef = doc(firestore, "msgCount", "contactCount");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const contador = docSnap.data().count;
-          setDatosContador([{ metodo: 'Formulario de Contacto', cantidad: contador },
-          { metodo: 'WhatsApp', cantidad: whatsappCount },
-          { metodo: 'Correo Electrónico', cantidad: emailCount }]);
-          
+          setDatosContador([
+            { metodo: "Formulario de Contacto", cantidad: contador },
+            { metodo: "WhatsApp", cantidad: whatsappCount },
+            { metodo: "Correo Electrónico", cantidad: emailCount },
+          ]);
         }
       } catch (error) {
-        console.error('Error al obtener datos del contador:', error);
+        console.error("Error al obtener datos del contador:", error);
       }
-
     };
 
     fetchDatosContador();
@@ -144,16 +172,16 @@ function Inicio() {
 
   const obtenerPropiedadesPorTipo = async () => {
     const datosDePrueba = [
-      { nombre: 'Propiedad1', tipo: 'casa' },
-      { nombre: 'Propiedad2', tipo: 'departamento' },
-      { nombre: 'Propiedad3', tipo: 'casa' },
-      { nombre: 'Propiedad4', tipo: 'terreno' },
-      { nombre: 'Propiedad5', tipo: 'departamento' },
+      { nombre: "Propiedad1", tipo: "casa" },
+      { nombre: "Propiedad2", tipo: "departamento" },
+      { nombre: "Propiedad3", tipo: "casa" },
+      { nombre: "Propiedad4", tipo: "terreno" },
+      { nombre: "Propiedad5", tipo: "departamento" },
     ];
 
     const propiedadesPorTipoData = {};
     datosDePrueba.forEach((propiedad) => {
-      const tipo = propiedad.tipo || 'Otros';
+      const tipo = propiedad.tipo || "Otros";
       if (propiedadesPorTipoData[tipo]) {
         propiedadesPorTipoData[tipo]++;
       } else {
@@ -165,7 +193,7 @@ function Inicio() {
 
     const obtenerTotalUsuarios = async () => {
       const firestore = getFirestore();
-      const usuariosCollection = collection(firestore, 'usuarios');
+      const usuariosCollection = collection(firestore, "usuarios");
       const usuariosSnapshot = await getDocs(usuariosCollection);
 
       const usuariosPorMesData = Array(12).fill(0);
@@ -189,14 +217,14 @@ function Inicio() {
   }, []);
 
   const dataGeneral = [
-    { name: 'Propiedades', valor: totalPropiedades },
-    { name: 'Usuarios', valor: totalUsuarios },
-    { name: 'Contactos', valor: totalContacts },
+    { name: "Propiedades", valor: totalPropiedades },
+    { name: "Usuarios", valor: totalUsuarios },
+    { name: "Contactos", valor: totalContacts },
   ];
 
   const dataPropiedades = [
-    { name: 'Vistas', valor: clickCount },
-    { name: 'Favoritos', valor: favoriteCount },
+    { name: "Vistas", valor: clickCount },
+    { name: "Favoritos", valor: favoriteCount },
   ];
 
   return (
@@ -207,54 +235,83 @@ function Inicio() {
         {dataGeneral.map((item, index) => (
           <Col span={8} key={index}>
             <Card>
-              <Statistic title={item.name} value={item.valor} prefix={index === 0 ? <HomeOutlined /> : (index === 1 ? <UserOutlined /> : <TeamOutlined />)} />
+              <Statistic
+                title={item.name}
+                value={item.valor}
+                prefix={
+                  index === 0 ? (
+                    <HomeOutlined />
+                  ) : index === 1 ? (
+                    <UserOutlined />
+                  ) : (
+                    <TeamOutlined />
+                  )
+                }
+              />
             </Card>
           </Col>
         ))}
       </Row>
 
-      <Row gutter={16} style={{ marginTop: '20px' }}>
-        <Col span={12}>
+      <Row gutter={16} style={{ marginTop: "20px" }}>
+
+      <Col span={24}>
+  <Card title="Propiedades y Estadísticas">
+    <BarChart width={1400} height={200} layout="vertical" data={dataPropiedades}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis type="number" />
+      <YAxis dataKey="name" type="category" />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="valor">
+        {dataGeneral.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={azules[index % azules.length]}
+          />
+        ))}
+      </Bar>
+    </BarChart>
+
+    <List
+      dataSource={propiedades}
+      renderItem={(item) => (
+        <List.Item>
+          <strong>{item.nombre}:</strong>
+          <span>
+            <EyeOutlined /> Vistas: {item.clickCount}, <LikeOutlined />{" "}
+            Favoritos: {item.favoriteCount}
+          </span>
+        </List.Item>
+      )}
+    />
+  </Card>
+</Col>
+
+        <Col span={14}>
           <Card title="Estadísticas Generales">
-            <BarChart width={600} height={300} data={dataGeneral}>
+            <BarChart width={800} height={300} data={dataGeneral}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="valor" fill="#1890ff" />
+              <Bar dataKey="valor">
+                {dataGeneral.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={azules[index % azules.length]}
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </Card>
         </Col>
 
-        <Col span={12}>
-          <Card title="Propiedades y Estadísticas">
-            <BarChart width={600} height={300} data={dataPropiedades}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="valor" fill="#52c41a" />
-            </BarChart>
 
-            <List
-              dataSource={propiedades}
-              renderItem={(item) => (
-                <List.Item>
-                  <strong>{item.nombre}:</strong>
-                  <span>
-                    <EyeOutlined /> Vistas: {item.clickCount}, <LikeOutlined /> Favoritos: {item.favoriteCount}
-                  </span>
-                </List.Item>
-              )}
-            />
-          </Card>
-        </Col>
-
-        <Col span={12}>
+        <Col span={10}>
           <Card title="Distribución de Propiedades por Tipo">
-            <PieChart width={400} height={300}>
+            <PieChart width={500} height={300}>
               <Pie
                 data={propiedadesPorTipo}
                 dataKey={(entry) => entry[1]}
@@ -265,12 +322,16 @@ function Inicio() {
                 fill="#8884d8"
                 onClick={(data, index) => {
                   const tipoSeleccionado = data.payload.name;
-                  const caracteristicas = obtenerCaracteristicasPorTipo(tipoSeleccionado);
+                  const caracteristicas =
+                    obtenerCaracteristicasPorTipo(tipoSeleccionado);
                   setPropiedadesSeleccionadas(caracteristicas);
                 }}
               >
                 {propiedadesPorTipo.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={azules[index % azules.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -278,7 +339,7 @@ function Inicio() {
             </PieChart>
 
             {propiedadesSeleccionadas && (
-              <div style={{ marginTop: '20px' }}>
+              <div style={{ marginTop: "20px" }}>
                 <h3>Características de {propiedadesSeleccionadas.tipo}</h3>
                 <p>Pausadas: {propiedadesSeleccionadas.pausadas}</p>
                 <p>Vendidas: {propiedadesSeleccionadas.vendidas}</p>
@@ -288,22 +349,30 @@ function Inicio() {
           </Card>
         </Col>
 
-        <Col span={12}>
-      <Card title="Contactos por Método">
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={datosContador}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="metodo" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="cantidad" fill="#1890ff" />
-          </BarChart>
-        </ResponsiveContainer>
-      </Card>
-    </Col>
+        <Col span={9}>
+          <Card title="Contactos por Método">
+            <ResponsiveContainer width="150%" height={400}>
+              <Doughnut
+                data={{
+                  labels: datosContador.map((item) => item.metodo),
+                  datasets: [
+                    {
+                      data: datosContador.map((item) => item.cantidad),
+                      backgroundColor: [
+                        "rgb(127, 179, 213)",
+                        "rgb(93, 156, 236)",
+                        "rgb(74, 137, 220)",
+                        // Añade más colores si tienes más datos
+                      ],
+                    },
+                  ],
+                }}
+              ></Doughnut>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
 
-        <Col span={24}>
+        <Col span={15}>
           <Card title="Trafico de Sandar Inmuebles">
             <HistogramaRegistro />
           </Card>
