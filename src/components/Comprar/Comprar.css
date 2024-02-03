@@ -30,6 +30,11 @@
     font-size: 18px;
   }
 
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
   /* Comprar.css */
 
 /* ... (estilos existentes) ... */
@@ -103,13 +108,16 @@
 .comprar-title,
 .comprar-info-box {
   animation: fadeIn 1s ease-in-out, slideInUp 1s ease-in-out;
+  padding: 3vw;
 }
 
 /* Añade estilos para pantallas más pequeñas (máximo ancho de 768px, ajusta según tus necesidades) */
 @media only screen and (max-width: 768px) {
   .step-container,
   .collapse-container {
-    width: 100%; /* Asegura que ocupen el ancho completo */
+    display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   }
 
   .collapse-container {
