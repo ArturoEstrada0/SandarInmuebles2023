@@ -250,8 +250,6 @@ const PropertyDetail = () => {
 
   const hasInfo = keysToCheck.some((key) => propertyDetails.cardsActivadas[key])
 
-  console.log(hasInfo)
-
   return (
     <div className='property-detail'>
       <>
@@ -267,10 +265,19 @@ const PropertyDetail = () => {
               }))}
             />
           ) : (
-            <Carousel>
+            <Carousel
+              style={{ width: '100%', height: '40vh', overflow: 'hidden' }}>
               {propertyDetails.fotos.map((foto, index) => (
-                <div key={index}>
-                  <img src={foto} alt={`foto-${index}`} />
+                <div key={index} style={{ height: '100%' }}>
+                  <img
+                    src={foto}
+                    alt={`foto-${index}`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
                 </div>
               ))}
             </Carousel>
@@ -339,11 +346,11 @@ const PropertyDetail = () => {
             <p>
               {isTextShown
                 ? propertyDetails.descripcion
-                : `${propertyDetails.descripcion.substring(0, 600)}${
-                    propertyDetails.descripcion.length > 600 ? '...' : ''
+                : `${propertyDetails.descripcion.substring(0, 300)}${
+                    propertyDetails.descripcion.length > 300 ? '...' : ''
                   }`}
             </p>
-            {propertyDetails.descripcion.length > 600 && (
+            {propertyDetails.descripcion.length > 300 && (
               <button
                 onClick={() => setIsTextShown(!isTextShown)}
                 style={{
@@ -542,89 +549,111 @@ const PropertyDetail = () => {
                       </>
                     )}
                     {activeKey === 'Estacionamiento' &&
-                      Array.from({
-                        length: propertyDetails.estacionamiento,
-                      }).map((_, index) => (
+                      (propertyDetails.estacionamiento === undefined ? (
                         <Card
-                          className='card-more-info'
-                          key={index}
-                          title={`Estacionamiento ${index + 1}`}
                           style={{
-                            flex: '1 0 30%',
-                            maxWidth: '31%',
+                            width: '100%',
                             margin: '10px',
                             borderRadius: '12px',
-                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                            transition: 'transform 0.3s ease-in-out',
                           }}>
-                          <p>Estacionamiento {index + 1}</p>
+                          <p>No hay estacionamientos disponibles</p>
+                        </Card>
+                      ) : (
+                        Array.from({
+                          length: propertyDetails.estacionamiento,
+                        }).map((_, index) => (
+                          <Card
+                            className='card-more-info'
+                            key={index}
+                            title={`Estacionamiento ${index + 1}`}
+                            style={{
+                              flex: '1 0 30%',
+                              maxWidth: '31%',
+                              margin: '10px',
+                              borderRadius: '12px',
+                              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                              transition: 'transform 0.3s ease-in-out',
+                            }}>
+                            <p>Estacionamiento {index + 1}</p>
+                          </Card>
+                        ))
+                      ))}
+                    {activeKey === 'Seguridad/Tecnologiá' &&
+                      (hasInfo ? (
+                        <Card
+                          style={{
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
+                          <ul
+                            style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              listStyleType: 'none',
+                              padding: 0,
+                            }}>
+                            {propertyDetails.cardsActivadas.Alarma && (
+                              <li
+                                style={{
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
+                                <SafetyCertificateTwoTone /> Alarma
+                              </li>
+                            )}
+                            {propertyDetails.cardsActivadas[
+                              'Aire acondicionado'
+                            ] && (
+                              <li
+                                style={{
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
+                                <SafetyCertificateTwoTone /> Aire acondicionado
+                              </li>
+                            )}
+                            {propertyDetails.cardsActivadas[
+                              'Cámaras de seguridad'
+                            ] && (
+                              <li
+                                style={{
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
+                                <SafetyCertificateTwoTone /> Cámaras de
+                                seguridad
+                              </li>
+                            )}
+                            {propertyDetails.cardsActivadas.Gimnasio && (
+                              <li
+                                style={{
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
+                                <SafetyCertificateTwoTone /> Gimnasio
+                              </li>
+                            )}
+                          </ul>
+                        </Card>
+                      ) : (
+                        <Card
+                          style={{
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
+                          <p>No hay información disponible</p>
                         </Card>
                       ))}
-                    {activeKey === 'Seguridad/Tecnologiá' && (
-                      <Card
-                        style={{
-                          width: '100%',
-                          margin: '10px',
-                          borderRadius: '12px',
-                        }}>
-                        <ul
-                          style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            listStyleType: 'none',
-                            padding: 0,
-                          }}>
-                          {propertyDetails.cardsActivadas.Alarma && (
-                            <li
-                              style={{
-                                textAlign: 'left',
-                                width: '50%',
-                                boxSizing: 'border-box',
-                                padding: '0 10px',
-                              }}>
-                              <SafetyCertificateTwoTone /> Alarma
-                            </li>
-                          )}
-                          {propertyDetails.cardsActivadas[
-                            'Aire acondicionado'
-                          ] && (
-                            <li
-                              style={{
-                                textAlign: 'left',
-                                width: '50%',
-                                boxSizing: 'border-box',
-                                padding: '0 10px',
-                              }}>
-                              <SafetyCertificateTwoTone /> Aire acondicionado
-                            </li>
-                          )}
-                          {propertyDetails.cardsActivadas[
-                            'Cámaras de seguridad'
-                          ] && (
-                            <li
-                              style={{
-                                textAlign: 'left',
-                                width: '50%',
-                                boxSizing: 'border-box',
-                                padding: '0 10px',
-                              }}>
-                              <SafetyCertificateTwoTone /> Cámaras de seguridad
-                            </li>
-                          )}
-                          {propertyDetails.cardsActivadas.Gimnasio && (
-                            <li
-                              style={{
-                                textAlign: 'left',
-                                width: '50%',
-                                boxSizing: 'border-box',
-                                padding: '0 10px',
-                              }}>
-                              <SafetyCertificateTwoTone /> Gimnasio
-                            </li>
-                          )}
-                        </ul>
-                      </Card>
-                    )}
                   </div>
                 </div>
                 <hr />
@@ -637,7 +666,7 @@ const PropertyDetail = () => {
             <img src={logo} alt='Descripción de la imagen' />
             <h2>Sandar Inmuebles</h2>
           </div>
-          <div className='section-form'>
+          <div className='section-form mobile-card'>
             <h3 style={{ fontFamily: 'Geometos' }}>Venta</h3>
             <div className='price'>
               $
