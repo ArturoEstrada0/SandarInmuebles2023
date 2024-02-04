@@ -112,15 +112,30 @@
 }
 
 /* Añade estilos para pantallas más pequeñas (máximo ancho de 768px, ajusta según tus necesidades) */
-@media only screen and (max-width: 768px) {
-  .step-container,
-  .collapse-container {
-    display: flex;
-  flex-wrap: wrap;
+.step-container {
+  background-color: #ffffff;
+  padding: 50px;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
   justify-content: space-between;
+}
+
+.collapse-container {
+  width: 60%;
+  margin-top: 20px; /* Agregamos margen superior para separarlo del step-container */
+}
+
+/* Media query para dispositivos móviles */
+@media only screen and (max-width: 768px) {
+  .step-container {
+    flex-direction: column; /* Cambia la dirección del flexbox a columna */
+    align-items: center; /* Centra los elementos en el eje transversal (horizontal) */
   }
 
   .collapse-container {
-    margin-top: 20px; /* Añade espacio entre las secciones */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin-top: 0; /* Elimina el margen superior para que esté pegado al step-container */
+    margin-bottom: 5rem;
   }
 }
