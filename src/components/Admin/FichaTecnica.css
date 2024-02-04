@@ -1,0 +1,140 @@
+.ficha-tecnica-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ficha-tecnica {
+    width: 80%;
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ficha-tecnica-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .ficha-tecnica-header img {
+    width: 40%;
+    height: 40%;
+  }
+  
+  .ficha-tecnica-details {
+    margin-bottom: 20px;
+  }
+  
+  .ficha-tecnica-photos {
+    margin-bottom: 20px;
+  }
+  
+  .ficha-tecnica-main-photo img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .ficha-tecnica-small-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .ficha-tecnica-small-photos img {
+    width: calc(15% - 10px); /* Para que haya un espacio entre las imágenes */
+    height: auto;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  
+  .ficha-tecnica-contact-info {
+    margin-bottom: 20px;
+  }
+  
+  .ficha-tecnica-property-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .ficha-tecnica-property-detail-card {
+    width: calc(50% - 10px); /* Dos cards por fila */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .ficha-tecnica-property-detail-card p {
+    margin-top: 10px;
+  }
+  
+  .ficha-tecnica-detail-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .ficha-tecnica-property-cards {
+    column-count: 3;
+    column-gap: 20px;
+  }
+  
+  .ficha-tecnica-property-card {
+    break-inside: avoid;
+  }
+  
+  .ficha-tecnica-icon-text-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .ficha-tecnica-card-text {
+    margin-left: 5px;
+  }
+  
+  .ficha-tecnica svg {
+    color: #0d56bb;
+  }
+  
+  /* Agrega la tipografía Geometos a todos los títulos */
+  .ficha-tecnica h1,
+  .ficha-tecnica h2,
+  .ficha-tecnica h3,
+  .ficha-tecnica h4,
+  .ficha-tecnica h5,
+  .ficha-tecnica h6 {
+    font-family: "Geometos", sans-serif;
+  }
+  
+  .ficha-tecnica-description {
+    margin-top: 20px; /* Agrega un margen inferior para separar del siguiente elemento */
+  }
+  
+  .ficha-tecnica-photos {
+    margin-bottom: 20px; /* Agrega un margen inferior para separar del siguiente elemento */
+  }
+  
+  .ficha-tecnica-main-photo,
+  .ficha-tecnica-small-photos {
+    margin-bottom: 10px; /* Agrega un margen inferior entre las imágenes */
+  }
+  
+  .ficha-tecnica-header {
+    background-color: #001529; /* Color de fondo */
+    padding: 20px; /* Añade un espacio interno alrededor del contenido */
+    border-radius: 10px;
+    color: #fff;
+  }
+  
+  .ficha-tecnica-property-price {
+    font-size: 32px; /* Tamaño de fuente más grande */
+    font-weight: bold; /* Texto en negrita */
+    color: #dde10f; /* Color llamativo, por ejemplo, naranja */
+  }
+  

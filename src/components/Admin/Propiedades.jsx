@@ -297,6 +297,7 @@ function Propiedades() {
 
       formData = {
         ...formData,
+        status: "activa",
         ...values,
         youtubeUrl,
         ubicacion: selectedLocation?.display_name,
@@ -613,6 +614,8 @@ function Propiedades() {
           >
             <CopyOutlined />
           </Button>
+
+          
           
         </Space>
       ),

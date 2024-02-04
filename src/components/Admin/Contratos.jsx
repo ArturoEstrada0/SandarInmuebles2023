@@ -1,4 +1,5 @@
 import { Table } from 'antd';
+import FichaTecnica from './FichaTecnica';
 
 const dataSource = [
   {
@@ -37,8 +38,9 @@ const columns = [
 function Contratos() {
   return (
     <div>
-      <h1>Contratos</h1>
-      <Table dataSource={dataSource} columns={columns} />
+      <h1>Ficha Tecnica</h1>
+
+      <FichaTecnica />
     </div>
   );
 }
