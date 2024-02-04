@@ -18,7 +18,7 @@
 
 .custom-icon {
   font-size: 27px;
-  color: #1677FF;
+  color: #1677ff;
 }
 
 .content-container {
@@ -28,6 +28,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 65px;
+  scroll-behavior: smooth;
 }
 .images-container {
   display: grid;
@@ -149,4 +150,12 @@
 .card-more-info:hover {
   cursor: pointer;
   transform: scale(1.04);
+}
+@media (max-width: 768px) {
+  .detail-content {
+    flex: 0 0 100%;
+  }
+  .detail-form {
+    display: none;
+  }
 }
