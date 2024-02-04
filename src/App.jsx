@@ -28,6 +28,7 @@ import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 import { collection, getDoc, getDocs, doc } from "firebase/firestore";
 import { firestore } from "./components/firebase/firebase";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import  Footer  from "./components/Footer/Footer";
 
 
 function App() {
@@ -92,7 +93,7 @@ function App() {
 
   return (
     <Router>
-      <Header />
+      <Header isAdmin={isAdmin} isAuthenticated={isAuthenticated} />
       <Routes>
         {isAuthenticated && isAdmin && (
           <Route path="/" element={<AdminPanel />} />
@@ -114,7 +115,11 @@ function App() {
             <Route path="/registro" element={<Registro />} />
           </>
         )}
+        
     </Routes>
+
+<Footer />
+
     </Router>
   );
 }

@@ -49,6 +49,8 @@ import CustomCarousel from "./Carousel";
 import m2Image from "../../assets/img/m2.png";
 import logo from "../../assets/img/sandarNegativo.png";
 import fondoSandar from "../../assets/img/sandarPresentacion.png";
+import Footer from '../Footer/Footer';
+
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -1136,6 +1138,7 @@ const PropertyList = ({ onPropertyClick }) => {
           </Button>
         </div>
       )}
+
     </Content>
   );
 };
