@@ -1,5 +1,6 @@
 /* Vender.css */
 
+/* Estilos base */
 .vender-container {
   position: relative;
   text-align: center;
@@ -26,142 +27,259 @@
 
 .overlay-content {
   position: absolute;
-  top: 40%;
+  top: 50%; /* Cambiado para centrar verticalmente en lugar de 40% */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   z-index: 1;
 }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Contenido overlay */
+.handshake-icon {
+  font-size: 6vw; /* Utilizando vw para hacerlo responsive */
+  color: #ff5722;
+  margin-bottom: 5vw; /* Utilizando vw para hacerlo responsive */
+  animation: bounce 1s ease-in-out infinite;
+}
+
+
+.overlay-content h1 {
+  font-family: 'Geometos';
+  color: #001529;
+  font-size: 3vw; /* Utilizando vw para hacerlo responsive */
+  margin-bottom: 3vw; /* Utilizando vw para hacerlo responsive */
+  animation: slideInLeft 1s ease-in-out;
+}
+
+.overlay-content p {
+  color: #001529;
+  font-size: 1.5vw; /* Utilizando vw para hacerlo responsive */
+  margin-bottom: 2vw; /* Utilizando vw para hacerlo responsive */
+  animation: slideInLeft 1s ease-in-out;
+}
+
+@media only screen and (max-width: 768px) {
   .handshake-icon {
-    font-size: 3em;
-    color: #ff5722;
-    margin-bottom: 20px;
-    animation: bounce 1s ease-in-out infinite;
+    font-size: 8vw; /* Ajuste para dispositivos más pequeños */
+    margin-bottom: 6vw; /* Ajuste para dispositivos más pequeños */
   }
-  
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-20px);
-    }
-    60% {
-      transform: translateY(-10px);
-    }
-  }
-  
+
   .overlay-content h1 {
-    font-family: 'Geometos';
-    color: #001529;
-    font-size: 3em;
-    margin-bottom: 20px;
-    animation: slideInLeft 1s ease-in-out;
+    font-size: 4vw; /* Ajuste para dispositivos más pequeños */
+    margin-bottom: 4vw; /* Ajuste para dispositivos más pequeños */
   }
 
   .overlay-content p {
-    color: #001529;
-    font-size: 1.2em;
-    animation: slideInLeft 1s ease-in-out;
+    font-size: 2.5vw; /* Ajuste para dispositivos más pequeños */
+    margin-bottom: 3vw; /* Ajuste para dispositivos más pequeños */
   }
-  
-  @keyframes slideInLeft {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+}
+
+@media only screen and (max-width: 576px) {
+  .handshake-icon {
+    font-size: 10vw; /* Ajuste para dispositivos aún más pequeños */
+    margin-bottom: 7vw; /* Ajuste para dispositivos aún más pequeños */
   }
 
-  .blue-rectangle {
-    background-color: #001529; /* Color azul */
-    padding: 120px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    position: relative; /* Añadido para posicionar el texto dentro de este contenedor */
+  .overlay-content h1 {
+    font-size: 5vw; /* Ajuste para dispositivos aún más pequeños */
+    margin-bottom: 5vw; /* Ajuste para dispositivos aún más pequeños */
   }
 
-  .blue-line {
-    border-top: 1px solid #fff; /* Línea horizontal blanca sobre el texto */
-  border-bottom: 1px solid #fff; /* Nueva línea horizontal blanca debajo del texto */
-  margin: 10px 0; /* Espacio entre las líneas y el texto */
+  .overlay-content p {
+    font-size: 3.5vw; /* Ajuste para dispositivos aún más pequeños */
+    margin-bottom: 4vw; /* Ajuste para dispositivos aún más pequeños */
   }
+}
 
+/* Rectángulo azul */
+.blue-rectangle {
+  background-color: #001529;
+  padding: 120px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.blue-line {
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  margin: 10px 0;
+}
+
+.blue-text {
+  color: #fff;
+  font-size: 1.3vw; /* Utilizando vw para hacerlo responsive */
+  text-align: center;
+  margin-bottom: 2vw; /* Utilizando vw para hacerlo responsive */
+}
+
+/* Media queries */
+@media only screen and (max-width: 768px) {
   .blue-text {
-    color: #fff;
-    font-size: 1.3rem;
-    text-align: center;
+    font-size: 3vw; /* Ajuste para dispositivos más pequeños */
+    margin-bottom: 3vw; /* Ajuste para dispositivos más pequeños */
   }
+}
 
-  .text-container{
-    margin-left: 340px;
-    margin-top: 50px;
+@media only screen and (max-width: 576px) {
+  .blue-text {
+    font-size: 4vw; /* Ajuste para dispositivos aún más pequeños */
+    margin-bottom: 4vw; /* Ajuste para dispositivos aún más pequeños */
   }
+}
 
-  .text-container h1{
-    margin-left: 100px;
-    font-family: 'Geometos';
-    color: #001529;
-    font-size: 1.3em;
-  }
+/* Contenedor de título */
+.titulo-container {
+  margin-left: 10%;
+  margin-top: 50px;
+}
 
-  .text-container p{
-    color: #001529;
-    font-size: 1em;
-    line-height: 1.5; /* Ajusta según sea necesario para centrar el interlineado */
-    text-align: center;
-  }
+.titulo-container h1 {
+  margin-right: 15%;
+  font-family: 'Geometos';
+  color: #001529;
+  font-size: 1.3em;
+}
 
+.titulo-container p {
+  color: #001529;
+  font-size: 1em;
+  line-height: 1.5;
+  text-align: center;
+  margin-right: 12%;
+}
+
+/* Contenedor de pasos */
+.step-container {
+  background-color: #ffffff;
+  padding: 50px;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+}
+
+.collapse-container {
+  width: 60%;
+  margin-top: 20px; /* Agregamos margen superior para separarlo del step-container */
+}
+
+/* Media query para dispositivos móviles */
+@media only screen and (max-width: 768px) {
   .step-container {
-    background-color: #ffffff;
-    padding: 50px;
-    text-align: center;
-    overflow: hidden;
-    justify-content: space-between;
-    display: flex;
-    margin-right: 20px;
+    flex-direction: column; /* Cambia la dirección del flexbox a columna */
+    align-items: center; /* Centra los elementos en el eje transversal (horizontal) */
   }
 
   .collapse-container {
-    width: 60%; /* Ajusta según sea necesario */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin-top: 0; /* Elimina el margen superior para que esté pegado al step-container */
+  }
+}
+
+.collapse-container p {
+  line-height: 1.5;
+  text-align: left;
+  color: #001529;
+}
+
+/* Contenedor de avisos de privacidad */
+.avisos-privacidad-container {
+  background-color: #001529;
+  padding: 65px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.avisos-privacidad-container p {
+  line-height: 1.5;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* Contenedor de formulario de contacto */
+.contact-form-container {
+  margin: 50px auto;
+  max-width: 800px;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Media queries */
+@media only screen and (max-width: 768px) {
+  .blue-rectangle {
+    padding: 80px;
   }
 
-  .collapse-container p {
-    line-height: 1.5; /* Ajusta según sea necesario para centrar el interlineado */
-    text-align: left;
-    color: #001529;
+  .titulo-container {
+    margin-left: 5%;
   }
 
-  .avisos-privacidad-container{
-    background-color: #001529;
-    padding: 65px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  .titulo-container h1 {
+    margin-right: 5%;
   }
 
-  .avisos-privacidad-container p {
-    line-height: 1.5; /* Ajusta según sea necesario para centrar el interlineado */
-    text-align: center;
-    color: #ffffff;
+  .titulo-container p {
+    margin-right: 5%;
   }
-  
-  
-  .contact-form-container {
-    margin: 50px auto; /* Centra el formulario horizontalmente */
-    max-width: 800px; /* Limita el ancho del formulario */
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Alinea el texto a la izquierda */
+
+  .collapse-container {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .blue-rectangle {
+    padding: 50px;
+  }
+
+  .titulo-container {
+    margin-left: 3%;
+  }
+
+  .titulo-container h1 {
+    margin-right: 3%;
+  }
+
+  .titulo-container p {
+    margin-right: 3%;
+  }
+
+  .collapse-container {
+    width: 100%;
+  }
 }

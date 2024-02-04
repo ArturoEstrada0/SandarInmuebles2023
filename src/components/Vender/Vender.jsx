@@ -12,6 +12,7 @@ const { Step } = Steps;
 const { Panel } = Collapse;
 const { Option } = Select;
 
+
 const Vender = () => {
   const [form] = Form.useForm();
  // const [currentStep, setCurrentStep] = useState(0);
@@ -84,7 +85,7 @@ const Vender = () => {
     </div>
 
 
-    <div className="text-container">
+    <div className="titulo-container">
       <h1>Te Apoyamos en todo el proceso de Inicio a fin</h1>
       <p>El compromiso de Sandar Inmuebles es acompañarte y asesorarte en todas las etapas del proceso de venta, para que la venta sea rapida y efectiva.</p>
       </div>
@@ -145,6 +146,8 @@ const Vender = () => {
               style={{ marginBottom: '20px' }}
             />
           </Steps>
+
+          
           {/* Nueva sección para los Collapse */}
         <div className="collapse-container">
           <Divider orientation="left"><h4 style={{fontFamily: 'Geometos'}}>Preguntas Frecuentes</h4></Divider>
@@ -200,7 +203,7 @@ const Vender = () => {
     </div>
 
 
-  <div className="text-container">
+  <div className="titulo-container">
       <h1>Iniciemos el proceso de venta juntos</h1>
       <p>Contactanos llenando el siguiente formulario.</p>
       </div>
