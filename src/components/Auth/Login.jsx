@@ -111,14 +111,14 @@ const Login = () => {
                   bgColor="dark"
                   className="w-100 mb-4"
                 >
-                  <MDBNavbarBrand className="d-flex align-items-center">
+                  <MDBNavbarBrand className="align-items-center">
                     <img
                       src="src/assets/img/logo.png"
                       alt="Logo"
                       height="50"
-                      className="d-inline-block align-text-top"
+                      className="inicio-logo"
                     />
-                    <span className="ms-2 fs-5 text-white">
+                    <span className="text-white">
                       SANDAR INMUBLES
                     </span>
                   </MDBNavbarBrand>

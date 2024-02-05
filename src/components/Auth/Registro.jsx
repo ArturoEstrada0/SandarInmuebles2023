@@ -156,13 +156,13 @@ const Registro = () => {
                     src="src/assets/img/logo.png"
                     alt="Logo"
                     height="50"
-                    className="d-inline-block align-text-top"
+                    className="inicio-logo"
                   />
                   <span className="ms-2 fs-5 text-white">SANDAR INMUBLES</span>
                 </MDBNavbarBrand>
               </MDBNavbar>
 
-              <h2 className="fw-bold mb-2">Registro de Sesión</h2>
+              <h2 className="Inicio">Registro de Sesión</h2>
 
               <MDBInput
                 wrapperClass="mb-4 mx-5 w-100"
@@ -252,7 +252,7 @@ const Registro = () => {
               <div>
                 <p className="mb-0">
                   ¿No tienes una cuenta?{" "}
-                  <Link to="/login" className="text-white-50 fw-bold">
+                  <Link to="/login" className="Registro">
                     Inicia Sesión
                   </Link>
                 </p>

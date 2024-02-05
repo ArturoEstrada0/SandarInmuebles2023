@@ -68,7 +68,7 @@ function LandingPage() {
       <Content style={{ backgroundColor: "#e2f4fe" }}>
         <div className="landing-page-container">
           <Row gutter={16}>
-            <Col xs={{ span: 24 }} md={{ span: 9 }} style={{ height: "40vh" }}>
+            <Col xs={{ span: 24 }} md={{ span: 9 }} style={{ height: "70vh" }}>
               <div
                 className="landing-page-text"
                 style={{ height: "100%", padding: "0 15px" }}
@@ -154,7 +154,7 @@ function LandingPage() {
                 </Row>
               </div>
             </Col>
-            <Col xs={{ span: 0 }} md={{ span: 15 }} style={{ height: "60vh" }}>
+            <Col xs={{ span: 0 }} md={{ span: 15 }} style={{ height: "70vh" }}>
               <div
                 className="landing-page-image"
                 style={{
