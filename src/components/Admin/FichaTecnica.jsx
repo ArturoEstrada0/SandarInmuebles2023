@@ -147,32 +147,59 @@ const FichaTecnica = () => {
     Promise.all(promises).then(() => setImagesLoaded(true));
   }, [propertyData]);
 
-  const downloadPDF = () => {
-    if (!propertyData || !imagesLoaded) return;
-
-    const pdf = new jsPDF();
-
-    html2canvas(fichaTecnicaRef.current).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save("ficha-tecnica.pdf");
+  const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      fetch(src)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          const image = new Image();
+          image.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(image);
+          };
+          image.onerror = reject;
+          image.src = url;
+        })
+        .catch(reject);
     });
   };
+  
+  
+
+  const downloadPDF = async () => {
+    if (!propertyData || !imagesLoaded) return;
+  
+    const pdf = new jsPDF();
+  
+    const images = document.querySelectorAll(".ficha-tecnica-photos-info img");
+    const imagePromises = Array.from(images).map((image) => loadImage(image.src));
+  
+    try {
+      const loadedImages = await Promise.all(imagePromises);
+  
+      loadedImages.forEach((loadedImage, index) => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = loadedImage.width;
+        canvas.height = loadedImage.height;
+        context.drawImage(loadedImage, 0, 0);
+  
+        const imgData = canvas.toDataURL("image/jpeg");
+  
+        if (index !== 0) {
+          pdf.addPage();
+        }
+        pdf.addImage(imgData, "JPEG", 0, 0);
+      });
+  
+      pdf.save("ficha-tecnica.pdf");
+    } catch (error) {
+      console.error("Error al cargar las imágenes:", error);
+    }
+  };
+  
+  
 
   return (
     <div className="ficha-tecnica-container">
