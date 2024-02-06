@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Typography, Steps, Divider, Collapse } from 'antd';
 import { HomeOutlined, DatabaseOutlined, TeamOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
 import './Comprar.css';
-import Footer from '../Footer/Footer';
 
 const { Title, Paragraph } = Typography;
 
@@ -168,8 +167,6 @@ const Comprar = () => {
           </div>
         </Col>
       </Row>
-
-      <Footer />
     </div>
   );
 }

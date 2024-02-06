@@ -4,13 +4,13 @@ import { FaRegHandshake } from 'react-icons/fa';
 import { Form, Input, Button, Steps, Collapse, Divider, Select, message} from 'antd';
 import './Vender.css';
 import ventaImage from '../../assets/img/venta.jpg';
-import Footer from '../Footer/Footer';
 import { collection, addDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 
 const { Step } = Steps;
 const { Panel } = Collapse;
 const { Option } = Select;
+
 
 const Vender = () => {
   const [form] = Form.useForm();
@@ -84,7 +84,7 @@ const Vender = () => {
     </div>
 
 
-    <div className="text-container">
+    <div className="titulo-container">
       <h1>Te Apoyamos en todo el proceso de Inicio a fin</h1>
       <p>El compromiso de Sandar Inmuebles es acompañarte y asesorarte en todas las etapas del proceso de venta, para que la venta sea rapida y efectiva.</p>
       </div>
@@ -145,6 +145,8 @@ const Vender = () => {
               style={{ marginBottom: '20px' }}
             />
           </Steps>
+
+          
           {/* Nueva sección para los Collapse */}
         <div className="collapse-container">
           <Divider orientation="left"><h4 style={{fontFamily: 'Geometos'}}>Preguntas Frecuentes</h4></Divider>
@@ -200,7 +202,7 @@ const Vender = () => {
     </div>
 
 
-  <div className="text-container">
+  <div className="titulo-container">
       <h1>Iniciemos el proceso de venta juntos</h1>
       <p>Contactanos llenando el siguiente formulario.</p>
       </div>
@@ -256,7 +258,6 @@ const Vender = () => {
 
     </Form>
 </div>
-      <Footer />
     </div>
   );
 };

@@ -86,7 +86,7 @@ const Login = () => {
           <MDBCol col="10" md="6">
             <img
               src="src/assets/img/inicioS.svg"
-              className="img-fluid"
+              className="img-fluid d-none d-md-block" // Oculta en pantallas pequeñas
               alt="Phone image"
             />
           </MDBCol>
@@ -100,7 +100,7 @@ const Login = () => {
                   <LeftOutlined
                     style={{
                       fontSize: "1.5rem",
-                      marginRight: "350px",
+                      marginRight: "320px",
                       color: "white",
                     }}
                   />
@@ -111,14 +111,14 @@ const Login = () => {
                   bgColor="dark"
                   className="w-100 mb-4"
                 >
-                  <MDBNavbarBrand className="d-flex align-items-center">
+                  <MDBNavbarBrand className="align-items-center">
                     <img
                       src="src/assets/img/logo.png"
                       alt="Logo"
                       height="50"
-                      className="d-inline-block align-text-top"
+                      className="inicio-logo"
                     />
-                    <span className="ms-2 fs-5 text-white">
+                    <span className="text-white">
                       SANDAR INMUBLES
                     </span>
                   </MDBNavbarBrand>
@@ -198,7 +198,7 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <p className="mb-0">
+                  <p className="mb-0 text-center align-items-center">
                     ¿No tienes una cuenta?{" "}
                     <Link to="/registro" className="Registro">
                       Regístrate

@@ -1,9 +1,8 @@
-import { Layout } from 'antd'
+import { Layout, QRCode} from 'antd'
 import LandingPage from './LandingPage/LandingPage'
 import AboutUs from './AboutUs/AboutUs'
 import Contact from './Contact/Contact'
 import PropertyList from './PropertyList/PropertyList'
-import Footer from './Footer/Footer'
 import ChatBubble from './Chat/ChatBubble'
 import Asesores from './Asesores/Asesores'
 
@@ -16,7 +15,7 @@ const { Content } = Layout
 function Home() {
   return (
     <Layout>
-      <Content style={{ marginTop: '65px' }}>
+      <Content style={{ marginTop: '65px', overflowX: 'hidden' }}> {/* Aquí aplicamos el estilo */}
       <ThemeProvider
   breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
   minBreakpoint="xxs">
@@ -32,7 +31,6 @@ function Home() {
         </ThemeProvider>
 
       </Content>
-      <Footer />
 
     </Layout>
     
