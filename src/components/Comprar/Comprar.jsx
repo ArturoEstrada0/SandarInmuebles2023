@@ -167,8 +167,6 @@ const Comprar = () => {
           </div>
         </Col>
       </Row>
-
-      <Footer />
     </div>
   );
 }
