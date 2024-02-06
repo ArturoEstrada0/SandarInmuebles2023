@@ -12,8 +12,7 @@ const Contact = () => {
   const [contactInfo, setContactInfo] = useState(null);
   const [contactTitle, setContactTitle] = useState('');
   const [contactParagraph, setContactParagraph] = useState('');
-  const [ContactCount, setContactCount] = useState('')
-  const [contactCount, setcontactCount] = useState('')
+  const [contactCount, setContactCount] = useState(0)
 useEffect(() => {
   setAnimationClass('animate__animated animate__fadeInUp');
 
@@ -42,21 +41,19 @@ useEffect(() => {
   fetchContactInfo();
 }, []);
 
-  const fetchCounter = async () => {
-    // Actualiza el contador de correo electrónico utilizando una función de actualización de estado
+
+const fetchCounter = async () => {
+  try {
+    // Actualiza el contador de contactos
     setContactCount(prevCount => prevCount + 1);
-  
+
     // Guarda el contador en Firebase
-    try {
-      const docRef = doc(firestore, "msgCount", "contactCount");
-      await setDoc(docRef, { count: contactCount + 1 });
-    } catch (error) {
-      console.error(
-        "Error al guardar el contador de correos electrónicos en Firebase",
-        error
-      );
-    }
-  };
+    const docRef = doc(firestore, 'msgCount', 'contactCount');
+    await setDoc(docRef, { count: contactCount + 1 });
+  } catch (error) {
+    console.error('Error al guardar el contador de contactos en Firebase', error);
+  }
+};
 
   const onFinish = async (values) => {
     try {
@@ -77,7 +74,7 @@ useEffect(() => {
   };
 
   return (
-    <div className={`contact-container ${animationClass}`}>
+    <div className={`contact-container ${animationClass}`} style={{marginTop: '65px'}}>
       <Card
         title={<span className={`card-title ${animationClass}`}>{contactTitle}</span>}
         className={`card-container ${animationClass}`}
@@ -142,6 +139,7 @@ useEffect(() => {
                 type="primary"
                 htmlType="submit"
                 style={{ backgroundColor: '#001529', borderColor: '#001529', fontFamily: "Geometos", fontSize: "0.8rem" }}
+                onClick={fetchCounter}
               >
                 Enviar Correo
               </Button>
@@ -171,6 +169,7 @@ useEffect(() => {
           </Col>
         </Row>
       </Card>
+
     </div>
   );
 };

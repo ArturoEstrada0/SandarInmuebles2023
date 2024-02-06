@@ -86,7 +86,7 @@ const Login = () => {
           <MDBCol col="10" md="6">
             <img
               src="src/assets/img/inicioS.svg"
-              className="img-fluid"
+              className="img-fluid d-none d-md-block" // Oculta en pantallas pequeñas
               alt="Phone image"
             />
           </MDBCol>
@@ -100,7 +100,7 @@ const Login = () => {
                   <LeftOutlined
                     style={{
                       fontSize: "1.5rem",
-                      marginRight: "350px",
+                      marginRight: "320px",
                       color: "white",
                     }}
                   />
@@ -198,7 +198,7 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <p className="mb-0">
+                  <p className="mb-0 text-center align-items-center">
                     ¿No tienes una cuenta?{" "}
                     <Link to="/registro" className="Registro">
                       Regístrate

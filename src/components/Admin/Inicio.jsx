@@ -46,7 +46,9 @@ function Inicio() {
   const [usuariosPorMes, setUsuariosPorMes] = useState([]);
   const [datosContador, setDatosContador] = useState([]);
 
-  const azules = ["#7FB3D5", "#5D9CEC", "#4A89DC"];
+  const azules = ["#f67b45", "#02A364", "#81b2d9"];
+  const dis = ["#3B8DA3", "#E9BC00", "#56340C"];
+
   const [propiedadesPorTipo, setPropiedadesPorTipo] = useState([]);
   const [usuariosRegistrados, setUsuariosRegistrados] = useState([
     { mes: 1, usuarios: 10 },
@@ -330,7 +332,7 @@ function Inicio() {
                 {propiedadesPorTipo.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={azules[index % azules.length]}
+                    fill={dis[index % dis.length]}
                   />
                 ))}
               </Pie>
@@ -359,8 +361,8 @@ function Inicio() {
                     {
                       data: datosContador.map((item) => item.cantidad),
                       backgroundColor: [
-                        "rgb(127, 179, 213)",
-                        "rgb(93, 156, 236)",
+                        "rgb(73, 122, 147)",
+                        "rgb(37, 211, 102)",
                         "rgb(74, 137, 220)",
                         // Añade más colores si tienes más datos
                       ],

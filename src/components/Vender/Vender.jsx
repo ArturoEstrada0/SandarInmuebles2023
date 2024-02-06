@@ -4,7 +4,6 @@ import { FaRegHandshake } from 'react-icons/fa';
 import { Form, Input, Button, Steps, Collapse, Divider, Select, message} from 'antd';
 import './Vender.css';
 import ventaImage from '../../assets/img/venta.jpg';
-import Footer from '../Footer/Footer';
 import { collection, addDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 
@@ -259,7 +258,6 @@ const Vender = () => {
 
     </Form>
 </div>
-      <Footer />
     </div>
   );
 };
