@@ -4,9 +4,10 @@ import { collection, doc, getDoc } from "firebase/firestore";
 import "./FichaTecnica.css";
 import Logo from "../../assets/img/sandarPositivo.png";
 import QRCode from "qrcode.react";
-import { jsPDF } from "jspdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   faBed,
   faBath,
@@ -69,7 +70,7 @@ library.add(
 
 const FichaTecnica = () => {
   const [propertyData, setPropertyData] = useState(null);
-  const [pdfGenerated, setPdfGenerated] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const fichaTecnicaRef = useRef(null);
 
   const getIcon = (key) => {
@@ -128,28 +129,50 @@ const FichaTecnica = () => {
     getPropertyData();
   }, []);
 
-  const generatePdf = () => {
+  useEffect(() => {
     if (!propertyData) return;
 
-    const doc = new jsPDF({
-      orientation: "landscape",
-    });
+    const images = document.querySelectorAll(".ficha-tecnica-photos-info img");
+    const promises = Array.from(images).map((image) =>
+      new Promise((resolve) => {
+        if (image.complete) {
+          resolve();
+        } else {
+          image.addEventListener("load", () => resolve());
+          image.addEventListener("error", () => resolve());
+        }
+      })
+    );
 
-    const fichaTecnicaContent = fichaTecnicaRef.current;
+    Promise.all(promises).then(() => setImagesLoaded(true));
+  }, [propertyData]);
 
-    doc.html(fichaTecnicaContent, {
-      callback: () => {
-        doc.save("ficha-tecnica.pdf");
-        setPdfGenerated(true);
-      },
+  const downloadPDF = () => {
+    if (!propertyData || !imagesLoaded) return;
+
+    const pdf = new jsPDF();
+
+    html2canvas(fichaTecnicaRef.current).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save("ficha-tecnica.pdf");
     });
   };
-
-  useEffect(() => {
-    if (pdfGenerated) {
-      console.log("PDF generado correctamente");
-    }
-  }, [pdfGenerated]);
 
   return (
     <div className="ficha-tecnica-container">
@@ -234,6 +257,7 @@ const FichaTecnica = () => {
                     key={index}
                     src={photo}
                     alt={`Photo-${index + 1}`}
+                    onLoad={() => setImagesLoaded(true)}
                   />
                 ))}
               </div>
@@ -245,11 +269,11 @@ const FichaTecnica = () => {
               <p>Teléfono: 443-205-7194</p>
               <p>Correo electrónico: sandarinmuebles@gmail.com</p>
             </div>
+            <button onClick={downloadPDF}>Descargar PDF</button>
             <QRCode
               value={`https://sandar-inmuebles.web.app/property/fn18mVGEjeFzvAuDrxuL`}
             />
           </div>
-          <button onClick={generatePdf}>Generar PDF</button>
         </div>
       )}
     </div>
