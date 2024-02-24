@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 import Gallery from './Gallery'
 import ContactForm from './ContactForm'
-import Footer from '../Footer/Footer'
 import {
   Grid,
   Row,
@@ -73,6 +72,7 @@ const PropertyDetail = () => {
   const [activeKey, setActiveKey] = useState('Habitaciones')
   const [youtubeVideoCode, setYoutubeVideoCode] = useState('')
   const [ubicacionCoords, setUbicacionCoords] = useState(null)
+  const [seeMore, setSeeMore] = useState(false)
 
   const screens = useBreakpoint()
 
@@ -270,7 +270,7 @@ const PropertyDetail = () => {
             <Carousel
               style={{ width: '100%', height: '40vh', overflow: 'hidden' }}>
               {propertyDetails.fotos.map((foto, index) => (
-                <div key={index} style={{ height: '100%' }}>
+                <div key={index} style={{ height: '100%', width: '100%' }}>
                   <img
                     src={foto}
                     alt={`foto-${index}`}
@@ -304,7 +304,7 @@ const PropertyDetail = () => {
               <h3 className='subtitle-section'>Detalles de la propiedad</h3>
               <Row gutter={[16, 16]}>
                 {details.map((detail, index) => (
-                  <Col key={index} xl={4}>
+                  <Col key={index} xl={4} lg={6} md={8} sm={12} xs={24}>
                     <Card
                       hoverable
                       title={detail.label}
@@ -313,6 +313,7 @@ const PropertyDetail = () => {
                         borderRadius: '5px',
                         backgroundColor: '#f5f5f5',
                         minHeight: '80px',
+                        minWidth: '80px',
                         padding: '4px',
                         display: 'flex',
                         justifyContent: 'center',
@@ -353,7 +354,10 @@ const PropertyDetail = () => {
             </ul>
             <hr />
             <h3 className='subtitle-section'>Descripción</h3>
-            <p>
+            <p
+              style={{
+                padding: '0 10px',
+              }}>
               {isTextShown
                 ? propertyDetails.descripcion
                 : `${propertyDetails.descripcion.substring(0, 300)}${
@@ -427,7 +431,13 @@ const PropertyDetail = () => {
             />
             <hr />
             <Col span={24}>
-              <div style={{ padding: '20px', backgroundColor: '#fcfeff' }}>
+              <div
+                className='more-info-container'
+                style={{
+                  padding: '20px',
+                  backgroundColor: '#fcfeff',
+                  width: '100%',
+                }}>
                 <div className='header'>
                   <h3 className='subtitle-section'>Más información</h3>
                 </div>
@@ -684,7 +694,7 @@ const PropertyDetail = () => {
             <img src={logo} alt='Descripción de la imagen' />
             <h2>Sandar Inmuebles</h2>
           </div>
-          <div className='section-form mobile-card'>
+          <div className='section-form'>
             <h3 style={{ fontFamily: 'Geometos' }}>Venta</h3>
             <div className='price'>
               $
@@ -704,8 +714,36 @@ const PropertyDetail = () => {
             <ContactForm onFinish={handleContactFormSubmit} />
           </div>
         </div>
+
+        <div className='form-mobile'>
+          <button
+            className='see-more-b'
+            onClick={() => {
+              setSeeMore(!seeMore)
+            }}>
+            <h6 className='see-more'> {seeMore ? 'Ver menos' : 'Ver más'} </h6>
+          </button>
+          <div className=''>
+            <div className=''>
+              <h3 style={{ fontFamily: 'Geometos' }}>Venta</h3>
+              <div className='price'>
+                $
+                {propertyDetails.precio.toLocaleString('es-MX', {
+                  minimumFractionDigits: 2,
+                })}
+              </div>
+            </div>
+            <div
+              style={{
+                display: `${seeMore ? 'flex' : 'none'}`,
+                maxHeight: '50vh',
+                overflow: 'auto',
+              }}>
+              <ContactForm onFinish={handleContactFormSubmit} />
+            </div>
+          </div>
+        </div>
       </div>
-      <Footer />
     </div>
   )
 }
