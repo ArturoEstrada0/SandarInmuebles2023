@@ -204,6 +204,9 @@
     flex-direction: column;
     gap: 10px;
   }
+  .more-info-container {
+    display: none;
+  }
 }
 @media (max-width: 1024px) {
   .detail-form {
