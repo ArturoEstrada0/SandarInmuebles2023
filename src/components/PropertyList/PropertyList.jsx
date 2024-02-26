@@ -628,8 +628,8 @@ const PropertyList = ({ onPropertyClick }) => {
                             display: 'flex',
                             flexDirection: 'row',
                             gap: '6px',
-                            backgroundColor: 'green',
-                            maxWidth: '80%',
+                            maxWidth: '90%',
+                            flexWrap: 'wrap',
                           }}>
                           {userAuthenticated ? (
                             <Button
@@ -652,7 +652,7 @@ const PropertyList = ({ onPropertyClick }) => {
                           ) : (
                             <Link to='/login'>
                               <Button
-                                style={{ fontSize: '12px' }}
+                                style={{ fontSize: '12px', flex: '1' }}
                                 type='primary'>
                                 Añadir a Favoritos
                               </Button>
@@ -663,14 +663,14 @@ const PropertyList = ({ onPropertyClick }) => {
                               display: 'flex',
                               flexDirection: 'row',
                               gap: '6px',
-                              backgroundColor: 'red',
-                              opacity: '0.5',
+                              flexWrap: 'wrap',
                             }}>
                             <Button
                               type='primary'
                               style={{
                                 backgroundColor: '#25D366',
                                 borderColor: '#25D366',
+                                flex: '1',
                               }}
                               icon={<WhatsAppOutlined />}
                               onClick={openModal}>
@@ -733,6 +733,7 @@ const PropertyList = ({ onPropertyClick }) => {
                                   backgroundColor: '#ffff',
                                   borderColor: '#e31925',
                                   color: 'black',
+                                  flex: '1',
                                 }}
                                 icon={
                                   <YoutubeFilled style={{ color: 'red' }} />
@@ -1026,7 +1027,13 @@ const PropertyList = ({ onPropertyClick }) => {
                       </div>
                       <div
                         className='property-actions'
-                        style={{ display: 'flex' }}>
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          gap: '6px',
+                          maxWidth: '90%',
+                          flexWrap: 'wrap',
+                        }}>
                         {/* Renderiza el botón de favoritos */}
                         {userAuthenticated ? (
                           <Button
@@ -1048,7 +1055,9 @@ const PropertyList = ({ onPropertyClick }) => {
                           </Button>
                         ) : (
                           <Link to='/login'>
-                            <Button style={{ fontSize: '12px' }} type='primary'>
+                            <Button
+                              style={{ fontSize: '12px', flex: '1' }}
+                              type='primary'>
                               Añadir a Favoritos
                             </Button>
                           </Link>
@@ -1058,8 +1067,9 @@ const PropertyList = ({ onPropertyClick }) => {
                         <div
                           style={{
                             display: 'flex',
-                            alignItems: 'center',
-                            marginLeft: '16px',
+                            flexDirection: 'row',
+                            gap: '6px',
+                            flexWrap: 'wrap',
                           }}>
                           {/* Botón de WhatsApp */}
                           <Button
@@ -1067,6 +1077,7 @@ const PropertyList = ({ onPropertyClick }) => {
                             style={{
                               backgroundColor: '#25D366',
                               borderColor: '#25D366',
+                              flex: '1',
                             }}
                             icon={<WhatsAppOutlined />}
                             onClick={openModal}>
@@ -1079,8 +1090,8 @@ const PropertyList = ({ onPropertyClick }) => {
                               style={{
                                 backgroundColor: '#ffff',
                                 borderColor: '#e31925',
-                                marginLeft: '16px',
                                 color: 'black',
+                                flex: '1',
                               }}
                               icon={<YoutubeFilled style={{ color: 'red' }} />}
                               onClick={() =>
