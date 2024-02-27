@@ -5,7 +5,7 @@
   text-align: center;
   margin-top: 100px;
   margin-bottom: 30px;
-  padding: 50px;
+  padding: 30px;
 }
 
 .image-container img {
@@ -47,7 +47,7 @@
 
 .button-asesor {
   font-family: 'Geometos';
-  margin-top: 10px; /* Ajusta el margen superior del contenedor del botón según tus preferencias */
+  margin-top: 10px;
   margin-left: 50%;
 }
 
@@ -75,9 +75,10 @@
   }
   .asesor-container {
     max-width: 100%;
-    margin-bottom: 10rem;
   }
   .button-asesor {
-    display: none;
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
   }
 }
