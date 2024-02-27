@@ -93,9 +93,7 @@ const Contact = () => {
   }
 
   return (
-    <div
-      className={`contact-container ${animationClass}`}
-      style={{ marginTop: '65px' }}>
+    <div className={`contact-container ${animationClass}`}>
       <Card
         title={
           <span className={`card-title ${animationClass}`}>{contactTitle}</span>
