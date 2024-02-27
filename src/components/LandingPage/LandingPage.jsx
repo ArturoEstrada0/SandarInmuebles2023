@@ -68,106 +68,101 @@ function LandingPage() {
   }, [])
 
   return (
-    console.log('landingPageData', landingPageData),
-    (
-      <Content style={{ backgroundColor: '#e2f4fe' }}>
-        <div className='landing-page-container'>
-          <Row gutter={16}>
-            <Col xs={{ span: 24 }} md={{ span: 9 }} style={{ height: '70vh' }}>
-              <div
-                className='landing-page-text'
-                style={{ height: '100%', padding: '0 15px' }}>
-                <Title
-                  level={2}
-                  style={{ fontSize: '2.2rem', fontFamily: 'Geometos' }}>
-                  {landingPageData && landingPageData.title}{' '}
-                  {/* Mostramos el título dinámico */}
-                </Title>
-                <Paragraph
-                  style={{
-                    fontSize: '1.2rem',
-                    fontFamily: 'Lato, sans-serif',
-                  }}>
-                  {landingPageData && landingPageData.subtitle}{' '}
-                  {/* Mostramos el subtítulo dinámico */}
-                </Paragraph>
-                <Link to='/inmuebles'>
-                  <Button
-                    size='large'
-                    className='banner-button'
-                    style={{
-                      background: '#001529',
-                      color: 'white',
-                      border: '1px solid white',
-                      borderRadius: '4px',
-                      padding: '30px 30px',
-                      fontWeight: 'bold',
-                      fontSize: '0.8rem',
-                      fontFamily: 'Geometos',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    Ver Inmuebles
-                  </Button>
-                </Link>
-                <Row gutter={16} style={{ marginTop: '20px' }}>
-                  <Col
-                    xs={{ span: 24 }}
-                    md={{ span: 8 }}
-                    className={`landing-page-stat ${
-                      animated ? 'animated' : ''
-                    }`}>
-                    <div className='landing-page-stat-number'>
-                      <CountUp end={300} duration={5} />+
-                    </div>
-                    <div className='landing-page-stat-title'>
-                      Propiedades Disponibles
-                    </div>
-                  </Col>
-                  <Col
-                    xs={{ span: 24 }}
-                    md={{ span: 8 }}
-                    className={`landing-page-stat ${
-                      animated ? 'animated' : ''
-                    }`}>
-                    <div className='landing-page-stat-number'>
-                      <CountUp end={1000} duration={5} />+
-                    </div>
-                    <div className='landing-page-stat-title'>
-                      Inmuebles Vendidos
-                    </div>
-                  </Col>
-                  <Col
-                    xs={{ span: 24 }}
-                    md={{ span: 8 }}
-                    className={`landing-page-stat ${
-                      animated ? 'animated' : ''
-                    }`}>
-                    <div className='landing-page-stat-number'>
-                      <CountUp end={95} duration={5} />%
-                    </div>
-                    <div className='landing-page-stat-title'>
-                      Clientes Satisfechos
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </Col>
-            <Col xs={{ span: 0 }} md={{ span: 15 }} style={{ height: '70vh' }}>
-              <div
-                className='landing-page-image'
+    <Content style={{ backgroundColor: '#e2f4fe' }}>
+      <div className='landing-page-container'>
+        <Row gutter={16}>
+          <Col xs={{ span: 24 }} md={{ span: 9 }}>
+            <div
+              className='landing-page-text'
+              style={{ height: '100%', padding: '0 15px' }}>
+              <Title
+                className='landing-page-title'
                 style={{
-                  height: '100%',
-                  backgroundImage: `url(${
-                    imageURLs.length > 0 ? imageURLs[currentImage] : ''
-                  })`,
-                }}></div>
-            </Col>
-          </Row>
-        </div>
-      </Content>
-    )
+                  fontSize: '1.8rem',
+                  fontFamily: 'Geometos',
+                  marginTop: '20px',
+                }}>
+                {landingPageData && landingPageData.title}{' '}
+                {/* Mostramos el título dinámico */}
+              </Title>
+              <Paragraph
+                style={{
+                  fontSize: '1.2rem',
+                  fontFamily: 'Lato, sans-serif',
+                }}>
+                {landingPageData && landingPageData.subtitle}{' '}
+                {/* Mostramos el subtítulo dinámico */}
+              </Paragraph>
+              <Link to='/inmuebles'>
+                <Button
+                  size='large'
+                  className='banner-button'
+                  style={{
+                    background: '#001529',
+                    color: 'white',
+                    border: '1px solid white',
+                    borderRadius: '4px',
+                    padding: '30px 30px',
+                    fontWeight: 'bold',
+                    fontSize: '0.8rem',
+                    fontFamily: 'Geometos',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  Ver Inmuebles
+                </Button>
+              </Link>
+              <Row gutter={16} style={{ marginTop: '20px' }}>
+                <Col
+                  xs={{ span: 24 }}
+                  md={{ span: 8 }}
+                  className={`landing-page-stat ${animated ? 'animated' : ''}`}>
+                  <div className='landing-page-stat-number'>
+                    <CountUp end={300} duration={5} />+
+                  </div>
+                  <div className='landing-page-stat-title'>
+                    Propiedades Disponibles
+                  </div>
+                </Col>
+                <Col
+                  xs={{ span: 24 }}
+                  md={{ span: 8 }}
+                  className={`landing-page-stat ${animated ? 'animated' : ''}`}>
+                  <div className='landing-page-stat-number'>
+                    <CountUp end={1000} duration={5} />+
+                  </div>
+                  <div className='landing-page-stat-title'>
+                    Inmuebles Vendidos
+                  </div>
+                </Col>
+                <Col
+                  xs={{ span: 24 }}
+                  md={{ span: 8 }}
+                  className={`landing-page-stat ${animated ? 'animated' : ''}`}>
+                  <div className='landing-page-stat-number'>
+                    <CountUp end={95} duration={5} />%
+                  </div>
+                  <div className='landing-page-stat-title'>
+                    Clientes Satisfechos
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+          <Col xs={{ span: 0 }} md={{ span: 15 }}>
+            <div
+              className='landing-page-image'
+              style={{
+                height: '100%',
+                backgroundImage: `url(${
+                  imageURLs.length > 0 ? imageURLs[currentImage] : ''
+                })`,
+              }}></div>
+          </Col>
+        </Row>
+      </div>
+    </Content>
   )
 }
 

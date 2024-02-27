@@ -351,7 +351,7 @@ const PropertyList = ({ onPropertyClick }) => {
         style={{ paddingTop: '32px', paddingBottom: '32px' }}>
         <Card className='custom-card'>
           <Title
-            level={2}
+            level={3}
             style={{
               background: 'white',
               fontFamily: 'Geometos',
