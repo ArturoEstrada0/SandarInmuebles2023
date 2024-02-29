@@ -112,7 +112,7 @@ const FichaTecnica = () => {
       try {
         const propertyRef = doc(
           collection(firestore, "propiedades"),
-          "M3vY8Klwj6uGqoxiYxsa"
+          "YYV1OEIhVueSPqbfHaMM"
         );
         const docSnapshot = await getDoc(propertyRef);
 
@@ -298,7 +298,7 @@ const FichaTecnica = () => {
             </div>
             <button onClick={downloadPDF}>Descargar PDF</button>
             <QRCode
-              value={`https://sandar-inmuebles.web.app/property/M3vY8Klwj6uGqoxiYxsa`}
+              value={`https://sandar-inmuebles.web.app/property/YYV1OEIhVueSPqbfHaMM`}
             />
           </div>
         </div>
