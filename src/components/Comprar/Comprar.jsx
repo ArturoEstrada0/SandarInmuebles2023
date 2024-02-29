@@ -1,5 +1,3 @@
-// Comprar.jsx
-
 import { useState, useEffect } from 'react'
 import { Row, Col, Typography, Steps, Divider, Collapse } from 'antd'
 import {
@@ -17,7 +15,6 @@ const { Panel } = Collapse
 
 const Comprar = () => {
   const iconStyle = { color: '#1890ff', marginRight: '8px' }
-  const [currentStep, setCurrentStep] = useState(0)
   const [currentStep1, setCurrentStep1] = useState(0)
   const [loading, setLoading] = useState(true)
 
@@ -31,14 +28,6 @@ const Comprar = () => {
 
   const handleStepClick = (step) => {
     setCurrentStep1(step)
-  }
-
-  const handleNextStep = () => {
-    setCurrentStep(currentStep + 1)
-  }
-
-  const handlePrevStep = () => {
-    setCurrentStep(currentStep - 1)
   }
 
   return (

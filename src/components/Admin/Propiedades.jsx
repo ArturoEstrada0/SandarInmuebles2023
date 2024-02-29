@@ -23,10 +23,8 @@ import {
   DeleteOutlined,
   EditOutlined,
   PauseCircleOutlined,
-  PauseOutlined,
   PlayCircleOutlined,
   SearchOutlined,
-  StarOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
@@ -45,7 +43,35 @@ import { getStorage } from 'firebase/storage'
 import YouTube from 'react-youtube'
 import Map from '../Map/Map'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRulerCombined, faHome, faBath, faToilet, faBed, faTree, faUtensils, faHouseFlag, faMountain, faCar, faParking, faVideo, faBell, faVolumeUp, faBox, faTshirt, faFire, faSnowflake, faCouch, faPaw, faBinoculars, faDumbbell, faSwimmingPool, faGlassCheers, faChess, faWater, faCity } from '@fortawesome/free-solid-svg-icons'
+import {
+  faRulerCombined,
+  faHome,
+  faBath,
+  faToilet,
+  faBed,
+  faTree,
+  faUtensils,
+  faHouseFlag,
+  faMountain,
+  faCar,
+  faParking,
+  faVideo,
+  faBell,
+  faVolumeUp,
+  faBox,
+  faTshirt,
+  faFire,
+  faSnowflake,
+  faCouch,
+  faPaw,
+  faBinoculars,
+  faDumbbell,
+  faSwimmingPool,
+  faGlassCheers,
+  faChess,
+  faWater,
+  faCity,
+} from '@fortawesome/free-solid-svg-icons'
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
 
@@ -118,26 +144,24 @@ function Propiedades() {
   }
 
   const isPropertyPaused = (property) => {
-    return property.status === "pausada";
-  };
+    return property.status === 'pausada'
+  }
 
   const handleCopiarEnlace = (enlace) => {
-    const textField = document.createElement('textarea');
-    textField.innerText = enlace;
-    document.body.appendChild(textField);
-    textField.select();
-    textField.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    textField.remove();
-  
+    const textField = document.createElement('textarea')
+    textField.innerText = enlace
+    document.body.appendChild(textField)
+    textField.select()
+    textField.setSelectionRange(0, 99999)
+    document.execCommand('copy')
+    textField.remove()
+
     // Mostrar notificación de Ant Design
     notification.success({
       message: 'Enlace copiado',
       description: 'El enlace se ha copiado exitosamente al portapapeles.',
-    });
-  };
-  
-
+    })
+  }
 
   const [highlightedProperties, setHighlightedProperties] = useState([])
 
@@ -167,7 +191,7 @@ function Propiedades() {
       }
 
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        `https://nominatim.openstreetmap.org/search?format=json&countrycodes=mx&q=${encodeURIComponent(
           newLocation,
         )}`,
         { timeout: 50000 },
@@ -181,7 +205,7 @@ function Propiedades() {
         if (!selectedLocation) {
           setMapCenter(moreliaCoords)
           setMarkerCoords(moreliaCoords)
-          setMapHeight('500px')
+          setMapHeight('300px')
         }
       } else {
         setLocationSuggestions([])
@@ -197,7 +221,7 @@ function Propiedades() {
 
     setMarkerCoords([suggestion.lat, suggestion.lon])
 
-    setMapHeight('500px')
+    setMapHeight('300px')
   }
 
   useEffect(() => {
@@ -276,8 +300,8 @@ function Propiedades() {
     setIsModalVisible(true)
   }
 
-  const handleEditarPropiedad = (record) => {
-    form.setFieldsValue({ ...record, imagen: [] })
+  const handleEditarPropiedad = (key) => {
+    form.setFieldsValue(dataSource.find((property) => property.key === key))
     setIsModalVisible(true)
   }
 
@@ -297,7 +321,7 @@ function Propiedades() {
 
       formData = {
         ...formData,
-        status: "activa",
+        status: 'activa',
         ...values,
         youtubeUrl,
         ubicacion: selectedLocation?.display_name,
@@ -367,9 +391,7 @@ function Propiedades() {
       setLoading(false)
       setUploading(false) // Establecer el estado uploading a false en cualquier caso
     }
-  };
-  
-  
+  }
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
@@ -526,13 +548,13 @@ function Propiedades() {
       dataIndex: 'tipoPropiedad',
       key: 'tipoPropiedad',
       filters: [
-        { text: "Casa", value: "Casa" },
-        { text: "Departamento", value: "Departamento" },
-        { text: "Terreno", value: "Terreno" },
-        { text: "Edificio", value: "Edificio" },
-        { text: "Oficina", value: "Oficina" },
-        { text: "Bodega", value: "Bodega" },
-        { text: "Local", value: "Local" },
+        { text: 'Casa', value: 'Casa' },
+        { text: 'Departamento', value: 'Departamento' },
+        { text: 'Terreno', value: 'Terreno' },
+        { text: 'Edificio', value: 'Edificio' },
+        { text: 'Oficina', value: 'Oficina' },
+        { text: 'Bodega', value: 'Bodega' },
+        { text: 'Local', value: 'Local' },
       ],
       onFilter: (value, record) => record.tipoPropiedad === value,
     },
@@ -608,15 +630,11 @@ function Propiedades() {
           <Button
             onClick={() =>
               handleCopiarEnlace(
-                `https://sandar-inmuebles.web.app/property/${record.key}`
+                `https://sandar-inmuebles.web.app/property/${record.key}`,
               )
-            }
-          >
+            }>
             <CopyOutlined />
           </Button>
-
-          
-          
         </Space>
       ),
     },
@@ -704,14 +722,23 @@ function Propiedades() {
       </Space>
       <Table dataSource={dataSource} columns={columns} />
       <Modal
-        title='Propiedad'
+        title='Añadir Propiedad'
         visible={isModalVisible}
         onOk={form.submit}
         onCancel={() => setIsModalVisible(false)}
         width={800}
         style={{ minWidth: '800px' }}
         footer={[
-          <Button key='back' onClick={() => setIsModalVisible(false)}>
+          <Button
+            key='back'
+            onClick={() => {
+              return (
+                setIsModalVisible(false),
+                form.resetFields(),
+                setFileList([]),
+                setCurrentStep(0)
+              )
+            }}>
             Cancelar
           </Button>,
           <Button
@@ -752,8 +779,7 @@ function Propiedades() {
                     required: true,
                     message: 'Por favor selecciona el tipo de propiedad',
                   },
-                ]}
-              >
+                ]}>
                 <Select>
                   <Select.Option value='Casa'>Casa</Select.Option>
                   <Select.Option value='Departamento'>
@@ -808,22 +834,20 @@ function Propiedades() {
                 </ul>
               )}
               <Form.Item
-  label='Precio'
-  name='precio'
-  rules={[
-    { required: true, message: 'Por favor ingresa el precio' },
-  ]}
->
-  <InputNumber
-    min={0}
-    formatter={(value) =>
-      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    }
-    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-    style={{ width: '50%' }} // Establecer el ancho del campo de entrada
-  /> 
-</Form.Item>
-
+                label='Precio'
+                name='precio'
+                rules={[
+                  { required: true, message: 'Por favor ingresa el precio' },
+                ]}>
+                <InputNumber
+                  min={0}
+                  formatter={(value) =>
+                    `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                  style={{ width: '50%' }} // Establecer el ancho del campo de entrada
+                />
+              </Form.Item>
 
               <Form.Item
                 label='Ubicación en Mapa'
@@ -835,7 +859,7 @@ function Propiedades() {
                     marginBottom: '20px',
                   }}>
                   <Map
-                    height='500px'
+                    height='300px'
                     width='100%'
                     markerCoords={markerCoords}
                   />
@@ -887,34 +911,241 @@ function Propiedades() {
                             }}
                             onClick={() => handleFeatureCheck(feature)}>
                             {/* Agrega iconos según sea necesario */}
-                            {feature === "Baño" && <FontAwesomeIcon icon={faBath} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Medio Baño" && <FontAwesomeIcon icon={faToilet} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Habitaciones" && <FontAwesomeIcon icon={faBed} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Jardín" && <FontAwesomeIcon icon={faTree} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Cocina" && <FontAwesomeIcon icon={faUtensils} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Terraza" && <FontAwesomeIcon icon={faHouseFlag} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Ático" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Cochera" && <FontAwesomeIcon icon={faCar} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Estacionamiento" && <FontAwesomeIcon icon={faParking} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Alarma" && <FontAwesomeIcon icon={faBell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Cámaras de seguridad" && <FontAwesomeIcon icon={faVideo} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Sistema de sonido" && <FontAwesomeIcon icon={faVolumeUp} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Bodega" && <FontAwesomeIcon icon={faBox} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Vestidor" && <FontAwesomeIcon icon={faTshirt} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Chimenea" && <FontAwesomeIcon icon={faFire} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Aire acondicionado" && <FontAwesomeIcon icon={faSnowflake} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Amueblado" && <FontAwesomeIcon icon={faCouch} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Mascotas permitidas" && <FontAwesomeIcon icon={faPaw} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Vista panorámica" && <FontAwesomeIcon icon={faBinoculars} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Gimnasio" && <FontAwesomeIcon icon={faDumbbell} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Piscina" && <FontAwesomeIcon icon={faSwimmingPool} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Salón de eventos" && <FontAwesomeIcon icon={faGlassCheers} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Área de juegos" && <FontAwesomeIcon icon={faChess} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Vista al mar" && <FontAwesomeIcon icon={faWater} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Vista a la montaña" && <FontAwesomeIcon icon={faMountain} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            {feature === "Vista a la ciudad" && <FontAwesomeIcon icon={faCity} size="2x" color={featuresChecked[feature] ? "#1890ff" : "#000"} />}
-                            
-                            
+                            {feature === 'Baño' && (
+                              <FontAwesomeIcon
+                                icon={faBath}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Medio Baño' && (
+                              <FontAwesomeIcon
+                                icon={faToilet}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Habitaciones' && (
+                              <FontAwesomeIcon
+                                icon={faBed}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Jardín' && (
+                              <FontAwesomeIcon
+                                icon={faTree}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Cocina' && (
+                              <FontAwesomeIcon
+                                icon={faUtensils}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Terraza' && (
+                              <FontAwesomeIcon
+                                icon={faHouseFlag}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Ático' && (
+                              <FontAwesomeIcon
+                                icon={faMountain}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Cochera' && (
+                              <FontAwesomeIcon
+                                icon={faCar}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Estacionamiento' && (
+                              <FontAwesomeIcon
+                                icon={faParking}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Alarma' && (
+                              <FontAwesomeIcon
+                                icon={faBell}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Cámaras de seguridad' && (
+                              <FontAwesomeIcon
+                                icon={faVideo}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Sistema de sonido' && (
+                              <FontAwesomeIcon
+                                icon={faVolumeUp}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Bodega' && (
+                              <FontAwesomeIcon
+                                icon={faBox}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Vestidor' && (
+                              <FontAwesomeIcon
+                                icon={faTshirt}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Chimenea' && (
+                              <FontAwesomeIcon
+                                icon={faFire}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Aire acondicionado' && (
+                              <FontAwesomeIcon
+                                icon={faSnowflake}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Amueblado' && (
+                              <FontAwesomeIcon
+                                icon={faCouch}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Mascotas permitidas' && (
+                              <FontAwesomeIcon
+                                icon={faPaw}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Vista panorámica' && (
+                              <FontAwesomeIcon
+                                icon={faBinoculars}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Gimnasio' && (
+                              <FontAwesomeIcon
+                                icon={faDumbbell}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Piscina' && (
+                              <FontAwesomeIcon
+                                icon={faSwimmingPool}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Salón de eventos' && (
+                              <FontAwesomeIcon
+                                icon={faGlassCheers}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Área de juegos' && (
+                              <FontAwesomeIcon
+                                icon={faChess}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Vista al mar' && (
+                              <FontAwesomeIcon
+                                icon={faWater}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Vista a la montaña' && (
+                              <FontAwesomeIcon
+                                icon={faMountain}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+                            {feature === 'Vista a la ciudad' && (
+                              <FontAwesomeIcon
+                                icon={faCity}
+                                size='2x'
+                                color={
+                                  featuresChecked[feature] ? '#1890ff' : '#000'
+                                }
+                              />
+                            )}
+
                             <p
                               style={{
                                 marginTop: '5px',
