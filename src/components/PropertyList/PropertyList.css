@@ -5,101 +5,98 @@
   padding: 20px;
   transition: height 0.5s ease; /* Agregar transición a la altura */
 }
+.centered-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  margin-top: 150px;
+}
 
+.filters {
+  display: flex;
+  justify-content: space-between;
+}
 
-  .centered-card {
-    margin: 0 10%;
-    margin-top: 45px;
-  }
+.search-button {
+  margin-top: 16px;
+}
 
-  .filters {
-    display: flex;
-    justify-content: space-between;
-  }
+.property-info-row {
+  margin-top: 20px; /* Ajusta el valor según tu preferencia */
+}
 
-  .search-button {
-    margin-top: 16px;
-  }
+.large-button {
+  font-size: 1.5rem; /* Ajusta el tamaño del texto del botón */
+  padding: 10px 20px; /* Ajusta el relleno (padding) para aumentar el tamaño del botón */
+}
 
-  .property-info-row {
-    margin-top: 20px; /* Ajusta el valor según tu preferencia */
-  }
+.centered-button {
+  display: flex;
+  align-items: center;
+}
 
-  .large-button {
-    font-size: 1.5rem; /* Ajusta el tamaño del texto del botón */
-    padding: 10px 20px; /* Ajusta el relleno (padding) para aumentar el tamaño del botón */
-  }
+.custom-carousel {
+  position: relative;
+  overflow: hidden;
+}
 
-  .centered-button {
-    display: flex;
-    align-items: center;
-  }
+.custom-carousel .custom-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  background-color: black;
+  padding: 8px;
+  border-radius: 50%;
+}
 
-  .custom-carousel {
-    position: relative;
-    overflow: hidden;
-  }
+.custom-carousel .custom-prev {
+  left: 10px;
+}
 
-  .custom-carousel .custom-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    background-color: black;
-    padding: 8px;
-    border-radius: 50%;
-  }
+.custom-carousel .custom-next {
+  right: 10px;
+}
 
-  .custom-carousel .custom-prev {
-    left: 10px;
-  }
+.property-image-container {
+  position: relative;
+  cursor: pointer;
+}
 
-  .custom-carousel .custom-next {
-    right: 10px;
-  }
+.sale-mark,
+.rent-mark {
+  position: absolute; /* Posicionamiento absoluto para las etiquetas */
+  top: 10px; /* Ajusta la posición vertical según sea necesario */
+  left: 10px; /* Ajusta la posición horizontal según sea necesario */
+  background-color: #1677ff; /* Color de fondo rojo para la marca de venta */
+  color: #ffffff; /* Color de texto blanco para la marca de venta */
+  font-size: 15px;
+  font-weight: bold;
+  padding: -0px 8px; /* Espacio interno de 8px alrededor del texto */
+  border-radius: 5px; /* Bordes redondeados */
+  z-index: 1; /* Ajusta el índice z para que esté por encima de las imágenes */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-  .property-image-container {
-    position: relative; /* Asegura que el contenedor de la imagen tenga posición relativa */
-    cursor: pointer;
-  }
-  
-  .sale-mark,
-  .rent-mark {
-    position: absolute; /* Posicionamiento absoluto para las etiquetas */
-    top: 10px; /* Ajusta la posición vertical según sea necesario */
-    left: 10px; /* Ajusta la posición horizontal según sea necesario */
-    background-color: #1677ff; /* Color de fondo rojo para la marca de venta */
-    color: #ffffff; /* Color de texto blanco para la marca de venta */
-    font-size: 15px;
-    font-weight: bold;
-    padding: -0px 8px; /* Espacio interno de 8px alrededor del texto */
-    border-radius: 5px; /* Bordes redondeados */
-    z-index: 1; /* Ajusta el índice z para que esté por encima de las imágenes */
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .property-card-container {
-    position: relative;
-  }
-  
-  .logo-container {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 10px;
-  }
-  
-  .logo {
-    width: 150px; /* Ajusta el tamaño según sea necesario */
-  }
-  
+.logo-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+}
 
-  
-  /* PropertyList.css */
+.logo {
+  width: 150px; /* Ajusta el tamaño según sea necesario */
+}
+
+/* PropertyList.css */
 
 /* Ajuste para dispositivos móviles */
 @media screen and (max-width: 768px) {
@@ -107,5 +104,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+  }
+  .property-details {
+    display: none;
+  }
+  .logo-container {
+    display: none;
   }
 }
