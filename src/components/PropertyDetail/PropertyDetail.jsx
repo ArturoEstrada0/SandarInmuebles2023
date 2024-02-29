@@ -164,7 +164,7 @@ const PropertyDetail = () => {
   const details = [
     { key: 'habitaciones', label: 'Habitaciones', icon: faBed },
     { key: 'baños', label: 'Baños', icon: faBath },
-    { key: 'medio Baño', label: 'Medios Baños', icon: faToilet },
+    { key: 'medioBaño', label: 'Medios Baños', icon: faToilet },
     { key: 'metrosConstruidos', label: 'Construcción', icon: faRulerCombined},
     { key: 'estacionamiento', label: 'Estacionamientos', icon: faCar },
   ];
