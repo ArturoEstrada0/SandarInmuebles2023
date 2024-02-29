@@ -18,7 +18,7 @@ export default function Asesores() {
           <Title level={3} className='asesor-title'>
             Encuentra a tu Asesor
           </Title>
-          <p>
+          <p style={{ textAlign: 'justify', padding: '0 20px' }}>
             Nuestros expertos en bienes raíces te proporcionarán asesoramiento
             profesional durante todo el proceso de compra o venta de
             propiedades. Estamos comprometidos en ayudarte a tomar decisiones

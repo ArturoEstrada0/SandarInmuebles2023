@@ -81,6 +81,7 @@ function LandingPage() {
                   fontSize: '1.8rem',
                   fontFamily: 'Geometos',
                   marginTop: '20px',
+                  textAlign: 'justify',
                 }}>
                 {landingPageData && landingPageData.title}{' '}
                 {/* Mostramos el título dinámico */}
@@ -89,6 +90,7 @@ function LandingPage() {
                 style={{
                   fontSize: '1.2rem',
                   fontFamily: 'Lato, sans-serif',
+                  textAlign: 'justify',
                 }}>
                 {landingPageData && landingPageData.subtitle}{' '}
                 {/* Mostramos el subtítulo dinámico */}

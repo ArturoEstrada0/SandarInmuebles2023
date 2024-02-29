@@ -357,6 +357,7 @@ const PropertyDetail = () => {
             <p
               style={{
                 padding: '0 10px',
+                textAlign: 'justify',
               }}>
               {isTextShown
                 ? propertyDetails.descripcion

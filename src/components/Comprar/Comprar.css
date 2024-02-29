@@ -3,39 +3,40 @@
 .comprar-container {
   animation: fadeIn 1s ease-in-out;
 }
-  
-  .comprar-title {
-    text-align: center;
-    margin-top: 80px;
-    /* border-bottom: 2px solid #1890ff; */ /* Comentada para quitar la línea azul */
-    padding-bottom: 10px;
-  }
-  
-  .comprar-info-box {
-    background-color: #fcfeff;
-    padding:45px;
-    border-radius: 12px;
-    margin-bottom: 32px;
-    margin: 0 auto;
-    max-width: 600px;
-  }
-  
-  .comprar-info-title {
-    border-bottom: 2px solid #1890ff;
-    padding-bottom: 8px;
-    font-size: 24px;
-  }
-  
-  .comprar-info-paragraph {
-    font-size: 18px;
-  }
 
-  img {
-    max-width: 100%;
-    height: auto;
-  }
+.comprar-title {
+  text-align: center;
+  margin-top: 80px;
+  /* border-bottom: 2px solid #1890ff; */ /* Comentada para quitar la línea azul */
+  padding-bottom: 10px;
+}
 
-  /* Comprar.css */
+.comprar-info-box {
+  background-color: #fcfeff;
+  padding: 45px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.comprar-info-title {
+  border-bottom: 2px solid #1890ff;
+  padding-bottom: 8px;
+  font-size: 24px;
+}
+
+.comprar-info-paragraph {
+  font-size: 18px;
+  text-align: justify;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Comprar.css */
 
 /* ... (estilos existentes) ... */
 
@@ -60,7 +61,7 @@
 }
 
 .imagen-fondo::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;

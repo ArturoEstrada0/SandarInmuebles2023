@@ -1,6 +1,6 @@
 // Comprar.jsx
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Row, Col, Typography, Steps, Divider, Collapse } from 'antd'
 import {
   HomeOutlined,
@@ -116,7 +116,7 @@ const Comprar = () => {
               <Step
                 title={<span style={{ fontSize: '1.5em' }}>Buscamos</span>}
                 description={
-                  <span style={{ fontSize: '1.1em' }}>
+                  <span style={{ fontSize: '1.1em', textAlign: 'justify' }}>
                     Ya sea que hayas encontrado una propiedad de tu interés en
                     nuestro sitio o que quieras conocer más opciones; tu asesor
                     te ayuda a encontrar las alternativas que mejor se adapten a
@@ -129,7 +129,7 @@ const Comprar = () => {
               <Step
                 title={<span style={{ fontSize: '1.5em' }}>VISITAMOS</span>}
                 description={
-                  <span style={{ fontSize: '1.1em' }}>
+                  <span style={{ fontSize: '1.1em', textAlign: 'justify' }}>
                     Una vez que hemos seleccionado las alternativas más
                     relevantes, tu asesor te ayuda a organizar las visitas para
                     que puedan ir juntos a descubrir las propiedades en persona
@@ -144,7 +144,7 @@ const Comprar = () => {
                   <span style={{ fontSize: '1.5em' }}>HACEMOS UNA OFERTA</span>
                 }
                 description={
-                  <span style={{ fontSize: '1.1em' }}>
+                  <span style={{ fontSize: '1.1em', textAlign: 'justify' }}>
                     Cuando has encontrado ese lugar que brilla entre el resto,
                     te ayudamos a hacer una oferta oficial de compra que te
                     acerque a tu hogar ideal.
@@ -160,7 +160,7 @@ const Comprar = () => {
                   </span>
                 }
                 description={
-                  <span style={{ fontSize: '1.1em' }}>
+                  <span style={{ fontSize: '1.1em', textAlign: 'justify' }}>
                     En este momento te ayudamos a tener claridad y certeza legal
                     para que tu compra sea segura y cuentes con toda la
                     información indispensable.
@@ -172,7 +172,7 @@ const Comprar = () => {
               <Step
                 title={<span style={{ fontSize: '1.5em' }}>CERRAMOS</span>}
                 description={
-                  <span style={{ fontSize: '1.1em' }}>
+                  <span style={{ fontSize: '1.1em', textAlign: 'justify' }}>
                     Te acompañamos hasta el final de la compra, dejando todo
                     listo para que puedas mudarte a tu nuevo hogar y disfrutarlo
                     en completa tranquilidad.
@@ -198,7 +198,7 @@ const Comprar = () => {
                   </span>
                 }
                 key='1'>
-                <p>
+                <p style={{ textAlign: 'justify' }}>
                   Es importante saber qué buscas en un inmueble, no sólo vayas
                   en fines de semana, también visita la zona entre semana y en
                   horas pico para darte una idea de cómo sería tu día a día.
@@ -215,7 +215,7 @@ const Comprar = () => {
                   </span>
                 }
                 key='1'>
-                <p>
+                <p style={{ textAlign: 'justify' }}>
                   Durante tu visita realizarás un recorrido completo del
                   inmueble, el edificio, estacionamiento y, en caso de contar
                   con ello, bodega o amenidades fuera del inmueble.
@@ -232,7 +232,7 @@ const Comprar = () => {
                   </span>
                 }
                 key='1'>
-                <p>
+                <p style={{ textAlign: 'justify' }}>
                   Lo más importante es realizar las visitas suficientes que te
                   permitan sentirte satisfecho. Lo ideal es que sean al menos 5,
                   en diferentes zonas y con diferentes características.
@@ -249,7 +249,7 @@ const Comprar = () => {
                   </span>
                 }
                 key='1'>
-                <p>
+                <p style={{ textAlign: 'justify' }}>
                   Aparte de las características físicas y amenidades, te
                   recomendamos ubicar bien la zona y los medios de transporte.
                   Revisa cuáles son las avenidas principales cercanas y cuál es
@@ -268,7 +268,7 @@ const Comprar = () => {
                   </span>
                 }
                 key='1'>
-                <p>
+                <p style={{ textAlign: 'justify' }}>
                   Puedes hacer una oferta de compra que será presentada al
                   propietario a través del asesor. De ser aceptada podrás
                   continuar con la compra.
