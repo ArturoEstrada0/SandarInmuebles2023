@@ -1,72 +1,84 @@
 .asesores-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-top: 100px;
-    margin-bottom: 30px;
-    padding: 50px;
-  }
-  
-  .image-container img {
-    max-width: 100%;
-    height: auto;
-    max-height: 370px; /* Ajusta la altura máxima según tus preferencias */
-  }
-  
-  .asesor-container {
-    margin: 20px 0; /* Agrega márgenes superior e inferior */
-    max-width: 50%; /* Establece el ancho máximo al 50% de la pantalla */
-    color: #333; /* Color de texto para el párrafo */
-    font-size: 20px;
-  }
-  
-  
-  .asesor-container h4 {
-    color: blue; /* Color azul para el h4 */
-  }
-  
-  .asesor-container hr {
-    width: 50%; /* Ancho de la línea horizontal al 50% de la pantalla */
-    margin: 10px auto; /* Ajusta el margen superior e inferior y centra la línea horizontal */
-    border: 2px solid blue; /* Color y grosor de la línea horizontal */
-  }
-  
-  .button-asesor button {
-    background: #001529;
-    color: white;
-    border: 1px solid white;
-    border-radius: 4px;
-    padding: 10px 20px; /* Ajusta el padding según tus preferencias */
-    font-weight: bold;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer; /* Agregado para mostrar que es un elemento interactivo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 30px;
+  padding: 30px;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  max-height: 370px; /* Ajusta la altura máxima según tus preferencias */
+}
+
+.asesor-container {
+  margin: 20px 0; /* Agrega márgenes superior e inferior */
+  max-width: 50%; /* Establece el ancho máximo al 50% de la pantalla */
+  color: #333; /* Color de texto para el párrafo */
+  font-size: 20px;
+}
+
+.asesor-container h4 {
+  color: blue; /* Color azul para el h4 */
+}
+
+.asesor-container hr {
+  width: 50%; /* Ancho de la línea horizontal al 50% de la pantalla */
+  margin: 10px auto; /* Ajusta el margen superior e inferior y centra la línea horizontal */
+  border: 2px solid blue; /* Color y grosor de la línea horizontal */
+}
+
+.button-asesor button {
+  background: #001529;
+  color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 10px 20px; /* Ajusta el padding según tus preferencias */
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Agregado para mostrar que es un elemento interactivo */
 }
 
 .button-asesor {
-    font-family: 'Geometos';
-    margin-top: 10px; /* Ajusta el margen superior del contenedor del botón según tus preferencias */
-    margin-left: 50%;
+  font-family: 'Geometos';
+  margin-top: 10px;
+  margin-left: 50%;
 }
-  
-  .asesor-container p{
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    text-align: left;
-    margin-left:10%;
-  }
 
-  .asesor-title {
-    font-family: 'Geometos';
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: left;
-    margin-left: 10%;
-    border-left: 3px solid #1890ff;
-    padding-left: 16px; /* Ajusta el espacio entre la línea y el texto */
+.asesor-container p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  text-align: left;
+  margin-left: 10%;
+}
+
+.asesor-title {
+  font-family: 'Geometos';
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+  margin-left: 10%;
+  border-left: 3px solid #1890ff;
+  padding-left: 16px; /* Ajusta el espacio entre la línea y el texto */
+}
+
+@media (max-width: 768px) {
+  .image-container {
+    display: none;
   }
+  .asesor-container {
+    max-width: 100%;
+  }
+  .button-asesor {
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+  }
+}

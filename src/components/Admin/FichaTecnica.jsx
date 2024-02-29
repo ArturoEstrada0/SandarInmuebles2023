@@ -4,9 +4,10 @@ import { collection, doc, getDoc } from "firebase/firestore";
 import "./FichaTecnica.css";
 import Logo from "../../assets/img/sandarPositivo.png";
 import QRCode from "qrcode.react";
-import { jsPDF } from "jspdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   faBed,
   faBath,
@@ -69,7 +70,7 @@ library.add(
 
 const FichaTecnica = () => {
   const [propertyData, setPropertyData] = useState(null);
-  const [pdfGenerated, setPdfGenerated] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const fichaTecnicaRef = useRef(null);
 
   const getIcon = (key) => {
@@ -111,7 +112,7 @@ const FichaTecnica = () => {
       try {
         const propertyRef = doc(
           collection(firestore, "propiedades"),
-          "fn18mVGEjeFzvAuDrxuL"
+          "2qfo9XJjAkNw7MYfNgNK"
         );
         const docSnapshot = await getDoc(propertyRef);
 
@@ -128,28 +129,77 @@ const FichaTecnica = () => {
     getPropertyData();
   }, []);
 
-  const generatePdf = () => {
+  useEffect(() => {
     if (!propertyData) return;
 
-    const doc = new jsPDF({
-      orientation: "landscape",
-    });
+    const images = document.querySelectorAll(".ficha-tecnica-photos-info img");
+    const promises = Array.from(images).map((image) =>
+      new Promise((resolve) => {
+        if (image.complete) {
+          resolve();
+        } else {
+          image.addEventListener("load", () => resolve());
+          image.addEventListener("error", () => resolve());
+        }
+      })
+    );
 
-    const fichaTecnicaContent = fichaTecnicaRef.current;
+    Promise.all(promises).then(() => setImagesLoaded(true));
+  }, [propertyData]);
 
-    doc.html(fichaTecnicaContent, {
-      callback: () => {
-        doc.save("ficha-tecnica.pdf");
-        setPdfGenerated(true);
-      },
+  const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      fetch(src)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          const image = new Image();
+          image.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(image);
+          };
+          image.onerror = reject;
+          image.src = url;
+        })
+        .catch(reject);
     });
   };
+  
+  
 
-  useEffect(() => {
-    if (pdfGenerated) {
-      console.log("PDF generado correctamente");
+  const downloadPDF = async () => {
+    if (!propertyData || !imagesLoaded) return;
+  
+    const pdf = new jsPDF();
+  
+    const images = document.querySelectorAll(".ficha-tecnica-photos-info img");
+    const imagePromises = Array.from(images).map((image) => loadImage(image.src));
+  
+    try {
+      const loadedImages = await Promise.all(imagePromises);
+  
+      loadedImages.forEach((loadedImage, index) => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = loadedImage.width;
+        canvas.height = loadedImage.height;
+        context.drawImage(loadedImage, 0, 0);
+  
+        const imgData = canvas.toDataURL("image/jpeg");
+  
+        if (index !== 0) {
+          pdf.addPage();
+        }
+        pdf.addImage(imgData, "JPEG", 0, 0);
+      });
+  
+      pdf.save("ficha-tecnica.pdf");
+    } catch (error) {
+      console.error("Error al cargar las imágenes:", error);
     }
-  }, [pdfGenerated]);
+  };
+  
+  
 
   return (
     <div className="ficha-tecnica-container">
@@ -234,6 +284,7 @@ const FichaTecnica = () => {
                     key={index}
                     src={photo}
                     alt={`Photo-${index + 1}`}
+                    onLoad={() => setImagesLoaded(true)}
                   />
                 ))}
               </div>
@@ -245,11 +296,11 @@ const FichaTecnica = () => {
               <p>Teléfono: 443-205-7194</p>
               <p>Correo electrónico: sandarinmuebles@gmail.com</p>
             </div>
+            <button onClick={downloadPDF}>Descargar PDF</button>
             <QRCode
-              value={`https://sandar-inmuebles.web.app/property/fn18mVGEjeFzvAuDrxuL`}
+              value={`https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK`}
             />
           </div>
-          <button onClick={generatePdf}>Generar PDF</button>
         </div>
       )}
     </div>

@@ -1,73 +1,66 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  Link,
-} from "react-router-dom";
-import { Layout, Spin } from "antd";
-import "./App.css";
-import Header from "./components/Header";
+import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import './App.css'
+import Header from './components/Header'
 
-import Home from "./components/Home";
-import PropertyList from "./components/PropertyList/PropertyList";
-import AboutUs from "./components/AboutUs/AboutUs";
-import Vender from "./components/Vender/Vender";
-import Comprar from "./components/Comprar/Comprar";
+import Home from './components/Home'
+import PropertyList from './components/PropertyList/PropertyList'
+import AboutUs from './components/AboutUs/AboutUs'
+import Vender from './components/Vender/Vender'
+import Comprar from './components/Comprar/Comprar'
 
-import Contact from "./components/Contact/Contact";
-import AdminPanel from "./components/Admin/AdminPanel";
+import Contact from './components/Contact/Contact'
+import AdminPanel from './components/Admin/AdminPanel'
 
-import Login from "./components/Auth/Login";
-import OlvidoContrasena from "./components/Auth/OlvidoContrasena";
-import Registro from "./components/Auth/Registro";
+import Login from './components/Auth/Login'
+import OlvidoContrasena from './components/Auth/OlvidoContrasena'
+import Registro from './components/Auth/Registro'
 
-import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
+import PropertyDetail from './components/PropertyDetail/PropertyDetail'
 
-import { collection, getDoc, getDocs, doc } from "firebase/firestore";
-import { firestore } from "./components/firebase/firebase";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-
+import { collection, getDoc, getDocs, doc } from 'firebase/firestore'
+import { firestore } from './components/firebase/firebase'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import Footer from './components/Footer/Footer'
 
 function App() {
-  const { isAuthenticated, user } = useAuth();
-  const [propertyData, setPropertyData] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const { isAuthenticated, user } = useAuth()
+  const [propertyData, setPropertyData] = useState([])
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [userData, setUserData] = useState(null)
 
   useEffect(() => {
     if (user && user.uid) {
       const fetchUserData = async () => {
         try {
-          const userDocRef = doc(firestore, "usuarios", user.uid);
-          const userDoc = await getDoc(userDocRef);
+          const userDocRef = doc(firestore, 'usuarios', user.uid)
+          const userDoc = await getDoc(userDocRef)
           if (userDoc.exists()) {
-            setUserData(userDoc.data());
-            setIsAdmin(userDoc.data().role === "admin");
+            setUserData(userDoc.data())
+            setIsAdmin(userDoc.data().role === 'admin')
           } else {
             console.error(
-              "No se encontró el documento del usuario en Firestore."
-            );
+              'No se encontró el documento del usuario en Firestore.',
+            )
           }
         } catch (error) {
-          console.error("Error al obtener datos del usuario:", error);
+          console.error('Error al obtener datos del usuario:', error)
         }
-      };
+      }
 
-      fetchUserData();
+      fetchUserData()
     }
-  }, [user]);
+  }, [user])
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const propertiesSnapshot = await getDocs(
-          collection(firestore, "propiedades")
-        );
+          collection(firestore, 'propiedades'),
+        )
         const properties = propertiesSnapshot.docs.map((doc) => {
-          const data = doc.data();
-          const features = data.activeFeatures || {};
+          const data = doc.data()
+          const features = data.activeFeatures || {}
 
           return {
             id: doc.id,
@@ -79,50 +72,53 @@ function App() {
             bathrooms: features.Baño || 0,
             area: features.Tamaño || 0,
             image: data.fotos[0],
-          };
-        });
-        setPropertyData(properties);
+          }
+        })
+        setPropertyData(properties)
       } catch (error) {
-        console.error("Error al obtener propiedades:", error);
+        console.error('Error al obtener propiedades:', error)
       }
-    };
+    }
 
-    fetchProperties();
-  }, []);
+    fetchProperties()
+  }, [])
 
   return (
     <Router>
-      <Header />
+      <Header isAdmin={isAdmin} isAuthenticated={isAuthenticated} />
       <Routes>
         {isAuthenticated && isAdmin && (
-          <Route path="/" element={<AdminPanel />} />
+          <Route path='/' element={<AdminPanel />} />
         )}
         {(!isAuthenticated || !isAdmin) && (
           <>
-            <Route path="/" element={<Home />} />
-            <Route path="/aboutUs" element={<AboutUs />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/propertyList" element={<PropertyList />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/aboutUs' element={<AboutUs />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path='/propertyList' element={<PropertyList />} />
             <Route
-              path="/property/:id"
+              path='/property/:id'
               element={<PropertyDetail propertyData={propertyData} />}
             />
-            <Route path="/vender" element={<Vender />} /> {/* Agrega esta línea */}
-            <Route path="/comprar" element={<Comprar />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/olvidoContrasena" element={<OlvidoContrasena />} />
-            <Route path="/registro" element={<Registro />} />
+            <Route path='/vender' element={<Vender />} />{' '}
+            {/* Agrega esta línea */}
+            <Route path='/comprar' element={<Comprar />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/olvidoContrasena' element={<OlvidoContrasena />} />
+            <Route path='/registro' element={<Registro />} />
           </>
         )}
-    </Routes>
+      </Routes>
+
+      <Footer />
     </Router>
-  );
+  )
 }
 
 const AppWithAuthProvider = () => (
   <AuthProvider>
     <App />
   </AuthProvider>
-);
+)
 
-export default AppWithAuthProvider;
+export default AppWithAuthProvider

@@ -12,6 +12,10 @@
      background-repeat: no-repeat; /* No repetir el fondo */
 }
 
+.inicio-logo{
+  max-width: 80px;
+}
+
 .Inicio{
   font-family: 'Geometos';
   font-size: 1.4rem;
