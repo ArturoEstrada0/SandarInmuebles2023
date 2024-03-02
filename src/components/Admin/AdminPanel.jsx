@@ -6,15 +6,16 @@ import {
   DollarOutlined,
   KeyOutlined,
   MailOutlined,
-  MessageOutlined,
-} from '@ant-design/icons'
-import Inicio from './Inicio'
-import Clientes from './Clientes'
-import Propiedades from './Propiedades'
-import Contratos from './Contratos'
-import Buzon from './Buzon'
-import ChatGPT from './ChatGPT'
-import Configuracion from './Configuracion'
+  MessageOutlined, // Importa el icono necesario
+} from '@ant-design/icons';
+import Inicio from './Inicio';
+import Asociados from './Asociados';
+import Clientes from './Clientes';
+import Propiedades from './Propiedades';
+import Contratos from './Contratos';
+import Buzon from './Buzon';
+import ChatGPT from './ChatGPT'; // Importa el componente ChatGPT
+import Configuracion from './Configuracion';
 
 const { Sider, Content } = Layout
 
@@ -24,7 +25,9 @@ function AdminPanel() {
   const renderizarSeccion = () => {
     switch (seccion) {
       case 'inicio':
-        return <Inicio />
+        return <Inicio />;
+      case 'asociados':
+        return <Asociados />;
       case 'clientes':
         return <Clientes />
       case 'propiedades':
@@ -54,7 +57,10 @@ function AdminPanel() {
           <Menu.Item key='inicio' icon={<HomeOutlined />}>
             Inicio
           </Menu.Item>
-          <Menu.Item key='clientes' icon={<UserOutlined />}>
+        <Menu.Item key="asociados" icon={<UserOutlined />}>
+            Asociados
+        </Menu.Item>
+          <Menu.Item key="clientes" icon={<UserOutlined />}>
             Clientes
           </Menu.Item>
           <Menu.Item key='propiedades' icon={<DollarOutlined />}>

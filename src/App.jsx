@@ -27,6 +27,7 @@ function App() {
   const { isAuthenticated, user } = useAuth()
   const [propertyData, setPropertyData] = useState([])
   const [isAdmin, setIsAdmin] = useState(false)
+  const [isAsociado, setIsAsociado] = useState(false)
   const [userData, setUserData] = useState(null)
 
   useEffect(() => {
@@ -38,6 +39,7 @@ function App() {
           if (userDoc.exists()) {
             setUserData(userDoc.data())
             setIsAdmin(userDoc.data().role === 'admin')
+            setIsAsociado(userDoc.data().role === 'asociado')
           } else {
             console.error(
               'No se encontró el documento del usuario en Firestore.',
@@ -85,9 +87,9 @@ function App() {
 
   return (
     <Router>
-      <Header isAdmin={isAdmin} isAuthenticated={isAuthenticated} />
+      <Header isAdmin={isAdmin} isAuthenticated={isAuthenticated} isAsociado={isAsociado} />
       <Routes>
-        {isAuthenticated && isAdmin && (
+        {isAuthenticated && (isAdmin || isAsociado ) && (
           <Route path='/' element={<AdminPanel />} />
         )}
         {(!isAuthenticated || !isAdmin) && (
