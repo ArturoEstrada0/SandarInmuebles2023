@@ -8,7 +8,7 @@ import './Header.css'
 import logo from "../assets/img/logo2.png";
 import texto from "../assets/img/sandarcom.png"
 
-const Header = ({ isAdmin}) => {
+const Header = ({ isAdmin, isAsociado } ) => {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const [activeSection, setActiveSection] = useState("");
@@ -55,7 +55,7 @@ const Header = ({ isAdmin}) => {
           <img src={texto} alt="Mi logotipo" style={logoStyle} className="logo" />
         </Link>
         <div className={`menu-links ${menuOpen ? "open" : ""}`}>
-        {!isAdmin && (
+        {!isAdmin && !isAsociado && (
             <>
           <Link
             to="/aboutUs"

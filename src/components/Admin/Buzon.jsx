@@ -3,6 +3,9 @@ import { Table, Tabs, notification, Badge, Input, Button } from "antd";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { SearchOutlined } from "@ant-design/icons";
+import { DownloadOutlined } from "@ant-design/icons";
+import * as XLSX from 'xlsx';
+
 
 const { TabPane } = Tabs;
 
@@ -442,6 +445,7 @@ const ContactList = () => {
             Reiniciar
           </Button>
         </div>
+        
       ),
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />,
       onFilter: (value, record) => record.propertyName.toLowerCase().includes(value.toLowerCase()),
@@ -607,6 +611,38 @@ const ContactList = () => {
     },
   ];
 
+  const downloadExcel = (tabKey) => {
+    let data, columns;
+    
+    if (tabKey === "contacts") {
+      data = contactDataContacts;
+      columns = columnsContacts;
+    } else if (tabKey === "msgpro") {
+      data = contactDataMsgPro;
+      columns = columnsMsgPro;
+    } else if (tabKey === "msgventa") {
+      data = contactDataMsgVenta;
+      columns = columnsMsgVenta;
+    }
+  
+    const dataToExport = [];
+    
+    data.forEach((contact) => {
+      const rowData = [];
+      columns.forEach((column) => {
+        rowData.push(contact[column.dataIndex]);
+      });
+      dataToExport.push(rowData);
+    });
+  
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([columns.map((column) => column.title), ...dataToExport]);
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+    XLSX.writeFile(wb, `${tabKey}_tabla.xlsx`);
+  };
+  
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Bandeja de Entrada</h2>
@@ -619,6 +655,12 @@ const ContactList = () => {
           }
           key="contacts"
         >
+        <div style={{ marginBottom: 16 }}> {/* Agrega un margen inferior al contenedor */}
+          <Button onClick={() => downloadExcel("contacts")} type="primary" icon={<DownloadOutlined />}>
+            Descargar Excel
+          </Button>
+        </div>
+
           <Table dataSource={contactDataContacts} columns={columnsContacts} loading={loadingContacts} />
         </TabPane>
         <TabPane
@@ -629,6 +671,13 @@ const ContactList = () => {
           }
           key="msgpro"
         >
+
+          <div style={{ marginBottom: 16 }}> {/* Agrega un margen inferior al contenedor */}
+              <Button onClick={() => downloadExcel("msgpro")} type="primary" icon={<DownloadOutlined />}>
+                Descargar Excel
+              </Button>
+            </div>
+
           <Table dataSource={contactDataMsgPro} columns={columnsMsgPro} loading={loadingMsgPro} />
         </TabPane>
         <TabPane
@@ -639,6 +688,13 @@ const ContactList = () => {
           }
           key="msgventa"
         >
+
+         <div style={{ marginBottom: 16 }}> {/* Agrega un margen inferior al contenedor */}
+            <Button onClick={() => downloadExcel("msgventa")} type="primary" icon={<DownloadOutlined />}>
+              Descargar Excel
+            </Button>
+          </div>
+
           <Table dataSource={contactDataMsgVenta} columns={columnsMsgVenta} loading={loadingMsgVenta} />
         </TabPane>
       </Tabs>

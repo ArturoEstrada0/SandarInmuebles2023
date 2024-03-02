@@ -9,6 +9,7 @@ import {
   MessageOutlined, // Importa el icono necesario
 } from '@ant-design/icons';
 import Inicio from './Inicio';
+import Asociados from './Asociados';
 import Clientes from './Clientes';
 import Propiedades from './Propiedades';
 import Contratos from './Contratos';
@@ -25,6 +26,8 @@ function AdminPanel() {
     switch (seccion) {
       case 'inicio':
         return <Inicio />;
+      case 'asociados':
+        return <Asociados />;
       case 'clientes':
         return <Clientes />;
       case 'propiedades':
@@ -50,6 +53,9 @@ function AdminPanel() {
           <Menu.Item key="inicio" icon={<HomeOutlined />}>
             Inicio
           </Menu.Item>
+        <Menu.Item key="asociados" icon={<UserOutlined />}>
+            Asociados
+        </Menu.Item>
           <Menu.Item key="clientes" icon={<UserOutlined />}>
             Clientes
           </Menu.Item>
