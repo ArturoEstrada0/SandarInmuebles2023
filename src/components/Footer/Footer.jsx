@@ -18,7 +18,7 @@ function Footer() {
             height: '85px',
             marginBottom: '15px',
             marginTop: '-10px',
-            opacity: '0.5',
+            opacity: '0.7',
           }}
         />
         <img
@@ -30,7 +30,7 @@ function Footer() {
             marginBottom: '15px',
             marginTop: '-10px',
             marginLeft: '-15px',
-            opacity: '0.5',
+            opacity: '0.7',
           }}
         />
         <p
