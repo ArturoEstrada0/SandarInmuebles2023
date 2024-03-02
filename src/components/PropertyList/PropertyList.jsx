@@ -67,6 +67,12 @@ const PropertyList = ({ onPropertyClick }) => {
 
   const { isAuthenticated, user } = useAuth() // Agrega esta línea para obtener el estado de autenticación y el usuario actual
 
+// Función para formatear los números con puntos cada tres dígitos
+const formatNumberWithDots = (number) => {
+  const unformattedNumber = number.toString().replace(/\,/g, ''); // Elimina los puntos
+  return unformattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Aplica el formato con puntos
+};
+
   useEffect(() => {
     // Verifica si el usuario está autenticado
     setUserAuthenticated(isAuthenticated)
@@ -97,18 +103,21 @@ const PropertyList = ({ onPropertyClick }) => {
   }, [])
 
   const handleMinPriceChange = (e) => {
-    const value = e.target.value
-    if (!isNaN(value) || value === '') {
-      setMinPrice(value)
+    const value = e.target.value.replace(/\,/g, '');
+    if (!isNaN(value) || value === "") {
+        const formattedValue = formatNumberWithDots(value);
+        setMinPrice(formattedValue);
     }
-  }
+};
+  
+const handleMaxPriceChange = (e) => {
+    const value = e.target.value.replace(/\,/g, '');
+    if (!isNaN(value) || value === "") {
+        const formattedValue = formatNumberWithDots(value);
+        setMaxPrice(formattedValue);
+    }
+};
 
-  const handleMaxPriceChange = (e) => {
-    const value = e.target.value
-    if (!isNaN(value) || value === '') {
-      setMaxPrice(value)
-    }
-  }
 
   const handleShowMoreClick = () => {
     setVisibleRows(visibleRows + 3) // Incrementar el número de filas visibles al hacer clic en "Ver más"
@@ -275,7 +284,7 @@ const PropertyList = ({ onPropertyClick }) => {
 
       return isConditionMatch && isTypeMatch && isPriceMatch // Actualiza aquí también
     })
-
+  
     setFilteredProperties(filtered)
   }
 
@@ -454,6 +463,7 @@ const PropertyList = ({ onPropertyClick }) => {
               Propiedades Destacadas
             </Title>
             <Row gutter={[16, 16]}>
+              
               {highlightedProperties.map((property) => (
                 <Col key={property.id} xs={24}>
                   <Card className='property-card' style={{ width: '100%' }}>
@@ -583,7 +593,7 @@ const PropertyList = ({ onPropertyClick }) => {
                                 Medios Baños: {property.medioBaño ?? 0}
                               </Text>
                             </Col>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
+                            <Col xs={8} style={{ marginRight: '-40px' }}>
                               <Text strong style={{ fontSize: '1.2rem' }}>
                                 <HomeOutlined
                                   style={{
@@ -594,7 +604,7 @@ const PropertyList = ({ onPropertyClick }) => {
                                 {property.tipoPropiedad}
                               </Text>
                             </Col>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
+                            <Col xs={8} style={{ marginRight: '-80px' }}>
                               <Text strong style={{ fontSize: '1.2rem' }}>
                                 <img
                                   src={m2Image}

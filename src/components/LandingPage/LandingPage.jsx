@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Layout, Row, Col, Button, Typography } from 'antd'
 import { Link } from 'react-router-dom'
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage'
-import { firestore } from '../firebase/firebase' // Importamos el objeto firestore para interactuar con Firestore
-import { doc, getDoc } from 'firebase/firestore' // Importamos las funciones necesarias para obtener el documento de Firestore
+import { firestore } from '../firebase/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 import CountUp from 'react-countup'
 import './LandingPage.css'
 
@@ -14,7 +14,7 @@ function LandingPage() {
   const [animated, setAnimated] = useState(false)
   const [currentImage, setCurrentImage] = useState(0)
   const [imageURLs, setImageURLs] = useState([])
-  const [landingPageData, setLandingPageData] = useState(null) // Estado para almacenar los datos de la página de inicio
+  const [landingPageData, setLandingPageData] = useState(null)
 
   useEffect(() => {
     setAnimated(true)
@@ -32,9 +32,6 @@ function LandingPage() {
         )
         setImageURLs(urls)
 
-        console.log('Todas las imágenes cargadas:', urls)
-
-        // Start the interval after images are loaded
         const interval = setInterval(() => {
           setCurrentImage((prevImage) => (prevImage + 1) % urls.length)
         }, 4000)
@@ -49,7 +46,7 @@ function LandingPage() {
 
     const fetchLandingPageData = async () => {
       try {
-        const docRef = doc(firestore, 'landingPageData', 'pageData') // Cambia 'pageData' al ID real de tu documento
+        const docRef = doc(firestore, 'landingPageData', 'pageData')
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
           const data = docSnap.data()
@@ -74,7 +71,7 @@ function LandingPage() {
           <Col xs={{ span: 24 }} md={{ span: 9 }}>
             <div
               className='landing-page-text'
-              style={{ height: '100%', padding: '0 15px' }}>
+              style={{ padding: '0 15px' }}>
               <Title
                 className='landing-page-title'
                 style={{
@@ -83,8 +80,7 @@ function LandingPage() {
                   marginTop: '20px',
                   textAlign: 'justify',
                 }}>
-                {landingPageData && landingPageData.title}{' '}
-                {/* Mostramos el título dinámico */}
+                {landingPageData && landingPageData.title}
               </Title>
               <Paragraph
                 style={{
@@ -92,8 +88,7 @@ function LandingPage() {
                   fontFamily: 'Lato, sans-serif',
                   textAlign: 'justify',
                 }}>
-                {landingPageData && landingPageData.subtitle}{' '}
-                {/* Mostramos el subtítulo dinámico */}
+                {landingPageData && landingPageData.subtitle}
               </Paragraph>
               <Link to='/inmuebles'>
                 <Button
@@ -104,7 +99,7 @@ function LandingPage() {
                     color: 'white',
                     border: '1px solid white',
                     borderRadius: '4px',
-                    padding: '30px 30px',
+                    padding: '15px 30px',
                     fontWeight: 'bold',
                     fontSize: '0.8rem',
                     fontFamily: 'Geometos',
@@ -152,11 +147,10 @@ function LandingPage() {
               </Row>
             </div>
           </Col>
-          <Col xs={{ span: 0 }} md={{ span: 15 }}>
+          <Col xs={{ span: 24 }} md={{ span: 15 }}>
             <div
               className='landing-page-image'
               style={{
-                height: '100%',
                 backgroundImage: `url(${
                   imageURLs.length > 0 ? imageURLs[currentImage] : ''
                 })`,
