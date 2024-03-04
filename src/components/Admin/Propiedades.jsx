@@ -38,6 +38,7 @@ import {
   getDocs,
   deleteDoc,
   updateDoc,
+  getDoc,
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import YouTube from 'react-youtube'
@@ -95,6 +96,7 @@ function Propiedades() {
   const [mapCenter, setMapCenter] = useState(moreliaCoords)
   const [markerCoords, setMarkerCoords] = useState(moreliaCoords)
   const [tableFilters, setTableFilters] = useState({})
+  const [propertyId, setPropertyId] = useState(null); // Agrega estado para almacenar el ID de la propiedad
 
   const [cardsActivadas, setCardsActivadas] = useState({})
 
@@ -300,38 +302,53 @@ function Propiedades() {
     setIsModalVisible(true)
   }
 
-  const handleEditarPropiedad = (key) => {
-    form.setFieldsValue(dataSource.find((property) => property.key === key))
-    setIsModalVisible(true)
-  }
+  const handleEditarPropiedad = async (key) => {
+    try {
+      const propertySnapshot = await getDoc(doc(firestore, 'propiedades', key));
+      if (propertySnapshot.exists()) {
+        const propertyData = propertySnapshot.data();
+        setPropertyId(key); // Establece el ID de la propiedad que se está editando
+        form.setFieldsValue(propertyData);
+        setIsModalVisible(true);
+      } else {
+        throw new Error('La propiedad no existe.');
+      }
+    } catch (error) {
+      console.error('Error al obtener la propiedad:', error);
+      notification.error({
+        message: 'Error al obtener la propiedad',
+        description: error.message || 'Ocurrió un error al obtener la propiedad.',
+      });
+    }
+  };
 
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
 
   const onFormSubmit = async (values, step) => {
-    setUploading(true) // Establecer el estado uploading a true cuando comienza la subida
-
+    setUploading(true); // Establecer el estado uploading a true cuando comienza la subida
+  
     try {
       if (
         step === 0 &&
         (!values.nombre || !values.ubicacion || !values.precio)
       ) {
-        throw new Error('Por favor, completa todos los campos obligatorios.')
+        throw new Error('Por favor, completa todos los campos obligatorios.');
       }
-
+  
       formData = {
         ...formData,
         status: 'activa',
         ...values,
         youtubeUrl,
         ubicacion: selectedLocation?.display_name,
-      }
-
+      };
+  
       if (step === 0) {
-        formData.tipoPropiedad = values.tipoPropiedad || ''
-        formData.condicion = values.condicion || ''
+        formData.tipoPropiedad = values.tipoPropiedad || '';
+        formData.condicion = values.condicion || '';
       }
-
+  
       if (step === 3) {
         if (typeof app !== 'undefined') {
           if (
@@ -339,59 +356,65 @@ function Propiedades() {
             values.fotos.fileList &&
             values.fotos.fileList.length > 0
           ) {
-            const imageId = Date.now().toString()
-
-            const uploadTasks = values.fotos.fileList.map(
-              async (photo, index) => {
-                const storageRef = ref(
-                  storage,
-                  `propiedades/${imageId}_${index}`,
-                )
-                await uploadBytes(storageRef, photo.originFileObj)
-
-                const imageURL = await getDownloadURL(storageRef)
-
-                return imageURL
-              },
-            )
-
-            const imageUrls = await Promise.all(uploadTasks)
-
-            formData = { ...formData, fotos: imageUrls, youtubeUrl }
-            formData = { ...formData, cardsActivadas }
-
-            const propiedadesCollection = collection(firestore, 'propiedades')
-            await addDoc(propiedadesCollection, formData)
-
+            const imageId = Date.now().toString();
+  
+            const uploadTasks = values.fotos.fileList.map(async (photo, index) => {
+              const storageRef = ref(storage, `propiedades/${imageId}_${index}`);
+              await uploadBytes(storageRef, photo.originFileObj);
+  
+              const imageURL = await getDownloadURL(storageRef);
+  
+              return imageURL;
+            });
+  
+            const imageUrls = await Promise.all(uploadTasks);
+  
+            // Verificar si formData.fotos ya está definido y si es un array
+            if (!Array.isArray(formData.fotos)) {
+              formData.fotos = []; // Inicializar formData.fotos como un array vacío si no lo es
+            }
+  
+            formData.fotos.push(...imageUrls);
+  
+            formData = { ...formData, youtubeUrl };
+            formData = { ...formData, cardsActivadas };
+  
+            const propiedadesCollection = collection(firestore, 'propiedades');
+            const propertyRef = doc(propiedadesCollection, propertyId); // Assuming you have propertyId defined
+            await updateDoc(propertyRef, formData); // Update the document with the new data
+  
             notification.success({
-              message: 'Propiedad guardada',
-              description: 'La propiedad ha sido guardada con éxito.',
-            })
-
-            setIsModalVisible(false)
+              message: 'Propiedad actualizada',
+              description: 'La propiedad ha sido actualizada con éxito.',
+            });
+  
+            setIsModalVisible(false);
           } else {
-            throw new Error(
-              'Por favor, selecciona al menos una foto para la propiedad.',
-            )
+            throw new Error('Por favor, selecciona al menos una foto para la propiedad.');
           }
         } else {
-          throw new Error('Firebase no está definido')
+          throw new Error('Firebase no está definido');
         }
       } else {
-        nextStep()
+        nextStep();
       }
     } catch (error) {
-      console.error('Error al guardar en Firebase:', error)
+      console.error('Error al guardar en Firebase:', error);
       notification.error({
         message: 'Error al guardar en Firebase',
         description:
           error.message || 'Ocurrió un error al intentar guardar la propiedad.',
-      })
+      });
     } finally {
-      setLoading(false)
-      setUploading(false) // Establecer el estado uploading a false en cualquier caso
+      setLoading(false);
+      setUploading(false); // Establecer el estado uploading a false en cualquier caso
     }
-  }
+  };
+  
+  
+  
+  
+  
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
