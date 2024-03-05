@@ -33,16 +33,17 @@ const CustomCarousel = ({ images, onImageClick }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="carousel-container" onClick={handleImageClick}>
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Slide ${index + 1}`}
-              className={`carousel-image ${
-                index === currentIndex ? "active" : ""
-              }`}
-            />
-          ))}
+         {images && images.length > 0 && images.map((image, index) => (
+  <img
+    key={index}
+    src={image}
+    alt={`Slide ${index + 1}`}
+    className={`carousel-image ${
+      index === currentIndex ? "active" : ""
+    }`}
+  />
+))}
+
           <div className={`carousel-overlay ${isHovered ? "visible" : ""}`}>
             <button className="carousel-button prev" onClick={handlePrev}>
               <LeftCircleFilled style={{ color: "white" }} />

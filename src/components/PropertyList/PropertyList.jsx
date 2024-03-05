@@ -1,5 +1,5 @@
 // PropertyList.jsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import {
   Layout,
   Row,
@@ -13,7 +13,7 @@ import {
   Modal,
   Carousel,
   Form,
-} from 'antd'
+} from "antd";
 import {
   HomeOutlined,
   DollarOutlined,
@@ -23,8 +23,8 @@ import {
   EnvironmentFilled,
   WhatsAppOutlined,
   YoutubeFilled,
-} from '@ant-design/icons'
-import './PropertyList.css'
+} from "@ant-design/icons";
+import "./PropertyList.css";
 import {
   collection,
   getDocs,
@@ -33,103 +33,103 @@ import {
   increment,
   getDoc,
   query,
-} from 'firebase/firestore'
-import { firestore } from '../firebase/firebase'
-import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRulerCombined, faToilet } from '@fortawesome/free-solid-svg-icons'
-import { faBath, faBed, faSearch } from '@fortawesome/free-solid-svg-icons'
+} from "firebase/firestore";
+import { firestore } from "../firebase/firebase";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRulerCombined, faToilet } from "@fortawesome/free-solid-svg-icons";
+import { faBath, faBed, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from "../../context/AuthContext";
 
-import CustomCarousel from './Carousel'
+import CustomCarousel from "./Carousel";
 
-import m2Image from '../../assets/img/m2.png'
-import logo from '../../assets/img/sandarNegativo.png'
+import m2Image from "../../assets/img/m2.png";
+import logo from "../../assets/img/sandarNegativo.png";
 
-const { Content } = Layout
-const { Option } = Select
-const { Title, Text } = Typography
+const { Content } = Layout;
+const { Option } = Select;
+const { Title, Text } = Typography;
 
 const PropertyList = ({ onPropertyClick }) => {
-  const [propertyClickCount, setPropertyClickCount] = useState(0)
-  const [filterType, setFilterType] = useState('all')
-  const [filterPrice, setFilterPrice] = useState([0, 1000000])
-  const [filterState, setFilterState] = useState('all')
-  const [filterCondition, setFilterCondition] = useState('all') // Cambia el nombre del estado
-  const [contactInfo, setContactInfo] = useState(null)
+  const [propertyClickCount, setPropertyClickCount] = useState(0);
+  const [filterType, setFilterType] = useState("all");
+  const [filterPrice, setFilterPrice] = useState([0, 1000000]);
+  const [filterState, setFilterState] = useState("all");
+  const [filterCondition, setFilterCondition] = useState("all"); // Cambia el nombre del estado
+  const [contactInfo, setContactInfo] = useState(null);
 
-  const [userAuthenticated, setUserAuthenticated] = useState(false)
-  const [visibleRows, setVisibleRows] = useState(50) // Estado para controlar el número de filas visibles
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [visibleRows, setVisibleRows] = useState(50); // Estado para controlar el número de filas visibles
 
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
-  const { isAuthenticated, user } = useAuth() // Agrega esta línea para obtener el estado de autenticación y el usuario actual
+  const { isAuthenticated, user } = useAuth(); // Agrega esta línea para obtener el estado de autenticación y el usuario actual
 
   useEffect(() => {
     // Verifica si el usuario está autenticado
-    setUserAuthenticated(isAuthenticated)
-  }, [isAuthenticated])
+    setUserAuthenticated(isAuthenticated);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const contactCollectionRef = collection(firestore, 'contactData')
-        const q = query(contactCollectionRef)
-        const querySnapshot = await getDocs(q)
+        const contactCollectionRef = collection(firestore, "contactData");
+        const q = query(contactCollectionRef);
+        const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
-          setContactInfo(doc.data())
-        })
+          setContactInfo(doc.data());
+        });
 
-        const contactDocRef = doc(firestore, 'contactData', 'contactInfo')
-        const docSnap = await getDoc(contactDocRef)
+        const contactDocRef = doc(firestore, "contactData", "contactInfo");
+        const docSnap = await getDoc(contactDocRef);
         if (docSnap.exists()) {
-          const data = docSnap.data()
+          const data = docSnap.data();
         }
       } catch (error) {
-        console.error('Error al obtener la información de contacto:', error)
+        console.error("Error al obtener la información de contacto:", error);
       }
-    }
+    };
 
-    fetchContactInfo()
-  }, [])
+    fetchContactInfo();
+  }, []);
 
   const handleMinPriceChange = (e) => {
-    const value = e.target.value
-    if (!isNaN(value) || value === '') {
-      setMinPrice(value)
+    const value = e.target.value;
+    if (!isNaN(value) || value === "") {
+      setMinPrice(value);
     }
-  }
+  };
 
   const handleMaxPriceChange = (e) => {
-    const value = e.target.value
-    if (!isNaN(value) || value === '') {
-      setMaxPrice(value)
+    const value = e.target.value;
+    if (!isNaN(value) || value === "") {
+      setMaxPrice(value);
     }
-  }
+  };
 
   const handleShowMoreClick = () => {
-    setVisibleRows(visibleRows + 3) // Incrementar el número de filas visibles al hacer clic en "Ver más"
-  }
+    setVisibleRows(visibleRows + 3); // Incrementar el número de filas visibles al hacer clic en "Ver más"
+  };
 
-  const [propertyData, setPropertyData] = useState([])
-  const [filteredProperties, setFilteredProperties] = useState([])
-  const [highlightedProperties, setHighlightedProperties] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [propertyData, setPropertyData] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [highlightedProperties, setHighlightedProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const propertiesSnapshot = await getDocs(
-          collection(firestore, 'propiedades'),
-        )
+          collection(firestore, "propiedades")
+        );
         const properties = propertiesSnapshot.docs
-          .filter((doc) => doc.data().status === 'activa') // Filtrar por el status "activa"
+          .filter((doc) => doc.data().status === "activa") // Filtrar por el status "activa"
           .map((doc) => {
-            const data = doc.data()
-            const features = data.activeFeatures || {}
+            const data = doc.data();
+            const features = data.activeFeatures || {};
 
             return {
               id: doc.id,
@@ -143,220 +143,239 @@ const PropertyList = ({ onPropertyClick }) => {
               halfBaths: data.medioBaño || 0,
               area: data.tamanioPropiedad || 0,
               areaBuild: data.metrosConstruidos || 0,
-              youtube: data.youtubeUrl || '',
+              youtube: data.youtubeUrl || "",
               image: data.fotos,
-            }
-          })
+            };
+          });
 
         // Inicializa el estado propertyData con isFavorite para cada propiedad
         const initialPropertyData = properties.map((property) => ({
           ...property,
           isFavorite: false, // Inicializar el estado isFavorite para cada propiedad
-        }))
+        }));
 
-        setPropertyData(initialPropertyData)
-        setFilteredProperties(initialPropertyData)
-        setHighlightedProperties(initialPropertyData)
+        setPropertyData(initialPropertyData);
+        setFilteredProperties(initialPropertyData);
+        setHighlightedProperties(initialPropertyData);
 
-        setLoading(false)
+        setLoading(false);
       } catch (error) {
-        console.error('Error al obtener propiedades:', error)
+        console.error("Error al obtener propiedades:", error);
       }
-    }
+    };
 
-    fetchProperties()
-  }, [])
+    fetchProperties();
+  }, []);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const propertiesSnapshot = await getDocs(
-          collection(firestore, 'propiedades'),
-        )
+          collection(firestore, "propiedades")
+        );
         const properties = propertiesSnapshot.docs
-          .filter((doc) => doc.data().status === 'activa') // Filtrar por el status "activa"
+          .filter((doc) => doc.data().status === "activa") // Filtrar por el status "activa"
           .map((doc) => ({
             id: doc.id,
             ...doc.data(),
-          }))
+          }));
 
         const highlighted = properties.filter(
-          (property) => property.highlighted,
-        )
+          (property) => property.highlighted
+        );
 
-        setHighlightedProperties(highlighted)
+        setHighlightedProperties(highlighted);
       } catch (error) {
-        console.error('Error al obtener propiedades:', error)
+        console.error("Error al obtener propiedades:", error);
       }
-    }
+    };
 
-    fetchProperties()
-  }, [])
+    fetchProperties();
+  }, []);
 
   const handlePropertyClick = async (propertyId) => {
     // Incrementa el contador local
 
-    setPropertyClickCount(propertyClickCount + 1)
+    setPropertyClickCount(propertyClickCount + 1);
 
     // Referencia al documento de la propiedad en Firestore
-    const propertyDocRef = doc(collection(firestore, 'propiedades'), propertyId)
+    const propertyDocRef = doc(
+      collection(firestore, "propiedades"),
+      propertyId
+    );
 
     // Actualiza el contador en Firestore
     try {
       await updateDoc(propertyDocRef, {
         clickCount: increment(1), // Incrementa el valor actual en 1
-      })
+      });
 
       // Llama a la función original pasada como prop (si es necesario)
       if (onPropertyClick) {
-        onPropertyClick(propertyId)
+        onPropertyClick(propertyId);
       }
-      const propertyURL = `/property/${propertyId}`
+      const propertyURL = `/property/${propertyId}`;
 
-      window.location.href = `/property/${propertyId}`
+      window.location.href = `/property/${propertyId}`;
     } catch (error) {
-      console.error('Error al actualizar el contador en Firestore:', error)
+      console.error("Error al actualizar el contador en Firestore:", error);
     }
-  }
+  };
 
-  const [favoriteProperties, setFavoriteProperties] = useState([])
+  const [favoriteProperties, setFavoriteProperties] = useState([]);
 
   const toggleFavorite = async (propertyId) => {
     try {
       if (!isAuthenticated) {
         // Si el usuario no está autenticado, redirige a la página de inicio de sesión
         // o muestra un mensaje para iniciar sesión
-        return
+        return;
       }
 
       const propertyIndex = propertyData.findIndex(
-        (property) => property.id === propertyId,
-      )
-      const updatedPropertyData = [...propertyData]
+        (property) => property.id === propertyId
+      );
+      const updatedPropertyData = [...propertyData];
       updatedPropertyData[propertyIndex] = {
         ...updatedPropertyData[propertyIndex],
         isFavorite: !updatedPropertyData[propertyIndex].isFavorite,
-      }
+      };
 
-      setPropertyData(updatedPropertyData) // Actualiza el estado propertyData
+      setPropertyData(updatedPropertyData); // Actualiza el estado propertyData
 
       if (favoriteProperties.includes(propertyId)) {
         setFavoriteProperties(
-          favoriteProperties.filter((id) => id !== propertyId),
-        )
+          favoriteProperties.filter((id) => id !== propertyId)
+        );
       } else {
-        setFavoriteProperties([...favoriteProperties, propertyId])
+        setFavoriteProperties([...favoriteProperties, propertyId]);
       }
 
       const propertyDocRef = doc(
-        collection(firestore, 'propiedades'),
-        propertyId,
-      )
+        collection(firestore, "propiedades"),
+        propertyId
+      );
 
       await updateDoc(propertyDocRef, {
         favoriteCount: increment(
-          favoriteProperties.includes(propertyId) ? -1 : 1,
+          favoriteProperties.includes(propertyId) ? -1 : 1
         ),
-      })
+      });
     } catch (error) {
-      console.error('Error al actualizar favoritos en Firestore:', error)
+      console.error("Error al actualizar favoritos en Firestore:", error);
     }
-  }
+  };
 
   const applyFilters = () => {
     const filtered = propertyData.filter((property) => {
       const isConditionMatch =
-        filterCondition === 'all' || property.condicion === filterCondition // Modifica la lógica aquí
+        filterCondition === "all" || property.condicion === filterCondition; // Modifica la lógica aquí
 
-      const isTypeMatch = filterType === 'all' || property.type === filterType
+      const isTypeMatch = filterType === "all" || property.type === filterType;
       const isPriceMatch =
-        (minPrice === '' || property.price >= parseInt(minPrice, 10)) &&
-        (maxPrice === '' || property.price <= parseInt(maxPrice, 10))
+        (minPrice === "" || property.price >= parseInt(minPrice, 10)) &&
+        (maxPrice === "" || property.price <= parseInt(maxPrice, 10));
 
-      return isConditionMatch && isTypeMatch && isPriceMatch // Actualiza aquí también
-    })
+      return isConditionMatch && isTypeMatch && isPriceMatch; // Actualiza aquí también
+    });
 
-    setFilteredProperties(filtered)
-  }
+    setFilteredProperties(filtered);
+  };
 
-  const [youtubeModalVisible, setYoutubeModalVisible] = useState(false)
-  const [videoId, setVideoId] = useState('')
-  const [selectedPhoto, setSelectedPhoto] = useState('')
+  const filteredHighlightedProperties = highlightedProperties.filter((property) => {
+    const isConditionMatch =
+      filterCondition === "all" || property.condicion === filterCondition;
+  
+    const isTypeMatch = filterType === "all" || property.tipoPropiedad === filterType;
+  
+    const isPriceMatch =
+      (minPrice === "" || property.precio >= parseInt(minPrice, 10)) &&
+      (maxPrice === "" || property.precio <= parseInt(maxPrice, 10));
+  
+    return isConditionMatch && isTypeMatch && isPriceMatch;
+  });
+
+
+  const [youtubeModalVisible, setYoutubeModalVisible] = useState(false);
+  const [videoId, setVideoId] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState("");
 
   const handleYoutubeButtonClick = (youtubeUrl) => {
     const regex =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    const match = youtubeUrl.match(regex)
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = youtubeUrl.match(regex);
 
     if (match) {
-      const extractedVideoId = match[1]
-      setVideoId(extractedVideoId)
-      setYoutubeModalVisible(true)
+      const extractedVideoId = match[1];
+      setVideoId(extractedVideoId);
+      setYoutubeModalVisible(true);
     } else {
       console.error(
-        'No se pudo encontrar el ID del video de YouTube en la URL proporcionada.',
-      )
+        "No se pudo encontrar el ID del video de YouTube en la URL proporcionada."
+      );
     }
-  }
+  };
 
   const handlePhotoClick = (photo) => {
-    setSelectedPhoto(photo)
-    setYoutubeModalVisible(true)
-  }
+    setSelectedPhoto(photo);
+    setYoutubeModalVisible(true);
+  };
 
   const [userData, setUserData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-  })
-  const [whatsappModalVisible, setWhatsappModalVisible] = useState(false)
+    name: "",
+    phone: "",
+    email: "",
+  });
+  const [whatsappModalVisible, setWhatsappModalVisible] = useState(false);
 
   // Función para manejar cambios en los datos del usuario
   const handleUserDataChange = (e) => {
-    const { name, value } = e.target
-    setUserData({ ...userData, [name]: value })
-  }
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
 
   // Función para abrir el modal
   const openModal = () => {
-    setWhatsappModalVisible(true)
-  }
+    setWhatsappModalVisible(true);
+  };
 
   // Función para cerrar el modal
   const closeModal = () => {
-    setWhatsappModalVisible(false)
-  }
+    setWhatsappModalVisible(false);
+  };
 
   // Función para manejar el envío de datos
   const handleSubmit = (property) => {
-    console.log(property)
+    console.log(property);
     // Aquí puedes generar el mensaje de WhatsApp con los datos del usuario
-    const message = `¡Hola! 👋\n\nEstoy interesad@ en la propiedad *${property.name}* ubicada en *${property.state}*. \n\nMi nombre es *${userData.name}* , mi teléfono es 📲 *${userData.phone}*  y mi correo electrónico es 📧 *${userData.email}*. \n\n¿Podrías proporcionarme más detalles sobre esta propiedad? 🏡\n\n🔗 URL de la propiedad: https://sandar-inmuebles.web.app/property/${property.id}`
+    const message = `¡Hola! 👋\n\nEstoy interesad@ en la propiedad *${property.name}* ubicada en *${property.state}*. \n\nMi nombre es *${userData.name}* , mi teléfono es 📲 *${userData.phone}*  y mi correo electrónico es 📧 *${userData.email}*. \n\n¿Podrías proporcionarme más detalles sobre esta propiedad? 🏡\n\n🔗 URL de la propiedad: https://sandar-inmuebles.web.app/property/${property.id}`;
 
     // Abre la ventana de chat de WhatsApp con el mensaje predefinido
     window.open(
       `https://api.whatsapp.com/send?phone=${
         contactInfo.phoneNumber
-      }&text=${encodeURIComponent(message)}`,
-    )
+      }&text=${encodeURIComponent(message)}`
+    );
 
     // Cierra el modal después de enviar el mensaje
-    closeModal()
-  }
+    closeModal();
+  };
 
   return (
-    <Content className='property-list'>
+    <Content className="property-list">
       <div
-        className='centered-card'
-        style={{ paddingTop: '32px', paddingBottom: '32px' }}>
-        <Card className='custom-card'>
+        className="centered-card"
+        style={{ paddingTop: "32px", paddingBottom: "32px" }}
+      >
+        <Card className="custom-card">
           <Title
             level={3}
             style={{
-              background: 'white',
-              fontFamily: 'Geometos',
-              fontSize: '1.3rem',
-            }}>
+              background: "white",
+              fontFamily: "Geometos",
+              fontSize: "1.3rem",
+            }}
+          >
             <SearchOutlined /> Búsqueda de Propiedades
           </Title>
           <Row gutter={[16, 16]}>
@@ -367,28 +386,29 @@ const PropertyList = ({ onPropertyClick }) => {
               <Select
                 value={filterType}
                 onChange={(value) => setFilterType(value)}
-                style={{ width: '100%' }}>
-                <Option value='all'>Todos</Option>
-                <Option value='Casa'>Casa</Option>
-                <Option value='Departamento'>Departamento</Option>
+                style={{ width: "100%" }}
+              >
+                <Option value="all">Todos</Option>
+                <Option value="Casa">Casa</Option>
+                <Option value="Departamento">Departamento</Option>
               </Select>
             </Col>
             <Col xs={24} sm={12} md={6} lg={6}>
               <Text strong>
                 <DollarOutlined /> Rango de Precio
               </Text>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: "flex" }}>
                 <Input
-                  placeholder='Mínimo'
+                  placeholder="Mínimo"
                   value={minPrice}
                   onChange={handleMinPriceChange}
-                  style={{ width: 'calc(50% - 8px)', marginRight: '8px' }}
+                  style={{ width: "calc(50% - 8px)", marginRight: "8px" }}
                 />
                 <Input
-                  placeholder='Máximo'
+                  placeholder="Máximo"
                   value={maxPrice}
                   onChange={handleMaxPriceChange}
-                  style={{ width: 'calc(50% - 8px)' }}
+                  style={{ width: "calc(50% - 8px)" }}
                 />
               </div>
             </Col>
@@ -399,10 +419,11 @@ const PropertyList = ({ onPropertyClick }) => {
               <Select
                 value={filterCondition}
                 onChange={(value) => setFilterCondition(value)}
-                style={{ width: '100%' }}>
-                <Option value='all'>Todos</Option>
-                <Option value='Venta'>Venta</Option>
-                <Option value='Renta'>Renta</Option>
+                style={{ width: "100%" }}
+              >
+                <Option value="all">Todos</Option>
+                <Option value="Venta">Venta</Option>
+                <Option value="Renta">Renta</Option>
               </Select>
             </Col>
             <Col
@@ -411,25 +432,27 @@ const PropertyList = ({ onPropertyClick }) => {
               md={6}
               lg={6}
               style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                marginTop: '16px',
-              }}>
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                marginTop: "16px",
+              }}
+            >
               <Button
-                type='primary'
+                type="primary"
                 onClick={applyFilters}
                 style={{
-                  backgroundColor: '#001529',
-                  color: 'white',
-                  fontFamily: 'Geometos',
-                }}>
+                  backgroundColor: "#001529",
+                  color: "white",
+                  fontFamily: "Geometos",
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faSearch}
-                  alt='Lupa de búsqueda'
+                  alt="Lupa de búsqueda"
                   style={{
-                    width: '16px',
-                    marginRight: '8px',
+                    width: "16px",
+                    marginRight: "8px",
                   }}
                 />
                 Buscar
@@ -440,39 +463,44 @@ const PropertyList = ({ onPropertyClick }) => {
       </div>
       {/* Sección para propiedades destacadas */}
       <div
-        style={{ display: 'flex', justifyContent: 'left', minHeight: '100vh' }}>
-        <div style={{ width: '100%' }}>
-          <div style={{ padding: '20px 0' }}>
+        style={{ display: "flex", justifyContent: "left", minHeight: "100vh" }}
+      >
+        <div style={{ width: "100%" }}>
+          <div style={{ padding: "20px 0" }}>
             <Title
               style={{
-                fontFamily: 'Geometos',
-                borderLeft: '3px solid #1890ff',
-                marginLeft: '20px',
-                paddingLeft: '15px',
+                fontFamily: "Geometos",
+                borderLeft: "3px solid #1890ff",
+                marginLeft: "20px",
+                paddingLeft: "15px",
               }}
-              level={3}>
+              level={3}
+            >
               Propiedades Destacadas
             </Title>
             <Row gutter={[16, 16]}>
-              {highlightedProperties.map((property) => (
+            {filteredHighlightedProperties.map((property) => (
                 <Col key={property.id} xs={24}>
-                  <Card className='property-card' style={{ width: '100%' }}>
+                  <Card className="property-card" style={{ width: "100%" }}>
                     <Row gutter={[16, 16]}>
                       <Col xs={24} sm={12} md={12} lg={8}>
                         <div
-                          className='property-image-container'
-                          onClick={() => handlePropertyClick(property.id)}>
-                          {property.condicion === 'Venta' && (
+                          className="property-image-container"
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
+                          {property.condicion === "Venta" && (
                             <div
-                              style={{ fontFamily: 'Geometos' }}
-                              className='sale-mark'>
+                              style={{ fontFamily: "Geometos" }}
+                              className="sale-mark"
+                            >
                               Venta
                             </div>
                           )}
-                          {property.condicion === 'Renta' && (
+                          {property.condicion === "Renta" && (
                             <div
-                              style={{ fontFamily: 'Geometos' }}
-                              className='rent-mark'>
+                              style={{ fontFamily: "Geometos" }}
+                              className="rent-mark"
+                            >
                               Renta
                             </div>
                           )}
@@ -484,137 +512,145 @@ const PropertyList = ({ onPropertyClick }) => {
                         sm={12}
                         md={12}
                         lg={14}
-                        style={{ margin: '0px 30px' }}>
+                        style={{ margin: "0px 30px" }}
+                      >
                         <div
-                          className='property-name'
+                          className="property-name"
                           style={{
-                            cursor: 'pointer',
-                            maxWidth: '90%',
-                            marginBottom: '10px',
+                            cursor: "pointer",
+                            maxWidth: "90%",
+                            marginBottom: "10px",
                           }}
-                          onClick={() => handlePropertyClick(property.id)}>
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
                           <Text
                             style={{
-                              fontSize: '1.3rem',
-                              color: '#1677ff',
-                              fontWeight: 'bold',
-                              fontFamily: 'Geometos',
-                            }}>
+                              fontSize: "1.3rem",
+                              color: "#1677ff",
+                              fontWeight: "bold",
+                              fontFamily: "Geometos",
+                            }}
+                          >
                             {property.nombre}
                           </Text>
                         </div>
                         <div
-                          className='property-location'
+                          className="property-location"
                           style={{
-                            cursor: 'pointer',
-                            maxWidth: '90%',
-                            marginBottom: '10px',
+                            cursor: "pointer",
+                            maxWidth: "90%",
+                            marginBottom: "10px",
                           }}
-                          onClick={() => handlePropertyClick(property.id)}>
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
                           <Text
                             style={{
-                              fontSize: '1.1rem',
-                              color: '#333',
-                              fontWeight: 'bold',
-                            }}>
+                              fontSize: "1.1rem",
+                              color: "#333",
+                              fontWeight: "bold",
+                            }}
+                          >
                             <EnvironmentFilled
-                              style={{ fontSize: '1.1rem', fontWeight: 'bold' }}
-                            />{' '}
+                              style={{ fontSize: "1.1rem", fontWeight: "bold" }}
+                            />{" "}
                             {property.ubicacion}
                           </Text>
                         </div>
                         <div
-                          className='property-price'
+                          className="property-price"
                           style={{
-                            cursor: 'pointer',
-                            marginTop: '10px',
-                            marginBottom: '10px',
+                            cursor: "pointer",
+                            marginTop: "10px",
+                            marginBottom: "10px",
                           }}
-                          onClick={() => handlePropertyClick(property.id)}>
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
                           <Text
                             style={{
-                              fontSize: '1.5rem',
-                              fontWeight: 'bold',
-                              marginTop: '10px',
-                            }}>
+                              fontSize: "1.5rem",
+                              fontWeight: "bold",
+                              marginTop: "10px",
+                            }}
+                          >
                             $ {property.precio.toLocaleString()} MXN
                           </Text>
                         </div>
-                        <div className='property-details'>
+                        <div className="property-details">
                           <Row
                             gutter={[16, 16]}
-                            style={{ marginBottom: '16px', marginTop: '20px' }}>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
-                              <Text strong style={{ fontSize: '1.2rem' }}>
+                            style={{ marginBottom: "16px", marginTop: "20px" }}
+                          >
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
                                 <FontAwesomeIcon
                                   icon={faBed}
                                   style={{
-                                    fontSize: '1.5rem',
-                                    fontWeight: 'bold',
-                                    marginRight: '5px',
+                                    fontSize: "1.5rem",
+                                    fontWeight: "bold",
+                                    marginRight: "5px",
                                   }}
                                 />
                                 Recámaras: {property.habitaciones}
                               </Text>
                             </Col>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
-                              <Text strong style={{ fontSize: '1.2rem' }}>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
                                 <FontAwesomeIcon
                                   icon={faBath}
-                                  alt='Baños'
+                                  alt="Baños"
                                   style={{
-                                    fontSize: '1.5rem',
-                                    marginRight: '5px',
+                                    fontSize: "1.5rem",
+                                    marginRight: "5px",
                                   }}
                                 />
                                 Baños: {property.baños}
                               </Text>
                             </Col>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
-                              <Text strong style={{ fontSize: '1.2rem' }}>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
                                 <FontAwesomeIcon
                                   icon={faToilet}
-                                  alt='Baños'
+                                  alt="Baños"
                                   style={{
-                                    fontSize: '1.5rem',
-                                    marginRight: '5px',
+                                    fontSize: "1.5rem",
+                                    marginRight: "5px",
                                   }}
                                 />
                                 Medios Baños: {property.medioBaño ?? 0}
                               </Text>
                             </Col>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
-                              <Text strong style={{ fontSize: '1.2rem' }}>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
                                 <HomeOutlined
                                   style={{
-                                    fontSize: '2rem',
-                                    fontWeight: 'bold',
+                                    fontSize: "2rem",
+                                    fontWeight: "bold",
                                   }}
                                 />
                                 {property.tipoPropiedad}
                               </Text>
                             </Col>
-                            <Col xs={8} style={{ marginRight: '-60px' }}>
-                              <Text strong style={{ fontSize: '1.2rem' }}>
+                            <Col xs={8} style={{ marginRight: "-60px" }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
                                 <img
                                   src={m2Image}
-                                  alt='m2'
+                                  alt="m2"
                                   style={{
-                                    width: '2rem',
-                                    height: '2rem',
-                                    marginRight: '5px',
+                                    width: "2rem",
+                                    height: "2rem",
+                                    marginRight: "5px",
                                   }}
                                 />
                                 {property.tamanioPropiedad} m²
                               </Text>
                             </Col>
                             <Col xs={8}>
-                              <Text strong style={{ fontSize: '1.2rem' }}>
+                              <Text strong style={{ fontSize: "1.2rem" }}>
                                 <FontAwesomeIcon
                                   icon={faRulerCombined}
                                   style={{
-                                    fontSize: '2rem',
-                                    marginRight: '5px',
+                                    fontSize: "2rem",
+                                    marginRight: "5px",
                                   }}
                                 />
                                 {property.metrosConstruidos} m²
@@ -623,17 +659,18 @@ const PropertyList = ({ onPropertyClick }) => {
                           </Row>
                         </div>
                         <div
-                          className='property-actions'
+                          className="property-actions"
                           style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: '6px',
-                            maxWidth: '90%',
-                            flexWrap: 'wrap',
-                          }}>
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "6px",
+                            maxWidth: "90%",
+                            flexWrap: "wrap",
+                          }}
+                        >
                           {userAuthenticated ? (
                             <Button
-                              type='primary'
+                              type="primary"
                               icon={
                                 property.isFavorite ? (
                                   <HeartFilled />
@@ -642,133 +679,144 @@ const PropertyList = ({ onPropertyClick }) => {
                                 )
                               }
                               onClick={(e) => {
-                                e.stopPropagation()
-                                toggleFavorite(property.id)
-                              }}>
+                                e.stopPropagation();
+                                toggleFavorite(property.id);
+                              }}
+                            >
                               {property.isFavorite
-                                ? 'Quitar de Favoritos'
-                                : 'Añadir a Favoritos'}
+                                ? "Quitar de Favoritos"
+                                : "Añadir a Favoritos"}
                             </Button>
                           ) : (
-                            <Link to='/login'>
+                            <Link to="/login">
                               <Button
-                                style={{ fontSize: '12px', flex: '1' }}
-                                type='primary'>
+                                style={{ fontSize: "12px", flex: "1" }}
+                                type="primary"
+                              >
                                 Añadir a Favoritos
                               </Button>
                             </Link>
                           )}
                           <div
                             style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              gap: '6px',
-                              flexWrap: 'wrap',
-                            }}>
+                              display: "flex",
+                              flexDirection: "row",
+                              gap: "6px",
+                              flexWrap: "wrap",
+                            }}
+                          >
                             <Button
-                              type='primary'
+                              type="primary"
                               style={{
-                                backgroundColor: '#25D366',
-                                borderColor: '#25D366',
-                                flex: '1',
+                                backgroundColor: "#25D366",
+                                borderColor: "#25D366",
+                                flex: "1",
                               }}
                               icon={<WhatsAppOutlined />}
-                              onClick={openModal}>
+                              onClick={openModal}
+                            >
                               WhatsApp
                             </Button>
                             <Modal
-                              title='Datos de Contacto'
+                              title="Datos de Contacto"
                               visible={whatsappModalVisible}
                               onCancel={closeModal}
                               footer={[
-                                <Button key='cancel' onClick={closeModal}>
+                                <Button key="cancel" onClick={closeModal}>
                                   Cancelar
                                 </Button>,
                                 <Button
-                                  key='submit'
-                                  type='primary'
-                                  onClick={() => handleSubmit(property)}>
+                                  key="submit"
+                                  type="primary"
+                                  onClick={() => handleSubmit(property)}
+                                >
                                   Enviar
                                 </Button>,
-                              ]}>
+                              ]}
+                            >
                               <div
                                 style={{
-                                  textAlign: 'center',
-                                  marginBottom: '20px',
-                                }}>
+                                  textAlign: "center",
+                                  marginBottom: "20px",
+                                }}
+                              >
                                 <img
                                   src={logo}
-                                  alt='Sandar Inmuebles'
-                                  style={{ width: '50%', maxWidth: '200px' }}
+                                  alt="Sandar Inmuebles"
+                                  style={{ width: "50%", maxWidth: "200px" }}
                                 />
                               </div>
                               <Form>
-                                <Form.Item label='Nombre'>
+                                <Form.Item label="Nombre">
                                   <Input
-                                    name='name'
+                                    name="name"
                                     value={userData.name}
                                     onChange={handleUserDataChange}
                                   />
                                 </Form.Item>
-                                <Form.Item label='Teléfono'>
+                                <Form.Item label="Teléfono">
                                   <Input
-                                    name='phone'
+                                    name="phone"
                                     value={userData.phone}
                                     onChange={handleUserDataChange}
                                   />
                                 </Form.Item>
-                                <Form.Item label='Correo electrónico'>
+                                <Form.Item label="Correo electrónico">
                                   <Input
-                                    name='email'
+                                    name="email"
                                     value={userData.email}
                                     onChange={handleUserDataChange}
                                   />
                                 </Form.Item>
                               </Form>
                             </Modal>
-                            {property.youtubeUrl !== '' && (
+                            {property.youtubeUrl !== "" && (
                               <Button
-                                type='primary'
+                                type="primary"
                                 style={{
-                                  backgroundColor: '#ffff',
-                                  borderColor: '#e31925',
-                                  color: 'black',
-                                  flex: '1',
+                                  backgroundColor: "#ffff",
+                                  borderColor: "#e31925",
+                                  color: "black",
+                                  flex: "1",
                                 }}
                                 icon={
-                                  <YoutubeFilled style={{ color: 'red' }} />
+                                  <YoutubeFilled style={{ color: "red" }} />
                                 }
                                 onClick={() =>
                                   handleYoutubeButtonClick(property.youtubeUrl)
-                                }>
+                                }
+                              >
                                 YouTube
                               </Button>
                             )}
                             <Modal
-                              title='Detalles de la Propiedad'
+                              title="Detalles de la Propiedad"
                               visible={youtubeModalVisible}
                               onCancel={() => setYoutubeModalVisible(false)}
                               footer={null}
                               centered
                               width={1200}
-                              bodyStyle={{ padding: '20px' }}>
+                              bodyStyle={{ padding: "20px" }}
+                            >
                               <Row gutter={[16, 16]}>
                                 <Col span={16}>
                                   <iframe
-                                    width='100%'
-                                    height='450'
+                                    width="100%"
+                                    height="450"
                                     src={`https://www.youtube.com/embed/${videoId}`}
-                                    frameborder='0'
+                                    frameborder="0"
                                     allowfullscreen
-                                    title='YouTube Video'></iframe>
+                                    title="YouTube Video"
+                                  ></iframe>
                                 </Col>
                                 <Col span={8}>
                                   <Text>Fotos de la propiedad:</Text>
                                   <div
                                     style={{
-                                      marginTop: '10px',
-                                      width: '100%',
-                                    }}>
+                                      marginTop: "10px",
+                                      width: "100%",
+                                    }}
+                                  >
                                     <Carousel autoplay>
                                       {property.fotos.map((photo, index) => (
                                         <div key={index}>
@@ -776,10 +824,10 @@ const PropertyList = ({ onPropertyClick }) => {
                                             src={photo}
                                             alt={`Property Photo ${index}`}
                                             style={{
-                                              width: '100%',
-                                              height: 'auto',
-                                              objectFit: 'cover',
-                                              cursor: 'pointer',
+                                              width: "100%",
+                                              height: "auto",
+                                              objectFit: "cover",
+                                              cursor: "pointer",
                                             }}
                                             onClick={() =>
                                               handlePhotoClick(photo)
@@ -789,24 +837,26 @@ const PropertyList = ({ onPropertyClick }) => {
                                       ))}
                                     </Carousel>
                                   </div>
-                                  <div style={{ marginTop: '20px' }}>
+                                  <div style={{ marginTop: "20px" }}>
                                     <Button
-                                      type='primary'
+                                      type="primary"
                                       onClick={() =>
                                         handlePropertyClick(property.id)
-                                      }>
+                                      }
+                                    >
                                       Ver más detalles
                                     </Button>
                                   </div>
                                   <div
                                     style={{
-                                      display: 'flex',
-                                      justifyContent: 'center',
-                                    }}>
+                                      display: "flex",
+                                      justifyContent: "center",
+                                    }}
+                                  >
                                     <img
                                       src={logo}
-                                      alt='Sandar Inmuebles'
-                                      style={{ width: '50%' }}
+                                      alt="Sandar Inmuebles"
+                                      style={{ width: "50%" }}
                                     />
                                   </div>
                                 </Col>
@@ -817,8 +867,8 @@ const PropertyList = ({ onPropertyClick }) => {
                       </Col>
                     </Row>
                   </Card>
-                  <div className='logo-container'>
-                    <img src={logo} alt='Sandar Inmuebles' className='logo' />
+                  <div className="logo-container">
+                    <img src={logo} alt="Sandar Inmuebles" className="logo" />
                   </div>
                 </Col>
               ))}
@@ -828,42 +878,46 @@ const PropertyList = ({ onPropertyClick }) => {
       </div>
 
       {/* Sección para propiedades filtradas */}
-      <div style={{ padding: '20px 0' }}>
+      <div style={{ padding: "20px 0" }}>
         <Title
           style={{
-            fontFamily: 'Geometos',
-            borderLeft: '3px solid #1890ff',
-            marginLeft: '20px',
-            paddingLeft: '15px',
+            fontFamily: "Geometos",
+            borderLeft: "3px solid #1890ff",
+            marginLeft: "20px",
+            paddingLeft: "15px",
           }}
-          level={3}>
+          level={3}
+        >
           Otras Propiedades
         </Title>
         <Row gutter={[16, 16]}>
           {loading ? (
-            <Spin tip='Cargando...' />
+            <Spin tip="Cargando..." />
           ) : (
             filteredProperties.slice(0, visibleRows).map((property) => (
               <Col key={property.id} xs={24} sm={24} md={24}>
-                <Card className='property-card'>
+                <Card className="property-card">
                   <Row gutter={[16, 16]}>
                     {/* Columna para la foto */}
                     <Col xs={24} sm={12} md={12} lg={8}>
                       <div
-                        className='property-image-container'
-                        onClick={() => handlePropertyClick(property.id)}>
+                        className="property-image-container"
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
                         {/* Renderiza la marca de venta o renta si es aplicable */}
-                        {property.condicion === 'Venta' && (
+                        {property.condicion === "Venta" && (
                           <div
-                            style={{ fontFamily: 'Geometos' }}
-                            className='sale-mark'>
+                            style={{ fontFamily: "Geometos" }}
+                            className="sale-mark"
+                          >
                             Venta
                           </div>
                         )}
-                        {property.condicion === 'Renta' && (
+                        {property.condicion === "Renta" && (
                           <div
-                            style={{ fontFamily: 'Geometos' }}
-                            className='rent-mark'>
+                            style={{ fontFamily: "Geometos" }}
+                            className="rent-mark"
+                          >
                             Renta
                           </div>
                         )}
@@ -876,148 +930,156 @@ const PropertyList = ({ onPropertyClick }) => {
                       sm={12}
                       md={12}
                       lg={14}
-                      style={{ margin: '0px 30px' }}>
+                      style={{ margin: "0px 30px" }}
+                    >
                       <div
-                        className='property-name'
+                        className="property-name"
                         style={{
-                          cursor: 'pointer',
-                          maxWidth: '90%',
-                          marginBottom: '10px',
+                          cursor: "pointer",
+                          maxWidth: "90%",
+                          marginBottom: "10px",
                         }}
-                        onClick={() => handlePropertyClick(property.id)}>
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
                         {/* Renderiza el nombre de propiedad */}
                         <Text
                           style={{
-                            fontSize: '1.3rem',
-                            color: '#1677ff',
-                            fontWeight: 'bold',
-                            fontFamily: 'Geometos',
-                          }}>
+                            fontSize: "1.3rem",
+                            color: "#1677ff",
+                            fontWeight: "bold",
+                            fontFamily: "Geometos",
+                          }}
+                        >
                           {property.name}
                         </Text>
                       </div>
 
                       <div
-                        className='property-location'
-                        style={{ cursor: 'pointer', maxWidth: '90%' }}
-                        onClick={() => handlePropertyClick(property.id)}>
+                        className="property-location"
+                        style={{ cursor: "pointer", maxWidth: "90%" }}
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
                         {/* Renderiza la ubicación */}
                         <Text
                           style={{
-                            fontSize: '1.1rem',
-                            color: '#333',
-                            fontWeight: 'bold',
-                          }}>
+                            fontSize: "1.1rem",
+                            color: "#333",
+                            fontWeight: "bold",
+                          }}
+                        >
                           <EnvironmentFilled
-                            style={{ fontSize: '1.1rem', fontWeight: 'bold' }}
-                          />{' '}
+                            style={{ fontSize: "1.1rem", fontWeight: "bold" }}
+                          />{" "}
                           {property.state}
                         </Text>
                       </div>
 
                       <div
-                        className='property-price'
+                        className="property-price"
                         style={{
-                          cursor: 'pointer',
-                          marginTop: '10px',
-                          marginBottom: '10px',
+                          cursor: "pointer",
+                          marginTop: "10px",
+                          marginBottom: "10px",
                         }}
-                        onClick={() => handlePropertyClick(property.id)}>
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
                         {/* Renderiza el precio */}
                         <Text
                           style={{
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                            marginTop: '10px',
+                            fontSize: "1.5rem",
+                            fontWeight: "bold",
+                            marginTop: "10px",
                           }}
-                          onClick={() => handlePropertyClick(property.id)}>
-                          {' '}
+                          onClick={() => handlePropertyClick(property.id)}
+                        >
+                          {" "}
                           $ {property.price.toLocaleString()} MXN
                         </Text>
                       </div>
-                      <div className='property-details'>
+                      <div className="property-details">
                         {/* Renderiza los detalles de la propiedad */}
                         <Row
                           gutter={[16, 16]}
                           style={{
-                            marginBottom: '16px',
-                            marginTop: '20px',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            gap: '20px',
-                          }}>
-                          <Col xs={8} style={{ marginRight: '-60px' }}>
-                            <Text strong style={{ fontSize: '1.2rem' }}>
+                            marginBottom: "16px",
+                            marginTop: "20px",
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            gap: "20px",
+                          }}
+                        >
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faBed}
                                 style={{
-                                  fontSize: '1.5rem',
-                                  fontWeight: 'bold',
-                                  marginRight: '5px',
+                                  fontSize: "1.5rem",
+                                  fontWeight: "bold",
+                                  marginRight: "5px",
                                 }}
-                              />{' '}
+                              />{" "}
                               Recámaras: {property.rooms}
                             </Text>
                           </Col>
-                          <Col xs={8} style={{ marginRight: '-60px' }}>
-                            <Text strong style={{ fontSize: '1.2rem' }}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faBath}
-                                alt='Baños'
+                                alt="Baños"
                                 style={{
-                                  fontSize: '1.5rem',
-                                  marginRight: '8px',
+                                  fontSize: "1.5rem",
+                                  marginRight: "8px",
                                 }}
-                              />{' '}
+                              />{" "}
                               Baños: {property.bathrooms}
                             </Text>
                           </Col>
-                          <Col xs={8} style={{ marginRight: '-60px' }}>
-                            <Text strong style={{ fontSize: '1.2rem' }}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faToilet}
-                                alt='Baños'
+                                alt="Baños"
                                 style={{
-                                  fontSize: '1.5rem',
-                                  marginRight: '8px',
+                                  fontSize: "1.5rem",
+                                  marginRight: "8px",
                                 }}
-                              />{' '}
+                              />{" "}
                               Medios Baños: {property.halfBaths ?? 0}
                             </Text>
                           </Col>
-                          <Col xs={8} style={{ marginRight: '-60px' }}>
-                            <Text strong style={{ fontSize: '1.2rem' }}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
                               <HomeOutlined
                                 style={{
-                                  fontSize: '2rem',
-                                  fontWeight: 'bold',
+                                  fontSize: "2rem",
+                                  fontWeight: "bold",
                                 }}
-                              />{' '}
+                              />{" "}
                               {property.type}
                             </Text>
                           </Col>
-                          <Col xs={8} style={{ marginRight: '-60px' }}>
-                            <Text strong style={{ fontSize: '1.2rem' }}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
                               <img
                                 src={m2Image}
-                                alt='m2'
+                                alt="m2"
                                 style={{
-                                  width: '2rem',
-                                  height: '2rem',
-                                  marginRight: '5px',
+                                  width: "2rem",
+                                  height: "2rem",
+                                  marginRight: "5px",
                                 }}
                               />
                               {property.area} m²
                             </Text>
                           </Col>
-                          <Col xs={8} style={{ marginRight: '-60px' }}>
-                            <Text strong style={{ fontSize: '1.2rem' }}>
+                          <Col xs={8} style={{ marginRight: "-60px" }}>
+                            <Text strong style={{ fontSize: "1.2rem" }}>
                               <FontAwesomeIcon
                                 icon={faRulerCombined}
                                 style={{
-                                  fontSize: '2rem',
-                                  marginRight: '5px',
+                                  fontSize: "2rem",
+                                  marginRight: "5px",
                                 }}
                               />
                               {property.areaBuild} m²
@@ -1026,18 +1088,19 @@ const PropertyList = ({ onPropertyClick }) => {
                         </Row>
                       </div>
                       <div
-                        className='property-actions'
+                        className="property-actions"
                         style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          gap: '6px',
-                          maxWidth: '90%',
-                          flexWrap: 'wrap',
-                        }}>
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: "6px",
+                          maxWidth: "90%",
+                          flexWrap: "wrap",
+                        }}
+                      >
                         {/* Renderiza el botón de favoritos */}
                         {userAuthenticated ? (
                           <Button
-                            type='primary'
+                            type="primary"
                             icon={
                               property.isFavorite ? (
                                 <HeartFilled />
@@ -1046,18 +1109,20 @@ const PropertyList = ({ onPropertyClick }) => {
                               )
                             }
                             onClick={(e) => {
-                              e.stopPropagation()
-                              toggleFavorite(property.id)
-                            }}>
+                              e.stopPropagation();
+                              toggleFavorite(property.id);
+                            }}
+                          >
                             {property.isFavorite
-                              ? 'Quitar de Favoritos'
-                              : 'Añadir a Favoritos'}
+                              ? "Quitar de Favoritos"
+                              : "Añadir a Favoritos"}
                           </Button>
                         ) : (
-                          <Link to='/login'>
+                          <Link to="/login">
                             <Button
-                              style={{ fontSize: '12px', flex: '1' }}
-                              type='primary'>
+                              style={{ fontSize: "12px", flex: "1" }}
+                              type="primary"
+                            >
                               Añadir a Favoritos
                             </Button>
                           </Link>
@@ -1066,88 +1131,94 @@ const PropertyList = ({ onPropertyClick }) => {
                         {/* Contenedor para los botones de YouTube y WhatsApp */}
                         <div
                           style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: '6px',
-                            flexWrap: 'wrap',
-                          }}>
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "6px",
+                            flexWrap: "wrap",
+                          }}
+                        >
                           {/* Botón de WhatsApp */}
                           <Button
-                            type='primary'
+                            type="primary"
                             style={{
-                              backgroundColor: '#25D366',
-                              borderColor: '#25D366',
-                              flex: '1',
+                              backgroundColor: "#25D366",
+                              borderColor: "#25D366",
+                              flex: "1",
                             }}
                             icon={<WhatsAppOutlined />}
-                            onClick={openModal}>
+                            onClick={openModal}
+                          >
                             WhatsApp
                           </Button>
 
-                          {property.youtube !== '' && (
+                          {property.youtube !== "" && (
                             <Button
-                              type='primary'
+                              type="primary"
                               style={{
-                                backgroundColor: '#ffff',
-                                borderColor: '#e31925',
-                                color: 'black',
-                                flex: '1',
+                                backgroundColor: "#ffff",
+                                borderColor: "#e31925",
+                                color: "black",
+                                flex: "1",
                               }}
-                              icon={<YoutubeFilled style={{ color: 'red' }} />}
+                              icon={<YoutubeFilled style={{ color: "red" }} />}
                               onClick={() =>
                                 handleYoutubeButtonClick(property.youtube)
-                              }>
+                              }
+                            >
                               YouTube
                             </Button>
                           )}
 
                           {/* Modal para solicitar datos del usuario */}
                           <Modal
-                            title='Datos de Contacto'
+                            title="Datos de Contacto"
                             visible={whatsappModalVisible}
                             onCancel={closeModal}
                             footer={[
-                              <Button key='cancel' onClick={closeModal}>
+                              <Button key="cancel" onClick={closeModal}>
                                 Cancelar
                               </Button>,
                               <Button
-                                key='submit'
-                                type='primary'
-                                onClick={() => handleSubmit(property)}>
+                                key="submit"
+                                type="primary"
+                                onClick={() => handleSubmit(property)}
+                              >
                                 Enviar
                               </Button>,
-                            ]}>
+                            ]}
+                          >
                             {/* Logotipo */}
                             <div
                               style={{
-                                textAlign: 'center',
-                                marginBottom: '20px',
-                              }}>
+                                textAlign: "center",
+                                marginBottom: "20px",
+                              }}
+                            >
                               <img
-                                className='logo-container'
+                                className="logo-container"
                                 src={logo}
-                                alt='Sandar Inmuebles'
-                                style={{ width: '50%', maxWidth: '200px' }}
+                                alt="Sandar Inmuebles"
+                                style={{ width: "50%", maxWidth: "200px" }}
                               />
                             </div>
                             <Form>
-                              <Form.Item label='Nombre'>
+                              <Form.Item label="Nombre">
                                 <Input
-                                  name='name'
+                                  name="name"
                                   value={userData.name}
                                   onChange={handleUserDataChange}
                                 />
                               </Form.Item>
-                              <Form.Item label='Teléfono'>
+                              <Form.Item label="Teléfono">
                                 <Input
-                                  name='phone'
+                                  name="phone"
                                   value={userData.phone}
                                   onChange={handleUserDataChange}
                                 />
                               </Form.Item>
-                              <Form.Item label='Correo electrónico'>
+                              <Form.Item label="Correo electrónico">
                                 <Input
-                                  name='email'
+                                  name="email"
                                   value={userData.email}
                                   onChange={handleUserDataChange}
                                 />
@@ -1159,8 +1230,8 @@ const PropertyList = ({ onPropertyClick }) => {
                     </Col>
                   </Row>
                   {/* Logotipo */}
-                  <div className='logo-container'>
-                    <img src={logo} alt='Sandar Inmuebles' className='logo' />
+                  <div className="logo-container">
+                    <img src={logo} alt="Sandar Inmuebles" className="logo" />
                   </div>
                 </Card>
               </Col>
@@ -1171,14 +1242,14 @@ const PropertyList = ({ onPropertyClick }) => {
 
       {/* Botón "Ver más" */}
       {visibleRows < filteredProperties.length && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <Button type='primary' onClick={handleShowMoreClick}>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <Button type="primary" onClick={handleShowMoreClick}>
             Ver más
           </Button>
         </div>
       )}
     </Content>
-  )
-}
+  );
+};
 
-export default PropertyList
+export default PropertyList;
