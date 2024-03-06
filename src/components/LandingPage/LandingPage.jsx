@@ -1,90 +1,92 @@
-import { useEffect, useState } from 'react'
-import { Layout, Row, Col, Button, Typography } from 'antd'
-import { Link } from 'react-router-dom'
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage'
-import { firestore } from '../firebase/firebase' // Importamos el objeto firestore para interactuar con Firestore
-import { doc, getDoc } from 'firebase/firestore' // Importamos las funciones necesarias para obtener el documento de Firestore
-import CountUp from 'react-countup'
-import './LandingPage.css'
+import { useEffect, useState } from 'react';
+import { Layout, Row, Col, Button, Typography } from 'antd';
+import { Link } from 'react-router-dom';
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { firestore } from '../firebase/firebase';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import CountUp from 'react-countup';
+import './LandingPage.css';
 
-const { Content } = Layout
-const { Title, Paragraph } = Typography
+const { Content } = Layout;
+const { Title, Paragraph } = Typography;
 
 function LandingPage() {
-  const [animated, setAnimated] = useState(false)
-  const [currentImage, setCurrentImage] = useState(0)
-  const [imageURLs, setImageURLs] = useState([])
-  const [landingPageData, setLandingPageData] = useState(null) // Estado para almacenar los datos de la página de inicio
+  const [animated, setAnimated] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
+  const [imageURLs, setImageURLs] = useState([]);
+  const [landingPageData, setLandingPageData] = useState(null);
+  const [availablePropertiesCount, setAvailablePropertiesCount] = useState(0);
 
   useEffect(() => {
-    setAnimated(true)
+    setAnimated(true);
 
-    const storage = getStorage()
-    const landingPageRef = ref(storage, 'LandingPage')
+    const storage = getStorage();
+    const landingPageRef = ref(storage, 'LandingPage');
 
     const fetchImages = async () => {
       try {
-        const imagesList = await listAll(landingPageRef)
+        const imagesList = await listAll(landingPageRef);
         const urls = await Promise.all(
           imagesList.items.map(async (imageRef) => {
-            return getDownloadURL(imageRef)
-          }),
-        )
-        setImageURLs(urls)
+            return getDownloadURL(imageRef);
+          })
+        );
+        setImageURLs(urls);
 
-        console.log('Todas las imágenes cargadas:', urls)
-
-        // Start the interval after images are loaded
         const interval = setInterval(() => {
-          setCurrentImage((prevImage) => (prevImage + 1) % urls.length)
-        }, 4000)
+          setCurrentImage((prevImage) => (prevImage + 1) % urls.length);
+        }, 4000);
 
         return () => {
-          clearInterval(interval)
-        }
+          clearInterval(interval);
+        };
       } catch (error) {
-        console.error('Error al obtener las imágenes:', error)
+        console.error('Error al obtener las imágenes:', error);
       }
-    }
+    };
 
     const fetchLandingPageData = async () => {
       try {
-        const docRef = doc(firestore, 'landingPageData', 'pageData') // Cambia 'pageData' al ID real de tu documento
-        const docSnap = await getDoc(docRef)
+        const docRef = doc(firestore, 'landingPageData', 'pageData');
+        const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          const data = docSnap.data()
-          setLandingPageData(data)
+          const data = docSnap.data();
+          setLandingPageData(data);
         }
       } catch (error) {
-        console.error(
-          'Error al obtener los datos de la página de inicio:',
-          error,
-        )
+        console.error('Error al obtener los datos de la página de inicio:', error);
       }
-    }
+    };
 
-    fetchImages()
-    fetchLandingPageData()
-  }, [])
+    const fetchAvailablePropertiesCount = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, 'propiedades'));
+        setAvailablePropertiesCount(querySnapshot.size);
+      } catch (error) {
+        console.error('Error al obtener el recuento de propiedades:', error);
+      }
+    };
+
+    fetchImages();
+    fetchLandingPageData();
+    fetchAvailablePropertiesCount();
+  }, []);
 
   return (
     <Content style={{ backgroundColor: '#e2f4fe' }}>
       <div className='landing-page-container'>
         <Row gutter={16}>
           <Col xs={{ span: 24 }} md={{ span: 9 }}>
-            <div
-              className='landing-page-text'
-              style={{ height: '100%', padding: '0 15px' }}>
+            <div className='landing-page-text' style={{ height: '100%', padding: '0 15px' }}>
               <Title
                 className='landing-page-title'
                 style={{
                   fontSize: '1.8rem',
                   fontFamily: 'Geometos',
                   marginTop: '20px',
-                  textAlign: 'justify',
+                  textAlign: 'left',
                 }}>
-                {landingPageData && landingPageData.title}{' '}
-                {/* Mostramos el título dinámico */}
+                {landingPageData && landingPageData.title}
               </Title>
               <Paragraph
                 style={{
@@ -92,8 +94,7 @@ function LandingPage() {
                   fontFamily: 'Lato, sans-serif',
                   textAlign: 'justify',
                 }}>
-                {landingPageData && landingPageData.subtitle}{' '}
-                {/* Mostramos el subtítulo dinámico */}
+                {landingPageData && landingPageData.subtitle}
               </Paragraph>
               <Link to='/inmuebles'>
                 <Button
@@ -121,11 +122,9 @@ function LandingPage() {
                   md={{ span: 8 }}
                   className={`landing-page-stat ${animated ? 'animated' : ''}`}>
                   <div className='landing-page-stat-number'>
-                    <CountUp end={300} duration={5} />+
+                    <CountUp end={availablePropertiesCount} duration={5} />
                   </div>
-                  <div className='landing-page-stat-title'>
-                    Propiedades Disponibles
-                  </div>
+                  <div className='landing-page-stat-title'>Inmuebles Disponibles</div>
                 </Col>
                 <Col
                   xs={{ span: 24 }}

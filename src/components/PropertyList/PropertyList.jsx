@@ -540,6 +540,7 @@ const PropertyList = ({ onPropertyClick }) => {
                 />
                 Buscar
               </Button>
+              
             </Col>
           </Row>
         </Card>
