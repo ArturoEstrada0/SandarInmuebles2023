@@ -38,6 +38,7 @@ import {
   getDocs,
   deleteDoc,
   updateDoc,
+  setDoc,
 } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import YouTube from 'react-youtube'
@@ -265,22 +266,35 @@ function Propiedades() {
     fetchData()
   }, [searchTerm, tableFilters])
 
-  const [featuresChecked, setFeaturesChecked] = useState({
-    Baño: false,
-    'Medios Baños': false,
-    Habitaciones: false,
-    Cocina: false,
-    Patio: false,
-    Jardín: false,
-    'Oficina/estudio': false,
-    Lavadero: false,
-    Sótano: false,
-    Ático: false,
-    Closets: false,
-    Terraza: false,
-    Cochera: false,
-    'numero de pisos': false,
-  })
+const [featuresChecked, setFeaturesChecked] = useState({
+  Baño: false,
+  'Medio Baño': false,
+  Habitaciones: false,
+  Cocina: false,
+  Jardín: false,
+  Terraza: false,
+  Ático: false,
+  Cochera: false,
+  Estacionamiento: false,
+  Alarma: false,
+  'Cámaras de seguridad': false,
+  'Sistema de sonido': false,
+  Bodega: false,
+  Vestidor: false,
+  Chimenea: false,
+  'Aire acondicionado': false,
+  Amueblado: false,
+  'Mascotas permitidas': false,
+  'Vista panorámica': false,
+  Gimnasio: false,
+  Piscina: false,
+  'Salón de eventos': false,
+  'Área de juegos': false,
+  'Vista al mar': false,
+  'Vista a la montaña': false,
+  'Vista a la ciudad': false,
+});
+
 
   const handleFeatureCheck = (feature) => {
     setFeaturesChecked((prevState) => ({
@@ -300,38 +314,59 @@ function Propiedades() {
     setIsModalVisible(true)
   }
 
-  const handleEditarPropiedad = (key) => {
-    form.setFieldsValue(dataSource.find((property) => property.key === key))
-    setIsModalVisible(true)
-  }
+  const [isEditing, setIsEditing] = useState("")
+  const [isKey, setIsKey] = useState("")
 
+  const handleEditarPropiedad = (key) => {
+    const propertyToEdit = dataSource.find((property) => property.key === key);
+    if (propertyToEdit) {
+      const propertyValues = {
+        ...propertyToEdit,
+        cardsActivadas: { ...propertyToEdit.cardsActivadas }, // Asegúrate de copiar el objeto mapa correctamente
+      };
+  
+      // Actualiza featuresChecked con las características activadas del registro
+      const updatedFeaturesChecked = { ...featuresChecked };
+      Object.keys(updatedFeaturesChecked).forEach((feature) => {
+        updatedFeaturesChecked[feature] = propertyValues.cardsActivadas[feature] || false;
+      });
+      setFeaturesChecked(updatedFeaturesChecked);
+  
+      form.setFieldsValue(propertyValues);
+      setIsModalVisible(true);
+      setIsKey(key);
+      setIsEditing(true);
+      console.log("Esta editando:", isEditing);
+      console.log("Esta es la key:", key);
+      console.log("Nueva key:", key); // Usar key directamente en lugar de isKey
+    }
+  };
+  
+  
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
 
   const onFormSubmit = async (values, step) => {
-    setUploading(true) // Establecer el estado uploading a true cuando comienza la subida
-
+    setUploading(true);
+  
     try {
-      if (
-        step === 0 &&
-        (!values.nombre || !values.ubicacion || !values.precio)
-      ) {
-        throw new Error('Por favor, completa todos los campos obligatorios.')
+      if (step === 0 && (!values.nombre || !values.ubicacion || !values.precio)) {
+        throw new Error('Por favor, completa todos los campos obligatorios.');
       }
-
+  
       formData = {
         ...formData,
         status: 'activa',
         ...values,
         youtubeUrl,
         ubicacion: selectedLocation?.display_name,
-      }
-
+      };
+  
       if (step === 0) {
-        formData.tipoPropiedad = values.tipoPropiedad || ''
-        formData.condicion = values.condicion || ''
+        formData.tipoPropiedad = values.tipoPropiedad || '';
+        formData.condicion = values.condicion || '';
       }
-
+  
       if (step === 3) {
         if (typeof app !== 'undefined') {
           if (
@@ -339,59 +374,71 @@ function Propiedades() {
             values.fotos.fileList &&
             values.fotos.fileList.length > 0
           ) {
-            const imageId = Date.now().toString()
-
+            const imageId = Date.now().toString();
+  
             const uploadTasks = values.fotos.fileList.map(
               async (photo, index) => {
                 const storageRef = ref(
                   storage,
                   `propiedades/${imageId}_${index}`,
-                )
-                await uploadBytes(storageRef, photo.originFileObj)
-
-                const imageURL = await getDownloadURL(storageRef)
-
-                return imageURL
+                );
+                await uploadBytes(storageRef, photo.originFileObj);
+  
+                const imageURL = await getDownloadURL(storageRef);
+  
+                return imageURL;
               },
-            )
-
-            const imageUrls = await Promise.all(uploadTasks)
-
-            formData = { ...formData, fotos: imageUrls, youtubeUrl }
-            formData = { ...formData, cardsActivadas }
-
-            const propiedadesCollection = collection(firestore, 'propiedades')
-            await addDoc(propiedadesCollection, formData)
-
+            );
+  
+            const imageUrls = await Promise.all(uploadTasks);
+  
+            formData = { ...formData, fotos: imageUrls, youtubeUrl };
+            formData = { ...formData, cardsActivadas };
+  
+            const propiedadesCollection = collection(firestore, 'propiedades');
+  
+            if (isEditing) {
+              console.log("si edita")
+              console.log("Values KEY:", isKey)
+              // Si se está editando, actualiza el documento existente en Firestore
+              const propertyDocRef = doc(firestore, 'propiedades', isKey);
+              await setDoc(propertyDocRef, formData); // Utiliza setDoc en lugar de addDoc
+            } else {
+              // Si no se está editando, agrega un nuevo documento a Firestore
+              await addDoc(propiedadesCollection, formData);
+            }
+  
             notification.success({
               message: 'Propiedad guardada',
               description: 'La propiedad ha sido guardada con éxito.',
-            })
-
-            setIsModalVisible(false)
+            });
+  
+            setIsModalVisible(false);
           } else {
             throw new Error(
-              'Por favor, selecciona al menos una foto para la propiedad.',
-            )
+              'Por favor, selecciona al menos una foto para la propiedad.'
+            );
           }
         } else {
-          throw new Error('Firebase no está definido')
+          throw new Error('Firebase no está definido');
         }
       } else {
-        nextStep()
+        nextStep();
       }
     } catch (error) {
-      console.error('Error al guardar en Firebase:', error)
+      console.error('Error al guardar en Firebase:', error);
       notification.error({
         message: 'Error al guardar en Firebase',
         description:
           error.message || 'Ocurrió un error al intentar guardar la propiedad.',
-      })
+      });
     } finally {
-      setLoading(false)
-      setUploading(false) // Establecer el estado uploading a false en cualquier caso
+      setLoading(false);
+      setUploading(false);
     }
-  }
+  };
+  
+  
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
