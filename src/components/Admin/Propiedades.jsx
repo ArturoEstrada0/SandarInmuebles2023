@@ -326,9 +326,9 @@ function Propiedades() {
     if (propertyToEdit) {
       const propertyValues = {
         ...propertyToEdit,
-        cardsActivadas: { ...propertyToEdit.cardsActivadas }, // Asegúrate de copiar el objeto mapa correctamente
+        cardsActivadas: { ...propertyToEdit.cardsActivadas },
       };
-
+  
       // Actualiza featuresChecked con las características activadas del registro
       const updatedFeaturesChecked = { ...featuresChecked };
       Object.keys(updatedFeaturesChecked).forEach((feature) => {
@@ -336,17 +336,28 @@ function Propiedades() {
           propertyValues.cardsActivadas[feature] || false;
       });
       setFeaturesChecked(updatedFeaturesChecked);
-
+  
       form.setFieldsValue(propertyValues);
       setIsModalVisible(true);
       setIsKey(key);
       setIsEditing(true);
       console.log("Esta editando:", isEditing);
       console.log("Esta es la key:", key);
-      console.log("Nueva key:", key); // Usar key directamente en lugar de isKey
+      console.log("Nueva key:", key);
     }
   };
 
+// Añade un efecto para actualizar el estado de cardsActivadas
+useEffect(() => {
+  if (isEditing) {
+    const propertyToEdit = dataSource.find((property) => property.key === isKey);
+    if (propertyToEdit) {
+      setCardsActivadas({ ...propertyToEdit.cardsActivadas });
+    }
+  }
+}, [isEditing, isKey, dataSource]);
+
+  
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
