@@ -318,6 +318,7 @@ function Propiedades() {
 
   const [isEditing, setIsEditing] = useState('')
   const [isKey, setIsKey] = useState('')
+  
 
   const handleEditarPropiedad = (key) => {
     const propertyToEdit = dataSource.find((property) => property.key === key)
@@ -334,6 +335,11 @@ function Propiedades() {
           propertyValues.cardsActivadas[feature] || false;
       });
       setFeaturesChecked(updatedFeaturesChecked);
+  
+      // Actualiza el estado de la URL de YouTube
+      if (propertyValues.youtubeUrl) {
+        setYoutubeUrl(propertyValues.youtubeUrl);
+      }
   
       form.setFieldsValue(propertyValues);
       setIsModalVisible(true);
