@@ -16,7 +16,7 @@ const Gallery = ({ images }) => {
   return (
     <div className='images-container pswp-gallery' id='gallery'>
       <div className='image-lar'>
-        <a href={images[0].url} data-pswp-width='2500' data-pswp-height='1600'>
+        <a href={images[0].url} data-pswp-width='2500' data-pswp-height='1667'>
           <img
             style={{ maxHeight: '50vh', objectFit: 'cover' }}
             loading='lazy'
@@ -31,7 +31,7 @@ const Gallery = ({ images }) => {
             key={i}
             href={image.url}
             data-pswp-width='2500'
-            data-pswp-height='1600'>
+            data-pswp-height='1667'>
             <img
               style={{ maxHeight: '25vh', objectFit: 'cover' }}
               loading='lazy'
@@ -47,7 +47,7 @@ const Gallery = ({ images }) => {
             key={i}
             href={image.url}
             data-pswp-width='2500'
-            data-pswp-height='1600'>
+            data-pswp-height='1667'>
             <img
               loading='lazy'
               src={image.url}
