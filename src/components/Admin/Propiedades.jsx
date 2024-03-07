@@ -928,6 +928,7 @@ function Propiedades() {
                   <Select.Option value="Edificio">Edificio</Select.Option>
                   <Select.Option value="Rancho">Rancho</Select.Option>
                   <Select.Option value="Hectareas">Hectareas</Select.Option>
+                  <Select.Option value="Huertas">Huertas</Select.Option>
                   {/* Agrega más opciones según sea necesario */}
                 </Select>
               </Form.Item>

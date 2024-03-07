@@ -38,6 +38,7 @@ import { firestore } from "../firebase/firebase";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAppleAlt,
   faClipboardList,
   faDollarSign,
   faDoorClosed,
@@ -49,6 +50,7 @@ import {
   faMoneyBillAlt,
   faRuler,
   faRulerCombined,
+  faSeedling,
   faToilet,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBath, faBed, faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -467,6 +469,9 @@ const PropertyList = ({ onPropertyClick }) => {
                 <Select.Option value="Hectareas">
                   <FontAwesomeIcon icon={faTree} /> Hectáreas
                 </Select.Option>
+                <Select.Option value="Huertas">
+  <FontAwesomeIcon icon={faSeedling} /> Huertas
+</Select.Option>
               </Select>
             </Col>
             <Col xs={24} sm={12} md={6} lg={6}>
