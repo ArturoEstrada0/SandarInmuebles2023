@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { firestore } from "../firebase/firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
 import "./FichaTecnica.css";
 import Logo from "../../assets/img/sandarPositivo.png";
+import LogoQR from "../../assets/img/sandarQR.png";
 import QRCode from "qrcode.react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import {
   faBed,
   faBath,
@@ -36,6 +35,7 @@ import {
   faToilet,
   faRulerCombined,
   faMap,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -133,83 +133,87 @@ const FichaTecnica = () => {
     if (!propertyData) return;
 
     const images = document.querySelectorAll(".ficha-tecnica-photos-info img");
-    const promises = Array.from(images).map((image) =>
-      new Promise((resolve) => {
-        if (image.complete) {
-          resolve();
-        } else {
-          image.addEventListener("load", () => resolve());
-          image.addEventListener("error", () => resolve());
-        }
-      })
+    const promises = Array.from(images).map(
+      (image) =>
+        new Promise((resolve) => {
+          if (image.complete) {
+            resolve();
+          } else {
+            image.addEventListener("load", () => resolve());
+            image.addEventListener("error", () => resolve());
+          }
+        })
     );
 
     Promise.all(promises).then(() => setImagesLoaded(true));
   }, [propertyData]);
 
-  const loadImage = (src) => {
-    return new Promise((resolve, reject) => {
-      fetch(src)
-        .then(response => response.blob())
-        .then(blob => {
-          const url = URL.createObjectURL(blob);
-          const image = new Image();
-          image.onload = () => {
-            URL.revokeObjectURL(url);
-            resolve(image);
-          };
-          image.onerror = reject;
-          image.src = url;
-        })
-        .catch(reject);
-    });
-  };
-  
-  
+  // Luego, en tu código para generar el PDF:
 
-  const downloadPDF = async () => {
-    if (!propertyData || !imagesLoaded) return;
-  
-    const pdf = new jsPDF();
-  
-    const images = document.querySelectorAll(".ficha-tecnica-photos-info img");
-    const imagePromises = Array.from(images).map((image) => loadImage(image.src));
-  
-    try {
-      const loadedImages = await Promise.all(imagePromises);
-  
-      loadedImages.forEach((loadedImage, index) => {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.width = loadedImage.width;
-        canvas.height = loadedImage.height;
-        context.drawImage(loadedImage, 0, 0);
-  
-        const imgData = canvas.toDataURL("image/jpeg");
-  
-        if (index !== 0) {
-          pdf.addPage();
-        }
-        pdf.addImage(imgData, "JPEG", 0, 0);
-      });
-  
-      pdf.save("ficha-tecnica.pdf");
-    } catch (error) {
-      console.error("Error al cargar las imágenes:", error);
+  const generatePDF = () => {
+    if (!imagesLoaded) return;
+
+    // Oculta todo el contenido de la página
+    document.body.style.visibility = "hidden";
+
+    // Muestra solo el contenido del componente que deseas imprimir
+    fichaTecnicaRef.current.style.visibility = "visible";
+
+    // Oculta el footer
+    const footer = document.getElementById("footer");
+    if (footer) {
+      footer.style.visibility = "hidden";
+    }
+
+    // Imprime el contenido de la página
+    window.print();
+
+    // Restaura la visibilidad del contenido de la página
+    document.body.style.visibility = "visible";
+
+    // Muestra el footer
+    if (footer) {
+      footer.style.visibility = "visible";
     }
   };
-  
-  
 
   return (
     <div className="ficha-tecnica-container">
       {propertyData && (
         <div className="ficha-tecnica" ref={fichaTecnicaRef}>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <button
+              className="download-button"
+              onClick={generatePDF}
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faDownload}
+                style={{ fontSize: "20px", color: "white" }}
+              />{" "}
+              Descargar ficha técnica
+            </button>
+          </div>
           <div className="ficha-tecnica-header">
             <img src={Logo} alt="Logo" className="ficha-tecnica-logo" />
             <div className="ficha-tecnica-property-title">
-              <h1>{propertyData.nombre}</h1>
-              <p className="ficha-tecnica-property-price">
+              <h1 style={{ fontSize: "32px" }}>{propertyData.nombre}</h1>
+              <p
+                className="ficha-tecnica-property-price"
+                style={{
+                  fontSize: "36px", // Aumenta el tamaño de la fuente
+                  color: "#fff", // Cambia el color del texto
+                  padding: "5px", // Agrega un poco de espacio alrededor del texto
+                }}
+              >
                 ${propertyData.precio.toLocaleString()} MXN
               </p>
             </div>
@@ -217,35 +221,59 @@ const FichaTecnica = () => {
           <div className="ficha-tecnica-details">
             <h2>Detalles de la propiedad</h2>
             <div className="ficha-tecnica-property-details">
-              <div className="ficha-tecnica-property-detail-card">
-                <div className="ficha-tecnica-detail-icon">
+              <div
+                className="ficha-tecnica-property-detail-card"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  className="ficha-tecnica-detail-icon"
+                  style={{ marginRight: "10px" }}
+                >
                   <FontAwesomeIcon icon={faBed} />
                 </div>
-                <p>
+                <p style={{ fontSize: "18px" }}>
                   <strong>Habitaciones:</strong> {propertyData.habitaciones}
                 </p>
               </div>
-              <div className="ficha-tecnica-property-detail-card">
-                <div className="ficha-tecnica-detail-icon">
+              <div
+                className="ficha-tecnica-property-detail-card"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  className="ficha-tecnica-detail-icon"
+                  style={{ marginRight: "10px" }}
+                >
                   <FontAwesomeIcon icon={faBath} />
                 </div>
-                <p>
+                <p style={{ fontSize: "18px" }}>
                   <strong>Baños:</strong> {propertyData.baños}
                 </p>
               </div>
-              <div className="ficha-tecnica-property-detail-card">
-                <div className="ficha-tecnica-detail-icon">
+              <div
+                className="ficha-tecnica-property-detail-card"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  className="ficha-tecnica-detail-icon"
+                  style={{ marginRight: "10px" }}
+                >
                   <FontAwesomeIcon icon={faMap} />
                 </div>
-                <p>
+                <p style={{ fontSize: "18px" }}>
                   <strong>Terreno:</strong> {propertyData.tamanioPropiedad}
                 </p>
               </div>
-              <div className="ficha-tecnica-property-detail-card">
-                <div className="ficha-tecnica-detail-icon">
+              <div
+                className="ficha-tecnica-property-detail-card"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div
+                  className="ficha-tecnica-detail-icon"
+                  style={{ marginRight: "10px" }}
+                >
                   <FontAwesomeIcon icon={faRulerCombined} />
                 </div>
-                <p>
+                <p style={{ fontSize: "18px" }}>
                   <strong>Metros Construidos:</strong>{" "}
                   {propertyData.tamanioPropiedad}
                 </p>
@@ -266,13 +294,16 @@ const FichaTecnica = () => {
                 )
             )}
           </div>
-          <div className="ficha-tecnica-description">
+          <div
+            className="ficha-tecnica-description"
+            style={{ marginBottom: "30px" }}
+          >
             <h2>Descripción</h2>
             <div className="ficha-tecnica-description-info">
               <p>{propertyData.descripcion}</p>
             </div>
           </div>
-          <div className="ficha-tecnica-photos">
+          <div className="ficha-tecnica-photos" style={{ marginTop: "30px" }}>
             <h2>Fotos</h2>
             <div className="ficha-tecnica-photos-info">
               <div className="ficha-tecnica-main-photo">
@@ -296,9 +327,22 @@ const FichaTecnica = () => {
               <p>Teléfono: 443-205-7194</p>
               <p>Correo electrónico: sandarinmuebles@gmail.com</p>
             </div>
-            <button onClick={downloadPDF}>Descargar PDF</button>
             <QRCode
-              value={`https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK`}
+              value="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK"
+              size={128}
+              imageSettings={{
+                src: LogoQR, // reemplaza esto con la ruta a tu logotipo
+                x: null,
+                y: null,
+                height: 34,
+                width: 34,
+                excavate: true,
+              }}
+              style={{
+                padding: "10px",
+                backgroundColor: "white",
+                borderRadius: "10px",
+              }} // Agrega padding y backgroundColor aquí
             />
           </div>
         </div>

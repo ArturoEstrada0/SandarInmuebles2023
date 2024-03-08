@@ -3,15 +3,16 @@
     justify-content: center;
     align-items: center;
     font-size: 12px; /* Tamaño de fuente general */
+    width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
 }
 
 .ficha-tecnica {
-    width: 100%; /* Cambiado para adaptarse al contenedor */
-    max-width: 800px;
+    width: 100%; /* Ya está configurado para adaptarse al 100% del ancho del contenedor */
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
 
 .ficha-tecnica-header {
@@ -22,6 +23,7 @@
     padding: 20px; /* Añade un espacio interno alrededor del contenido */
     border-radius: 10px;
     color: #fff;
+    
 }
 
 .ficha-tecnica-header img {
@@ -131,11 +133,13 @@
 }
 
 .ficha-tecnica-footer {
+    font-size: 18px;
     background-color: #001529; /* Mismo fondo que el header */
     padding: 40px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
 }
 
 .contact-info {
@@ -176,3 +180,37 @@
 .contact-button:hover {
     background-color: #084289;
 }
+
+@media print {
+    .ant-layout-sider-children {
+      display: none;
+    }
+  }
+  @media print {
+  .ant-layout-sider {
+    display: none;
+  }
+}
+
+@media print {
+    .ant-layout-footer {
+      display: none;
+    }
+  }
+  
+  @media print {
+    .header-div {
+      display: none;
+    }
+  }
+
+  @media print {
+  .contratos {
+    display: none;
+  }
+}
+@media print {
+    .download-button {
+      display: none;
+    }
+  }

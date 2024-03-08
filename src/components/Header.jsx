@@ -44,7 +44,7 @@ const Header = ({ isAdmin, isAsociado } ) => {
 
   return (
     <>
-      <div style={headerStyle}>
+<div style={headerStyle} className="header-div">
         {showToggle && (
           <div className={`toggle-button ${menuOpen ? "open" : ""}`} onClick={toggleMenu}>
             {menuOpen ? <CloseOutlined /> : <MenuOutlined />}
