@@ -6,7 +6,9 @@ import {
   DollarOutlined,
   KeyOutlined,
   MailOutlined,
-  MessageOutlined, // Importa el icono necesario
+  MessageOutlined,
+  FileOutlined,
+  FolderOutlined, // Importa el icono necesario
 } from '@ant-design/icons';
 import Inicio from './Inicio';
 import Asociados from './Asociados';
@@ -66,8 +68,8 @@ function AdminPanel() {
           <Menu.Item key='propiedades' icon={<DollarOutlined />}>
             Propiedades
           </Menu.Item>
-          <Menu.Item key='contratos' icon={<KeyOutlined />}>
-            Contratos
+          <Menu.Item key='contratos' icon={<FolderOutlined />}>
+            Ficha Tecnica
           </Menu.Item>
           <Menu.Item key='buzon' icon={<MailOutlined />}>
             Buzon
