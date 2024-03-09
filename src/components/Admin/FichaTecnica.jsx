@@ -202,7 +202,10 @@ const FichaTecnica = () => {
               Descargar ficha técnica
             </button>
           </div>
-          <div className="ficha-tecnica-header">
+          <div
+            className="ficha-tecnica-header"
+            style={{ position: "relative" }}
+          >
             <img src={Logo} alt="Logo" className="ficha-tecnica-logo" />
             <div className="ficha-tecnica-property-title">
               <h1 style={{ fontSize: "32px" }}>{propertyData.nombre}</h1>
@@ -216,6 +219,21 @@ const FichaTecnica = () => {
               >
                 ${propertyData.precio.toLocaleString()} MXN
               </p>
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+                fontSize: "16px",
+                color: "#fff",
+                backgroundColor: "blue",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                textTransform: "uppercase",
+              }}
+            >
+              <strong>EN {propertyData.condicion}</strong>
             </div>
           </div>
           <div className="ficha-tecnica-details">
@@ -275,7 +293,7 @@ const FichaTecnica = () => {
                 </div>
                 <p style={{ fontSize: "18px" }}>
                   <strong>Metros Construidos:</strong>{" "}
-                  {propertyData.tamanioPropiedad}
+                  {propertyData.metrosConstruidos}
                 </p>
               </div>
             </div>
@@ -306,7 +324,14 @@ const FichaTecnica = () => {
           <div className="ficha-tecnica-photos" style={{ marginTop: "30px" }}>
             <h2>Fotos</h2>
             <div className="ficha-tecnica-photos-info">
-              <div className="ficha-tecnica-main-photo">
+              <div
+                className="ficha-tecnica-main-photo"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <img src={propertyData.fotos[0]} alt="Main" />
               </div>
               <div className="ficha-tecnica-small-photos">

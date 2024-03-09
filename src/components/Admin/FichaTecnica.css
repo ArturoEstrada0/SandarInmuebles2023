@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px; /* Tamaño de fuente general */
+    font-size: 18px; /* Tamaño de fuente general */
     width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
 }
 
@@ -40,7 +40,7 @@
 }
 
 .ficha-tecnica-main-photo img {
-    width: 100%;
+    width: 70%;
     height: auto;
     object-fit: cover;
     border-radius: 5px;
@@ -53,7 +53,7 @@
 }
 
 .ficha-tecnica-small-photos img {
-    width: calc(15% - 10px); /* Para que haya un espacio entre las imágenes */
+    width: calc(20% - 10px); /* Para que haya un espacio entre las imágenes */
     height: auto;
     object-fit: cover;
     border-radius: 3px;
