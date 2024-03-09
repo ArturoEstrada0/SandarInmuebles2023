@@ -68,7 +68,7 @@ library.add(
   faMap
 );
 
-const FichaTecnica = () => {
+const FichaTecnica = ({ propertyId }) => {
   const [propertyData, setPropertyData] = useState(null);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const fichaTecnicaRef = useRef(null);
@@ -110,10 +110,7 @@ const FichaTecnica = () => {
   useEffect(() => {
     const getPropertyData = async () => {
       try {
-        const propertyRef = doc(
-          collection(firestore, "propiedades"),
-          "2qfo9XJjAkNw7MYfNgNK"
-        );
+        const propertyRef = doc(collection(firestore, "propiedades"), propertyId); // Usa la propiedad propertyId aquí
         const docSnapshot = await getDoc(propertyRef);
 
         if (docSnapshot.exists()) {
@@ -127,7 +124,7 @@ const FichaTecnica = () => {
     };
 
     getPropertyData();
-  }, []);
+  }, [propertyId]); // Añade propertyId como dependencia
 
   useEffect(() => {
     if (!propertyData) return;
@@ -217,7 +214,12 @@ const FichaTecnica = () => {
                   padding: "5px", // Agrega un poco de espacio alrededor del texto
                 }}
               >
-                ${propertyData.precio.toLocaleString()} MXN
+                {new Intl.NumberFormat("es-MX", {
+                  style: "currency",
+                  currency: "MXN",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(propertyData.precio)} MXN
               </p>
             </div>
             <div
@@ -300,17 +302,33 @@ const FichaTecnica = () => {
           </div>
           <h2>Caracteristicas</h2>
           <div className="ficha-tecnica-property-cards">
-            {Object.entries(propertyData.cardsActivadas).map(
-              ([key, value]) =>
-                value && (
-                  <div className="ficha-tecnica-property-card" key={key}>
-                    <div className="ficha-tecnica-icon-text-wrapper">
-                      <FontAwesomeIcon icon={getIcon(key)} />
-                      <span className="ficha-tecnica-card-text">{key}</span>
+            {Object.entries(propertyData.cardsActivadas)
+              .filter(
+                ([key]) =>
+                  ![
+                    "Habitaciones",
+                    "Baño",
+                    "Terreno",
+                    "Metros Construidos",
+                  ].includes(key)
+              )
+              .map(
+                ([key, value]) =>
+                  value && (
+                    <div className="ficha-tecnica-property-card" key={key}>
+                      <div className="ficha-tecnica-icon-text-wrapper">
+                        <FontAwesomeIcon icon={getIcon(key)} />
+                        <span className="ficha-tecnica-card-text">
+                          {key}
+                          {key === "Medio Baño" &&
+                            `: ${propertyData.medioBaño}`}
+                          {key === "Estacionamiento" &&
+                            `: ${propertyData.estacionamiento}`}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )
-            )}
+                  )
+              )}
           </div>
           <div
             className="ficha-tecnica-description"
@@ -346,29 +364,74 @@ const FichaTecnica = () => {
               </div>
             </div>
           </div>
-          <div className="ficha-tecnica-footer">
+          <div
+            className="ficha-tecnica-footer"
+            style={{ position: "relative" }}
+          >
             <div className="contact-info">
               <h2>Datos de contacto:</h2>
-              <p>Teléfono: 443-205-7194</p>
-              <p>Correo electrónico: sandarinmuebles@gmail.com</p>
+              <p>
+                Teléfono | Whatsapp:{" "}
+                <a
+                  href="https://wa.me/4432057194"
+                  style={{ color: "#007bff", textDecoration: "none" }}
+                >
+                  443-205-7194
+                </a>
+              </p>
+              <p>
+                Correo electrónico:{" "}
+                <a
+                  href={`mailto:sandarinmuebles@gmail.com`}
+                  style={{ color: "#007bff", textDecoration: "none" }}
+                >
+                  sandarinmuebles@gmail.com
+                </a>
+              </p>
             </div>
-            <QRCode
-              value="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK"
-              size={128}
-              imageSettings={{
-                src: LogoQR, // reemplaza esto con la ruta a tu logotipo
-                x: null,
-                y: null,
-                height: 34,
-                width: 34,
-                excavate: true,
-              }}
+            <div className="qr-code-container">
+              <QRCode
+                value="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK"
+                size={128}
+                imageSettings={{
+                  src: LogoQR,
+                  height: 34,
+                  width: 34,
+                  excavate: true,
+                }}
+                style={{
+                  padding: "10px",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                }}
+              />
+              {/* Enlace "Ver Propiedad" */}
+              <p style={{textAlign: "center",  color: "#007bff", textDecoration: "none"}}>
+                <a href="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK">
+                  Ver Propiedad
+                </a>
+              </p>
+            </div>
+
+            {/* Enlace en el centro y abajo */}
+            <div
+              className="center-bottom-link"
               style={{
-                padding: "10px",
-                backgroundColor: "white",
-                borderRadius: "10px",
-              }} // Agrega padding y backgroundColor aquí
-            />
+                position: "absolute",
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                textAlign: "center",
+                width: "100%",
+              }}
+            >
+              <a
+                href="https://sandarinmuebles.com"
+                style={{ color: "#007bff", textDecoration: "none" }}
+              >
+                SandarInmuebles.com
+              </a>
+            </div>
           </div>
         </div>
       )}
