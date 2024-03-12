@@ -110,7 +110,10 @@ const FichaTecnica = ({ propertyId }) => {
   useEffect(() => {
     const getPropertyData = async () => {
       try {
-        const propertyRef = doc(collection(firestore, "propiedades"), propertyId); // Usa la propiedad propertyId aquí
+        const propertyRef = doc(
+          collection(firestore, "propiedades"),
+          propertyId
+        ); // Usa la propiedad propertyId aquí
         const docSnapshot = await getDoc(propertyRef);
 
         if (docSnapshot.exists()) {
@@ -150,6 +153,16 @@ const FichaTecnica = ({ propertyId }) => {
   const generatePDF = () => {
     if (!imagesLoaded) return;
 
+    // Guarda el elemento padre original
+    const originalParent = fichaTecnicaRef.current.parentElement;
+
+    // Crea un nuevo div al final del body
+    const printContainer = document.createElement("div");
+    document.body.appendChild(printContainer);
+
+    // Mueve el contenido a imprimir al nuevo div
+    printContainer.appendChild(fichaTecnicaRef.current);
+
     // Oculta todo el contenido de la página
     document.body.style.visibility = "hidden";
 
@@ -172,6 +185,12 @@ const FichaTecnica = ({ propertyId }) => {
     if (footer) {
       footer.style.visibility = "visible";
     }
+
+    // Mueve el contenido a imprimir de vuelta a su lugar original
+    originalParent.appendChild(fichaTecnicaRef.current);
+
+    // Elimina el div que se creó para imprimir
+    document.body.removeChild(printContainer);
   };
 
   return (
@@ -194,7 +213,7 @@ const FichaTecnica = ({ propertyId }) => {
             >
               <FontAwesomeIcon
                 icon={faDownload}
-                style={{ fontSize: "20px", color: "white" }}
+                style={{ fontSize: "30px", color: "white" }}
               />{" "}
               Descargar ficha técnica
             </button>
@@ -219,7 +238,8 @@ const FichaTecnica = ({ propertyId }) => {
                   currency: "MXN",
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
-                }).format(propertyData.precio)} MXN
+                }).format(propertyData.precio)}{" "}
+                MXN
               </p>
             </div>
             <div
@@ -391,7 +411,7 @@ const FichaTecnica = ({ propertyId }) => {
             </div>
             <div className="qr-code-container">
               <QRCode
-                value="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK"
+                value={`https://sandar-inmuebles.web.app/property/${propertyId}`}
                 size={128}
                 imageSettings={{
                   src: LogoQR,
@@ -405,8 +425,15 @@ const FichaTecnica = ({ propertyId }) => {
                   borderRadius: "10px",
                 }}
               />
+
               {/* Enlace "Ver Propiedad" */}
-              <p style={{textAlign: "center",  color: "#007bff", textDecoration: "none"}}>
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#007bff",
+                  textDecoration: "none",
+                }}
+              >
                 <a href="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK">
                   Ver Propiedad
                 </a>

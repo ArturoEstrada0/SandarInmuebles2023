@@ -17,6 +17,7 @@ import {
   Radio,
   Card,
   Spin,
+  Drawer,
 } from "antd";
 import {
   CopyOutlined,
@@ -72,6 +73,8 @@ import {
   faChess,
   faWater,
   faCity,
+  faLink,
+  faFilePdf,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
@@ -167,18 +170,18 @@ function Propiedades() {
     });
   };
 
-  const [propertyDetailsModalVisible, setPropertyDetailsModalVisible] =
-    useState(false);
+  const [isModalVisibleFicha, setIsModalVisibleFicha] = useState(false);
   const [selectedPropertyKey, setSelectedPropertyKey] = useState(null);
 
-  const handleOpenPropertyDetailsModal = (recordKey) => {
-    setSelectedPropertyKey(recordKey);
-    setPropertyDetailsModalVisible(true);
+  const handleOpenPropertyDetailsModal = (key) => {
+    if (!isModalVisibleFicha) {
+      setSelectedPropertyKey(key);
+      setIsModalVisibleFicha(true);
+    }
   };
 
   const handleClosePropertyDetailsModal = () => {
-    setSelectedPropertyKey(null);
-    setPropertyDetailsModalVisible(false);
+    setIsModalVisibleFicha(false);
   };
 
   const [highlightedProperties, setHighlightedProperties] = useState([]);
@@ -765,17 +768,24 @@ function Propiedades() {
 
           {/* Agrega el botón para abrir el modal */}
           <Button onClick={() => handleOpenPropertyDetailsModal(record.key)}>
-            Ficha Técnica
+            <span style={{ color: "#E74C3C" }}>
+              <FontAwesomeIcon icon={faFilePdf} />
+            </span>
           </Button>
 
           {/* Renderiza el modal */}
           <Modal
-            title="Detalles de la Propiedad"
-            visible={propertyDetailsModalVisible}
+            title={
+              <span>
+                <FontAwesomeIcon icon={faFilePdf} />
+                {" Detalles de la Propiedad"}
+              </span>
+            }
+            visible={isModalVisibleFicha}
+            footer={null} // Oculta el footer
             onCancel={handleClosePropertyDetailsModal}
-            footer={null}
             width={800} // Ancho del modal (en píxeles)
-            height={600} // Alto del modal (en píxeles)
+            styles={{ maxHeight: "90vh", overflow: "hidden" }} // Cambio de bodyStyle a styles
           >
             {/* Renderiza el componente FichaTecnica dentro del modal */}
             {selectedPropertyKey && (
@@ -790,7 +800,9 @@ function Propiedades() {
               )
             }
           >
-            <CopyOutlined />
+            <span style={{ color: "#1E90FF" }}>
+              <FontAwesomeIcon icon={faLink} />
+            </span>
           </Button>
         </Space>
       ),

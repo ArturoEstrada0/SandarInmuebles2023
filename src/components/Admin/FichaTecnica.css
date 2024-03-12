@@ -1,112 +1,109 @@
 .ficha-tecnica-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px; /* Tamaño de fuente general */
-    width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px; /* Tamaño de fuente general */
+  width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
 }
 
 .ficha-tecnica {
-    width: 100%; /* Ya está configurado para adaptarse al 100% del ancho del contenedor */
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+  width: 100%; /* Ya está configurado para adaptarse al 100% del ancho del contenedor */
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .ficha-tecnica-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    background-color: #001529; /* Color de fondo */
-    padding: 20px; /* Añade un espacio interno alrededor del contenido */
-    border-radius: 10px;
-    color: #fff;
-    
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #001529; /* Color de fondo */
+  padding: 20px; /* Añade un espacio interno alrededor del contenido */
+  border-radius: 10px;
+  color: #fff;
 }
 
 .ficha-tecnica-header img {
-    width: 40%;
-    height: 40%;
+  width: 40%;
+  height: 40%;
 }
 
 .ficha-tecnica-details {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .ficha-tecnica-photos {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .ficha-tecnica-main-photo img {
-    width: 70%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 70%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .ficha-tecnica-small-photos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center; /* Centrar las imágenes pequeñas */
 }
 
 .ficha-tecnica-small-photos img {
-    width: calc(20% - 10px); /* Para que haya un espacio entre las imágenes */
-    height: auto;
-    object-fit: cover;
-    border-radius: 3px;
+  width: calc(20% - 10px); /* Para que haya un espacio entre las imágenes */
+  height: auto;
+  object-fit: cover;
+  border-radius: 3px;
 }
 
 .ficha-tecnica-contact-info {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .ficha-tecnica-property-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .ficha-tecnica-property-detail-card {
-    width: calc(50% - 10px); /* Dos cards por fila */
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+  width: calc(50% - 10px); /* Dos cards por fila */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
 .ficha-tecnica-property-detail-card p {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .ficha-tecnica-detail-icon {
-    font-size: 24px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .ficha-tecnica-property-cards {
-    column-count: 3;
-    column-gap: 20px;
+  column-count: 3;
+  column-gap: 20px;
 }
 
 .ficha-tecnica-property-card {
-    break-inside: avoid;
+  break-inside: avoid;
 }
 
 .ficha-tecnica-icon-text-wrapper {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .ficha-tecnica-card-text {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .ficha-tecnica svg {
-    color: #0d56bb;
+  color: #0d56bb;
 }
 
 /* Agrega la tipografía Geometos a todos los títulos */
@@ -116,102 +113,168 @@
 .ficha-tecnica h4,
 .ficha-tecnica h5,
 .ficha-tecnica h6 {
-    font-family: "Geometos", sans-serif;
+  font-family: "Geometos", sans-serif;
 }
 
+/* Ajusta el margen de los títulos h2 y agrega una línea de borde inferior */
+/* Agrega una línea vertical al inicio de cada título */
+/* Agrega una línea vertical al inicio de cada título */
+.ficha-tecnica h2:not(.ficha-tecnica-footer h2) {
+  margin-top: 40px; /* Aumenta el margen superior */
+  margin-bottom: 40px; /* Aumenta el margen inferior */
+  position: relative;
+  left: 15px; /* Ajusta la posición del título para que coincida con la línea vertical */
+}
+
+.ficha-tecnica h2:not(.ficha-tecnica-footer h2):before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -15px; /* Ajusta la posición de la línea vertical */
+  width: 4px; /* Ajusta el grosor de la línea vertical */
+  height: 100%;
+  background-color: #0d56bb; /* Color de la línea vertical */
+  margin-right: 10px; /* Espacio entre la línea y el título */
+}
+
+/* Agrega una línea vertical al inicio de cada título del footer */
+.ficha-tecnica-footer h2:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -15px; /* Ajusta la posición de la línea vertical */
+  width: 4px; /* Ajusta el grosor de la línea vertical */
+  height: 100%;
+  background-color: #0d56bb; /* Color de la línea vertical */
+  margin-right: 10px; /* Espacio entre la línea y el título */
+}
+
+
 .ficha-tecnica-description {
-    text-align: justify;
-    margin-top: 20px; /* Agrega un margen inferior para separar del siguiente elemento */
+  text-align: justify;
+  margin-top: 20px; /* Agrega un margen inferior para separar del siguiente elemento */
 }
 
 .ficha-tecnica-photos {
-    margin-bottom: 20px; /* Agrega un margen inferior para separar del siguiente elemento */
+  margin-bottom: 20px; /* Agrega un margen inferior para separar del siguiente elemento */
 }
 
 .ficha-tecnica-main-photo,
 .ficha-tecnica-small-photos {
-    margin-bottom: 10px; /* Agrega un margen inferior entre las imágenes */
+  margin-bottom: 10px; /* Agrega un margen inferior entre las imágenes */
 }
 
 .ficha-tecnica-footer {
-    font-size: 18px;
-    background-color: #001529; /* Mismo fondo que el header */
-    padding: 40px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
+  font-size: 18px;
+  background-color: #001529; /* Mismo fondo que el header */
+  padding: 40px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Añadido para adaptarse al 100% del ancho de la página */
 }
 
 .contact-info {
-    text-align: left;
-    color: #fff;
+  text-align: left;
+  color: #fff;
 }
 
 .qr-code {
-    width: 100px; /* Ajusta el tamaño del código QR según sea necesario */
+  width: 100px; /* Ajusta el tamaño del código QR según sea necesario */
 }
 
 .close-button {
-    padding: 10px 20px;
-    background-color: transparent;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
 }
 
 .close-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .contact-button {
-    padding: 10px 20px;
-    background-color: #0d56bb;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  background-color: #0d56bb;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .contact-button:hover {
-    background-color: #084289;
+  background-color: #084289;
 }
 
 @media print {
-    .ant-layout-sider-children {
-      display: none;
-    }
+  .ant-layout-sider-children,
+  .ant-layout-sider,
+  .ant-layout-footer,
+  .header-div,
+  .contratos,
+  .download-button,
+  .ant-modal-wrap,
+  .ant-modal-mask,
+  .ant-modal-root {
+      display: none !important;
   }
-  @media print {
-  .ant-layout-sider {
-    display: none;
-  }
-}
 
-@media print {
-    .ant-layout-footer {
-      display: none;
-    }
+  .ficha-tecnica-container,
+  .ficha-tecnica,
+  .ficha-tecnica-details,
+  .ficha-tecnica-property-detail-card,
+  .ficha-tecnica-property-details,
+  .ficha-tecnica-description,
+  .contact-info {
+      font-size: 30px !important; /* Ajusta el tamaño de fuente según sea necesario */
+  }
+
+  .ficha-tecnica-property-detail-card p {
+      font-size: 30px !important; /* Ajusta el tamaño de fuente para las etiquetas <p> según sea necesario */
+      margin-top: 20px !important; /* Agrega un margen superior según sea necesario */
+  }
+
+  .ficha-tecnica-main-photo img {
+      width: auto !important; /* Restaurar el tamaño de la imagen a automático para imprimir */
+      height: auto !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      object-fit: contain !important; /* Ajusta el ajuste del objeto según sea necesario */
+  }
+
+  .ficha-tecnica-small-photos img {
+      width: auto !important; /* Restaurar el tamaño de la imagen a automático para imprimir */
+      height: auto !important;
+      max-width: 49% !important; /* Ajustar el tamaño máximo de las imágenes al 50% del contenedor */
+      max-height: 49% !important;
+      object-fit: contain !important; /* Ajusta el ajuste del objeto según sea necesario */
+  }
+
+  .ficha-tecnica-detail-icon svg,
+  .ficha-tecnica svg {
+      color: #0d56bb !important; /* Restaurar el color del icono según sea necesario */
+      font-size: 40px !important; /* Ajusta el tamaño del icono según sea necesario */
+  }
+
+  .close-button,
+  .contact-button {
+      display: none !important; /* Ocultar botones de cierre y contacto al imprimir */
+  }
+
+  .qr-code-container {
+      font-size: 24px;
+      text-align: center !important; /* Centrar el QR Code en la impresión */
+  }
+  .ficha-tecnica .ficha-tecnica-property-card .ficha-tecnica-icon-text-wrapper svg {
+    font-size: 24px !important; /* Reducir el tamaño de los iconos */
   }
   
-  @media print {
-    .header-div {
-      display: none;
-    }
-  }
-
-  @media print {
-  .contratos {
-    display: none;
-  }
+  
 }
-@media print {
-    .download-button {
-      display: none;
-    }
-  }
