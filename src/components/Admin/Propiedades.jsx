@@ -79,6 +79,7 @@ import {
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import FichaTecnica from "./FichaTecnica";
+import "./Propiedades.css";
 
 const storage = getStorage(app);
 
@@ -849,8 +850,8 @@ function Propiedades() {
   };
 
   return (
-    <div>
-      {uploading && ( // Mostrar el spinner si el estado uploading es true
+    <div style={{ padding: "20px" }}>
+      {uploading && (
         <div
           style={{
             position: "fixed",
@@ -872,9 +873,9 @@ function Propiedades() {
             }}
           />
         </div>
-      )}{" "}
+      )}
       <h1>Propiedades</h1>
-      <Space direction="horizontal">
+      <Space direction="vertical" style={{ width: "100%" }}>
         <Button type="primary" onClick={handleAdd}>
           Añadir propiedad
         </Button>
@@ -889,32 +890,46 @@ function Propiedades() {
             }
           }}
         />
-
-        <Input
-          type="text"
-          placeholder="Precio mínimo"
-          value={
-            minPrice === null ? "" : `$${minPrice.toLocaleString("es-MX")}`
-          }
-          onChange={handleMinPriceChange}
-          addonBefore="MXN"
-        />
-
-        <Input
-          type="text"
-          placeholder="Precio máximo"
-          value={
-            maxPrice === null ? "" : `$${maxPrice.toLocaleString("es-MX")}`
-          }
-          onChange={handleMaxPriceChange}
-          addonBefore="MXN"
-        />
-
-        <Button type="primary" onClick={handleFilter}>
-          Filtrar
-        </Button>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <Input
+            type="text"
+            placeholder="Precio mínimo"
+            value={
+              minPrice === null ? "" : `$${minPrice.toLocaleString("es-MX")}`
+            }
+            onChange={handleMinPriceChange}
+            addonBefore="MXN"
+            style={{ marginBottom: "10px", marginRight: "10px", flex: "1" }}
+          />
+          <Input
+            type="text"
+            placeholder="Precio máximo"
+            value={
+              maxPrice === null ? "" : `$${maxPrice.toLocaleString("es-MX")}`
+            }
+            onChange={handleMaxPriceChange}
+            addonBefore="MXN"
+            style={{ marginBottom: "10px", marginRight: "10px", flex: "1" }}
+          />
+          <Button
+            type="primary"
+            onClick={handleFilter}
+            style={{ marginBottom: "10px" }}
+          >
+            Filtrar
+          </Button>
+        </div>
       </Space>
-      <Table dataSource={dataSource} columns={columns} />
+      <div style={{ overflowX: "auto" }}>
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          scroll={{ x: true }}
+          bordered
+          responsive
+        />
+      </div>
+
       <Modal
         title="Añadir Propiedad"
         visible={isModalVisible}
@@ -926,12 +941,10 @@ function Propiedades() {
           <Button
             key="back"
             onClick={() => {
-              return (
-                setIsModalVisible(false),
-                form.resetFields(),
-                setFileList([]),
-                setCurrentStep(0)
-              );
+              setIsModalVisible(false);
+              form.resetFields();
+              setFileList([]);
+              setCurrentStep(0);
             }}
           >
             Cancelar
