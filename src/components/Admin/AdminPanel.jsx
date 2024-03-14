@@ -68,9 +68,7 @@ function AdminPanel() {
           <Menu.Item key='propiedades' icon={<DollarOutlined />}>
             Propiedades
           </Menu.Item>
-          <Menu.Item key='contratos' icon={<FolderOutlined />}>
-            Ficha Tecnica
-          </Menu.Item>
+        
           <Menu.Item key='buzon' icon={<MailOutlined />}>
             Buzon
           </Menu.Item>
