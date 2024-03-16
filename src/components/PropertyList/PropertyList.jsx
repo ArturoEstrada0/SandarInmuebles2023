@@ -70,7 +70,7 @@ import { useAuth } from '../../context/AuthContext'
 import CustomCarousel from './Carousel'
 
 import m2Image from '../../assets/img/m2.png'
-import logo from '../../assets/img/sandarNegativo.png'
+import logo from '../../assets/img/sandarNegativoo.png'
 
 const { Content } = Layout
 const { Option } = Select
