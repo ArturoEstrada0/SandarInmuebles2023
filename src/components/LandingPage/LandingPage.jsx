@@ -77,7 +77,9 @@ function LandingPage() {
       <div className='landing-page-container'>
         <Row gutter={16}>
           <Col xs={{ span: 24 }} md={{ span: 9 }}>
-            <div className='landing-page-text' style={{ height: '100%', padding: '0 15px' }}>
+            <div
+              className='landing-page-text'
+              style={{ height: '100%', padding: '0 15px' }}>
               <Title
                 className='landing-page-title'
                 style={{
@@ -96,7 +98,7 @@ function LandingPage() {
                 }}>
                 {landingPageData && landingPageData.subtitle}
               </Paragraph>
-              <Link to='/inmuebles'>
+              <Link to='/propertyList'>
                 <Button
                   size='large'
                   className='banner-button'
@@ -124,14 +126,20 @@ function LandingPage() {
                   <div className='landing-page-stat-number'>
                     <CountUp end={availablePropertiesCount} duration={5} />
                   </div>
-                  <div className='landing-page-stat-title'>Inmuebles Disponibles</div>
+                  <div className='landing-page-stat-title'>
+                    Inmuebles Disponibles
+                  </div>
                 </Col>
                 <Col
                   xs={{ span: 24 }}
                   md={{ span: 8 }}
                   className={`landing-page-stat ${animated ? 'animated' : ''}`}>
                   <div className='landing-page-stat-number'>
-                    <CountUp end={1000} duration={5} />+
+                    <CountUp
+                      end={landingPageData && landingPageData.soldProperties}
+                      duration={5}
+                    />
+                    +
                   </div>
                   <div className='landing-page-stat-title'>
                     Inmuebles Vendidos
@@ -142,7 +150,10 @@ function LandingPage() {
                   md={{ span: 8 }}
                   className={`landing-page-stat ${animated ? 'animated' : ''}`}>
                   <div className='landing-page-stat-number'>
-                    <CountUp end={95} duration={5} />%
+                    <CountUp
+                      end={landingPageData && landingPageData.satisfiedClients}
+                      duration={5}
+                    />
                   </div>
                   <div className='landing-page-stat-title'>
                     Clientes Satisfechos

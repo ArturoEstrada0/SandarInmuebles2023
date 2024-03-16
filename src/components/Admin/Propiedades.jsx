@@ -75,6 +75,16 @@ import {
   faCity,
   faLink,
   faFilePdf,
+  faClipboardList,
+  faWarehouse,
+  faDoorClosed,
+  faBriefcase,
+  faBuilding,
+  faSeedling,
+  faStore,
+  faLaptop,
+  faHiking,
+  faRuler,
 } from '@fortawesome/free-solid-svg-icons'
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
@@ -681,10 +691,14 @@ function Propiedades() {
         { text: 'Casa', value: 'Casa' },
         { text: 'Departamento', value: 'Departamento' },
         { text: 'Terreno', value: 'Terreno' },
-        { text: 'Edificio', value: 'Edificio' },
+        { text: 'Despacho', value: 'Despacho' },
         { text: 'Oficina', value: 'Oficina' },
         { text: 'Bodega', value: 'Bodega' },
-        { text: 'Local', value: 'Local' },
+        { text: 'Edificio', value: 'Edificio' },
+        { text: 'Rancho', value: 'Rancho' },
+        { text: 'Hectareas', value: 'Hectareas' },
+        { text: 'Huertas', value: 'Huertas' },
+        { text: 'Local Comercial', value: 'Local Comercial' },
       ],
       onFilter: (value, record) => record.tipoPropiedad === value,
     },
@@ -794,7 +808,7 @@ function Propiedades() {
           <Button
             onClick={() =>
               handleCopiarEnlace(
-                `https://sandar-inmuebles.web.app/property/${record.key}`,
+                `https://sandarinmuebles.com/property/${record.key}`,
               )
             }>
             <span style={{ color: '#1E90FF' }}>
@@ -971,17 +985,43 @@ function Propiedades() {
                   },
                 ]}>
                 <Select>
-                  <Select.Option value='Casa'>Casa</Select.Option>
-                  <Select.Option value='Departamento'>
-                    Departamento
+                  <Select.Option value='all'>
+                    <FontAwesomeIcon icon={faClipboardList} /> Todas las
+                    propiedades
                   </Select.Option>
-                  <Select.Option value='Terreno'>Terreno</Select.Option>
-                  <Select.Option value='Despacho'>Despacho</Select.Option>
-                  <Select.Option value='Oficina'>Oficina</Select.Option>
-                  <Select.Option value='Bodega'>Bodega</Select.Option>
-                  <Select.Option value='Edificio'>Edificio</Select.Option>
-                  <Select.Option value='Rancho'>Rancho</Select.Option>
-                  <Select.Option value='Hectareas'>Hectareas</Select.Option>
+                  <Select.Option value='Bodega'>
+                    <FontAwesomeIcon icon={faWarehouse} /> Bodega
+                  </Select.Option>
+                  <Select.Option value='Casa'>
+                    <FontAwesomeIcon icon={faHome} /> Casa
+                  </Select.Option>
+                  <Select.Option value='Departamento'>
+                    <FontAwesomeIcon icon={faDoorClosed} /> Departamento
+                  </Select.Option>
+                  <Select.Option value='Despacho'>
+                    <FontAwesomeIcon icon={faBriefcase} /> Despacho
+                  </Select.Option>
+                  <Select.Option value='Edificio'>
+                    <FontAwesomeIcon icon={faBuilding} /> Edificio
+                  </Select.Option>
+                  <Select.Option value='Hectareas'>
+                    <FontAwesomeIcon icon={faTree} /> Hectáreas
+                  </Select.Option>
+                  <Select.Option value='Huertas'>
+                    <FontAwesomeIcon icon={faSeedling} /> Huertas
+                  </Select.Option>
+                  <Select.Option value='Local Comercial'>
+                    <FontAwesomeIcon icon={faStore} /> Local Comercial
+                  </Select.Option>
+                  <Select.Option value='Oficina'>
+                    <FontAwesomeIcon icon={faLaptop} /> Oficina
+                  </Select.Option>
+                  <Select.Option value='Rancho'>
+                    <FontAwesomeIcon icon={faHiking} /> Rancho
+                  </Select.Option>
+                  <Select.Option value='Terreno'>
+                    <FontAwesomeIcon icon={faRuler} /> Terreno
+                  </Select.Option>
                   {/* Agrega más opciones según sea necesario */}
                 </Select>
               </Form.Item>

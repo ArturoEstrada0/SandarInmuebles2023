@@ -258,7 +258,7 @@ const PropertyDetail = () => {
   );
 
   return (
-    <div className="property-detail">
+    <div className='property-detail'>
       <>
         {propertyDetails &&
           propertyDetails.fotos &&
@@ -267,23 +267,22 @@ const PropertyDetail = () => {
             <Gallery
               images={propertyDetails.fotos.map((foto) => ({
                 url: foto,
-                width: "2500",
-                height: "1600",
+                width: '2500',
+                height: '1600',
               }))}
             />
           ) : (
             <Carousel
-              style={{ width: "100%", height: "40vh", overflow: "hidden" }}
-            >
+              style={{ width: '100%', height: '40vh', overflow: 'hidden' }}>
               {propertyDetails.fotos.map((foto, index) => (
-                <div key={index} style={{ height: "100%", width: "100%" }}>
+                <div key={index} style={{ height: '100%', width: '100%' }}>
                   <img
                     src={foto}
                     alt={`foto-${index}`}
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
                     }}
                   />
                 </div>
@@ -291,67 +290,63 @@ const PropertyDetail = () => {
             </Carousel>
           ))}
       </>
-      <div className="body-property">
-        <div className="detail-content">
+      <div className='body-property'>
+        <div className='detail-content'>
           <h2
-            className="title-main"
-            style={{ fontFamily: "Geometos", fontSize: "2em" }}
-          >
+            className='title-main'
+            style={{ fontFamily: 'Geometos', fontSize: '2em' }}>
             {propertyDetails.nombre}
           </h2>
           <h4
-            className="subtitle-main"
-            style={{ fontFamily: "Geometos", fontSize: "1.1em" }}
-          >
+            className='subtitle-main'
+            style={{ fontFamily: 'Geometos', fontSize: '1.1em' }}>
             {propertyDetails.ubicacion}
           </h4>
           <hr />
 
           <Col span={24}>
-            <div style={{ marginBottom: "20px" }}>
-              <h3 className="subtitle-section">Detalles de la propiedad</h3>
+            <div style={{ marginBottom: '20px' }}>
+              <h3 className='subtitle-section'>Detalles de la propiedad</h3>
               <Row gutter={[16, 16]}>
                 {details.map((detail, index) => (
                   <Col key={index} xl={4} lg={6} md={8} sm={12} xs={24}>
                     <Card
                       hoverable
                       title={detail.label}
-                      size="small"
+                      size='small'
                       style={{
-                        borderRadius: "5px",
-                        backgroundColor: "#f5f5f5",
-                        minHeight: "80px",
-                        minWidth: "80px",
-                        padding: "4px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <div style={{ marginBottom: "10px" }}>
-                        {detail.key === "tamanioPropiedad" ? (
+                        borderRadius: '5px',
+                        backgroundColor: '#f5f5f5',
+                        minHeight: '80px',
+                        minWidth: '80px',
+                        padding: '4px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                      }}>
+                      <div style={{ marginBottom: '10px' }}>
+                        {detail.key === 'tamanioPropiedad' ? (
                           <img
                             src={detail.icon}
                             alt={detail.label}
                             style={{
-                              width: "auto",
-                              height: "30px",
-                              color: "#1890ff",
+                              width: 'auto',
+                              height: '30px',
+                              color: '#1890ff',
                             }}
                           />
                         ) : (
                           <FontAwesomeIcon
                             icon={detail.icon}
-                            className="custom-icon"
-                            style={{ color: "#1890ff" }}
+                            className='custom-icon'
+                            style={{ color: '#1890ff' }}
                           />
                         )}
                       </div>
                       <Title
                         level={3}
-                        style={{ color: "#1890ff", textAlign: "center" }}
-                      >
+                        style={{ color: '#1890ff', textAlign: 'center' }}>
                         {propertyDetails[detail.key] || 0}
                       </Title>
                     </Card>
@@ -361,8 +356,8 @@ const PropertyDetail = () => {
             </div>
           </Col>
 
-          <div className="list-info">
-            <h3 className="subtitle-section">Información del inmueble</h3>
+          <div className='list-info'>
+            <h3 className='subtitle-section'>Información del inmueble</h3>
             <ul>
               {Object.entries(propertyDetails.cardsActivadas)
                 .filter(([value]) => value)
@@ -376,32 +371,30 @@ const PropertyDetail = () => {
                 ))}
             </ul>
             <hr />
-            <h3 className="subtitle-section">Descripción</h3>
+            <h3 className='subtitle-section'>Descripción</h3>
             <p
               style={{
-                padding: "0 10px",
-                textAlign: "justify",
-              }}
-            >
+                padding: '0 10px',
+                textAlign: 'justify',
+              }}>
               {isTextShown
                 ? propertyDetails.descripcion
                 : `${propertyDetails.descripcion.substring(0, 300)}${
-                    propertyDetails.descripcion.length > 300 ? "..." : ""
+                    propertyDetails.descripcion.length > 300 ? '...' : ''
                   }`}
             </p>
             {propertyDetails.descripcion.length > 300 && (
               <button
                 onClick={() => setIsTextShown(!isTextShown)}
                 style={{
-                  backgroundColor: "transparent",
-                  color: "#1677FF",
-                  padding: "0",
-                  cursor: "pointer",
-                  border: "2px solid transparent",
-                  outline: "none",
-                }}
-              >
-                {isTextShown ? "Ver menos \u25B2" : "Ver más \u25BC"}
+                  backgroundColor: 'transparent',
+                  color: '#1677FF',
+                  padding: '0',
+                  cursor: 'pointer',
+                  border: '2px solid transparent',
+                  outline: 'none',
+                }}>
+                {isTextShown ? 'Ver menos \u25B2' : 'Ver más \u25BC'}
               </button>
             )}
             <hr />
@@ -409,41 +402,38 @@ const PropertyDetail = () => {
               <>
                 <div
                   style={{
-                    marginTop: "20px",
-                    marginBottom: "20px",
-                    width: "85%",
-                    margin: "0 auto",
-                    backgroundColor: "#fff",
-                    borderRadius: "8px",
-                    padding: "16px",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
+                    marginTop: '20px',
+                    marginBottom: '20px',
+                    width: '85%',
+                    margin: '0 auto',
+                    backgroundColor: '#fff',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  }}>
                   <iframe
-                    width="100%"
-                    height="325"
+                    width='100%'
+                    height='325'
                     src={`https://www.youtube.com/embed/${youtubeVideoCode}?controls=1&showinfo=0&fs=1`}
-                    title="YouTube Video"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    title='YouTube Video'
+                    frameBorder='0'
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
                     allowFullScreen
-                    style={{ borderRadius: "8px" }}
-                  ></iframe>
+                    style={{ borderRadius: '8px' }}></iframe>
                   <hr />
-                  <div style={{ textAlign: "center", marginTop: "16px" }}>
+                  <div style={{ textAlign: 'center', marginTop: '16px' }}>
                     <p
                       style={{
-                        fontSize: "16px",
-                        color: "#333",
-                        fontFamily: "Geometos",
-                      }}
-                    >
+                        fontSize: '16px',
+                        color: '#333',
+                        fontFamily: 'Geometos',
+                      }}>
                       {propertyDetails.nombre +
-                        " $" +
-                        propertyDetails.precio.toLocaleString("es-MX", {
+                        ' $' +
+                        propertyDetails.precio.toLocaleString('es-MX', {
                           minimumFractionDigits: 2,
                         }) +
-                        " MXN"}
+                        ' MXN'}
                     </p>
                   </div>
                 </div>
@@ -451,129 +441,119 @@ const PropertyDetail = () => {
               </>
             )}
 
-            <h3 className="subtitle-section">Ubicación del inmueble</h3>
+            <h3 className='subtitle-section'>Ubicación del inmueble</h3>
             <Map
-              id="map"
-              height={"400px"}
-              width={"100%"}
+              id='map'
+              height={'400px'}
+              width={'100%'}
               markerCoords={ubicacionCoords}
             />
             <hr />
             <Col span={24}>
               <div
-                className="more-info-container"
+                className='more-info-container'
                 style={{
-                  padding: "20px",
-                  backgroundColor: "#fcfeff",
-                  width: "100%",
-                }}
-              >
-                <div className="header">
-                  <h3 className="subtitle-section">Más información</h3>
+                  padding: '20px',
+                  backgroundColor: '#fcfeff',
+                  width: '100%',
+                }}>
+                <div className='header'>
+                  <h3 className='subtitle-section'>Más información</h3>
                 </div>
-                <div className="button-group">
+                <div className='button-group'>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Habitaciones" ? "active" : ""
+                      activeKey === 'Habitaciones' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Habitaciones")}
-                  >
+                    onClick={() => onCollapseChange('Habitaciones')}>
                     Habitaciones
                   </Button>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Interiores/Exteriores" ? "active" : ""
+                      activeKey === 'Interiores/Exteriores' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Interiores/Exteriores")}
-                  >
+                    onClick={() => onCollapseChange('Interiores/Exteriores')}>
                     Interiores/Exteriores
                   </Button>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Estacionamiento" ? "active" : ""
+                      activeKey === 'Estacionamiento' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Estacionamiento")}
-                  >
+                    onClick={() => onCollapseChange('Estacionamiento')}>
                     Estacionamiento
                   </Button>
                   <Button
                     className={`custom-button ${
-                      activeKey === "Seguridad/Tecnologiá" ? "active" : ""
+                      activeKey === 'Seguridad/Tecnologiá' ? 'active' : ''
                     }`}
-                    onClick={() => onCollapseChange("Seguridad/Tecnologiá")}
-                  >
+                    onClick={() => onCollapseChange('Seguridad/Tecnologiá')}>
                     Seguridad/Tecnología
                   </Button>
                 </div>
-                <div className="content-container">
+                <div className='content-container'>
                   <div
                     style={{
-                      marginTop: "20px",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    {activeKey === "Habitaciones" &&
+                      marginTop: '20px',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-around',
+                    }}>
+                    {activeKey === 'Habitaciones' &&
                       Array.from({ length: propertyDetails.habitaciones }).map(
                         (_, index) => (
                           <Card
-                            className="card-more-info"
+                            className='card-more-info'
                             key={index}
                             style={{
-                              flex: "1 0 30%",
-                              maxWidth: "31%",
-                              margin: "10px",
-                              borderRadius: "12px",
-                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                              transition: "transform 0.3s ease-in-out",
+                              flex: '1 0 30%',
+                              maxWidth: '31%',
+                              margin: '10px',
+                              borderRadius: '12px',
+                              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                              transition: 'transform 0.3s ease-in-out',
                             }}
-                            title={<>{`Habitación ${index + 1}`}</>}
-                          >
+                            title={<>{`Habitación ${index + 1}`}</>}>
                             <p>Habitación {index + 1}</p>
                             <FontAwesomeIcon
                               icon={faBed}
                               style={{
-                                color: "#1890ff",
-                                fontSize: "24px",
-                                marginTop: "10px",
+                                color: '#1890ff',
+                                fontSize: '24px',
+                                marginTop: '10px',
                               }}
                             />
                           </Card>
-                        )
+                        ),
                       )}
-                    {activeKey === "Interiores/Exteriores" && (
+                    {activeKey === 'Interiores/Exteriores' && (
                       <>
                         <Card
-                          title="Espacios interiores"
+                          title='Espacios interiores'
                           style={{
-                            width: "100%",
-                            margin: "10px",
-                            borderRadius: "12px",
-                          }}
-                        >
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
                           <ul
                             style={{
-                              display: "flex",
-                              flexWrap: "wrap",
+                              display: 'flex',
+                              flexWrap: 'wrap',
                               padding: 0,
-                              listStyleType: "none",
-                            }}
-                          >
+                              listStyleType: 'none',
+                            }}>
                             {Object.entries(propertyDetails.cardsActivadas)
                               .filter(
-                                ([key, value]) => value && isInterior(key)
+                                ([key, value]) => value && isInterior(key),
                               )
                               .map(([key]) => (
                                 <li
                                   key={key}
                                   style={{
-                                    textAlign: "left",
-                                    width: "33.33%",
-                                    boxSizing: "border-box",
-                                    padding: "0 10px",
-                                  }}
-                                >
+                                    textAlign: 'left',
+                                    width: '33.33%',
+                                    boxSizing: 'border-box',
+                                    padding: '0 10px',
+                                  }}>
                                   {getIcon(key)}
                                   {formatLabel(key)}
                                 </li>
@@ -581,35 +561,32 @@ const PropertyDetail = () => {
                           </ul>
                         </Card>
                         <Card
-                          title="Espacios exteriores"
+                          title='Espacios exteriores'
                           style={{
-                            width: "100%",
-                            margin: "10px",
-                            borderRadius: "12px",
-                          }}
-                        >
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
                           <ul
                             style={{
-                              display: "flex",
-                              flexWrap: "wrap",
+                              display: 'flex',
+                              flexWrap: 'wrap',
                               padding: 0,
-                              listStyleType: "none",
-                            }}
-                          >
+                              listStyleType: 'none',
+                            }}>
                             {Object.entries(propertyDetails.cardsActivadas)
                               .filter(
-                                ([key, value]) => value && !isInterior(key)
+                                ([key, value]) => value && !isInterior(key),
                               )
                               .map(([key]) => (
                                 <li
                                   key={key}
                                   style={{
-                                    textAlign: "left",
-                                    width: "33.33%",
-                                    boxSizing: "border-box",
-                                    padding: "0 10px",
-                                  }}
-                                >
+                                    textAlign: 'left',
+                                    width: '33.33%',
+                                    boxSizing: 'border-box',
+                                    padding: '0 10px',
+                                  }}>
                                   {getIcon(key)}
                                   {formatLabel(key)}
                                 </li>
@@ -618,15 +595,14 @@ const PropertyDetail = () => {
                         </Card>
                       </>
                     )}
-                    {activeKey === "Estacionamiento" &&
+                    {activeKey === 'Estacionamiento' &&
                       (propertyDetails.estacionamiento === undefined ? (
                         <Card
                           style={{
-                            width: "100%",
-                            margin: "10px",
-                            borderRadius: "12px",
-                          }}
-                        >
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
                           <p>No hay estacionamientos disponibles</p>
                         </Card>
                       ) : (
@@ -634,76 +610,70 @@ const PropertyDetail = () => {
                           length: propertyDetails.estacionamiento,
                         }).map((_, index) => (
                           <Card
-                            className="card-more-info"
+                            className='card-more-info'
                             key={index}
                             title={`Estacionamiento ${index + 1}`}
                             style={{
-                              flex: "1 0 30%",
-                              maxWidth: "31%",
-                              margin: "10px",
-                              borderRadius: "12px",
-                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                              transition: "transform 0.3s ease-in-out",
-                            }}
-                          >
+                              flex: '1 0 30%',
+                              maxWidth: '31%',
+                              margin: '10px',
+                              borderRadius: '12px',
+                              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                              transition: 'transform 0.3s ease-in-out',
+                            }}>
                             <p>Estacionamiento {index + 1}</p>
                           </Card>
                         ))
                       ))}
-                    {activeKey === "Seguridad/Tecnologiá" &&
+                    {activeKey === 'Seguridad/Tecnologiá' &&
                       (hasInfo ? (
                         <Card
                           style={{
-                            width: "100%",
-                            margin: "10px",
-                            borderRadius: "12px",
-                          }}
-                        >
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
                           <ul
                             style={{
-                              display: "flex",
-                              flexWrap: "wrap",
-                              listStyleType: "none",
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              listStyleType: 'none',
                               padding: 0,
-                            }}
-                          >
+                            }}>
                             {propertyDetails.cardsActivadas.Alarma && (
                               <li
                                 style={{
-                                  textAlign: "left",
-                                  width: "50%",
-                                  boxSizing: "border-box",
-                                  padding: "0 10px",
-                                }}
-                              >
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
                                 <SafetyCertificateTwoTone /> Alarma
                               </li>
                             )}
                             {propertyDetails.cardsActivadas[
-                              "Aire acondicionado"
+                              'Aire acondicionado'
                             ] && (
                               <li
                                 style={{
-                                  textAlign: "left",
-                                  width: "50%",
-                                  boxSizing: "border-box",
-                                  padding: "0 10px",
-                                }}
-                              >
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
                                 <SafetyCertificateTwoTone /> Aire acondicionado
                               </li>
                             )}
                             {propertyDetails.cardsActivadas[
-                              "Cámaras de seguridad"
+                              'Cámaras de seguridad'
                             ] && (
                               <li
                                 style={{
-                                  textAlign: "left",
-                                  width: "50%",
-                                  boxSizing: "border-box",
-                                  padding: "0 10px",
-                                }}
-                              >
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
                                 <SafetyCertificateTwoTone /> Cámaras de
                                 seguridad
                               </li>
@@ -711,12 +681,11 @@ const PropertyDetail = () => {
                             {propertyDetails.cardsActivadas.Gimnasio && (
                               <li
                                 style={{
-                                  textAlign: "left",
-                                  width: "50%",
-                                  boxSizing: "border-box",
-                                  padding: "0 10px",
-                                }}
-                              >
+                                  textAlign: 'left',
+                                  width: '50%',
+                                  boxSizing: 'border-box',
+                                  padding: '0 10px',
+                                }}>
                                 <SafetyCertificateTwoTone /> Gimnasio
                               </li>
                             )}
@@ -725,11 +694,10 @@ const PropertyDetail = () => {
                       ) : (
                         <Card
                           style={{
-                            width: "100%",
-                            margin: "10px",
-                            borderRadius: "12px",
-                          }}
-                        >
+                            width: '100%',
+                            margin: '10px',
+                            borderRadius: '12px',
+                          }}>
                           <p>No hay información disponible</p>
                         </Card>
                       ))}
@@ -740,66 +708,63 @@ const PropertyDetail = () => {
             </Col>
           </div>
         </div>
-        <div className="detail-form">
-          <div className="sandar-logo">
-            <img src={logo} alt="Descripción de la imagen" />
+        <div className='detail-form'>
+          <div className='sandar-logo'>
+            <img src={logo} alt='Descripción de la imagen' />
             <h2>Sandar Inmuebles</h2>
           </div>
-          <div className="section-form">
-            <h3 style={{ fontFamily: "Geometos" }}>Venta</h3>
-            <div className="price">
+          <div className='section-form'>
+            <h3 style={{ fontFamily: 'Geometos' }}>{propertyDetails.condicion}</h3>
+            <div className='price'>
               $
-              {propertyDetails.precio.toLocaleString("es-MX", {
+              {propertyDetails.precio.toLocaleString('es-MX', {
                 minimumFractionDigits: 2,
               })}
             </div>
             <h3
               style={{
-                fontSize: "1.1rem",
-                marginTop: "25px",
-                textTransform: "none",
-                fontFamily: "Geometos",
-              }}
-            >
+                fontSize: '1.1rem',
+                marginTop: '25px',
+                textTransform: 'none',
+                fontFamily: 'Geometos',
+              }}>
               Contacta con el anunciante
             </h3>
             <ContactForm onFinish={handleContactFormSubmit} />
           </div>
         </div>
 
-        <div className="form-mobile">
+        <div className='form-mobile'>
           <button
-            className="see-more-b"
+            className='see-more-b'
             onClick={() => {
-              setSeeMore(!seeMore);
-            }}
-          >
-            <h6 className="see-more"> {seeMore ? "Ver menos" : "Ver más"} </h6>
+              setSeeMore(!seeMore)
+            }}>
+            <h6 className='see-more'> {seeMore ? 'Ver menos' : 'Ver más'} </h6>
           </button>
-          <div className="">
-            <div className="">
-              <h3 style={{ fontFamily: "Geometos" }}>Venta</h3>
-              <div className="price">
+          <div className=''>
+            <div className=''>
+              <h3 style={{ fontFamily: 'Geometos' }}>{propertyDetails.condicion}</h3>
+              <div className='price'>
                 $
-                {propertyDetails.precio.toLocaleString("es-MX", {
+                {propertyDetails.precio.toLocaleString('es-MX', {
                   minimumFractionDigits: 2,
                 })}
               </div>
             </div>
             <div
               style={{
-                display: `${seeMore ? "flex" : "none"}`,
-                maxHeight: "50vh",
-                overflow: "auto",
-              }}
-            >
+                display: `${seeMore ? 'flex' : 'none'}`,
+                maxHeight: '50vh',
+                overflow: 'auto',
+              }}>
               <ContactForm onFinish={handleContactFormSubmit} />
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default PropertyDetail;

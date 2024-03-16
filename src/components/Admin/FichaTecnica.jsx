@@ -411,7 +411,7 @@ const FichaTecnica = ({ propertyId }) => {
             </div>
             <div className="qr-code-container">
               <QRCode
-                value={`https://sandar-inmuebles.web.app/property/${propertyId}`}
+                value={`https://sandarinmuebles.com/property/${propertyId}`}
                 size={128}
                 imageSettings={{
                   src: LogoQR,
@@ -434,7 +434,7 @@ const FichaTecnica = ({ propertyId }) => {
                   textDecoration: "none",
                 }}
               >
-                <a href="https://sandar-inmuebles.web.app/property/2qfo9XJjAkNw7MYfNgNK">
+                <a href="https://sandarinmuebles.com/property/2qfo9XJjAkNw7MYfNgNK">
                   Ver Propiedad
                 </a>
               </p>

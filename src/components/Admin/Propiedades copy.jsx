@@ -199,7 +199,7 @@ const columns = [
         <Button
           onClick={() =>
             handleCopiarEnlace(
-              `https://sandar-inmuebles.web.app/property/${record.key}`,
+              `https://sandarinmuebles.com/property/${record.key}`,
             )
           }>
           <CopyOutlined />
