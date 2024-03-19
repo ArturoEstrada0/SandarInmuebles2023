@@ -262,10 +262,10 @@ const PropertyDetail = () => {
     <div className='property-detail'>
       <Helmet>
         <title>{propertyDetails.nombre}</title>
-        <meta name='description' content={propertyDetails.descripcion} />
-        <meta property='og:title' content={propertyDetails.nombre} />
-        <meta property='og:description' content={propertyDetails.descripcion} />
-        <meta property='og:image' content={propertyDetails.fotos[0]} />
+        <meta name='keywords' content={propertyDetails.descripcion} />
+        <meta property='title' content={propertyDetails.nombre} />
+        <meta property='description' content={propertyDetails.descripcion} />
+        <meta property='image' content={propertyDetails.fotos[0]} />
         {/* Add more meta tags as needed */}
       </Helmet>
       <>
