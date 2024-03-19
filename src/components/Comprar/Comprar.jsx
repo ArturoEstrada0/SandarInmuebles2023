@@ -7,6 +7,7 @@ import {
   SafetyCertificateOutlined,
 } from '@ant-design/icons'
 import './Comprar.css'
+import { Helmet } from 'react-helmet'
 
 const { Title, Paragraph } = Typography
 
@@ -32,6 +33,18 @@ const Comprar = () => {
 
   return (
     <div className={`comprar-container ${loading ? 'loading' : ''}`}>
+      <Helmet>
+        <title>Comprar Propiedad - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='¿Deseas comprar una propiedad? En Sandar Inmuebles te apoyamos en todo el proceso de inicio a fin. Descubre por qué comprar con nosotros.'
+        />
+        <meta
+          name='keywords'
+          content='comprar, propiedad, inmuebles, Sandar Inmuebles'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
       <div style={{ paddingInline: '30px' }}>
         <Title level={2} className='comprar-title'>
           ¿Por qué comprar con Sandar Inmuebles?

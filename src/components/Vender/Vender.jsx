@@ -15,6 +15,7 @@ import './Vender.css'
 import ventaImage from '../../assets/img/venta.jpg'
 import { collection, addDoc } from 'firebase/firestore'
 import { firestore } from '../firebase/firebase'
+import { Helmet } from 'react-helmet'
 
 const { Step } = Steps
 const { Panel } = Collapse
@@ -74,6 +75,18 @@ const Vender = () => {
 
   return (
     <div className='vender-container'>
+      <Helmet>
+        <title>Vender Propiedad - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='¿Deseas vender tu propiedad? En Sandar Inmuebles te apoyamos en todo el proceso de inicio a fin. Contáctanos llenando el formulario en esta página.'
+        />
+        <meta
+          name='keywords'
+          content='vender, propiedad, inmuebles, Sandar Inmuebles'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
       <div className='background-container'>
         <img className='background-image' src={ventaImage} alt='Background' />
         <div className='overlay-content'>

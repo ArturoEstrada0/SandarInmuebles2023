@@ -56,6 +56,7 @@ import Map from "../Map/Map";
 
 import { firestore } from "../firebase/firebase";
 import logo from "../../assets/img/logo.png";
+import { Helmet } from "react-helmet";
 
 const { Title } = Typography;
 const { useBreakpoint } = Grid;
@@ -259,6 +260,14 @@ const PropertyDetail = () => {
 
   return (
     <div className='property-detail'>
+      <Helmet>
+        <title>{propertyDetails.nombre}</title>
+        <meta name='description' content={propertyDetails.descripcion} />
+        <meta property='og:title' content={propertyDetails.nombre} />
+        <meta property='og:description' content={propertyDetails.descripcion} />
+        <meta property='og:image' content={propertyDetails.fotos[0]} />
+        {/* Add more meta tags as needed */}
+      </Helmet>
       <>
         {propertyDetails &&
           propertyDetails.fotos &&
@@ -714,7 +723,9 @@ const PropertyDetail = () => {
             <h2>Sandar Inmuebles</h2>
           </div>
           <div className='section-form'>
-            <h3 style={{ fontFamily: 'Geometos' }}>{propertyDetails.condicion}</h3>
+            <h3 style={{ fontFamily: 'Geometos' }}>
+              {propertyDetails.condicion}
+            </h3>
             <div className='price'>
               $
               {propertyDetails.precio.toLocaleString('es-MX', {
@@ -744,7 +755,9 @@ const PropertyDetail = () => {
           </button>
           <div className=''>
             <div className=''>
-              <h3 style={{ fontFamily: 'Geometos' }}>{propertyDetails.condicion}</h3>
+              <h3 style={{ fontFamily: 'Geometos' }}>
+                {propertyDetails.condicion}
+              </h3>
               <div className='price'>
                 $
                 {propertyDetails.precio.toLocaleString('es-MX', {

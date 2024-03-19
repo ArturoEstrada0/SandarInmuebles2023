@@ -20,6 +20,7 @@ import {
 import { firestore } from '../firebase/firebase'
 import 'animate.css'
 import './Contact.css'
+import { Helmet } from 'react-helmet'
 
 const Contact = () => {
   const [form] = Form.useForm()
@@ -96,6 +97,15 @@ const Contact = () => {
     <div
       className={`contact-container ${animationClass}`}
       style={{ marginTop: '65px' }}>
+      <Helmet>
+        <title>Contacto - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='¿Tienes alguna pregunta o comentario? No dudes en contactarnos. Estamos aquí para ayudarte.'
+        />
+        <meta name='keywords' content='contacto, inmuebles, Sandar Inmuebles' />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
       <Card
         title={
           <span className={`card-title ${animationClass}`}>{contactTitle}</span>

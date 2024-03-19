@@ -10,6 +10,7 @@ import { app, firestore } from "../firebase/firebase"; // Asegúrate de que la r
 import { doc, setDoc } from "firebase/firestore";
 
 import "./ChatBubble.css"; // Asegúrate de importar tu archivo CSS
+import { Helmet } from "react-helmet";
 
 const { Option } = Select;
 
@@ -70,85 +71,89 @@ function ChatBubble() {
 
   return (
     <>
+      <Helmet>
+        <title>Chat - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='¿Tienes alguna pregunta o comentario? No dudes en contactarnos a través de nuestro chat. Estamos aquí para ayudarte.'
+        />
+        <meta name='keywords' content='chat, inmuebles, Sandar Inmuebles' />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
       <FloatButton.Group
-        trigger="hover"
+        trigger='hover'
         style={{
           right: 25,
         }}
         icon={<CommentOutlined /> /* Color del icono */}
-        onClick={sendEmailMessage}
-
-      >
+        onClick={sendEmailMessage}>
         <a
           href={`mailto:arturoestrada301@gmail.com`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           <FloatButton icon={<MailOutlined />} />
         </a>
         <FloatButton
           icon={<WhatsAppOutlined />}
           onClick={openWhatsAppModal}
-          style={{ marginTop: "10px" }}
+          style={{ marginTop: '10px' }}
         />
       </FloatButton.Group>
 
       <Modal
-        title="Enviar Mensaje de WhatsApp"
+        title='Enviar Mensaje de WhatsApp'
         visible={isModalVisible}
         onOk={sendWhatsAppMessage}
         onCancel={closeWhatsAppModal}
         footer={[
-          <Button key="cancel" onClick={closeWhatsAppModal}>
+          <Button key='cancel' onClick={closeWhatsAppModal}>
             Cancelar
           </Button>,
-          <Button key="send" type="primary" onClick={sendWhatsAppMessage}>
+          <Button key='send' type='primary' onClick={sendWhatsAppMessage}>
             Enviar
           </Button>,
-        ]}
-      >
-        <div style={{ marginBottom: "16px" }}>
+        ]}>
+        <div style={{ marginBottom: '16px' }}>
           <label>Categoría:</label>
           <Select
             value={selectedCategory}
             onChange={(value) => setSelectedCategory(value)}
-            placeholder="Selecciona una categoría"
-            style={{ width: "100%" }}
-          >
-            <Option value="Venta">Venta</Option>
-            <Option value="Alquiler">Alquiler</Option>
-            <Option value="Consultas">Consultas</Option>
-            <Option value="Mantenimiento">Mantenimiento</Option>
+            placeholder='Selecciona una categoría'
+            style={{ width: '100%' }}>
+            <Option value='Venta'>Venta</Option>
+            <Option value='Alquiler'>Alquiler</Option>
+            <Option value='Consultas'>Consultas</Option>
+            <Option value='Otros'>Otros</Option>
             {/* Agrega más categorías según tus necesidades */}
           </Select>
         </div>
-        <div style={{ marginBottom: "16px" }}>
+        <div style={{ marginBottom: '16px' }}>
           <label>Nombre:</label>
           <Input
             value={personName}
             onChange={(e) => setPersonName(e.target.value)}
-            placeholder="Nombre"
+            placeholder='Nombre'
           />
         </div>
-        <div style={{ marginBottom: "16px" }}>
+        <div style={{ marginBottom: '16px' }}>
           <label>Mensaje:</label>
           <Input.TextArea
             value={whatsappMessage}
             onChange={(e) => setWhatsappMessage(e.target.value)}
-            placeholder="Escribe tu mensaje..."
+            placeholder='Escribe tu mensaje...'
           />
         </div>
-        <div style={{ marginBottom: "16px" }}>
+        <div style={{ marginBottom: '16px' }}>
           <label>Teléfono:</label>
           <Input
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="Teléfono"
+            placeholder='Teléfono'
           />
         </div>
       </Modal>
     </>
-  );
+  )
 }
 
 export default ChatBubble;

@@ -28,6 +28,7 @@ import {
 } from "mdb-react-ui-kit";
 
 import "./Login.css";
+import { Helmet } from "react-helmet";
 
 const Registro = () => {
   const [name, setName] = useState("");
@@ -125,134 +126,142 @@ const Registro = () => {
   };
 
   return (
-    <div className="fondo-cards" style={{ marginTop: "65px" }}>
+    <div className='fondo-cards' style={{ marginTop: '65px' }}>
+      <Helmet>
+        <title>Registro - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='Regístrate para crear una cuenta en Sandar Inmuebles. Si ya tienes una cuenta, puedes iniciar sesión.'
+        />
+        <meta
+          name='keywords'
+          content='registro, crear cuenta, inmuebles, Sandar Inmuebles'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
       <MDBContainer
         fluid
-        className="d-flex justify-content-center align-items-center vh-100"
-      >
-        <MDBCol col="12" md="6" className="order-md-2 mt-5">
+        className='d-flex justify-content-center align-items-center vh-100'>
+        <MDBCol col='12' md='6' className='order-md-2 mt-5'>
           <MDBCard
-            className="bg-dark text-white my-5 mx-auto"
-            style={{ borderRadius: "1rem", maxWidth: "400px" }}
-          >
-            <MDBCardBody className="p-5 d-flex flex-column align-items-center">
-              <Link to="/">
+            className='bg-dark text-white my-5 mx-auto'
+            style={{ borderRadius: '1rem', maxWidth: '400px' }}>
+            <MDBCardBody className='p-5 d-flex flex-column align-items-center'>
+              <Link to='/'>
                 <LeftOutlined
                   style={{
-                    fontSize: "1.5rem",
-                    marginRight: "350px",
-                    color: "white",
+                    fontSize: '1.5rem',
+                    marginRight: '350px',
+                    color: 'white',
                   }}
                 />
               </Link>
               <MDBNavbar
-                expand="lg"
+                expand='lg'
                 light
-                bgColor="dark"
-                className="w-100 mb-4"
-              >
-                <MDBNavbarBrand className="d-flex align-items-center">
+                bgColor='dark'
+                className='w-100 mb-4'>
+                <MDBNavbarBrand className='d-flex align-items-center'>
                   <img
-                    src="src/assets/img/logo.png"
-                    alt="Logo"
-                    height="50"
-                    className="inicio-logo"
+                    src='src/assets/img/logo.png'
+                    alt='Logo'
+                    height='50'
+                    className='inicio-logo'
                   />
-                  <span className="ms-2 fs-5 text-white">SANDAR INMUBLES</span>
+                  <span className='ms-2 fs-5 text-white'>SANDAR INMUBLES</span>
                 </MDBNavbarBrand>
               </MDBNavbar>
 
-              <h2 className="Inicio">Registro de Sesión</h2>
+              <h2 className='Inicio'>Registro de Sesión</h2>
 
               <MDBInput
-                wrapperClass="mb-4 mx-5 w-100"
-                labelClass="text-white"
-                inputClass="text-white" // Aquí se define el color del texto
-                label="Nombre"
-                size="lg"
-                id="form1"
-                type="text"
+                wrapperClass='mb-4 mx-5 w-100'
+                labelClass='text-white'
+                inputClass='text-white' // Aquí se define el color del texto
+                label='Nombre'
+                size='lg'
+                id='form1'
+                type='text'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
               <MDBInput
-                wrapperClass="mb-4 mx-5 w-100"
-                labelClass="text-white"
-                inputClass="text-white" // Aquí se define el color del texto
-                label="Correo Electrónico"
-                size="lg"
-                id="form2"
-                type="email"
+                wrapperClass='mb-4 mx-5 w-100'
+                labelClass='text-white'
+                inputClass='text-white' // Aquí se define el color del texto
+                label='Correo Electrónico'
+                size='lg'
+                id='form2'
+                type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
               <MDBInput
-                wrapperClass="mb-4 mx-5 w-100"
-                labelClass="text-white"
-                inputClass="text-white" // Aquí se define el color del texto
-                label="Contraseña"
-                size="lg"
-                id="form3"
-                type="password"
+                wrapperClass='mb-4 mx-5 w-100'
+                labelClass='text-white'
+                inputClass='text-white' // Aquí se define el color del texto
+                label='Contraseña'
+                size='lg'
+                id='form3'
+                type='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
               <MDBInput
-                wrapperClass="mb-4 mx-5 w-100"
-                labelClass="text-white"
-                inputClass="text-white" // Aquí se define el color del texto
-                label="Confirmar Contraseña"
-                size="lg"
-                id="form4"
-                type="password"
+                wrapperClass='mb-4 mx-5 w-100'
+                labelClass='text-white'
+                inputClass='text-white' // Aquí se define el color del texto
+                label='Confirmar Contraseña'
+                size='lg'
+                id='form4'
+                type='password'
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
               <MDBInput
-                wrapperClass="mb-4 mx-5 w-100"
-                labelClass="text-white"
-                inputClass="white" // Aquí se define el color del texto
-                label="Teléfono"
-                size="lg"
-                id="form6"
-                type="tel"
+                wrapperClass='mb-4 mx-5 w-100'
+                labelClass='text-white'
+                inputClass='white' // Aquí se define el color del texto
+                label='Teléfono'
+                size='lg'
+                id='form6'
+                type='tel'
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               />
 
-              <div className="d-flex flex-row justify-content-center mb-4">
+              <div className='d-flex flex-row justify-content-center mb-4'>
                 <MDBCheckbox
-                  name="flexCheck"
-                  id="flexCheckDefault"
-                  label="Acepto todos los términos del servicio"
+                  name='flexCheck'
+                  id='flexCheckDefault'
+                  label='Acepto todos los términos del servicio'
                 />
               </div>
               <MDBBtn
                 outline
-                className="mx-2 px-5"
-                color="white"
-                size="lg"
-                onClick={register}
-              >
+                className='mx-2 px-5'
+                color='white'
+                size='lg'
+                onClick={register}>
                 Registrar
               </MDBBtn>
               {error && (
-                <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+                <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>
               )}
               {successMessage && (
-                <p style={{ color: "green", marginTop: "10px" }}>
+                <p style={{ color: 'green', marginTop: '10px' }}>
                   {successMessage}
                 </p>
               )}
               <div>
-                <p className="mb-0">
-                  ¿No tienes una cuenta?{" "}
-                  <Link to="/login" className="Registro">
+                <p className='mb-0'>
+                  ¿No tienes una cuenta?{' '}
+                  <Link to='/login' className='Registro'>
                     Inicia Sesión
                   </Link>
                 </p>
@@ -260,16 +269,16 @@ const Registro = () => {
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-        <MDBCol col="12" md="6" className="order-md-1">
+        <MDBCol col='12' md='6' className='order-md-1'>
           <img
-            src="src/assets/img/registro.svg"
-            className="img-fluid"
-            alt="Phone image"
+            src='src/assets/img/registro.svg'
+            className='img-fluid'
+            alt='Phone image'
           />
         </MDBCol>
       </MDBContainer>
     </div>
-  );
+  )
 };
 
 export default Registro;

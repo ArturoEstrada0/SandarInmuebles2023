@@ -71,6 +71,7 @@ import CustomCarousel from './Carousel'
 
 import m2Image from '../../assets/img/m2.png'
 import logo from '../../assets/img/sandarNegativoo.png'
+import { Helmet } from 'react-helmet'
 
 const { Content } = Layout
 const { Option } = Select
@@ -408,6 +409,21 @@ const PropertyList = ({ onPropertyClick }) => {
 
   return (
     <Content className='property-list'>
+      <Helmet>
+        <title>Lista de Propiedades</title>
+        <meta
+          name='description'
+          content='Esta es la lista de propiedades disponibles.'
+        />
+        <meta
+          name='keywords'
+          content='inmobiliaria, inicio, propiedades disponibles, sobre nosotros, morelia, renta, terreno, huerta, rancho, oficina, despacho, edificio, departamento, muebles, sandar, inmuebles, bienes raíces, bienes raices, bienes, raices, bienes raíces morelia, bienes raices morelia, bienes raíces michoacán, bienes raices michoacan, michoacan, hogar, casa, casas, hogar, hogares, hogares morelia, hogares michoacán, hogares michoacan, hogares en morelia, hogares en michoacán, hogares en michoacan, hogares en venta, hogares en renta, hogares en venta morelia, hogares en venta michoacán, hogares en venta michoacan, hogares en renta morelia, hogares en renta michoacán, hogares en renta michoacan, hogares en renta morelia michoacán, hogares en renta morelia michoacan, hogares en renta michoacán morelia, hogares en renta michoacan morelia, hogares en venta michoacán morelia, hogares en venta michoacan morelia, hogares en venta morelia michoacán, hogares en venta morelia michoacan, hogares en venta michoacán morelia, hogares en venta michoacan morelia, hogares en renta michoacán morelia, hogares en renta michoacan morelia, hogares en renta morelia michoacán, hogares en renta morelia michoacan, hogares en renta michoacán morelia, hogares en renta michoacan morelia, hogares en venta michoacán morelia, hogares en venta michoacan morelia, hogares en venta morelia michoacán, hogares en venta morelia michoacan, hogares en venta michoacán morelia, hogares en venta michoacan morelia, hogares en renta michoacán morelia, hogares en renta michoacan morelia, hogares en renta morelia michoacán, hogares en renta morelia michoacan, hogares en renta michoacán morelia, hogares en renta michoacan morelia, hogares en venta michoacán morelia, hogares en venta michoacan morelia, hogares en venta morelia michoacán, hogares en venta morelia michoacan, hogares en venta michoacán morelia, hogares en venta mich'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <meta name='theme-color' content='#009578' />
+        {/* Agrega aquí cualquier otro metadato que necesites */}
+      </Helmet>
       <div
         className='centered-card'
         style={{ paddingTop: '32px', paddingBottom: '32px' }}>

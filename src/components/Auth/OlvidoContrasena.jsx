@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import './Olvidocontrasena.css'
+import { Helmet } from "react-helmet";
 
 const OlvidoContrasena = () => {
   const [email, setEmail] = useState("");
@@ -23,28 +24,49 @@ const OlvidoContrasena = () => {
   };
 
   return (
-    <div className="fondo">
-    <div className="olvido-contrasena-container">
-      <form className=".olvido-contrasena-container form" onSubmit={handleOlvidoContrasenaSubmit}>
-        <p style={{color: 'black'}}>Para recuperar tu contraseña, ingresa aquí tu correo electronico y recibe el enlace.</p>
-        <label className="label-oc" htmlFor="email">Correo electrónico:</label>
-        <input
-        className="input-oc"
-          type="email"
-          id="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+    <div className='fondo'>
+      <Helmet>
+        <title>Registro - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='Regístrate para crear una cuenta en Sandar Inmuebles. Si ya tienes una cuenta, puedes iniciar sesión.'
         />
-        <button className="button-oc" type="submit">Enviar enlace de restablecimiento</button>
-      </form>
+        <meta
+          name='keywords'
+          content='registro, crear cuenta, inmuebles, Sandar Inmuebles'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
+      <div className='olvido-contrasena-container'>
+        <form
+          className='.olvido-contrasena-container form'
+          onSubmit={handleOlvidoContrasenaSubmit}>
+          <p style={{ color: 'black' }}>
+            Para recuperar tu contraseña, ingresa aquí tu correo electronico y
+            recibe el enlace.
+          </p>
+          <label className='label-oc' htmlFor='email'>
+            Correo electrónico:
+          </label>
+          <input
+            className='input-oc'
+            type='email'
+            id='email'
+            name='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button className='button-oc' type='submit'>
+            Enviar enlace de restablecimiento
+          </button>
+        </form>
 
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {successMessage && <p className='success-message'>{successMessage}</p>}
+        {errorMessage && <p className='error-message'>{errorMessage}</p>}
+      </div>
     </div>
-    </div>
-  );
+  )
 };
 
 export default OlvidoContrasena;

@@ -22,6 +22,7 @@ import {
 
 import "./Login.css";
 import { collection } from "firebase/firestore";
+import { Helmet } from "react-helmet";
 
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -80,127 +81,131 @@ const Login = () => {
   };
 
   return (
-    <div className="fondo-cards" style={{ marginTop: "67px" }}>
+    <div className='fondo-cards' style={{ marginTop: '67px' }}>
+      <Helmet>
+        <title>Iniciar Sesión - Sandar Inmuebles</title>
+        <meta
+          name='description'
+          content='Inicia sesión en tu cuenta de Sandar Inmuebles. Si aún no tienes una cuenta, puedes registrarte.'
+        />
+        <meta
+          name='keywords'
+          content='iniciar sesión, login, inmuebles, Sandar Inmuebles'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+      </Helmet>
       <MDBContainer fluid>
-        <MDBRow className="d-flex justify-content-center align-items-center">
-          <MDBCol col="10" md="6">
+        <MDBRow className='d-flex justify-content-center align-items-center'>
+          <MDBCol col='10' md='6'>
             <img
-              src="src/assets/img/inicioS.svg"
-              className="img-fluid d-none d-md-block" // Oculta en pantallas pequeñas
-              alt="Phone image"
+              src='src/assets/img/inicioS.svg'
+              className='img-fluid d-none d-md-block' // Oculta en pantallas pequeñas
+              alt='Phone image'
             />
           </MDBCol>
-          <MDBCol col="12">
+          <MDBCol col='12'>
             <MDBCard
-              className="bg-dark text-white my-5 mx-auto"
-              style={{ borderRadius: "1rem", maxWidth: "400px" }}
-            >
-              <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
-                <Link to="/">
+              className='bg-dark text-white my-5 mx-auto'
+              style={{ borderRadius: '1rem', maxWidth: '400px' }}>
+              <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
+                <Link to='/'>
                   <LeftOutlined
                     style={{
-                      fontSize: "1.5rem",
-                      marginRight: "320px",
-                      color: "white",
+                      fontSize: '1.5rem',
+                      marginRight: '320px',
+                      color: 'white',
                     }}
                   />
                 </Link>
                 <MDBNavbar
-                  expand="lg"
+                  expand='lg'
                   light
-                  bgColor="dark"
-                  className="w-100 mb-4"
-                >
-                  <MDBNavbarBrand className="align-items-center">
+                  bgColor='dark'
+                  className='w-100 mb-4'>
+                  <MDBNavbarBrand className='align-items-center'>
                     <img
-                      src="src/assets/img/logo.png"
-                      alt="Logo"
-                      height="50"
-                      className="inicio-logo"
+                      src='src/assets/img/logo.png'
+                      alt='Logo'
+                      height='50'
+                      className='inicio-logo'
                     />
-                    <span className="text-white">
-                      SANDAR INMUBLES
-                    </span>
+                    <span className='text-white'>SANDAR INMUBLES</span>
                   </MDBNavbarBrand>
                 </MDBNavbar>
 
-                <h2 className="Inicio">Inicio de Sesión</h2>
+                <h2 className='Inicio'>Inicio de Sesión</h2>
 
                 <MDBInput
-                  wrapperClass="mb-4 mx-5 w-100"
-                  labelClass="text-white"
-                  label="Correo electronico"
+                  wrapperClass='mb-4 mx-5 w-100'
+                  labelClass='text-white'
+                  label='Correo electronico'
                   onChange={(e) => setEmail(e.target.value)}
-                  id="formControlEmail"
-                  type="email"
-                  size="lg"
-                  style={{ color: "white" }}
+                  id='formControlEmail'
+                  type='email'
+                  size='lg'
+                  style={{ color: 'white' }}
                 />
                 <MDBInput
-                  wrapperClass="mb-4 mx-5 w-100"
-                  labelClass="text-white"
-                  label="Contraseña"
+                  wrapperClass='mb-4 mx-5 w-100'
+                  labelClass='text-white'
+                  label='Contraseña'
                   onKeyPress={handleKeyPress}
                   onChange={(e) => setPassword(e.target.value)}
-                  id="formControlPassword"
-                  type="password"
-                  size="lg"
-                  style={{ color: "white" }}
+                  id='formControlPassword'
+                  type='password'
+                  size='lg'
+                  style={{ color: 'white' }}
                 />
 
-                <p className="small mb-3 pb-lg-2">
-                  <Link to="/olvidoContrasena" className="text-white-50">
+                <p className='small mb-3 pb-lg-2'>
+                  <Link to='/olvidoContrasena' className='text-white-50'>
                     ¿Olvidaste tu contraseña?
                   </Link>
                 </p>
                 <MDBBtn
                   onClick={signIn}
                   outline
-                  className="mx-2 px-5"
-                  color="white"
-                  size="lg"
-                >
+                  className='mx-2 px-5'
+                  color='white'
+                  size='lg'>
                   Iniciar Sesión
                 </MDBBtn>
                 {error && (
-                  <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+                  <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>
                 )}
                 {successMessage && (
-                  <p className="text-success">{successMessage}</p>
+                  <p className='text-success'>{successMessage}</p>
                 )}
-                <div className="d-flex flex-row mt-3 mb-5">
+                <div className='d-flex flex-row mt-3 mb-5'>
                   <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="m-3"
-                    style={{ color: "white" }}
-                  >
-                    <MDBIcon fab icon="facebook-f" size="lg" />
+                    tag='a'
+                    color='none'
+                    className='m-3'
+                    style={{ color: 'white' }}>
+                    <MDBIcon fab icon='facebook-f' size='lg' />
                   </MDBBtn>
 
                   <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="m-3"
-                    style={{ color: "white" }}
-                  >
-                    <MDBIcon fab icon="twitter" size="lg" />
+                    tag='a'
+                    color='none'
+                    className='m-3'
+                    style={{ color: 'white' }}>
+                    <MDBIcon fab icon='twitter' size='lg' />
                   </MDBBtn>
 
                   <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="m-3"
-                    style={{ color: "white" }}
-                  >
-                    <MDBIcon fab icon="google" size="lg" />
+                    tag='a'
+                    color='none'
+                    className='m-3'
+                    style={{ color: 'white' }}>
+                    <MDBIcon fab icon='google' size='lg' />
                   </MDBBtn>
                 </div>
 
                 <div>
-                  <p className="mb-0 text-center align-items-center">
-                    ¿No tienes una cuenta?{" "}
-                    <Link to="/registro" className="Registro">
+                  <p className='mb-0 text-center align-items-center'>
+                    ¿No tienes una cuenta?{' '}
+                    <Link to='/registro' className='Registro'>
                       Regístrate
                     </Link>
                   </p>
@@ -211,7 +216,7 @@ const Login = () => {
         </MDBRow>
       </MDBContainer>
     </div>
-  );
+  )
 };
 
 export default Login;

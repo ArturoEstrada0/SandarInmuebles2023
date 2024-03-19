@@ -7,6 +7,7 @@ import { firestore } from '../firebase/firebase'
 import './AboutUs.css'
 
 import aboutusF from '../../assets/img/mudandose2.jpg'
+import { Helmet } from 'react-helmet'
 const { Content } = Layout
 const { Title, Paragraph } = Typography
 
@@ -46,6 +47,20 @@ const AboutUs = () => {
 
   return (
     <Content style={{ marginTop: '3em' }}>
+      <Helmet>
+        <title>Sobre Nosotros</title>
+        <meta
+          name='description'
+          content='Aprenda más sobre nosotros y nuestra experiencia en el sector inmobiliario.'
+        />
+        <meta
+          name='keywords'
+          content='inmobiliaria, experiencia, ventas, propiedades, casa, casas, morelia, renta, terreno, huerta, rancho, oficina, despacho, edificio, departamento'
+        />
+        <meta name='author' content='Sandar Inmuebles' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <meta name='theme-color' content='#009578' />
+      </Helmet>
       <div
         className='about-us-container'
         style={{ backgroundImage: `url(${aboutusF})` }}>
