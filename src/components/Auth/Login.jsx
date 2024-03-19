@@ -5,7 +5,8 @@ import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 import { addDoc, auth, firestore } from "../firebase/firebase"; // Asegúrate de importar 'auth' y 'firestore' desde tu archivo de configuración de Firebase
-
+import inicioS from '../../assets/img/inicioS.svg'
+import logo from '../../assets/img/logo.png'
 
 import {
   MDBBtn,
@@ -98,7 +99,7 @@ const Login = () => {
         <MDBRow className='d-flex justify-content-center align-items-center'>
           <MDBCol col='10' md='6'>
             <img
-              src='src/assets/img/inicioS.svg'
+              src={inicioS}
               className='img-fluid d-none d-md-block' // Oculta en pantallas pequeñas
               alt='Phone image'
             />
@@ -124,7 +125,7 @@ const Login = () => {
                   className='w-100 mb-4'>
                   <MDBNavbarBrand className='align-items-center'>
                     <img
-                      src='src/assets/img/logo.png'
+                      src={logo}
                       alt='Logo'
                       height='50'
                       className='inicio-logo'
